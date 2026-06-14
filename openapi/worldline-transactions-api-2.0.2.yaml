@@ -1,0 +1,2936 @@
+openapi: 3.0.1
+info:
+  title: Merchant payments - Transactions API
+  description: This is the API server supplied by equensWorldline.
+  contact:
+    name: Worldline FS Acquiring Processing API team.
+    url: https://financial-services.developer.worldline.com/
+    email: dl-fr-dp2si-acquiring@worldline.com
+  license:
+    name: proprietary Worldline Financial Services
+  version: "2.0.4"
+#####################################################################################################################
+#version 2.0.4 (10-04-2025)
+#- In this update, we've made several documentation corrections. No functional impact!!!
+#   - Small text corections in some endpoint/resource descriptions
+#
+#version 2.0.3 (04-04-2025)
+#- In this update, we've made several documentation corrections to enhance clarity. No functional impact!!!
+#   - DateTime values in example responses corrected: 2024-03-21T15:52:01+01:00 (not zulu/utc).
+#   - Corrected example data of paymentDate in response. Should be (yyyy-mm-ddT00:00:00+hh:00) and not (yyyy-mm-dd). 
+#     (Although ideally, the time component should be omitted, it remains unchanged to align with current production version)
+#   - Expanded the explanation of the standard HTTP paging mechanism. Included a link to relevant HTTP specifications
+#     and provided examples of the Link header for easier understanding and implementation.
+#   - Add more explanation to the search-by-criteria endpoint resource. Clarified that at least one of the following  
+#     query parameters is required: acquirerRefNo, merchantReference, actionId, pspReference. 
+#
+#version 2.0.2 (30-08-2023)
+#- add new id call: /v2.1/acquirers/{acquirerId}/transactions/{transactionId}
+#  - returns a list of transactions instead of 0/1 transaction
+#  - Note: existing id call will remain: /v2.0/acquirers/{acquirerId}/transactions/{transactionId}
+#
+#- Changes to search call (/v2.0/acquirers/{acquirerId}/transactions): 
+#  - Add query parameter actionId and pspReference
+#  - Rename query parameter merchantTransactionRefNo to merchantReference (old one still available but deprecated)
+#
+#- Add 5 new fields in a transaction response
+#  - captureSequenceNumber, captureSequenceCount, schemeMerchantId, schemeTransactionId, paymentInitiationChannel
+#
+#- Changes in TransactionIdentification (part of Transaction, Authorization and Lifecycle)
+#  - Rename field merchantTransactionReference to merchantReference (old one still available but deprecated)
+#  - Add field actionId, pspReference, retrievalReferenceNumber
+# 
+#- Changes in ContractIdentification (part of Transaction, Authorization and Lifecycle)
+#  - Add field pspId
+# 
+#version 2.0.1 (17-10-2022)
+#- Add 7 new fields to a transaction
+#  - result3ds, version3ds, cavv, xid, ucaf, mitCause, initiatorType
+#
+#####################################################################################################################
+servers:
+- url: /MerchantApiTransaction/api
+paths:
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/transactions/{transactionId}:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve a transaction (deprecated, please use v2.1 call)
+      description: |
+        This operation uses the unique transactionId to retrieve the transaction data
+      operationId: getTransaction
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: path
+        description: |
+          Unique identification of the transaction
+
+          examples TDS16172008721825920, TDS16172008721825921
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+              example:
+                transactionIdentification:
+                  transactionId: "TDS16172008721825920"
+                  actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                  acquirerReferenceNumber: "11223344662288134679854"
+                  merchantReference: "trx reference by merchant"
+                  merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                  pspReference: "string"
+                  retrievalReferenceNumber: "string"
+                  stan: 12752
+                contractIdentification: 
+                  acquirerId: "315000001"
+                  pspId: "string"
+                  holdingId: 200
+                  merchantId: "1001"
+                  contractId: "10011"
+                  cardAcceptorId: "1001"
+                  siteId: 100111
+                  terminalId: "W01AB01"
+                approvalCode: "AB90EF"
+                brand: "MAES"
+                cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                channel: 1
+                contactlessIndicator: 1
+                creditDebitIndicator: "D"
+                forwardingInstitutionId: "671734512"
+                matStatus: "1"
+                merchantCategoryCode: 7000
+                paymentFacilitatorId: "10000000000"
+                paymentInfo: [
+                  {
+                    merchantPaymentId: "SO-000000017036619028",
+                    merchantPaymentAggregationLevelCode: "02",
+                    paymentType: "03",
+                    paymentDate: "2024-02-21T00:00:00+01:00",
+                    paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                  }
+                ]
+                paymentProductTypeCode: "2"
+                posEntryMode: "79x"
+                pricePlanTarifId: "tarifId"
+                processingDateTimeScheme: "2024-03-21T15:52:01+01:00"
+                region: "Netherlands Maestro"
+                regionCode: "31"
+                subMerchantId: "734188"
+                terminalBatchReference: "0000000216"
+                terminalProtocol: "02"
+                transactionDateTime: "2024-03-21T15:52:01+01:00"
+                transactionDescription: ""
+                transactionFeePricePlanTypeCode: "01"
+                transactionLevel: "Contract"
+                transactionStatus: "TFEE"
+                transactionType: "Purchase Presentment"
+                transactionTypeCode: "904"
+                truncatedPan: "6731230000000123"
+                vatLabel: ""
+                result3ds: ""
+                version3ds: ""
+                cavv: "string"
+                xid: "string"
+                ucaf: "string"
+                mitCause: "Unscheduled"
+                initiatorType: "Cardholder"
+                captureSequenceNumber: 2
+                captureSequenceCount: 3
+                schemeMerchantId: "string"
+                schemeTransactionId: "string"
+                paymentInitiationChannel: "0"
+                transactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                transactionVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                netAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                schemeMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                interchangeFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                cashBackAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                acquirerMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.1/acquirers/{acquirerId}/transactions/{transactionId}:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve a transaction
+      description: |
+        This operation uses the unique transactionId to retrieve the transaction data. A list will be returned.
+      operationId: getTransactionById
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: path
+        description: |
+          Unique identification of the transaction
+
+          examples TDS16172008721825920, TDS16172008721825921
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              examples:
+                POS:
+                  value:
+                  - transactionIdentification:
+                      transactionId: "TDS16172008721825920"
+                      actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                      acquirerReferenceNumber: "11223344662288134679854"
+                      merchantReference: "trx reference by merchant"
+                      merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                      pspReference: "string"
+                      retrievalReferenceNumber: "string"
+                      stan: 12752
+                    contractIdentification: 
+                      acquirerId: "315000001"
+                      pspId: "string"
+                      holdingId: 200
+                      merchantId: "1001"
+                      contractId: "10011"
+                      cardAcceptorId: "1001"
+                      siteId: 100111
+                      terminalId: "W01AB01"
+                    approvalCode: "AB90EF"
+                    brand: "MAES"
+                    cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                    channel: 1
+                    contactlessIndicator: 1
+                    creditDebitIndicator: "D"
+                    forwardingInstitutionId: "671734512"
+                    matStatus: "1"
+                    merchantCategoryCode: 7000
+                    paymentFacilitatorId: "10000000000"
+                    paymentInfo: [
+                      {
+                        merchantPaymentId: "SO-000000017036619028",
+                        merchantPaymentAggregationLevelCode: "02",
+                        paymentType: "03",
+                        paymentDate: "2024-02-14T00:00:00+01:00",
+                        paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                      }
+                    ]
+                    paymentProductTypeCode: "2"
+                    posEntryMode: "79x"
+                    pricePlanTarifId: "tarifId"
+                    processingDateTimeScheme: "2024-02-14T12:20:56+01:00"
+                    region: "Netherlands Maestro"
+                    regionCode: "31"
+                    subMerchantId: "734188"
+                    terminalBatchReference: "0000000216"
+                    terminalProtocol: "02"
+                    transactionDateTime: "2024-02-14T12:20:56+01:00"
+                    transactionDescription: ""
+                    transactionFeePricePlanTypeCode: "01"
+                    transactionLevel: "Contract"
+                    transactionStatus: "TFEE"
+                    transactionType: "Purchase Presentment"
+                    transactionTypeCode: "904"
+                    truncatedPan: "6731230000000123"
+                    vatLabel: ""
+                    result3ds: ""
+                    version3ds: ""
+                    cavv: "string"
+                    xid: "string"
+                    ucaf: "string"
+                    mitCause: "Unscheduled"
+                    initiatorType: "Cardholder"
+                    captureSequenceNumber: 2
+                    captureSequenceCount: 3
+                    schemeMerchantId: "string"
+                    schemeTransactionId: "string"
+                    paymentInitiationChannel: "0"
+                    transactionAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    transactionVatAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    merchantTransactionFeeAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    merchantTransactionFeeVatAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    netAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    schemeMarkupAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    interchangeFeeAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    cashBackAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    acquirerMarkupAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    merchantTransactionAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                CNP:
+                  value:                 
+                  - transactionIdentification:
+                      transactionId: "ACQ_EU2-20230926085528-000000000000106006"
+                      actionId: "4bcccd2c-b364-4b4d-b64d-c266914e70ba"
+                      acquirerReferenceNumber: "11223344662288134679854"
+                      merchantReference: "trx reference by merchant"
+                      merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                      pspReference: "string"
+                      retrievalReferenceNumber: "string"
+                      stan: 12752
+                    contractIdentification: 
+                      acquirerId: "315000001"
+                      pspId: "PSP11112222"
+                      holdingId: 200
+                      merchantId: "1001"
+                      contractId: "10011"
+                      cardAcceptorId: "90100110"
+                      siteId: 100111
+                      terminalId: "W01AB01"
+                    approvalCode: "AB90EF"
+                    brand: "MAST"
+                    cardAcceptorNameLocation: "Event Payment Solutions 1 Rotterdam"
+                    channel: 2
+                    contactlessIndicator: null
+                    creditDebitIndicator: "D"
+                    forwardingInstitutionId: "671734512"
+                    matStatus: ""
+                    merchantCategoryCode: 7999
+                    paymentFacilitatorId: "10000000000"
+                    paymentInfo: [
+                      {
+                        merchantPaymentId: "SO-000000017036619028",
+                        merchantPaymentAggregationLevelCode: "02",
+                        paymentType: "03",
+                        paymentDate: "2024-02-14T00:00:00+01:00",
+                        paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                      }
+                    ]
+                    paymentProductTypeCode: "2"
+                    posEntryMode: ""
+                    pricePlanTarifId: "tarifId"
+                    processingDateTimeScheme: "2024-02-14T12:20:56+01:00"
+                    region: "Netherlands Maestro"
+                    regionCode: "31"
+                    subMerchantId: "734188"
+                    terminalBatchReference: ""
+                    terminalProtocol: ""
+                    transactionDateTime: "2024-03-21T15:52:01+01:00"
+                    transactionDescription: ""
+                    transactionFeePricePlanTypeCode: "01"
+                    transactionLevel: "Contract"
+                    transactionStatus: "TFEE"
+                    transactionType: "Purchase Presentment"
+                    transactionTypeCode: "904"
+                    truncatedPan: "6731230000000123"
+                    vatLabel: ""
+                    result3ds: "Full"
+                    version3ds: "V2"
+                    cavv: "string"
+                    xid: "string"
+                    ucaf: "string"
+                    mitCause: "Unscheduled"
+                    initiatorType: "Cardholder"
+                    captureSequenceNumber: 2
+                    captureSequenceCount: 3
+                    schemeMerchantId: "string"
+                    schemeTransactionId: "string"
+                    paymentInitiationChannel: ""
+                    transactionAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    transactionVatAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    merchantTransactionFeeAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    merchantTransactionFeeVatAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    netAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    schemeMarkupAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    interchangeFeeAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    acquirerMarkupAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+                    merchantTransactionAmount:
+                      amount: "3.00"
+                      currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/transactions:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve transactions on search criteria
+      description: |
+         This operation uses query parameters to retrieve the associated transaction(s) data. 
+         For example, with a MC 2nd Chargeback the unique AcquirerRefNo retrieves the unique transactionId’s and associated transaction data of all the different stages in the dispute life cycle.
+         If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links.
+         Note, startDateTime and endDateTime must be present AND at least one of these query parameters: acquirerRefNo, merchantReference, actionId, pspReference
+      operationId: getTransactionBySearchCriteria
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: acquirerRefNo
+        in: query
+        description: |
+          Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks.
+          (Note: acquirerRefNo = acquirerReferenceNumber)
+        schema:
+          type: string
+      - name: merchantReference
+        in: query
+        description: |
+          This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.
+        schema:
+          type: string
+      - name: merchantTransactionRefNo
+        in: query
+        description: |
+          ***DEPRECATED*** (please use merchantReference)
+          
+          This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.
+        schema:
+          type: string
+      - name: actionId
+        in: query
+        description: |
+          Action ID (example 432956ee-6974-42d2-bfdb-878997f21653)
+        schema:
+          type: string
+      - name: pspReference
+        in: query
+        description: |
+          Additional information provided by the concentrator to return on his statement
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: | 
+          Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
+  
+          Note, startDateTime and endDateTime must be present AND at least one of these query parameters: acquirerRefNo, merchantReference, actionId, pspReference
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: |
+          End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
+
+          Note, startDateTime and endDateTime must be present AND at least one of these query parameters: acquirerRefNo, merchantReference, actionId, pspReference
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - TransactionDateTime
+          - TransactionType
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/abc/transactions&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/transactions&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              example:
+              - transactionIdentification:
+                  transactionId: "TDS16172008721825920"
+                  actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                  acquirerReferenceNumber: "11223344662288134679854"
+                  merchantReference: "trx reference by merchant"
+                  merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                  pspReference: "string"
+                  retrievalReferenceNumber: "string"
+                  stan: 12752
+                contractIdentification: 
+                  acquirerId: "315000001"
+                  pspId: "string"
+                  holdingId: 200
+                  merchantId: "1001"
+                  contractId: "10011"
+                  cardAcceptorId: "1001"
+                  siteId: 100111
+                  terminalId: "W01AB01"
+                approvalCode: "AB90EF"
+                brand: "MAES"
+                cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                channel: 1
+                contactlessIndicator: 1
+                creditDebitIndicator: "D"
+                forwardingInstitutionId: "671734512"
+                matStatus: "1"
+                merchantCategoryCode: 7000
+                paymentFacilitatorId: "10000000000"
+                paymentInfo: [
+                  {
+                    merchantPaymentId: "SO-000000017036619028",
+                    merchantPaymentAggregationLevelCode: "02",
+                    paymentType: "03",
+                    paymentDate: "2024-02-21T00:00:00+01:00",
+                    paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                  }
+                ]
+                paymentProductTypeCode: "2"
+                posEntryMode: "79x"
+                pricePlanTarifId: "tarifId"
+                processingDateTimeScheme: "2024-03-21T15:52:01+01:00"
+                region: "Netherlands Maestro"
+                regionCode: "31"
+                subMerchantId: "734188"
+                terminalBatchReference: "0000000216"
+                terminalProtocol: "02"
+                transactionDateTime: "2024-03-21T15:52:01+01:00"
+                transactionDescription: ""
+                transactionFeePricePlanTypeCode: "01"
+                transactionLevel: "Contract"
+                transactionStatus: "TFEE"
+                transactionType: "Purchase Presentment"
+                transactionTypeCode: "904"
+                truncatedPan: "6731230000000123"
+                vatLabel: ""
+                result3ds: ""
+                version3ds: ""
+                cavv: "string"
+                xid: "string"
+                ucaf: "string"
+                mitCause: "Unscheduled"
+                initiatorType: "Cardholder"
+                captureSequenceNumber: 2
+                captureSequenceCount: 3
+                schemeMerchantId: "string"
+                schemeTransactionId: "string"
+                paymentInitiationChannel: "0"
+                transactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                transactionVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                netAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                schemeMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                interchangeFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                cashBackAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                acquirerMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/payments/{paymentId}/transactions:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve transactions for payment id
+      description: |
+        This operation uses the paymentId to retrieve the associated transaction(s) data. 
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links
+      operationId: getTransactionListByPaymentId
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: paymentId
+        in: path
+        description: |
+          Unique identification of the payment in which this transaction has been paid out
+
+          If present, the paymentDate must be present too
+        required: true
+        schema:
+          type: string
+      - name: paymentDate
+        in: query
+        description: |
+          Payment Date (yyyy-mm-dd), known as payment posting date (required for search on paymentId)
+
+          If present, the paymentId must be present too
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - TransactionDateTime
+          - TransactionType
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/aid/payments/pid/transactions&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/aid/payments/pid/transactions&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              example:
+              - transactionIdentification:
+                  transactionId: "TDS16172008721825920"
+                  actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                  acquirerReferenceNumber: "11223344662288134679854"
+                  merchantReference: "trx reference by merchant"
+                  merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                  pspReference: "string"
+                  retrievalReferenceNumber: "string"
+                  stan: 12752
+                contractIdentification: 
+                  acquirerId: "315000001"
+                  pspId: "string"
+                  holdingId: 200
+                  merchantId: "1001"
+                  contractId: "10011"
+                  cardAcceptorId: "1001"
+                  siteId: 100111
+                  terminalId: "W01AB01"
+                approvalCode: "AB90EF"
+                brand: "MAES"
+                cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                channel: 1
+                contactlessIndicator: 1
+                creditDebitIndicator: "D"
+                forwardingInstitutionId: "671734512"
+                matStatus: "1"
+                merchantCategoryCode: 7000
+                paymentFacilitatorId: "10000000000"
+                paymentInfo: [
+                  {
+                    merchantPaymentId: "SO-000000017036619028",
+                    merchantPaymentAggregationLevelCode: "02",
+                    paymentType: "03",
+                    paymentDate: "2024-02-21T00:00:00+01:00",
+                    paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                  }
+                ]
+                paymentProductTypeCode: "2"
+                posEntryMode: "79x"
+                pricePlanTarifId: "tarifId"
+                processingDateTimeScheme: "2024-03-21T15:52:01+01:00"
+                region: "Netherlands Maestro"
+                regionCode: "31"
+                subMerchantId: "734188"
+                terminalBatchReference: "0000000216"
+                terminalProtocol: "02"
+                transactionDateTime: "2024-03-21T15:52:01+01:00"
+                transactionDescription: ""
+                transactionFeePricePlanTypeCode: "01"
+                transactionLevel: "Contract"
+                transactionStatus: "TFEE"
+                transactionType: "Purchase Presentment"
+                transactionTypeCode: "904"
+                truncatedPan: "6731230000000123"
+                vatLabel: ""
+                result3ds: ""
+                version3ds: ""
+                cavv: "string"
+                xid: "string"
+                ucaf: "string"
+                mitCause: "Unscheduled"
+                initiatorType: "Cardholder"
+                captureSequenceNumber: 2
+                captureSequenceCount: 3
+                schemeMerchantId: "string"
+                schemeTransactionId: "string"
+                paymentInitiationChannel: "0"
+                transactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                transactionVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                netAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                schemeMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                interchangeFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                cashBackAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                acquirerMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/holdings/{holdingId}/transactions:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve transactions on holding level
+      description: |
+        This operation retrieves all transaction(s) on specific holding level.
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links
+      operationId: getTransactionsOnHoldingLevel
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: holdingId
+        in: path
+        description: Unique identification of the holding, determined by equensWorldline
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: startDateTime
+        in: query
+        description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss)
+          (greater or equals to this value)
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss)
+          (until this value, so not incuded)
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: cardNumberLast4
+        in: query
+        description: Last 4 digits from the cardnumber
+        schema:
+          type: string
+      - name: refundOnly
+        in: query
+        description: Return refunds only indicator. (0 = return all transactions,
+          1 = refunds only)
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: |
+          Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - TransactionDateTime
+          - TransactionType
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/abc/holdings/hid/transactions&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/holdings/hid/transactions&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              example:
+              - transactionIdentification:
+                  transactionId: "TDS16172008721825920"
+                  actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                  acquirerReferenceNumber: "11223344662288134679854"
+                  merchantReference: "trx reference by merchant"
+                  merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                  pspReference: "string"
+                  retrievalReferenceNumber: "string"
+                  stan: 12752
+                contractIdentification: 
+                  acquirerId: "315000001"
+                  pspId: "string"
+                  holdingId: 200
+                  merchantId: "1001"
+                  contractId: "10011"
+                  cardAcceptorId: "1001"
+                  siteId: 100111
+                  terminalId: "W01AB01"
+                approvalCode: "AB90EF"
+                brand: "MAES"
+                cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                channel: 1
+                contactlessIndicator: 1
+                creditDebitIndicator: "D"
+                forwardingInstitutionId: "671734512"
+                matStatus: "1"
+                merchantCategoryCode: 7000
+                paymentFacilitatorId: "10000000000"
+                paymentInfo: [
+                  {
+                    merchantPaymentId: "SO-000000017036619028",
+                    merchantPaymentAggregationLevelCode: "02",
+                    paymentType: "03",
+                    paymentDate: "2024-02-21T00:00:00+01:00",
+                    paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                  }
+                ]
+                paymentProductTypeCode: "2"
+                posEntryMode: "79x"
+                pricePlanTarifId: "tarifId"
+                processingDateTimeScheme: "2024-03-21T15:52:01+01:00"
+                region: "Netherlands Maestro"
+                regionCode: "31"
+                subMerchantId: "734188"
+                terminalBatchReference: "0000000216"
+                terminalProtocol: "02"
+                transactionDateTime: "2024-03-21T15:52:01+01:00"
+                transactionDescription: ""
+                transactionFeePricePlanTypeCode: "01"
+                transactionLevel: "Contract"
+                transactionStatus: "TFEE"
+                transactionType: "Purchase Presentment"
+                transactionTypeCode: "904"
+                truncatedPan: "6731230000000123"
+                vatLabel: ""
+                result3ds: ""
+                version3ds: ""
+                cavv: "string"
+                xid: "string"
+                ucaf: "string"
+                mitCause: "Unscheduled"
+                initiatorType: "Cardholder"
+                captureSequenceNumber: 2
+                captureSequenceCount: 3
+                schemeMerchantId: "string"
+                schemeTransactionId: "string"
+                paymentInitiationChannel: "0"
+                transactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                transactionVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                netAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                schemeMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                interchangeFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                cashBackAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                acquirerMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/merchants/{merchantId}/transactions:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve transactions on merchant level
+      description: |
+        This operation retrieves all transaction(s) on specific merchant level.
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links
+      operationId: getTransactionsOnMerchantLevel
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: merchantId
+        in: path
+        description: Unique identification of the merchant, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: |
+          Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
+          Either the update (start/end) time or the creation (start/end) time is required
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: |
+          End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
+          Either the update (start/end) time or the creation (start/end) time is required
+        schema:
+          type: string
+          format: date-time
+      - name: updateStartDateTime
+        in: query
+        description: |
+          Update start Datetime of processing (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
+          Either the update (start/end) time or the creation (start/end) time is required
+        schema:
+          type: string
+          format: date-time
+      - name: updateEndDateTime
+        in: query
+        description: |
+          Update end Datetime of processing (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
+          Either the update (start/end) time or the creation (start/end) time is required
+        schema:
+          type: string
+          format: date-time
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: cardNumberLast4
+        in: query
+        description: Last 4 digits from the cardnumber
+        schema:
+          type: string
+      - name: refundOnly
+        in: query
+        description: Return refunds only indicator. (0 = return all transactions,
+          1 = refunds only)
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: |
+          Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - TransactionDateTime
+          - TransactionType
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/abc/merchants/mid/transactions&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/merchants/mid/transactions&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              example:
+              - transactionIdentification:
+                  transactionId: "TDS16172008721825920"
+                  actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                  acquirerReferenceNumber: "11223344662288134679854"
+                  merchantReference: "trx reference by merchant"
+                  merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                  pspReference: "string"
+                  retrievalReferenceNumber: "string"
+                  stan: 12752
+                contractIdentification: 
+                  acquirerId: "315000001"
+                  pspId: "string"
+                  holdingId: 200
+                  merchantId: "1001"
+                  contractId: "10011"
+                  cardAcceptorId: "1001"
+                  siteId: 100111
+                  terminalId: "W01AB01"
+                approvalCode: "AB90EF"
+                brand: "MAES"
+                cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                channel: 1
+                contactlessIndicator: 1
+                creditDebitIndicator: "D"
+                forwardingInstitutionId: "671734512"
+                matStatus: "1"
+                merchantCategoryCode: 7000
+                paymentFacilitatorId: "10000000000"
+                paymentInfo: [
+                  {
+                    merchantPaymentId: "SO-000000017036619028",
+                    merchantPaymentAggregationLevelCode: "02",
+                    paymentType: "03",
+                    paymentDate: "2024-02-21T00:00:00+01:00",
+                    paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                  }
+                ]
+                paymentProductTypeCode: "2"
+                posEntryMode: "79x"
+                pricePlanTarifId: "tarifId"
+                processingDateTimeScheme: "2024-03-21T15:52:01+01:00"
+                region: "Netherlands Maestro"
+                regionCode: "31"
+                subMerchantId: "734188"
+                terminalBatchReference: "0000000216"
+                terminalProtocol: "02"
+                transactionDateTime: "2024-03-21T15:52:01+01:00"
+                transactionDescription: ""
+                transactionFeePricePlanTypeCode: "01"
+                transactionLevel: "Contract"
+                transactionStatus: "TFEE"
+                transactionType: "Purchase Presentment"
+                transactionTypeCode: "904"
+                truncatedPan: "6731230000000123"
+                vatLabel: ""
+                result3ds: ""
+                version3ds: ""
+                cavv: "string"
+                xid: "string"
+                ucaf: "string"
+                mitCause: "Unscheduled"
+                initiatorType: "Cardholder"
+                captureSequenceNumber: 2
+                captureSequenceCount: 3
+                schemeMerchantId: "string"
+                schemeTransactionId: "string"
+                paymentInitiationChannel: "0"
+                transactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                transactionVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                netAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                schemeMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                interchangeFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                cashBackAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                acquirerMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/contracts/{contractId}/transactions:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve transactions on contract level
+      description: |
+        This operation retrieves all transaction(s) on specific contract level.
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links
+      operationId: getTransactionsOnContractLevel
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Unique identification of the contract, determined by the acquirer
+        required: true
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss)
+          (greater or equals to this value)
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss)
+          (until this value, so not incuded)
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: cardNumberLast4
+        in: query
+        description: Last 4 digits from the cardnumber
+        schema:
+          type: string
+      - name: refundOnly
+        in: query
+        description: Return refunds only indicator. (0 = return all transactions,
+          1 = refunds only)
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: |
+          Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - TransactionDateTime
+          - TransactionType
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/abc/contracts/cid/transactions&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/contracts/cid/transactions&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              example:
+              - transactionIdentification:
+                  transactionId: "TDS16172008721825920"
+                  actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                  acquirerReferenceNumber: "11223344662288134679854"
+                  merchantReference: "trx reference by merchant"
+                  merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                  pspReference: "string"
+                  retrievalReferenceNumber: "string"
+                  stan: 12752
+                contractIdentification: 
+                  acquirerId: "315000001"
+                  pspId: "string"
+                  holdingId: 200
+                  merchantId: "1001"
+                  contractId: "10011"
+                  cardAcceptorId: "1001"
+                  siteId: 100111
+                  terminalId: "W01AB01"
+                approvalCode: "AB90EF"
+                brand: "MAES"
+                cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                channel: 1
+                contactlessIndicator: 1
+                creditDebitIndicator: "D"
+                forwardingInstitutionId: "671734512"
+                matStatus: "1"
+                merchantCategoryCode: 7000
+                paymentFacilitatorId: "10000000000"
+                paymentInfo: [
+                  {
+                    merchantPaymentId: "SO-000000017036619028",
+                    merchantPaymentAggregationLevelCode: "02",
+                    paymentType: "03",
+                    paymentDate: "2024-02-21T00:00:00+01:00",
+                    paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                  }
+                ]
+                paymentProductTypeCode: "2"
+                posEntryMode: "79x"
+                pricePlanTarifId: "tarifId"
+                processingDateTimeScheme: "2024-03-21T15:52:01+01:00"
+                region: "Netherlands Maestro"
+                regionCode: "31"
+                subMerchantId: "734188"
+                terminalBatchReference: "0000000216"
+                terminalProtocol: "02"
+                transactionDateTime: "2024-03-21T15:52:01+01:00"
+                transactionDescription: ""
+                transactionFeePricePlanTypeCode: "01"
+                transactionLevel: "Contract"
+                transactionStatus: "TFEE"
+                transactionType: "Purchase Presentment"
+                transactionTypeCode: "904"
+                truncatedPan: "6731230000000123"
+                vatLabel: ""
+                result3ds: ""
+                version3ds: ""
+                cavv: "string"
+                xid: "string"
+                ucaf: "string"
+                mitCause: "Unscheduled"
+                initiatorType: "Cardholder"
+                captureSequenceNumber: 2
+                captureSequenceCount: 3
+                schemeMerchantId: "string"
+                schemeTransactionId: "string"
+                paymentInitiationChannel: "0"
+                transactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                transactionVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                netAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                schemeMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                interchangeFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                cashBackAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                acquirerMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites/{siteId}/transactions:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve transactions on site level
+      description: |
+        This operation retrieves all transaction(s) on specific site level.
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links
+      operationId: getTransactionsOnSiteLevel
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Unique identification of the contract, determined by the acquirer
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: startDateTime
+        in: query
+        description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss)
+          (greater or equals to this value)
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss)
+          (until this value, so not incuded)
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: cardNumberLast4
+        in: query
+        description: Last 4 digits from the cardnumber
+        schema:
+          type: string
+      - name: refundOnly
+        in: query
+        description: Return refunds only indicator. (0 = return all transactions,
+          1 = refunds only)
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: |
+          Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - TransactionDateTime
+          - TransactionType
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/abc/contracts/cid/sites/sid/transactions&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/contracts/cid/sites/sid/transactions&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              example:
+              - transactionIdentification:
+                  transactionId: "TDS16172008721825920"
+                  actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                  acquirerReferenceNumber: "11223344662288134679854"
+                  merchantReference: "trx reference by merchant"
+                  merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                  pspReference: "string"
+                  retrievalReferenceNumber: "string"
+                  stan: 12752
+                contractIdentification: 
+                  acquirerId: "315000001"
+                  pspId: "string"
+                  holdingId: 200
+                  merchantId: "1001"
+                  contractId: "10011"
+                  cardAcceptorId: "1001"
+                  siteId: 100111
+                  terminalId: "W01AB01"
+                approvalCode: "AB90EF"
+                brand: "MAES"
+                cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                channel: 1
+                contactlessIndicator: 1
+                creditDebitIndicator: "D"
+                forwardingInstitutionId: "671734512"
+                matStatus: "1"
+                merchantCategoryCode: 7000
+                paymentFacilitatorId: "10000000000"
+                paymentInfo: [
+                  {
+                    merchantPaymentId: "SO-000000017036619028",
+                    merchantPaymentAggregationLevelCode: "02",
+                    paymentType: "03",
+                    paymentDate: "2024-02-21T00:00:00+01:00",
+                    paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                  }
+                ]
+                paymentProductTypeCode: "2"
+                posEntryMode: "79x"
+                pricePlanTarifId: "tarifId"
+                processingDateTimeScheme: "2024-03-21T15:52:01+01:00"
+                region: "Netherlands Maestro"
+                regionCode: "31"
+                subMerchantId: "734188"
+                terminalBatchReference: "0000000216"
+                terminalProtocol: "02"
+                transactionDateTime: "2024-03-21T15:52:01+01:00"
+                transactionDescription: ""
+                transactionFeePricePlanTypeCode: "01"
+                transactionLevel: "Contract"
+                transactionStatus: "TFEE"
+                transactionType: "Purchase Presentment"
+                transactionTypeCode: "904"
+                truncatedPan: "6731230000000123"
+                vatLabel: ""
+                result3ds: ""
+                version3ds: ""
+                cavv: "string"
+                xid: "string"
+                ucaf: "string"
+                mitCause: "Unscheduled"
+                initiatorType: "Cardholder"
+                captureSequenceNumber: 2
+                captureSequenceCount: 3
+                schemeMerchantId: "string"
+                schemeTransactionId: "string"
+                paymentInitiationChannel: "0"
+                transactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                transactionVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                netAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                schemeMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                interchangeFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                cashBackAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                acquirerMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites/{siteId}/terminals/{terminalId}/transactions:
+    get:
+      tags:
+      - Transaction
+      summary: Retrieve transactions on terminal level
+      description: |
+        This operation retrieves all transaction(s) on specific terminal level.
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links
+      operationId: getTransactionsOnTerminalLevel
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Unique identification of the contract, determined by the acquirer
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: terminalId
+        in: path
+        description: Unique code identifying the terminal at the Card acceptor location
+        required: true
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss)
+          (greater or equals to this value)
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss)
+          (until this value, so not incuded)
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: cardNumberLast4
+        in: query
+        description: Last 4 digits from the cardnumber
+        schema:
+          type: string
+      - name: refundOnly
+        in: query
+        description: Return refunds only indicator. (0 = return all transactions,
+          1 = refunds only)
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: |
+          Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - TransactionDateTime
+          - TransactionType
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/abc/contracts/cid/sites/sid/terminals/tid/transactions&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/contracts/cid/sites/sid/terminals/tid/transactions&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              example:
+              - transactionIdentification:
+                  transactionId: "TDS16172008721825920"
+                  actionId: "432956ee-6974-42d2-bfdb-878997f21653"
+                  acquirerReferenceNumber: "11223344662288134679854"
+                  merchantReference: "trx reference by merchant"
+                  merchantTransactionReference: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+                  pspReference: "string"
+                  retrievalReferenceNumber: "string"
+                  stan: 12752
+                contractIdentification: 
+                  acquirerId: "315000001"
+                  pspId: "string"
+                  holdingId: 200
+                  merchantId: "1001"
+                  contractId: "10011"
+                  cardAcceptorId: "1001"
+                  siteId: 100111
+                  terminalId: "W01AB01"
+                approvalCode: "AB90EF"
+                brand: "MAES"
+                cardAcceptorNameLocation: "Purchase Merchant/ CC \\ARNHEM       \\NLD"
+                channel: 1
+                contactlessIndicator: 1
+                creditDebitIndicator: "D"
+                forwardingInstitutionId: "671734512"
+                matStatus: "1"
+                merchantCategoryCode: 7000
+                paymentFacilitatorId: "10000000000"
+                paymentInfo: [
+                  {
+                    merchantPaymentId: "SO-000000017036619028",
+                    merchantPaymentAggregationLevelCode: "02",
+                    paymentType: "03",
+                    paymentDate: "2024-02-21T00:00:00+01:00",
+                    paymentCrossReferenceURI: "acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD"
+                  }
+                ]
+                paymentProductTypeCode: "2"
+                posEntryMode: "79x"
+                pricePlanTarifId: "tarifId"
+                processingDateTimeScheme: "2024-03-21T15:52:01+01:00"
+                region: "Netherlands Maestro"
+                regionCode: "31"
+                subMerchantId: "734188"
+                terminalBatchReference: "0000000216"
+                terminalProtocol: "02"
+                transactionDateTime: "2024-03-21T15:52:01+01:00"
+                transactionDescription: ""
+                transactionFeePricePlanTypeCode: "01"
+                transactionLevel: "Contract"
+                transactionStatus: "TFEE"
+                transactionType: "Purchase Presentment"
+                transactionTypeCode: "904"
+                truncatedPan: "6731230000000123"
+                vatLabel: ""
+                result3ds: ""
+                version3ds: ""
+                cavv: "string"
+                xid: "string"
+                ucaf: "string"
+                mitCause: "Unscheduled"
+                initiatorType: "Cardholder"
+                captureSequenceNumber: 2
+                captureSequenceCount: 3
+                schemeMerchantId: "string"
+                schemeTransactionId: "string"
+                paymentInitiationChannel: "0"
+                transactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                transactionVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionFeeVatAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                netAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                schemeMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                interchangeFeeAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                cashBackAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                acquirerMarkupAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+                merchantTransactionAmount:
+                  amount: "3.00"
+                  currency: "EUR"
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/authorizations:
+    get:
+      tags:
+      - Authorization
+      summary: Retrieve authorizations
+      description: |
+        This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated authorization(s) data. 
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links
+      operationId: getAuthorizations
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: acquirerRefNo
+        in: query
+        description: |
+          Data supplied by an acquirer to assist in identifying an authorization.
+          (Note: acquirerRefNo = acquirerReferenceNumber)
+
+          examples ARN29851, 74875009071000046650752
+        required: true
+        schema:
+          type: string
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - AuthorizationDateTime
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/abc/authorizations&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/authorizations&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Authorization'
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/transactionlifecycle:
+    get:
+      tags:
+      - Transaction Lifecycle
+      summary: Retrieve by AcquirerRefNo
+      description: |
+        This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated 
+        first/second presentment(s) data \nand the associated transaction data of the different stages in the dispute life cycle.
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links
+      operationId: getLifeCycle
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: acquirerRefNo
+        in: query
+        description: |
+          Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks
+          (Note: acquirerRefNo = acquirerReferenceNumber)
+
+          examples ARN29851, 74875009071000046650752
+        required: true
+        schema:
+          type: string
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than
+          or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than
+          this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required
+          if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - TransactionDateTime
+          - TransactionType
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: '</acquiring/transaction/v2.0/acquirers/abc/transactionlifecycle&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/transactionlifecycle&pageNumber=1>; rel="prev"'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lifecycle'
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        transactionIdentification:
+          $ref: '#/components/schemas/TransactionIdentification'
+        contractIdentification:
+          $ref: '#/components/schemas/ContractIdentification'
+        approvalCode:
+          type: string
+          description: Code assigned by the authorising institution indicating approval
+          example: AB90EF
+        brand:
+          type: string
+          description: Unique identification of the brand (payment product). Maestro
+            MAES, Visa VISA, etc.
+          example: MAES
+        cardAcceptorNameLocation:
+          type: string
+          description: The name and place where the terminal is located. Note - A
+            backslash is not valid json. So a backslash will be escaped (with a backslash)
+          example: Purchase Merchant/ CC \ARNHEM       \NLD
+        channel:
+          type: integer
+          description: Channel code (0 atm, 1 pos, 2 eCommerce, 3 moto)
+          format: int32
+        contactlessIndicator:
+          type: integer
+          description: Indicates whether the transaction has been done contactless
+            (0 no, 1 yes)
+          format: int32
+          example: 1
+        creditDebitIndicator:
+          type: string
+          description: Funding source. The field describes how the cardholder funds
+            his account. (C = Credit, D = Debit, P = Prepaid)
+          example: D
+        forwardingInstitutionId:
+          type: string
+          description: Code identifying the acquirer processor or card acceptor
+          example: "671734512"
+        matStatus:
+          type: string
+          description: MAT transactions are flagged as MAT so that acquirer and merchant
+            can see the transaction was approved in back-up mode. Values ​​0 (No MAT)
+            or 1 (Approved MAT).
+          example: "1"
+        merchantCategoryCode:
+          type: integer
+          description: Merchant Catogory Code
+          format: int32
+          example: 7000
+        paymentFacilitatorId:
+          type: string
+          description: Identifier for a Payment Facilitator which allows anyone who
+            wants to offer merchant services on a sub-merchant platform.
+          example: "10000000000"
+        paymentInfo:
+          $ref: '#/components/schemas/PaymentInfo'
+        paymentProductTypeCode:
+          type: string
+          description: Code for the type of payment product. (Z Commercial Card. 2
+            Consumer Card)
+          example: "2"
+        posEntryMode:
+          type: string
+          description: A code that identifies how the carddata was entered on the
+            terminal and which PINentry capabilities the terminal possesses.
+          example: 79x
+        pricePlanTarifId:
+          type: string
+          description: Unique identification for the price plan tarif.
+          example: tarifId
+        processingDateTimeScheme:
+          type: string
+          description: processing date-time by scheme (RFC 3339)
+          format: date-time
+        region:
+          type: string
+          description: Region of the payment scheme (Netherlands Maestro, etc)
+          example: Netherlands Maestro
+        regionCode:
+          type: string
+          description: Region of the payment scheme code
+          example: "31"
+        subMerchantId:
+          type: string
+          description: Sub Merchant ID, defined by a Payment Facilitator (merchant).
+            Each merchant that is considered to be a “Payment Facilitator” by MasterCard
+            needs to uniquely identify all of its sites with a sub merchant ID
+          example: "734188"
+        terminalBatchReference:
+          type: string
+          description: Reference of the terminal batch
+          example: "0000000216"
+        terminalProtocol:
+          type: string
+          description: Terminal Protocol
+          example: "02"
+        transactionDateTime:
+          type: string
+          description: authorisation date-time (RFC 3339)
+          format: date-time
+        transactionDescription:
+          type: string
+          description: Transaction currency combination description
+          example: 0150 Chargeback Correction case id 0000001
+        transactionFeePricePlanTypeCode:
+          type: string
+          description: Type of Merchant transaction fee price plan code. (00 No price
+            plan type, 01 Standard pricing, 02 Interchange plus, 03 Advanced pricing)
+          example: "01"
+        transactionLevel:
+          type: string
+          description: Code that identifies the transaction level
+          example: Contract
+        transactionStatus:
+          type: string
+          description: Status of the transaction (CAPT transaction is captured, TFEE
+            transaction fee is added, PAID transaction is paid out)
+          example: TFEE
+        transactionType:
+          type: string
+          description: Description of transaction being undertaken
+          example: Purchase Presentment
+        transactionTypeCode:
+          type: string
+          description: |
+            Code which indicates the type of transaction being undertaken. Used in conjunction with the Account type code as part of the Processing code.
+            (Most common codes are the following: 904 Purchase Presentment, 905 Cash Withdrawal/Advance Presentment, 901 Refund Presentment, 047 Reimbursement Equens Merchant Loss Settled Debit, 024 Adjustment (Corrections or Manual Adjustments) Correction, etc.)
+          example: "904"
+        truncatedPan:
+          type: string
+          description: truncated pan. Only the first 6 and last 3 digits are present.
+            Values inbetween are zeros
+          example: "6731230000000123"
+        vatLabel:
+          type: string
+          description: Describes the rate of the VAT
+          example: 21%
+        result3ds:
+          type: string
+          description: Indicates result of the 3-D Secure authentication process.
+          example: Full
+        version3ds:
+          type: string
+          description: Indicates the applied 3-D Secure version.
+          example: V2
+        cavv:
+          type: string
+          description: CAVV (Cardholder Authentication Verification Value) data in
+            hexadecimal notation (40 characters for 20 bytes).
+        xid:
+          type: string
+          description: XID (eCommerce transaction ID) in hexadecimal notation (40
+            characters for 20 bytes).
+        ucaf:
+          type: string
+          description: UCAF (Universal Cardholder Authentication Field) in hexadecimal
+            notation (40 characters for 20 bytes).
+        mitCause:
+          type: string
+          description: Cause detailing the Merchant Initiated Transaction.
+          example: Unscheduled
+        initiatorType:
+          type: string
+          description: Indicates which entity has triggered the operation.
+          example: Cardholder
+        captureSequenceNumber:
+          type: integer
+          description: Number of current capture in the entire capture sequence starting
+            from 1.
+          format: int32
+          example: 2
+        captureSequenceCount:
+          type: integer
+          description: Total number of captures for the business case in case BusinessCaseType is FinancialRequest.
+          format: int32
+          example: 3
+        schemeMerchantId:
+          type: string
+          description: Id for the merchant assigned by the card scheme
+        schemeTransactionId:
+          type: string
+          description: The Trace-ID/TID assigned by the scheme
+        paymentInitiationChannel:
+          type: string
+          description: Used to provide information about the form factor of the token that was used to initiate a payment
+          example: 00
+        transactionAmount:
+          $ref: '#/components/schemas/Amount'
+        transactionVatAmount:
+          $ref: '#/components/schemas/Amount'
+        merchantTransactionFeeAmount:
+          $ref: '#/components/schemas/Amount'
+        merchantTransactionFeeVatAmount:
+          $ref: '#/components/schemas/Amount'
+        netAmount:
+          $ref: '#/components/schemas/Amount'
+        schemeMarkupAmount:
+          $ref: '#/components/schemas/Amount'
+        interchangeFeeAmount:
+          $ref: '#/components/schemas/Amount'
+        cashBackAmount:
+          $ref: '#/components/schemas/Amount'
+        acquirerMarkupAmount:
+          $ref: '#/components/schemas/Amount'
+        merchantTransactionAmount:
+          $ref: '#/components/schemas/Amount'
+    Authorization:
+      type: object
+      properties:
+        transactionIdentification:
+          $ref: '#/components/schemas/TransactionIdentification'
+        contractIdentification:
+          $ref: '#/components/schemas/ContractIdentification'
+        approvalCode:
+          type: string
+          description: Code assigned by the authorising institution indicating approval
+          example: AB90EF
+        authorizationDateTime:
+          type: string
+          description: authorisation date-time (RFC 3339)
+          format: date-time
+        brand:
+          type: string
+          description: Brand
+          example: MAES
+        cardAcceptorNameLocation:
+          type: string
+          description: The name and place where the terminal is located. Note - A
+            backslash is not valid json. So a backslash will be escaped (with a backslash)
+          example: Purchase Merchant/ CC \ARNHEM       \NLD
+        cardExpiryDate:
+          type: integer
+          description: The year and month after which the card expires
+          format: int32
+          example: 2104
+        cardSequenceNumber:
+          type: integer
+          description: card sequence number
+          format: int32
+          example: 123
+        cardValidationResult:
+          type: string
+          description: Contains the result of a CVC2/CVV2 validation or the (i)CVC/CVV
+            validation
+          example: M
+        channel:
+          type: integer
+          description: Channel code (0 atm, 1 pos, 2 eCommerce, 3 moto)
+          format: int32
+        contactlessIndicator:
+          type: integer
+          description: Indicates whether the transaction has been done contactless
+            (0 no, 1 yes)
+          format: int32
+          example: 1
+        ecommerceIndicator:
+          type: string
+          description: Electronic Commerce Indicators
+          example: "2100000"
+        forwardingInstitutionId:
+          type: string
+          description: Code identifying the acquirer processor or card acceptor
+          example: "671734512"
+        iccDateFilled:
+          type: string
+          description: EMV data present. Y or N
+          example: Y
+        merchantCategoryCode:
+          type: integer
+          description: Merchant Catogory Code
+          format: int32
+          example: 7000
+        paymentFacilitatorId:
+          type: string
+          description: Identifier for a Payment Facilitator which allows anyone who
+            wants to offer merchant services on a sub-merchant platform.
+          example: "10000000000"
+        pointOfServiceDataOnline:
+          type: string
+          description: A code used to indicate the local conditions at the point-of-service
+            device, at the time a card payment transaction was initiated.
+          example: "0123456789012345678901245"
+        pointOfServiceDataOffline:
+          type: string
+          description: A code used to identify terminal capability, terminal environment
+            and presentation of security data.
+          example: "111121613024"
+        posEntryMode:
+          type: string
+          description: A code that identifies how the carddata was entered on the
+            terminal and which PINentry capabilities the terminal possesses.
+          example: 79x
+        processingCode:
+          type: string
+          description: Code which indicates the type of transaction being undertaken.
+            Used in conjunction with the Account type code as part of the Processing
+            code.
+          example: "010000"
+        responseCodeInternal:
+          type: string
+          description: response code internal
+          example: "00"
+        responseCodeExternal:
+          type: string
+          description: Response Code from the authorization response received from
+            the brand gateway
+          example: "00"
+        retrievalReferenceNumber:
+          type: string
+          description: Retrieval Reference Number from the authorization request sent to Mastercard/Visa
+          example: "012345678901"
+        serviceCode:
+          type: string
+          description: The service code from the track
+          example: "945"
+        subMerchantId:
+          type: string
+          description: Sub Merchant ID, defined by a Payment Facilitator (merchant).
+            Each merchant that is considered to be a “Payment Facilitator” by MasterCard
+            needs to uniquely identify all of its sites with a sub merchant ID
+          example: "734188"
+        terminalBatchReference:
+          type: string
+          description: Reference of the terminal batch
+          example: "0000000216"
+        terminalProtocol:
+          type: string
+          description: Terminal Protocol
+          example: "02"
+        truncatedPan:
+          type: string
+          description: truncated pan. Only the first 6 and last 3 digits are present.
+            Values inbetween are zeros
+          example: "6731230000000123"
+        cashBackAmount:
+          $ref: '#/components/schemas/Amount'
+        originalAmountRequested:
+          $ref: '#/components/schemas/Amount'
+        amountAuthorized:
+          $ref: '#/components/schemas/Amount'
+        tipAmount:
+          $ref: '#/components/schemas/Amount'
+    Lifecycle:
+      type: object
+      properties:
+        transactionIdentification:
+          $ref: '#/components/schemas/TransactionIdentification'
+        contractIdentification:
+          $ref: '#/components/schemas/ContractIdentification'
+        approvalCode:
+          type: string
+          description: Code assigned by the authorising institution indicating approval
+          example: AB90EF
+        brand:
+          type: string
+          description: Brand
+          example: MAES
+        cardAcceptorNameLocation:
+          type: string
+          description: The name and place where the terminal is located. Note - A
+            backslash is not valid json. So a backslash will be escaped (with a backslash)
+          example: Purchase Merchant/ CC \ARNHEM       \NLD
+        channel:
+          type: integer
+          description: Channel code (0 atm, 1 pos, 2 eCommerce, 3 moto)
+          format: int32
+        contactlessIndicator:
+          type: integer
+          description: Indicates whether the transaction has been done contactless
+            (0 no, 1 yes)
+          format: int32
+          example: 1
+        creditDebitIndicator:
+          type: string
+          description: Funding source. The field describes how the cardholder funds
+            his account. (C = Credit, D = Debit, P = Prepaid)
+          example: D
+        forwardingInstitutionId:
+          type: string
+          description: Code identifying the acquirer processor or card acceptor
+          example: "671734512"
+        merchantCategoryCode:
+          type: integer
+          description: Merchant Catogory Code
+          format: int32
+          example: 7000
+        paymentFacilitatorId:
+          type: string
+          description: Identifier for a Payment Facilitator which allows anyone who
+            wants to offer merchant services on a sub-merchant platform.
+          example: "10000000000"
+        paymentInfo:
+          $ref: '#/components/schemas/PaymentInfo'
+        paymentProductTypeCode:
+          type: string
+          description: Code for the type of payment product. (Z Commercial Card. 2
+            Consumer Card)
+          example: "2"
+        posEntryModeClearing:
+          type: string
+          description: A code that identifies how the carddata was entered on the
+            terminal and which PINentry capabilities the terminal possesses.
+          example: "02"
+        pricePlanTarifId:
+          type: string
+          description: Unique identification for the price plan tarif.
+          example: tarifId
+        processingDateScheme:
+          type: string
+          description: processing date-time by scheme (RFC 3339)
+          format: date-time
+        region:
+          type: string
+          description: Region of the payment scheme (Netherlands Maestro, etc)
+          example: Netherlands Maestro
+        regionCode:
+          type: string
+          description: Region of the payment scheme code
+          example: "31"
+        subMerchantId:
+          type: string
+          description: Sub Merchant ID, defined by a Payment Facilitator (merchant).
+            Each merchant that is considered to be a “Payment Facilitator” by MasterCard
+            needs to uniquely identify all of its sites with a sub merchant ID
+          example: "734188"
+        terminalBatchReference:
+          type: string
+          description: Reference of the terminal batch
+          example: "0000000216"
+        terminalProtocol:
+          type: string
+          description: Terminal Protocol
+          example: "02"
+        transactionDateTime:
+          type: string
+          description: authorisation date-time (RFC 3339)
+          format: date-time
+        transactionDescription:
+          type: string
+          description: Transaction currency combination description
+          example: 0150 Chargeback Correction case id 0000001
+        transactionFeePricePlanTypeCode:
+          type: string
+          description: Type of Merchant transaction fee price plan code. (00 No price
+            plan type, 01 Standard pricing, 02 Interchange plus, 03 Advanced pricing)
+          example: "01"
+        transactionLevel:
+          type: string
+          description: Code that identifies the transaction level
+          example: Contract
+        transactionStatus:
+          type: string
+          description: Status of the transaction (CAPT transaction is captured, TFEE
+            transaction fee is added, PAID transaction is paid out)
+          example: TFEE
+        transactionType:
+          type: string
+          description: Description of transaction being undertaken
+          example: Purchase Presentment
+        transactionTypeCode:
+          type: string
+          description: |
+            Code which indicates the type of transaction being undertaken. Used in conjunction with the Account type code as part of the Processing code.
+
+            Most common codes are the following: 904 Purchase Presentment, 905 Cash Withdrawal/Advance Presentment, 901 Refund Presentment, 047 Reimbursement Equens Merchant Loss Settled Debit, 024 Adjustment (Corrections or Manual Adjustments) Correction, 030 Adjustment (Corrections or Manual Adjustments) Paid debt, 038 Adjustment (Corrections or Manual Adjustments) Fee Correction, etc.
+          example: "904"
+        truncatedPan:
+          type: string
+          description: truncated pan. Only the first 6 and last 3 digits are present.
+            Values inbetween are zeros
+          example: "6731230000000123"
+        vatLabel:
+          type: string
+          description: Describes the rate of the VAT
+          example: 21%
+        transactionAmount:
+          $ref: '#/components/schemas/Amount'
+        transactionVatAmount:
+          $ref: '#/components/schemas/Amount'
+        merchantTransactionFeeAmount:
+          $ref: '#/components/schemas/Amount'
+        merchantTransactionFeeVatAmount:
+          $ref: '#/components/schemas/Amount'
+        netAmount:
+          $ref: '#/components/schemas/Amount'
+        schemeMarkupAmount:
+          $ref: '#/components/schemas/Amount'
+        interchangeFeeAmount:
+          $ref: '#/components/schemas/Amount'
+        cashBackAmount:
+          $ref: '#/components/schemas/Amount'
+        acquirerMarkupAmount:
+          $ref: '#/components/schemas/Amount'
+        merchantTransactionAmount:
+          $ref: '#/components/schemas/Amount'
+    TransactionIdentification:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique identification for a Cardholder Initiated Transaction
+          example: "TDS16172008721825920"
+        actionId:
+          type: string
+          description: Action ID in UUID format
+          example: "432956ee-6974-42d2-bfdb-878997f21653"
+        acquirerReferenceNumber:
+          type: string
+          description: Data supplied by an acquirer to assist in identifying a transaction,
+            e.g. for researching retrievals and chargebacks
+          example: "11223344662288134679854"
+        merchantReference:
+          type: string
+          description: Merchant Reference. This is a reference that the merchant can
+            add to an authorization request towards the terminal by entering it via
+            the keyboard of the merchant.
+          example: "trx reference by merchant"
+        merchantTransactionReference:
+          type: string
+          description: |
+            *** DEPRECATED*** (Not available in v2.1. please use merchantReference)
+            Merchant Reference. This is a reference that the merchant can
+            add to an authorization request towards the terminal by entering it via
+            the keyboard of the merchant.
+          example: "DEPRECATED. Not available in v2.1. Please use merchantReference"
+        pspReference:
+          type: string
+          description: Additional information provided by the concentrator to return on his statement.
+        retrievalReferenceNumber:
+          type: string
+          description: External retrieval reference number.
+        stan:
+          type: integer
+          description: Systems Trace Audit Number
+          format: int32
+          example: 12752
+    ContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+          example: "671234567"
+        pspId:
+          type: string
+          description: Psp Id
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: "1280300"
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: "12872"
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the cardAcceptor within the contract
+          example: "30010"
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+          example: 30010
+        terminalId:
+          type: string
+          description: Unique code identifying the terminal at the Card acceptor location
+          example: 20YT45
+    Amount:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: |
+            Amount in the major units of the currency according to ISO 4217.
+
+            In case of euro, "3.10" (is 3.10 euro)
+          format: unlimited size decimal
+          example: "3.00"
+        currency:
+          type: string
+          description: Currency of the amount
+          example: EUR
+    PaymentInfo:
+      type: array
+      items:
+        $ref: '#/components/schemas/PaymentData'
+    PaymentData:
+      type: object
+      properties:
+        merchantPaymentId:
+          type: string
+          description: Unique identification of the payment in which this transaction
+            has been paid out
+          example: SO-000000017036619028
+        merchantPaymentAggregationLevelCode:
+          type: string
+          description: Code for the merchant payment aggregation level.
+          example: "02"
+        paymentType:
+          type: string
+          description: Type for which payment created. Transaction Fee, Transaction
+          example: "03"
+        paymentDate:
+          type: string
+          description: payment date (yyyy-mm-ddT00:00:00+01:00) (Note, including 00:00:00+hh:00)
+          format: date
+        paymentCrossReferenceURI:
+          type: string
+          description: URI to the MerchantApiPayment to get the payment that belongs
+            to this transaction. Only available if there is a payment date.
+          example: acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD
