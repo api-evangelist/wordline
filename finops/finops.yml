@@ -1,0 +1,66 @@
+finops:
+  description: Worldline API pricing is transaction-based and negotiated through individual merchant and partner contracts. No public per-call or tiered pricing is published. The following summarizes the pricing model characteristics known from public documentation.
+  note: All pricing is custom and requires direct engagement with Worldline sales. Contact Worldline or your regional account manager for a quote.
+  contact: https://worldline.com/en/home/contact-us.html
+
+  pricing_model:
+    type: Custom / Negotiated
+    billing_basis: Transaction volume and type
+    currency: EUR (primary), multi-currency payout supported
+    contract_type: Enterprise agreement
+
+  cost_dimensions:
+    - dimension: Transaction Fees
+      description: Per-transaction fees for payment authorizations, captures, and refunds. Rates vary by payment method, region, and volume.
+      public_rate: Not disclosed — negotiated per contract
+
+    - dimension: Interchange Fees
+      description: Card scheme interchange fees passed through to merchants. Worldline provides an Interchange Fees API for financial institutions to retrieve applicable interchange rates.
+      public_rate: Determined by card schemes (Visa, Mastercard, etc.); passed through or blended per agreement
+      reference: https://financial-services.developer.worldline.com/acquiring/interchange-fees-API
+
+    - dimension: Payment Method Fees
+      description: Additional fees may apply for alternative payment methods (APMs) beyond standard card payments. Rates vary by APM and volume commitments.
+      public_rate: Not disclosed — negotiated per contract
+
+    - dimension: Currency Conversion
+      description: Dynamic Currency Conversion (DCC) and multi-currency processing fees apply for cross-border transactions. Supported in 80+ acceptance currencies with payout in 15 currencies (Acquiring API).
+      public_rate: Not disclosed — negotiated per contract
+
+    - dimension: Platform Access / Integration Fees
+      description: Setup, integration, and platform access fees may apply depending on the product (Connect, Direct, Acquiring, SmartPOS, Financial Services).
+      public_rate: Not disclosed — negotiated per contract
+
+    - dimension: SmartPOS Terminal / Hardware
+      description: SmartPOS Android payment terminals are physical hardware. Hardware costs and software licensing fees are negotiated separately from API usage.
+      public_rate: Not disclosed — contact Worldline for hardware pricing
+
+  cost_optimization:
+    - Consolidate transactions where possible to reduce per-transaction fee volume
+    - Negotiate volume discounts based on monthly or annual transaction projections
+    - Use Card on File tokenization to reduce friction and improve authorization rates, lowering overall cost per successful transaction
+    - Leverage account-to-account payments (zero scheme fees) for applicable use cases
+    - Monitor interchange fees via the Interchange Fees API for financial institution customers to optimize routing
+    - Use merchant analysis and transaction APIs to identify trends and optimize payment method mix
+    - Leverage sandbox environments for all development and testing to avoid transaction fees during integration
+
+  apis_with_financial_relevance:
+    - name: Interchange Fees API
+      url: https://financial-services.developer.worldline.com/acquiring/interchange-fees-API
+      description: Retrieves interchange fee rates applicable to merchants and transaction types; relevant for financial institutions optimizing routing costs
+
+    - name: Merchant Analysis API
+      url: https://financial-services.developer.worldline.com/acquiring/merchant-analysis-API
+      description: Provides merchant trends, revenue, and transaction analytics useful for monitoring and optimizing payment cost structures
+
+    - name: Statements API
+      url: https://financial-services.developer.worldline.com/acquiring/statements-API
+      description: Provides merchant payment specifications and detailed financial statements for reconciliation and FinOps reporting
+
+    - name: Transactions API
+      url: https://financial-services.developer.worldline.com/acquiring/transactions-API
+      description: Detailed transaction data retrieval enabling cost attribution and chargeback tracking
+
+    - name: Merchant Payments API
+      url: https://financial-services.developer.worldline.com/acquiring/merchant-payments-API
+      description: Provides comprehensive payment data to merchant customers for financial reporting and reconciliation

@@ -1,0 +1,52 @@
+rate_limits:
+  description: Worldline does not publicly publish specific numeric rate limits for its payment APIs. Rate limits and throttling policies are negotiated as part of individual merchant and partner agreements. The following represents known operational characteristics and best practices from Worldline documentation.
+  note: For specific rate limit thresholds applicable to your integration, contact Worldline sales or your account manager.
+  contact: https://developer.worldline.com/en/home/contact
+
+  policies:
+    - api: Worldline Connect (Global Collect) API
+      scope: Server-to-Server API
+      session_expiry: Client API sessions expire after 2 hours
+      authentication: API key per merchant (retrieved from Configuration Center)
+      environments:
+        - name: Sandbox
+          url: https://payment.preprod.connect.worldline-solutions.com
+          purpose: Testing and development
+        - name: Production
+          url: https://payment.connect.worldline-solutions.com
+          purpose: Live transactions
+      notes: Specific request-per-second limits are not publicly disclosed; contact merchant support for thresholds.
+
+    - api: Worldline Direct (Global Online Pay) API
+      scope: Server and Client API
+      environments:
+        - name: Test
+          url: https://secure.ogone.com/Ncol/Test/
+          purpose: Testing and development
+        - name: Production
+          url: https://secure.ogone.com/Ncol/Prod/
+          purpose: Live transactions
+      notes: Rate limits are not publicly specified; contact Worldline Direct support for your account-specific thresholds.
+
+    - api: Worldline Acquiring API
+      scope: REST API for PSPs and Payment Facilitators
+      authentication: Negotiated API credentials
+      notes: Acquiring API rate limits are defined in the partner agreement. No public thresholds are documented.
+
+    - api: Worldline Financial Services APIs (Issuing, Acquiring, Open Banking, Identity)
+      scope: Financial institution REST APIs
+      authentication: OAuth2 tokens; access controlled per registered application
+      environments:
+        - name: Sandbox
+          url: https://financial-services.developer.worldline.com
+          purpose: Testing via sandbox environment
+        - name: Production
+          purpose: Production access upon contract agreement
+      notes: Rate limits for issuing, acquiring, open banking, and identity APIs are defined per financial institution contract.
+
+  general_guidance:
+    - Implement retry logic with exponential backoff for all Worldline API calls
+    - Use idempotency keys where supported to safely retry failed requests
+    - Cache payment method lists and configuration data to reduce API calls
+    - Use webhooks/notifications where available instead of polling for payment status
+    - Batch operations where the API supports it to reduce call volume
