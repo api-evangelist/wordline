@@ -1,0 +1,3035 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Account - Statement API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Account - Statement
+  description: Account Statement Api Controller
+paths:
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements:
+    get:
+      tags:
+      - Account - Statement
+      summary: Retrieve statements list for the account by external reference
+      operationId: listStatementsByAccountIssuerExtRef
+      description: "The API is used to get the list of statements generated for an account and optionally a requested period.\nIt is also possible to get reprint information of a statement.\nThe input parameters are:\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n- the search period (start date / end date),\n- the embed field \"reprint-history\" if needed.\n\nThe API returns:\n•\tin the consumer cards context, the list of statements of the paying account\n•\tin the commercial cards context, the list of statements of the employee account whether it is paid by another account or not. \n\nIn response, the list of statement is provided with the  financial information of each statement such as:\nprevious cycle balance (start balance), end cycle balance, due amount, total of payments, ..."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: periodStartDateTime
+        in: query
+        description: 'Period start date of cycle closure to include (format : yyyy-MM-ddTHH:mm:ssZ)'
+        required: false
+        type: string
+      - name: periodEndDateTime
+        in: query
+        description: 'Period end date of cycle closure to include (format : yyyy-MM-ddTHH:mm:ssZ)'
+        required: false
+        type: string
+      - name: includeOriginalAccount
+        in: query
+        description: 'Parameter to indicate if data related to the original account should be returned : case of a product change or a card reallocation (only for corporate cards).Default value is false.'
+        required: false
+        type: boolean
+        default: false
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - reprintHistory
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListStatement'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements/last:
+    get:
+      tags:
+      - Account - Statement
+      summary: Retrieve last statement for the account by external reference
+      operationId: retrieveLastStatementByAccountIssuerExtRef
+      description: "The API is used to get the financial information of  the last statement generated for an account such as:\nprevious cycle balance (start balance), end cycle balance, due amount, total of payments, ...\nIt is also possible to get reprint information of the statement.\nThe input parameters are:\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n- the embed field \"reprint-history\" if needed.\n\nThe API returns:\n•\tin the consumer cards context, the statement of the paying account\n•\tin the commercial cards context, the statement of the employee account whether it is paid by another account or not."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - reprintHistory
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityStatement'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements/last/operations:
+    get:
+      tags:
+      - Account - Statement
+      summary: List operations for last account statement by external reference
+      description: 'The API is used to get the list of operations of the last statement generated for an account.
+
+        The input account can be provided by using:
+
+        - the account reference
+
+        - or the issuer external account reference.'
+      operationId: listLastStatementOperationsByAccountIssuerExtRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListOperation'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements/last/reprint:
+    post:
+      tags:
+      - Account - Statement
+      summary: Reprint last statement by external reference
+      description: 'The API is used to request the reprint of the last statement for an account.
+
+        The input account can be provided by using:
+
+        - the account reference
+
+        - or the issuer external account reference.
+
+
+        As a result, the statement data is extracted again and pushed to the output management module'
+      operationId: reprintLastStatementByAccountIssuerExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityReprintStatementResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements/next:
+    get:
+      tags:
+      - Account - Statement
+      summary: Retrieve next statement for the account by external reference
+      description: "The API is used to get the financial information based on the last statement generated for an account such as:\ncurrent cycle balance, cycle closure date, payment due date, next cycle closure date (end cycle balance, due amount, total of payments are not yet known).\nThe input parameters are:\n- the issuerId\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n\nThe API returns:\n•\tin the consumer cards context, the statement of the paying account\n•\tin the commercial cards context, the statement of the employee account whether it is paid by another account or not."
+      operationId: retrieveNextStatementByAccountIssuerExtRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - reprintHistory
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityStatement'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements/next/operations:
+    get:
+      tags:
+      - Account - Statement
+      summary: List operations for next account statement by external reference
+      description: "The API is used to get the list of operations generated for an account since the last cycle closure date. \nThose operations will be part of the next statement.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference."
+      operationId: listNextStatementOperationsByAccountIssuerExtRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListOperation'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements/{cycleClosureDate}:
+    get:
+      tags:
+      - Account - Statement
+      summary: Retrieve one statement from the list by external reference
+      description: "The API is used to get the financial information  for an account statement such as: previous cycle balance (start balance), end cycle balance, due amount, total of payments, ...\nThe input account can be provided by using:\n•\tthe account reference\n•\tor the issuer external account reference.\nThe statement involved by the request has to be provided by giving the cycle closure date.\n\nThe API returns:\n•\tin the consumer cards context, the statement of the paying account\n•\tin the commercial cards context, the statement of the employee account whether it is paid by another account or not."
+      operationId: retrieveStatementByAccountIssuerExtRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: cycleClosureDate
+        in: path
+        description: 'Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)
+
+          HH:mm:ss should be filled with 23:59:59'
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - reprintHistory
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityStatement'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements/{cycleClosureDate}/operations:
+    get:
+      tags:
+      - Account - Statement
+      summary: List operations for an account statement by external reference
+      description: "The API is used to get the list of operations posted to an account included in a statement.\nThe input account can be provided by using:\n•\tthe account reference\n•\tor the issuer external account reference.\nThe statement involved by the request has to be provided by giving the cycle closure date.\nIt is also possible to exclude sub-operations generated during the payment (manual or automatic) / reimbursement apportionment on accounts."
+      operationId: listStatementOperationsByAccountIssuerExtRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: cycleClosureDate
+        in: path
+        description: 'Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)
+
+          HH:mm:ss should be filled with 23:59:59'
+        required: true
+        type: string
+      - name: excludeOperationKinds
+        in: query
+        description: 'Parameter to filter out sub-operations generated during the payment (manual or automatic)/reimbursement apportionment on accounts Available value : SUBPAYOP (apportionment operation)'
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListOperation'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/statements/{cycleClosureDate}/reprint:
+    post:
+      tags:
+      - Account - Statement
+      summary: Reprint a statement by external reference
+      description: 'The API is used to request the reprint of a statement for an account.
+
+        The input account can be provided by using:
+
+        - the account reference
+
+        - or the issuer external account reference.
+
+
+        The statement involved by the request has to be provided by giving the cycle closure date
+
+
+        As a result, the statement data is extracted again and pushed to the output management module.'
+      operationId: reprintStatementByAccountIssuerExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: cycleClosureDate
+        in: path
+        description: 'Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)
+
+          HH:mm:ss should be filled with 23:59:59'
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityReprintStatementResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements:
+    get:
+      tags:
+      - Account - Statement
+      summary: Retrieve statements list for the account
+      operationId: listStatements
+      description: "The API is used to get the list of statements generated for an account and optionally a requested period.\nIt is also possible to get reprint information of a statement.\nThe input parameters are:\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n- the search period (start date / end date),\n- the embed field \"reprint-history\" if needed.\n\nThe API returns:\n•\tin the consumer cards context, the list of statements of the paying account\n•\tin the commercial cards context, the list of statements of the employee account whether it is paid by another account or not. \n\nIn response, the list of statement is provided with the  financial information of each statement such as:\nprevious cycle balance (start balance), end cycle balance, due amount, total of payments, ..."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: periodStartDateTime
+        in: query
+        description: 'Period start date of cycle closure to include (format : yyyy-MM-ddTHH:mm:ssZ)'
+        required: false
+        type: string
+      - name: periodEndDateTime
+        in: query
+        description: 'Period end date of cycle closure to include (format : yyyy-MM-ddTHH:mm:ssZ)'
+        required: false
+        type: string
+      - name: includeOriginalAccount
+        in: query
+        description: 'Parameter to indicate if data related to the original account should be returned : case of a product change or a card reallocation (only for corporate cards).Default value is false.'
+        required: false
+        type: boolean
+        default: false
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - reprintHistory
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListStatement'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements/last:
+    get:
+      tags:
+      - Account - Statement
+      summary: Retrieve last statement for the account
+      operationId: retrieveLastStatement
+      description: "The API is used to get the financial information of  the last statement generated for an account such as:\nprevious cycle balance (start balance), end cycle balance, due amount, total of payments, ...\nIt is also possible to get reprint information of the statement.\nThe input parameters are:\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n- the embed field \"reprint-history\" if needed.\n\nThe API returns:\n•\tin the consumer cards context, the statement of the paying account\n•\tin the commercial cards context, the statement of the employee account whether it is paid by another account or not."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - reprintHistory
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityStatement'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements/last/operations:
+    get:
+      tags:
+      - Account - Statement
+      summary: List operations for last account statement
+      description: 'The API is used to get the list of operations of the last statement generated for an account.
+
+        The input account can be provided by using:
+
+        - the account reference
+
+        - or the issuer external account reference.'
+      operationId: listLastStatementOperations
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListOperation'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements/last/reprint:
+    post:
+      tags:
+      - Account - Statement
+      summary: Reprint last statement
+      description: 'The API is used to request the reprint of the last statement for an account.
+
+        The input account can be provided by using:
+
+        - the account reference
+
+        - or the issuer external account reference.
+
+
+        As a result, the statement data is extracted again and pushed to the output management module'
+      operationId: reprintLastStatement
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityReprintStatementResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements/next:
+    get:
+      tags:
+      - Account - Statement
+      summary: Retrieve next statement for the account
+      description: "The API is used to get the financial information based on the last statement generated for an account such as:\ncurrent cycle balance, cycle closure date, payment due date, next cycle closure date (end cycle balance, due amount, total of payments are not yet known).\nThe input parameters are:\n- the issuerId\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n\nThe API returns:\n•\tin the consumer cards context, the statement of the paying account\n•\tin the commercial cards context, the statement of the employee account whether it is paid by another account or not."
+      operationId: retrieveNextStatement
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - reprintHistory
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityStatement'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements/next/operations:
+    get:
+      tags:
+      - Account - Statement
+      summary: List operations for next account statement
+      description: "The API is used to get the list of operations generated for an account since the last cycle closure date. \nThose operations will be part of the next statement.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference."
+      operationId: listNextStatementOperations
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListOperation'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements/{cycleClosureDate}:
+    get:
+      tags:
+      - Account - Statement
+      summary: Retrieve one statement from the list
+      description: "The API is used to get the financial information  for an account statement such as: previous cycle balance (start balance), end cycle balance, due amount, total of payments, ...\nThe input account can be provided by using:\n•\tthe account reference\n•\tor the issuer external account reference.\nThe statement involved by the request has to be provided by giving the cycle closure date.\n\nThe API returns:\n•\tin the consumer cards context, the statement of the paying account\n•\tin the commercial cards context, the statement of the employee account whether it is paid by another account or not."
+      operationId: retrieveStatement
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: cycleClosureDate
+        in: path
+        description: 'Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)
+
+          HH:mm:ss should be filled with 23:59:59'
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - reprintHistory
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityStatement'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements/{cycleClosureDate}/operations:
+    get:
+      tags:
+      - Account - Statement
+      summary: List operations for an account statement
+      description: "The API is used to get the list of operations posted to an account included in a statement.\nThe input account can be provided by using:\n•\tthe account reference\n•\tor the issuer external account reference.\nThe statement involved by the request has to be provided by giving the cycle closure date.\nIt is also possible to exclude sub-operations generated during the payment (manual or automatic) / reimbursement apportionment on accounts."
+      operationId: listStatementOperations
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: cycleClosureDate
+        in: path
+        description: 'Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)
+
+          HH:mm:ss should be filled with 23:59:59'
+        required: true
+        type: string
+      - name: excludeOperationKinds
+        in: query
+        description: 'Parameter to filter out sub-operations generated during the payment (manual or automatic)/reimbursement apportionment on accounts Available value : SUBPAYOP (apportionment operation)'
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListOperation'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/statements/{cycleClosureDate}/reprint:
+    post:
+      tags:
+      - Account - Statement
+      summary: Reprint a statement
+      description: 'The API is used to request the reprint of a statement for an account.
+
+        The input account can be provided by using:
+
+        - the account reference
+
+        - or the issuer external account reference.
+
+
+        The statement involved by the request has to be provided by giving the cycle closure date
+
+
+        As a result, the statement data is extracted again and pushed to the output management module.'
+      operationId: reprintStatement
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: cycleClosureDate
+        in: path
+        description: 'Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)
+
+          HH:mm:ss should be filled with 23:59:59'
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityReprintStatementResponse'
+      security:
+      - basic: []
+      deprecated: false
+definitions:
+  Statement:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      accountIdentifier:
+        description: Refer to Account.accountIdentifier
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      cycleClosureDate:
+        type: string
+        format: date-time
+        description: Cycle closure date (mandatory)
+      reprintHistory:
+        type: array
+        description: 'Historic data of reprinting if any (optional).
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/ReprintHistory'
+      creationDate:
+        type: string
+        format: date-time
+        description: Date when the statement is generated
+      paymentDueDate:
+        type: string
+        format: date-time
+        description: Deprecated
+      directDebitAmount:
+        description: 'Amount of the direct debit that is issued for payment when the payment mode is autopayment (direct debit).
+
+          Depending on the issuer configuration, the direct Debit Amount can be different from the amount calculated at the cycle closure date (field theoricDirectDebitAmount) if credit operations (reversal, credit voucher…) are posted to the account between the cycle closure date and the date the direct debit is issued.'
+        allOf:
+        - $ref: '#/definitions/Amount'
+      theoricDirectDebitAmount:
+        description: Direct debit amount calculated at the cycle closure date when the payment mode is autopayment (direct debit) and depending on the payment conditions.
+        allOf:
+        - $ref: '#/definitions/Amount'
+      cycleBalance:
+        description: Balance amount for the statement
+        allOf:
+        - $ref: '#/definitions/Amount'
+      previousCycleBalance:
+        description: 'Balance amount of the previous cyclic closure (start balance of the statement).
+
+          Not provided for a non-closed cycle.'
+        allOf:
+        - $ref: '#/definitions/Amount'
+      totalOfPayment:
+        description: Sum of all payment operations received during the cycle.
+        allOf:
+        - $ref: '#/definitions/Amount'
+      loyaltyPoints:
+        type: array
+        description: Refer to LoyaltyPoint.loyaltyPoints
+        items:
+          $ref: '#/definitions/LoyaltyPoint'
+      previousCycleClosureDate:
+        type: string
+        format: date-time
+        description: The closure date of the previous cycle (optional)
+      nextCycleClosureDate:
+        type: string
+        format: date-time
+        description: The date of the next cycle closure (optional)
+      amountDue:
+        description: Minimum payment amount calculated by our system depending  on the payment conditions of the customer (full payer/partial payer) the customer has to pay to reimburse his debt.
+        allOf:
+        - $ref: '#/definitions/Amount'
+      initialPastAmountDue:
+        description: Remaining amount due of the previous cycle, set at cycle closure (optional, no past amount due for the first cycle or if the amount due was fully repaid for during the previous cycle).
+        allOf:
+        - $ref: '#/definitions/Amount'
+      initialRemainingAmountDue:
+        description: Sum of the amountDue (minimum payment amount) of the cycle and the initialPastAmountDue (optional).
+        allOf:
+        - $ref: '#/definitions/Amount'
+      statementDuplicatedForCompany:
+        type: boolean
+        description: Indicates if the company receives a duplicate for statement generated by other paying accounts in the corporate contract
+      iban:
+        type: string
+        description: International Bank Account Number of the customer (debtor)
+      payingAccountIdentifier:
+        description: The reference of paying account
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      cycleInformation:
+        description: Dates related to the closure calendar for the closure cycle
+        allOf:
+        - $ref: '#/definitions/CycleInformation'
+    title: Statement
+  CardIdentifier:
+    type: object
+    description: Identification of the card either by Issuer card external reference or by card reference
+    properties:
+      cardReference:
+        type: string
+        description: 'Reference of the card generated by our system, unique per platform.
+
+          This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
+      issuerCardExternalReference:
+        type: string
+        description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+
+          This reference is unique per issuer and may be used to carry out research and find information.'
+    title: CardIdentifier
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  DetailedFeeAmount:
+    type: object
+    properties:
+      percentage:
+        type: string
+        description: Percentage used for amount calculation of the covered risk
+      name:
+        type: string
+        description: Name of the covered risk
+      feeAmount:
+        description: Amount / Currency / Exponent of the covered risk
+        allOf:
+        - $ref: '#/definitions/Amount'
+      externalOperationCode:
+        type: string
+        description: External operation code the covered risk
+      includeInOtherDetailFeeAmount:
+        type: boolean
+        description: Indicates if the detail fee amount is part of another detail fee amount
+    title: DetailedFeeAmount
+  LoyaltyPoint:
+    type: object
+    properties:
+      unit:
+        type: string
+        description: ' Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional).'
+      cumulatedValue:
+        type: integer
+        format: int64
+        description: Total number of loyalty points (optional).
+    title: LoyaltyPoint
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  TravelDetailLeg:
+    type: object
+    properties:
+      flightNumber:
+        type: string
+        description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
+      carrier:
+        type: string
+        description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
+      class:
+        type: string
+        description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
+      stopOver:
+        type: string
+        description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
+      destination:
+        type: string
+        description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
+      fareCode:
+        type: string
+        description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
+    title: TravelDetailLeg
+  DisputeFolderIdentifier:
+    type: object
+    required:
+    - disputeFolderReference
+    properties:
+      disputeFolderReference:
+        type: string
+        description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
+      issuerDisputeExternalReference:
+        type: string
+        description: The issuer Dispute External Reference, Present if provided in the request.
+    title: DisputeFolderIdentifier
+  ApiResponseEntityReprintStatementResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/ReprintStatementResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityReprintStatementResponse
+  ApiResponseEntityStatement:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/Statement'
+    description: Issuer response entity
+    title: ApiResponseEntityStatement
+  ApiResponseEntityListStatement:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        type: array
+        description: Response data
+        items:
+          $ref: '#/definitions/Statement'
+    description: Issuer response entity
+    title: ApiResponseEntityListStatement
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  ApiResponseEntityListOperation:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        type: array
+        description: Response data
+        items:
+          $ref: '#/definitions/Operation'
+    description: Issuer response entity
+    title: ApiResponseEntityListOperation
+  CycleInformation:
+    type: object
+    description: Dates related to the closure calendar for the open closure cycle
+    properties:
+      cycleStartDate:
+        type: string
+        format: date-time
+        description: Date when the cycle is opened
+      cycleClosureDate:
+        type: string
+        format: date-time
+        description: Date when the open cycle is closed
+      statementGenerationDate:
+        type: string
+        format: date-time
+        description: Date when the statement is produced for the cycle
+      directDebitIssuingDate:
+        type: string
+        format: date-time
+        description: Direct debit issuing date of the cycle
+      directDebitDueDate:
+        type: string
+        format: date-time
+        description: Direct debit due date of the cycle
+      gracePeriodEndDate:
+        type: string
+        format: date-time
+        description: Grace period end date of the cycle
+      dueDateForSelfPayer:
+        type: string
+        format: date-time
+        description: Due date for self payer of the cycle
+      cycleDueDate:
+        type: string
+        format: date-time
+        description: Due date of the cycle, used for monitoring process (delinquency)
+      statementEffectiveStartDate:
+        type: string
+        format: date
+        description: "Effective start date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
+      statementEffectiveEndDate:
+        type: string
+        format: date
+        description: "Effective end date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
+    title: CycleInformation
+  TravelDetail:
+    type: object
+    properties:
+      flightNumber:
+        type: string
+        description: flightNumber (customer travel details)
+      originCity:
+        type: string
+        description: originCity (customer travel details)
+      destinationCity:
+        type: string
+        description: 'destinationCity (customer travel details) '
+    title: TravelDetail
+  LodgingInformation:
+    type: object
+    properties:
+      businessFormatCode:
+        type: string
+        description: 'The fields represents additional data from VISA clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Business Format Code (Value: CA); POS: 17-18.'
+      noShowIndicator:
+        type: string
+        description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging No-Show Indicator; POS 27.
+
+          MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
+      extraCharges:
+        type: string
+        description: 'The fields represents additional data from VISA clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Extra Charges; POS 28–33.'
+      checkInDate:
+        type: string
+        description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Check-in Date (YYMMDD); POS 38-43.
+
+          MCI mapping is the following: PDS 0574. PDS 0574 (Arrival Date) contains the cardholder check-in date (YYMMDD).'
+      dailyRoomRate:
+        type: string
+        description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Daily Room Rate; POS 44-55.
+
+          MCI mapping is the following: PDS 0580. PDS 0580 (Room Rate) contains the daily room charges exclusive of taxes and fees. This PDS consists of two subfields:
+
+          1. Room Rate Amount; POS: 1-12
+
+          2. Room Rate Exponent; POS: 13'
+      totalTax:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Tax; POS 56-67.
+
+          MCI mapping is the following: PDS 0597. PDS 0597 (Total Tax Amount) contains the total amount of sales tax or value added tax (VAT) on the total purchase amount.'
+      prepaidExpenses:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Prepaid Expenses; POS 68-79.
+
+          MCI mapping is the following: PDS 0704. PDS 0704 (Prepaid Expenses) provides the amount of deposit or other prepaid amounts for the lodging stay.'
+      foodBeverageCharge:
+        type: string
+        description: 'The field represents additional data from VISA clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Food/Beverage Charges; POS 80-91.'
+      folioCashAdvances:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Folio Cash Advances; POS 92-103.
+
+          MCI mapping is the following: PDS 0706. PDS 0706 (Cash Advances) provides the amount of cash received during the lodging stay.'
+      totalRoomNights:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Room Nights; POS 104-105.
+
+          MCI mapping is the following: PDS 0703. PDS 0703 (Total Room Nights) provides the total number of nights for which a room was contracted during a lodging stay.'
+      totalRoomTax:
+        type: string
+        description: "The field represents additional data from VISA and MCI clearing file addendum.\nVISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Room Tax; POS 106-117.\nMCI mapping is the following: PDS 0581. PDS 0581 (Total Room Tax) contains tax amount information such as the daily room tax, occupancy tax, energy tax, and tourist tax amounts. This PDS consists of three subfields:\n1. Total Room Tax Amount; POS: 1-12\n2. Total Room Tax Exponent; POS: 13\n 3. Total Room Tax Sign; POS: 14"
+    title: LodgingInformation
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  AccountIdentifier:
+    type: object
+    properties:
+      accountReference:
+        type: string
+        description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+      issuerAccountExternalReference:
+        type: string
+        description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+    title: AccountIdentifier
+  Operation:
+    type: object
+    required:
+    - operationIdentifier
+    - externalOperationDate
+    - externalOperationReference
+    - externalOperationServicePoster
+    - operationKind
+    - postingDate
+    - reversal
+    - postingAccountIdentifier
+    - status
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      operationIdentifier:
+        description: 'Internal identifier associated to the transaction to which one this transaction is linked. 16-digit incremental number (1000000000000001)
+
+          Ex: TRANSACTION_FEE linked to FP (Parent)'
+        allOf:
+        - $ref: '#/definitions/OperationIdentifier'
+      acquirerReferenceData:
+        type: string
+        description: 'Acquirer Reference Number (ARN) associated to the transaction
+
+          - MCI : DE 031 - Acquirer Reference Data
+
+          - VISA : TCR0 Acquirer Reference Number pos. 27-49'
+      cardAcceptorCity:
+        type: string
+        description: 'Card Acceptor Location (City) associated to the transaction
+
+
+          MCI : DE 043 s3 - Card Acceptor City
+
+          VISA : TCR0 - Merchant City'
+      cardAcceptorCountry:
+        type: string
+        description: 'Card Acceptor Country Code associated to the transaction
+
+
+          MCI : DE 043 s6 - Card Acceptor Country Code
+
+          VISA : TCR0 - Merchant Country'
+      cardAcceptorZipCode:
+        type: string
+        description: 'Card Acceptor ZIP Code associated to the transaction
+
+
+          MCI : DE 043 s4 - Card Acceptor Postal (ZIP) Code
+
+          VISA : TCR0 - Merchant zip code'
+      cardScheme:
+        type: string
+        description: Short name of national or international network, if implicated.
+      eCommerce:
+        type: boolean
+        description: Ecommerce indicator
+      cardAcceptorName:
+        type: string
+        description: 'Complete Card Acceptor Name / Location (Merchant) associated to the transaction
+
+
+          MCI : DE 043 s1 to s6 - Card Acceptor Name/Location
+
+          VISA : TCR0'
+      description:
+        type: string
+        description: Textual description of the current operation. Can contain a free text that can be used when the operation is presented to the Customer
+      externalOperationCode:
+        type: string
+        description: Value per operation type posted to an Account determined by our system according to specific Issuer configuration
+      feeType:
+        type: string
+        description: 'Type of fee used to create the current operation. Mandatory if the operation is a fee.
+
+          In the case fee is managed within our system, the complete value list is shared with the issuer and can be for example "ACCOUNT_SETUP_FEE", "TRANSACTION_FEE". "EVENT_FEE","CARD_FEE".'
+      maskedPan:
+        type: string
+        description: Refer to Card.maskedPan
+      merchantCategoryCode:
+        type: string
+        description: Classifies the type of business applicable to the card acceptor
+      'balanceAdjustmentReason ':
+        type: string
+        description: 'The reason why the balance adjustment has been requested (conditional)
+
+          Mandatory when balance adjustment.
+
+          Allowed value list depends on the issuer configuration'
+      exchangeRate:
+        type: number
+        format: double
+        description: Used to realize the conversion between the original currency and the account currency
+      exchangeRateDate:
+        type: string
+        format: date-time
+        description: The date of the exchange operation
+      exchangeRateSource:
+        type: string
+        description: The source of the exchange rate information. Rate source name or scheme used.
+      operationCode:
+        type: string
+        description: 'Transaction category defined by our system describing the current operation (only for Scheme transaction and load operation). Values:
+
+          CASH_ADVANCE,
+
+          CASH_BACK
+
+          CASH_WITHDRAWAL,
+
+          CREDIT,
+
+          FUND_TRANSFER,
+
+          NORMAL_PURCHASE,
+
+          REFUND_PURCHASE
+
+          LOAD'
+      operationKind:
+        type: string
+        description: 'Indicates the operation class.
+
+          Values:
+
+          BAL (balance transfer)
+
+          FEE (fee operation)
+
+          INT (interest operation)
+
+          LOAD (load operation)
+
+          PAY (payment operation)
+
+          RMB (reimbursement operation)
+
+          TRN (transaction operation from scheme)
+
+          DISPUTE (refund / redebit operation triggered from our Dispute module)
+
+          RST_BAL (reset balance operation)
+
+          SUBPAYOP (apportionment operation)
+
+          WRITE_OFF (write off - esp account closing)
+
+          CRD_INST (instalment operation)
+
+          CRD_INST_INIT (Instalment credit operation)
+
+          BAL_ADJ (balance adjustment operation)'
+      postingDate:
+        type: string
+        format: date-time
+        description: Date and Time when the transaction is posted to the account
+      reconciliationAmount:
+        description: "Transaction amount provided by the scheme in the currency agreed between the scheme and the issuer/WL. \nMandatory for 1st presentment.\nScheme Reconciliation Amount / Currency  / Exponent\n- MCI: DE 005 / DE 050 / associated PDS 0148\n- VISA: Destination Amount / Destination Currency"
+        allOf:
+        - $ref: '#/definitions/Amount'
+      referenceAmount:
+        description: Amount impacting the Cardholder account
+        allOf:
+        - $ref: '#/definitions/Amount'
+      reversal:
+        type: boolean
+        description: This flag indicates if this operation is a reversal (true) or not (false)
+      reversalReason:
+        type: string
+        description: The reason why the reversal has been created. Determined by the calling service depending information of the original message (conditional) Mandatory, if the operation is reversal
+      subFeeType:
+        type: string
+        description: Sub Type of internal fee created and impacting the Cardholder Account (free text)
+      frequency:
+        description: Free text describing the frequency of the operation performed (daily, monthly, yearly...) (optional)
+        type: string
+      transactionAmount:
+        description: 'DE 4 (Amount, Transaction) is the amount of funds the cardholder requested in the currency appearing on the transaction information document (TID), which may be the acquirer’s local currency or a currency acceptable to the cardholder and card acceptor that the acquirer supports, exclusive of PDS 0146 (Amounts, Transaction Fee). If no currency is identified on the TID, the transaction is deemed to have taken place in the currency that is legal tender at the point of interaction.
+
+          Amount of the transaction. This field contains numerics. Two decimal positions are implied. If the Original Source Currency code is 392 (Japanese Yen), any value other than zero after the decimal produces an Invalid Amount error.
+
+          MCI DE 004
+
+          VISA TCR0
+
+          The value can be both positive and negative.'
+        allOf:
+        - $ref: '#/definitions/Amount'
+      transactionDate:
+        type: string
+        format: date-time
+        description: 'Transaction Date in Merchant site when transaction has been performed
+
+          E.g. : 2023-02-04T00:00:00+01:00
+
+          - MCI: DE 012 (Date and Time, Local Transaction)
+
+          - VISA : TCR0 pos. 58-61'
+      valueDate:
+        type: string
+        format: date-time
+        description: The date the operation impacts balances or counters. If not set, the valueDate will be set to operationDate if operationDate is not in the past, today otherwise (conditional)
+      walletId:
+        type: string
+        description: Indicates the identifier of the wallet (Apple Pay or other token requestor) used for the operation
+      authorizationBusinessCaseIdentifier:
+        description: Internal identifier provided by the WLP Front Office in each Authorisation Message received. Only present if operation (first presentment) matched with an authorization.
+        allOf:
+        - $ref: '#/definitions/AuthorizationBusinessCaseIdentifier'
+      cardIdentifier:
+        description: Refer to Card.cardIdentifier
+        allOf:
+        - $ref: '#/definitions/CardIdentifier'
+      disputeFolderIdentifier:
+        description: Refer to disputeFolderIdentifier object description (technical field)
+        allOf:
+        - $ref: '#/definitions/DisputeFolderIdentifier'
+      panTokenIdentifier:
+        description: 'Token Requestor Identifier value associated to the transaction
+
+          - MCI : PDS 0059 - Token Requestor ID
+
+          - VISA : TCR5 Token Requestor ID pos. 149-159'
+        allOf:
+        - $ref: '#/definitions/PanTokenIdentifier'
+      externalOperationDate:
+        type: string
+        format: date-time
+        description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+          The date is provided by the caller and must not be modified in case of reprocess (idempotency)'
+      externalOperationReference:
+        type: string
+        description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+          The reference is provided by the caller and must not be modified in case of reprocess (idempotency)'
+      externalOperationServicePoster:
+        type: string
+        description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+          The Service Poster depends on the caller. This is a free text. When the  value is ITP, OPC, IDM, CMS, CAS, WLP-CAS or WLP_CAS, operations are considered "internal".'
+      businessCaseId:
+        type: string
+        description: DEPRECATED
+      pointOfServiceDataCode:
+        type: string
+        description: DEPRECATED
+      travelInformation:
+        description: DEPRECATED
+        allOf:
+        - $ref: '#/definitions/TravelInformation'
+      pan:
+        type: string
+        description: Refer to Card.pan (optional)
+      panReference:
+        type: string
+        description: Pan reference only if the card is associated to the operation
+      acquisitionMaterial:
+        type: string
+        description: 'Only for scheme transaction.
+
+          Type of material used to realize the operation.
+
+          Possible values:
+
+          ATM, POS, INTERNET, MANUAL, VOICE_PHONE, UNATTENDED_TERMINAL, MOBILE, UNKNOWN'
+        enum:
+        - ATM
+        - POS
+        - VOICE_PHONE
+        - MANUAL
+        - UNATTENDED_TERMINAL
+        - MOBILE
+        - INTERNET
+        - UNKNOWN
+      cardAcceptorIdCode:
+        type: string
+        description: 'Identifies the card acceptor ID assigned by the acquirer. This ID must represent a unique identifier for each merchant name/location within the acquiring BIN.
+
+          Card Acceptor (Merchant) Identifier associated to the transaction
+
+          - MCI : DE 042 - Card Acceptor ID Code
+
+          - VISA : TCR5 - Acquirer''s Business ID'
+      entryMode:
+        type: string
+        description: 'Precise how the card information have been read. Conversion of the native fields.
+
+          Possible values :
+
+          UNKNOWN
+
+          OCR: Optical Character Reader
+
+          MANUAL
+
+          MAGSTRIPE: Magnetic Stripe read
+
+          CONTACTLESS: Contactless read (called proximity payment or Mobile Chip system)
+
+          CHIP: Chip read
+
+          BARCODE: Bar Code read'
+      approvalCode:
+        type: string
+        description: 'Authorization Approval Code associated to the transaction
+
+          * MCI : DE 038 - Approval Code
+
+          * VISA : TCR0 Authorization Code pos. 152-157'
+      authorization:
+        description: 'Data retrieved from the authorization matched to the transaction.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/OperationAuthorization'
+      pointOfSaleEnvironment:
+        type: string
+        description: 'Recurring transaction indicator, indicating that the cardholder
+
+          and merchant have agreed to periodic billing for goods and services, such as
+
+          utility bills, internet connection, and magazine subscriptions.
+
+          Values:
+
+          Space = default
+
+          R = Recurring Payment Transaction
+
+          I = Installment Payment
+
+          C = Credential on File'
+      mailPhoneEcommerceAndPaymentIndicator:
+        type: string
+        description: "Mail Phone Ecommerce and Payment Indicator indicates if transaction was initiated as mail order, telephone order or electronic commerce. \nUsed in Visa interchange validation and determination.  \nRequired in input for Visa transactions. \nBase II mapped from Draft data TCR1 position 116. \nDomain: \nSpace - Field not applicable or acquirer did not specify.  \n1 - Mail/Phone Order (MO/TO). \n2 - Recurring transaction (valid only for U.S. acquired transactions). \n3 - Instalment payment.  \n4 - Unknown classification/other mail order.  \n5 - Secure Electronic Commerce Transaction. \n6 - Non-Authenticated Security Transaction at a 3-D Secure-capable merchant, and merchant attempted to authenticate the cardholder using 3-D secure. \n7 - Non-Authenticated Security Transaction \n8 - Non-secure transaction. \n9 - For optional regional use only."
+      posDataCode:
+        type: string
+        description: DEPRECATED
+      pointOfService:
+        description: Represents series of codes that identify terminal capability, terminal environment, and point-of interaction (POI) security data (both for VISA and MCI)
+        allOf:
+        - $ref: '#/definitions/PointOfService'
+      acquirerId:
+        description: 'VISA mapping is the following: TC05, TCR0; Field: Acquirer Reference Number POS 27-49. Should be taken positions 2-7 of this field (Acquirer BIN).
+
+          MCI mapping is the following: DE 31 Acquirer Reference Data. Should be taken positions 2-7 of this field.'
+        type: string
+      destinationId:
+        description: 'VISA mapping is the following: Determined based on transaction data.
+
+          MCI mapping is the following: DE 93 transaction Destination Institution ID code.'
+        type: string
+      detailedFeeAmounts:
+        type: array
+        description: "Details of the insurance fee when this latter is a percentage of the account balance and covers several risks e.g. Payment protection insurance covering Unemployment, Incapacity for work and disability/life. \nEach detail amount represents a part of the insurance fee for a given risk and contains the following information : the covered risk (name), the related amount, the percentage applied on the account balance, the related external operation code."
+        items:
+          $ref: '#/definitions/DetailedFeeAmount'
+      loyaltyPoint:
+        description: Used when the operation has loyalty points
+        allOf:
+        - $ref: '#/definitions/LoyaltyPoint'
+      schemeTransactionIdentifier:
+        type: string
+        description: "This field will contain the transaction identifier, a unique value that schemas assign to each transaction. It can be used to maintain an audit trailthroughout the life cycle of the transaction and all related transactions, such as reversals, adjustments, confirmations, and dispute financials\nThe corresponding mapping is:\n- VISA: TC05 TCR5 payment service, pos 5-19 \n- MCI: DE 063 - Transaction Life Cycle ID, subfield 2 - Trace ID"
+      transactionType:
+        type: string
+        description: DEPRECATED
+      rewardedOperationIdentifier:
+        description: Internal identifier associated to the transaction linked to a Bonus operation 16-digit incremental number (1000000000000001). Used only if a Bonus operation is related to.
+        allOf:
+        - $ref: '#/definitions/OperationIdentifier'
+      lodgingInformation:
+        description: 'The list of lodging information parameters from the clearing file.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/LodgingInformation'
+      carRentalInformation:
+        description: 'The list of car rental information parameters from the clearing file.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/CarRentalInformation'
+      airItineraryInformation:
+        description: 'The list of air itinerary parameters from the clearing file.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/AirItineraryInformation'
+      disputed:
+        type: boolean
+        description: The attribute shows weather the operation was disputed or not
+      printOnStatement:
+        type: boolean
+        description: "Flag indicating whether to include some manual operations in the statements. Defaul values - yes\nValues: \nyes, \nno"
+      cardAcceptorAddress:
+        type: string
+        description: The attribute represents card acceptor address received from scheme
+      cardAcceptorStateProvinceRegionCode:
+        type: string
+        description: The attribute represents card acceptor state province region code received from scheme
+      postingAccountIdentifier:
+        description: Identifier of the account on which the operation was posted
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      status:
+        type: string
+        description: "Status of the transaction \n* PROCESSED\n* IN_ERROR\n* CAS_IN_DISPUTE (when the transaction is disputed)\n* CAS_PENDING"
+      operationType:
+        type: string
+        description: Defines the operation type that is configured in 'Operation type tree' in the Issuer Configuration
+      parentOperationIdentifier:
+        description: 'Internal identifier associated to the transaction to which one this transaction is linked. 16-digit incremental number (1000000000000001)
+
+          Ex: TRANSACTION_FEE linked to FP (Parent)'
+        allOf:
+        - $ref: '#/definitions/OperationIdentifier'
+      virtualCardService:
+        description: 'Data related to Virtual Card Service. These are the ones used by Virtual Card Engine in scope of Virtual Card Service program.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/VirtualCardService'
+      virtualServiceCardReference:
+        type: string
+        description: Virtual service card reference of the operation generated by our system
+      origin:
+        type: string
+        description: Origin used during the creation of the operation.
+      username:
+        type: string
+        description: Name of the user who initiated the operation
+      paymentTrigger:
+        type: string
+        description: "Indicates how the payment is triggered \nThe possible values are :\n- ON_DEMAND\n- CYCLIC (related to monthly cycle closure)\n- ON_TRANSACTION"
+      paymentReason:
+        type: string
+        description: "Reason why the payment is triggered \nThe list of possible payment reasons is configurable per issuer."
+      reimbursementTrigger:
+        type: string
+        description: "Indicates how the reimbursement is triggered \nThe possible values are :\n- ON_DEMAND\n- CYCLIC (related to monthly cycle closure)\n- DAILY\n- ON_TRANSACTION\n- ON_TERMINATION (on contract termination)"
+      reimbursementReason:
+        type: string
+        description: "Reason why the reimbursement is triggered \nThe list of possible reimbursement reasons is configurable per issuer."
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"}, separated by a ",", related to an operation that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      bonusProgramReference:
+        description: The issuer must provide the reference of the Bonus/Loyalty program for which the reward is applied.
+        type: string
+      cashAmount:
+        description: 'Additional Amount / Currency / Exponent for Cash Back transaction amount
+
+          * MCI : DE 054 s2 = 40 - Amount, Cash Back
+
+          * VISA : TCR1 pos. 158-166 Cashback'
+        allOf:
+        - $ref: '#/definitions/Amount'
+      surchargeAmount:
+        description: Additional Amount / Currency / Exponent for surcharge transaction amount in Transaction Currency
+        allOf:
+        - $ref: '#/definitions/Amount'
+      operationHierarchyReference:
+        type: string
+        description: Identifier of the original operation in our system
+    title: Operation
+  CarRentalInformation:
+    type: object
+    properties:
+      businessFormatCode:
+        type: string
+        description: 'The fields represents additional data from VISA clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Business Format Code (Value: CA); POS 17-18.'
+      days:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Days Rented; POS 19-20.
+
+          MCI mapping is the following: PDS 0691. PDS 0691 (Days Rented) provides the number of days that the vehicle was rented.'
+      noShowIndicator:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental No-Show Indicator; POS 27.
+
+          MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
+      extraCharges:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental Extra Charges; POS 28-33.
+
+          MCI mapping is the following: PDS 0701. PDS 0701 (Extra Charges) provides the extra charges associated with the vehicle rental.'
+      checkOutDate:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental Check-out Date (YYMMDD); POS 38-43.
+
+          MCI mapping is the following: PDS 0551. PDS 0551 (Rental Check-Out Date) is the date when the vehicle was originally rented (YYMMDD).'
+      dailyRentRate:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Daily Rental Rate; POS 44-55.
+
+          MCI mapping is the following: PDS 0553. PDS 0553 (Rental Rate) contains the rental rate charged for the vehicle and indicates whether it is a daily, weekly, or monthly rate. This PDS consists of two subfields:
+
+          1. Rental Rate Indicator; POS: 1
+
+          - D: Daily rate
+
+          - W: Weekly rate
+
+          - M: Monthly rate
+
+          - space: Unknown or unreported
+
+          2. Rental Rate; POS: 2-13'
+      weeklyRentRate:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Weekly Rental Rate; POS 56-67.
+
+          MCI mapping is the following: PDS 0692. PDS 0692 (Weekly Rental Amount) provides the amount charged for a seven-day rental period.'
+      insuranceCharge:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Insurance Charges; POS 68-79.
+
+          MCI mapping is the following: PDS 0559. PDS 0559 (Vehicle Insurance) contains an indicator of whether the customer purchased insurance and of the insurance amount. This PDS consists of two subfields:
+
+          1. Insurance Indicator; POS: 1
+
+          - Y: Yes (insurance was purchased)
+
+          - N: No (insurance was not purchased)
+
+          - spaces: Unknown or unreported
+
+          2. Insurance Charges; POS: 2-13'
+      fuelCharge:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Fuel Charges; POS 80-91.
+
+          MCI mapping is the following: PDS 0698. PDS 0698 (Fuel Charge) provides the amount charged for fuel used during vehicle rental.'
+      classCode:
+        type: string
+        description: "The field represents additional data from VISA and MCI clearing file addendum.\n VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Class Code; POS 92-93.\nMCI mapping is the following: PDS 0568. PDS 0568 (Rental Class ID) contains the classification, such as midsize or luxury, of the vehicle rented."
+      oneWayDropCharge:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: One-Way Drop-off Charges; POS 94-105.
+
+          MCI mapping is the following: PDS 0694. PDS 0694 (One Way Drop Off Charge) provides a charge associated with not returning a vehicle to the original rental location.'
+      renterName:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Renter Name; POS 106-145.
+
+          MCI mapping is the following: PDS 0545. PDS 0545 (Renter Name) is the name of the individual making the vehicle rental agreement.'
+    title: CarRentalInformation
+  Amount:
+    type: object
+    required:
+    - value
+    - exponent
+    - isoCode
+    properties:
+      value:
+        type: integer
+        format: int64
+        description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+      exponent:
+        type: integer
+        format: int32
+        description: Exponent of Amount. Number of decimal digits.
+      isoCode:
+        type: string
+        description: 'Currency code of amount
+
+          The currency in ISO4217 alphabetic format.
+
+          Example: EUR for Euro'
+    title: Amount
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  PanTokenIdentifier:
+    type: object
+    required:
+    - panTokenReference
+    properties:
+      panTokenReference:
+        type: string
+        description: Pan Token Reference
+    title: PanTokenIdentifier
+  ReprintStatementResponse:
+    type: object
+    properties:
+      accountIdentifier:
+        description: Refer to Account.accountIdentifier attribute
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      requestedDate:
+        type: string
+        format: date-time
+        description: Refer to ReprintHistory.requestedDate
+    title: ReprintStatementResponse
+  PointOfService:
+    type: object
+    properties:
+      entryModePan:
+        type: string
+        description: VISA TCR0 PosEntryMode.
+      entryModePin:
+        type: string
+        description: VISA TCR0 CardholderIDMethod.
+      conditionCode:
+        type: string
+        description: VISA. Field equals to "02" if PosEntryMode is populated, "00" if not populated.
+      posTerminalCapability:
+        type: string
+        description: VISA TCR0 PosTerminalCapability
+      cardDataInputCapability:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 1 indicates the set of methods supported by the terminal for the input of account number, card, or mobile device data.
+      cardholderAuthenticationCapability:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 2 describes the capability of the terminal device to support/accept authentication data.
+      cardCaptureCapability:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 3 indicates whether the terminal has card capture capabilities.
+      terminalOperatingEnvironment:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 4 indicates whether the card acceptor is attending the terminal and the location of the terminal.
+      cardholderPresentData:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 5 indicates whether the cardholder is present at the point of service and explains the condition if the cardholder is not present.
+      cardPresentData:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 6 indicates if the card is present at the point of service.
+      cardDataInputMode:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 7 indicates the method used for PAN entry to initiate a transaction.
+      cardholderAuthenticationMethod:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 8 indicates the method by which the cardholder’s identity was verified at the point of service.
+      cardholderAuthenticationEntity:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 9 indicates the entity through which the cardholder’s identity was verified at the point of service.
+      cardDataOutputCapability:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 10 indicates the ability of the terminal to write or output data to a card.
+      terminalDataOutputCapability:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 11 indicates the print and display capabilities of the terminal.
+      pinCaptureCapability:
+        type: string
+        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 12 indicates the maximum number of PIN characters that the POS terminal can capture.
+    title: PointOfService
+  VirtualCardService:
+    type: object
+    properties:
+      virtualServiceCardExternalReference:
+        type: string
+        description: The external reference calculated for VCC by the Virtual Card Engine (VCE)
+      issuerCompanyExternalReference:
+        type: string
+        description: This attribute will represent a unique identifier of company (the corporate customer of the Issuer)
+      virtualServiceCardNumber:
+        type: string
+        description: Virtual Service Card Number of the operation (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
+      maskedVirtualServiceCardNumber:
+        type: string
+        description: Masked Virtual Service Card Number. This is the VCC (Virtula Credit Card) PAN in masked format
+      virtualServicesFields:
+        type: object
+        description: 'This attribute will return specific informative fields related to VCC (Virtual Credit Card) that the Virtual Card Engine will provide to the Issuing Back Office system,
+
+          List of external data (label:value), separated by a "|''", related to a virtual card that can be provided by e.g. the issuer for information or for usage by other systems.
+
+          Example : label1:value|label2:value
+
+          Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+    title: VirtualCardService
+  OperationIdentifier:
+    type: object
+    required:
+    - operationId
+    properties:
+      operationId:
+        type: string
+        description: Internal operation identifier. 16-digit incremental number
+    title: OperationIdentifier
+  AuthorizationBusinessCaseIdentifier:
+    type: object
+    required:
+    - businessCaseId
+    properties:
+      businessCaseId:
+        type: string
+        description: 'Business case to which the transaction belongs.
+
+          The provided information reflects its status after transaction completion.
+
+          A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
+    title: AuthorizationBusinessCaseIdentifier
+  AirItineraryInformation:
+    type: object
+    properties:
+      businessFormatCode:
+        type: string
+        description: 'The fields represents additional data from VISA clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Business Format Code; POS 17-18.'
+      travelAgent:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Name; POS 92-116.
+
+          MCI mapping is the following: PDS 0511. PDS 0511 (Travel Agency Name) is the name of the travel agency that issued the ticket.'
+      travelAgentCode:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Code; POS 84-91.
+
+          MCI mapping is the following: PDS 0510. PDS 0510 (Travel Agency Code) is a code assigned to the travel agency.'
+      passengerName:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Passenger Name; POS 27-46.
+
+          MCI mapping is the following: PDS 0505. PDS 0505 (Passenger Name) contains the name of the passenger to whom the ticket was issued.'
+      departureDate:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Departure Date (MMDDYY); POS 47-52.
+
+          MCI mapping is the following: PDS 0520. PDS 0520 (Travel Date) is the effective ticket date, also referred as departure date (YYMMDD).'
+      originCityCode:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Origination City/Airport Code; POS 53-55.
+
+          MCI mapping is the following: PDS 0523. PDS 0523 (City of Origin/Airport Code) is the originating airport or railway name standard abbreviation.'
+      restrictedTicketIndicator:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Restricted Ticket Indicator; POS 117.
+
+          MCI mapping is the following: PDS 0713. PDS 0713 (Restricted Ticket Indicator) provides the identifier noting that the ticket purchased has some restriction associated with its use.'
+      reservationSystem:
+        type: string
+        description: 'The fields represents additional data from VISA clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Computerized Reservation System; POS 142-145.'
+      creditReasonIndicator:
+        type: string
+        description: 'The fields represents additional data from VISA clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Credit Reason Indicator; POS 166.'
+      ticketChangeIndicator:
+        type: string
+        description: 'The fields represents additional data from VISA clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Ticket Change Indicator; POS 167.'
+      ticketNumber:
+        type: string
+        description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+          VISA mapping is the following: TC05, TCR0; Field: Merchant Name POS 92-116; POS 13-25 of this field should be taken as input.
+
+          MCI mapping is the following: PDS 0506. PDS 0506 (Ticket Number) contains the number on the ticket.'
+      IATACode:
+        type: string
+        description: 'The field represents additional data from MCI clearing file addendum.
+
+          MCI mapping is the following: PDS 0717. PDS 0717 (IATA Client Code) provides the International Air Transport Association (IATA) code identifying the company that purchased the ticket.'
+      leg1:
+        allOf:
+        - $ref: '#/definitions/TravelDetailLeg'
+        description: Description of first leg of trip
+      leg2:
+        allOf:
+        - $ref: '#/definitions/TravelDetailLeg'
+        description: Description of second leg of trip
+      leg3:
+        allOf:
+        - $ref: '#/definitions/TravelDetailLeg'
+        description: Description of third leg of trip
+      leg4:
+        allOf:
+        - $ref: '#/definitions/TravelDetailLeg'
+        description: Description of fourth leg of trip
+    title: AirItineraryInformation
+  OperationAuthorization:
+    type: object
+    properties:
+      transactionDate:
+        type: string
+        format: date-time
+        description: The date and time on which the transaction was approved. Data is retrieved from the matched authorization transaction.
+    title: OperationAuthorization
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  TravelInformation:
+    type: object
+    properties:
+      passengerName:
+        type: string
+        description: 'passengerName (customer travel information) '
+      ticketNumber:
+        type: string
+        description: 'ticketNumber (customer travel information) '
+      travelDetailList:
+        type: array
+        description: 'List of TravelDetail '
+        items:
+          $ref: '#/definitions/TravelDetail'
+    title: TravelInformation
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+  ReprintHistory:
+    type: object
+    properties:
+      requestedDate:
+        type: string
+        format: date-time
+        description: The date of the reprinting request (mandatory)
+      origin:
+        type: string
+        description: Origin used when the reprinting of the statement was requested.
+      username:
+        type: string
+        description: Name of the user who requested to reprint the statement
+    title: ReprintHistory
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

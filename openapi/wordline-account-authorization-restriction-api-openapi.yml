@@ -1,0 +1,1778 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Account - Authorization Restriction API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Account - Authorization Restriction
+  description: Account Authorization Restriction Controller
+paths:
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/authorization-restrictions:
+    get:
+      tags:
+      - Account - Authorization Restriction
+      summary: List the Authorization Restrictions (by issuer ref.)
+      description: Operation to get the list of Authorization Restrictions on an Account.
+      operationId: getMultipleAuthorizationRestrictionsByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestrictions'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/authorization-restrictions/{authorizationRestrictionReference}/authorization-restriction-overrides
+  : get:
+      tags:
+      - Account - Authorization Restriction
+      summary: List the Authorization Restriction Overrides (by issuer ref.)
+      description: Operation to get the list of overrides on an Authorization Restriction, identified by its authorizationRestrictionReference.
+      operationId: getMultipleAuthorizationRestrictionOverridesByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: all
+        in: query
+        required: false
+        type: boolean
+        default: false
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestrictionOverrides'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      tags:
+      - Account - Authorization Restriction
+      summary: Create an Authorization Restriction Override (by issuer ref.)
+      description: Operation to override an Authorization Restriction, identified by its authorizationRestrictionReference.
+      operationId: createAuthorizationRestrictionOverrideByExtAcctRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAuthorizationRestrictionOverrideRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAuthorizationRestrictionOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/authorization-restrictions/{authorizationRestrictionReference}/authorization-restriction-overrides/{authorizationRestrictionOverrideReference}
+  : get:
+      tags:
+      - Account - Authorization Restriction
+      summary: Retrieve an Authorization Restriction Override (by issuer ref.)
+      description: Operation to fetch an existing Authorization Restriction Override, identified by its authorizationRestrictionOverrideReference.
+      operationId: getSingleAuthorizationRestrictionOverrideByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: authorizationRestrictionOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestrictionOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    put:
+      tags:
+      - Account - Authorization Restriction
+      summary: Update an Authorization Restriction Override (by issuer ref.)
+      description: 'Operation to update an existing Authorization Restriction Override, identified by its authorizationRestrictionOverrideReference.
+
+        Only the provided attributes are updated (other ones are not modified).
+
+        Optional attributes can be set to null (JSON keyword).'
+      operationId: modifyAuthorizationRestrictionOverrideByExtAcctRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: authorizationRestrictionOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/ModifyAuthorizationRestrictionOverrideRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyAuthorizationRestrictionOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Account - Authorization Restriction
+      summary: Delete an Authorization Restriction Override (by issuer ref.)
+      description: Operation to delete an existing Authorization Restriction Override, identified by its authorizationRestrictionOverrideReference.
+      operationId: deleteAuthorizationRestrictionOverrideByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: authorizationRestrictionOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteAuthorizationRestrictionOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/authorization-restrictions:
+    get:
+      tags:
+      - Account - Authorization Restriction
+      summary: List the Authorization Restrictions
+      description: Operation to get the list of Authorization Restrictions on an Account.
+      operationId: getMultipleAuthorizationRestrictions
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestrictions'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/authorization-restrictions/{authorizationRestrictionReference}:
+    get:
+      tags:
+      - Account - Authorization Restriction
+      summary: Retrieve an Authorization Restriction
+      description: Operation to fetch an existing Authorization Restriction, identified by its authorizationRestrictionReference.
+      operationId: getSingleAuthorizationRestriction
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestriction'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/{accountReference}/authorization-restrictions/{authorizationRestrictionReference}/authorization-restriction-overrides
+  : get:
+      tags:
+      - Account - Authorization Restriction
+      summary: List the Authorization Restriction Overrides
+      description: Operation to get the list of overrides on an Authorization Restriction, identified by its authorizationRestrictionReference.
+      operationId: getMultipleAuthorizationRestrictionOverrides
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: all
+        in: query
+        required: false
+        type: boolean
+        default: false
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestrictionOverrides'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      tags:
+      - Account - Authorization Restriction
+      summary: Create an Authorization Restriction Override
+      description: Operation to override an Authorization Restriction, identified by its authorizationRestrictionReference.
+      operationId: createAuthorizationRestrictionOverride
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAuthorizationRestrictionOverrideRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAuthorizationRestrictionOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/{accountReference}/authorization-restrictions/{authorizationRestrictionReference}/authorization-restriction-overrides/{authorizationRestrictionOverrideReference}
+  : get:
+      tags:
+      - Account - Authorization Restriction
+      summary: Retrieve an Authorization Restriction Override
+      description: Operation to fetch an existing Authorization Restriction Override, identified by its authorizationRestrictionOverrideReference.
+      operationId: getSingleAuthorizationRestrictionOverride
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestrictionOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    put:
+      tags:
+      - Account - Authorization Restriction
+      summary: Update an Authorization Restriction Override
+      description: 'Operation to update an existing Authorization Restriction Override, identified by its authorizationRestrictionOverrideReference.
+
+        Only the provided attributes are updated (other ones are not modified).
+
+        Optional attributes can be set to null (JSON keyword).'
+      operationId: modifyAuthorizationRestrictionOverride
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/ModifyAuthorizationRestrictionOverrideRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyAuthorizationRestrictionOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Account - Authorization Restriction
+      summary: Delete an Authorization Restriction Override
+      description: Operation to delete an existing Authorization Restriction Override, identified by its authorizationRestrictionOverrideReference.
+      operationId: deleteAuthorizationRestrictionOverride
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteAuthorizationRestrictionOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/authorization-restrictions/search:
+    post:
+      tags:
+      - Account - Authorization Restriction
+      summary: Search the Authorization Restrictions
+      description: Operation to search the Authorization Restrictions on an Account, together with active and future Overrides, if any.
+      operationId: searchAuthorizationRestrictionsByAcctRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/SearchAuthorizationRestrictionRequest'
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntitySearchAuthorizationRestrictionResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/authorization-restrictions/{authorizationRestrictionReference}/authorization-restriction-overrides/{authorizationRestrictionOverrideReference}/history
+  : get:
+      tags:
+      - Account - Authorization Restriction
+      summary: Get authorization restriction override history by external account reference
+      operationId: getAuthorizationRestrictionOverrideHistoryByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: authorizationRestrictionOverrideReference
+        in: path
+        description: authorizationRestrictionOverrideReference
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        description: authorizationRestrictionReference
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestrictionOverrideHistory'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+  ? /issuers/{issuerId}/accounts/{accountReference}/authorization-restrictions/{authorizationRestrictionReference}/authorization-restriction-overrides/{authorizationRestrictionOverrideReference}/history
+  : get:
+      tags:
+      - Account - Authorization Restriction
+      summary: Get authorization restriction override history
+      operationId: getAuthorizationRestrictionOverrideHistory
+      produces:
+      - application/json
+      parameters:
+      - name: accountReference
+        in: path
+        description: accountReference
+        required: true
+        type: string
+      - name: authorizationRestrictionOverrideReference
+        in: path
+        description: authorizationRestrictionOverrideReference
+        required: true
+        type: string
+      - name: authorizationRestrictionReference
+        in: path
+        description: authorizationRestrictionReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizationRestrictionOverrideHistory'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+definitions:
+  ApiResponseEntityGetAuthorizationRestrictionOverrides:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorizationRestrictionOverride'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetAuthorizationRestrictionOverrides
+    description: 'Response to: List the Authorization Restriction Overrides'
+  GetAuthorizationRestrictionResponse:
+    type: object
+    properties:
+      authorizationRestrictionIdentifier:
+        $ref: '#/definitions/AuthorizationRestrictionIdentifier'
+      collection:
+        type: boolean
+        description: Not used, will be removed
+      conditionCheck:
+        type: boolean
+        description: Overrides the default configured for the corresponding restriction attribute (see configuration entity explanations). In case JSON null is provided then the default becomes effective.
+      conditionCheckOrigin:
+        type: string
+        description: 'Indicates from which level ConditionCheck has been taken. Possible values: Default, Exception, Override, Other.'
+      conditionParameters:
+        type: array
+        description: Overrides the default configured for the corresponding restriction attribute. An item must not have leading or trailing spaces. Moreover it must not contain any comma. In case JSON null is provided then the default becomes effective.
+        items:
+          type: string
+      conditionParametersOrigin:
+        type: string
+        description: 'Indicates from which level ConditionParameters has been taken. Possible values: Default, Exception, Override, Other.'
+      issuerId:
+        type: string
+        description: Not used, will be removed
+      name:
+        type: string
+        description: 'minLength: 1
+
+          Descriptive text for the restriction. The caller should be forward compatible regarding the length of this field. The caller should at least support 50 characters length.'
+    title: GetAuthorizationRestrictionResponse
+  CreateAuthorizationRestrictionOverrideRequest:
+    type: object
+    properties:
+      activationEndTime:
+        type: string
+        format: date-time
+        description: Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever.
+      activationStartTime:
+        type: string
+        format: date-time
+        description: First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately.
+      conditionCheck:
+        type: boolean
+        description: Overrides the default configured for the corresponding restriction attribute. In case JSON null is provided then the default becomes effective.
+      conditionParameters:
+        type: array
+        description: Overrides the default configured for the corresponding restriction attribute (see configuration entity explanations). An item must not have leading or trailing spaces. Moreover it must not contain any comma. In case JSON null is provided then the default becomes effective.
+        items:
+          type: string
+      priority:
+        type: integer
+        description: In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique accross all overrides with overlapping activation timespans, which are associated with the same restriction and the same account. That means, two overrides for the same account and same restriction can have the same priority, if they are not active at the same time. If they are active at the same time, unique priorities must be given. If the field is not set in the request, it will be set to 0
+    title: CreateAuthorizationRestrictionOverrideRequest
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  AuthorizationRestrictionIdentifier:
+    type: object
+    properties:
+      authorizationRestrictionReference:
+        type: string
+        description: 'minLength: 1
+
+          maxLength: 60
+
+          Identifies the restriction.'
+    title: AuthorizationRestrictionIdentifier
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  GetAuthorizationRestrictionOverrideResponse:
+    type: object
+    properties:
+      activationEndTime:
+        type: string
+        example: '2020-07-28T10:13:15.421Z'
+        description: Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever.
+      activationStartTime:
+        type: string
+        example: '2020-07-28T10:13:15.421Z'
+        description: First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately.
+      authorizationRestrictionOverrideIdentifier:
+        $ref: '#/definitions/AuthorizationRestrictionOverrideIdentifier'
+      collection:
+        type: boolean
+        description: Not used, will be removed
+      conditionCheck:
+        type: boolean
+        description: Overrides the default configured for the corresponding restriction attribute (see configuration entity explanations). In case JSON null is provided then the default becomes effective.
+      conditionParameters:
+        type: array
+        description: Overrides the default configured for the corresponding restriction attribute. An item must not have leading or trailing spaces. Moreover it must not contain any comma. In case JSON null is provided then the default becomes effective.
+        items:
+          type: string
+      defaultAuthorizationRestrictionReference:
+        $ref: '#/definitions/AuthorizationRestrictionIdentifier'
+      deleted:
+        type: boolean
+        description: Indicates whether the override is still present or has been deleted.
+      issuerId:
+        type: string
+        description: Not used, will be removed.
+      priority:
+        type: string
+        description: 'minimum: 0
+
+          maximum: 9999
+
+          In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a restriction and an account. Required field when inserting.'
+    title: GetAuthorizationRestrictionOverrideResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  ApiResponseEntityModifyAuthorizationRestrictionOverride:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/AuthorizationRestrictionOverrideIdentifier'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityModifyAuthorizationRestrictionOverride
+    description: 'Response to: Update an Authorization Restriction Override'
+  ApiResponseEntityCreateAuthorizationRestrictionOverride:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/AuthorizationRestrictionOverrideIdentifier'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityCreateAuthorizationRestrictionOverride
+    description: 'Response to: Create an Authorization Restriction Override'
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  ApiResponseEntityDeleteAuthorizationRestrictionOverride:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/AuthorizationRestrictionOverrideIdentifier'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityDeleteAuthorizationRestrictionOverride
+    description: 'Response to: Delete an Authorization Restriction Override'
+  ApiResponseEntityGetAuthorizationRestrictions:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorizationRestriction'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetAuthorizationRestrictions
+    description: 'Response to: List the Authorization Restrictions'
+  ApiResponseEntityGetAuthorizationRestrictionOverrideHistory:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorizationRestrictionOverrideHistoryEntry'
+      responseMetadata:
+        description: Response metadata
+        $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetAuthorizationRestrictionOverrideHistory
+    description: Issuer response entity
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  ApiResponseEntitySearchAuthorizationRestrictionResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/SearchAuthorizationRestrictionResponse'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntitySearchAuthorizationRestrictionResponse
+    description: 'Response to: Search the Authorization Restrictions'
+  ModifyAuthorizationRestrictionOverrideRequest:
+    type: object
+    properties:
+      activationEndTime:
+        type: string
+        format: date-time
+        description: Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever.
+      activationStartTime:
+        type: string
+        format: date-time
+        description: First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately.
+      conditionCheck:
+        type: boolean
+        description: Overrides the default configured for the corresponding restriction attribute. In case JSON null is provided then the default becomes effective.
+      conditionParameters:
+        type: array
+        description: Overrides the default configured for the corresponding restriction attribute (see configuration entity explanations). An item must not have leading or trailing spaces. Moreover it must not contain any comma. In case JSON null is provided then the default becomes effective.
+        items:
+          type: string
+      priority:
+        type: integer
+        description: In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique accross all overrides with overlapping activation timespans, which are associated with the same restriction and the same account. That means, two overrides for the same account and same restriction can have the same priority, if they are not active at the same time. If they are active at the same time, unique priorities must be given. If the field is not set in the request, it will be set to 0
+    title: ModifyAuthorizationRestrictionOverrideRequest
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  AuthorizationRestrictionOverride:
+    type: object
+    properties:
+      activationEndTime:
+        type: string
+        example: '2020-07-28T10:13:15.421Z'
+        description: Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever.
+      activationStartTime:
+        type: string
+        example: '2020-07-28T10:13:15.421Z'
+        description: First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately.
+      authorizationRestrictionOverrideIdentifier:
+        $ref: '#/definitions/AuthorizationRestrictionOverrideIdentifier'
+      conditionCheck:
+        type: boolean
+        description: Overrides the default configured for the corresponding restriction attribute (see configuration entity explanations). In case JSON null is provided then the default becomes effective.
+      conditionParameters:
+        type: array
+        description: Overrides the default configured for the corresponding restriction attribute. An item must not have leading or trailing spaces. Moreover it must not contain any comma. In case JSON null is provided then the default becomes effective.
+        items:
+          type: string
+      defaultAuthorizationRestrictionReference:
+        $ref: '#/definitions/AuthorizationRestrictionIdentifier'
+      deleted:
+        type: boolean
+        description: Indicates whether the override is still present or has been deleted.
+      issuerId:
+        type: string
+        description: Not used, will be removed.
+      priority:
+        type: string
+        description: 'minimum: 0
+
+          maximum: 9999
+
+          In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a restriction and an account. Required field when inserting.'
+    title: AuthorizationRestrictionOverride
+  AuthorizationRestrictionWithOverrides:
+    type: object
+    properties:
+      activeOverrides:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorizationRestrictionOverride'
+      authorizationRestrictionIdentifier:
+        $ref: '#/definitions/AuthorizationRestrictionIdentifier'
+      conditionCheck:
+        type: boolean
+      conditionCheckOrigin:
+        type: string
+      conditionParameters:
+        type: array
+        items:
+          type: string
+      conditionParametersOrigin:
+        type: string
+      futureOverrides:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorizationRestrictionOverride'
+      name:
+        type: string
+    title: AuthorizationRestrictionWithOverrides
+  SearchAuthorizationRestrictionRequest:
+    type: object
+    properties:
+      filter:
+        type: array
+        items:
+          type: string
+      includeFutureRestrictions:
+        type: boolean
+    title: SearchAuthorizationRestrictionRequest
+  AuthorizationRestrictionOverrideHistoryEntry:
+    type: object
+    required:
+    - changeTime
+    properties:
+      activationEndTime:
+        type: string
+        description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately.
+
+          Date Time format:  DD/MM/YYYY'
+      activationStartTime:
+        type: string
+        description: "First point in time at which the override will be considered. If not provided the override will be taken into account immediately.\nDate Time format:  DD/MM/YYYY \n"
+      changeTime:
+        type: string
+        description: "Time when the modification has been performed. UTC time zone.\nDate Time format: yyyy-MM-dd’T’HH:mm:ssZ \n"
+      changeType:
+        type: string
+      conditionCheck:
+        type: boolean
+      conditionParameters:
+        type: array
+        items:
+          type: string
+      priority:
+        type: integer
+        format: int32
+    title: AuthorizationRestrictionOverrideHistoryEntry
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  AuthorizationRestrictionOverrideIdentifier:
+    type: object
+    properties:
+      authorizationRestrictionOverrideReference:
+        type: string
+        description: 'minLength: 1
+
+          maxLength: 100
+
+          Identifies the restriction override which has to be replaced. Can be absent when inserting. In such a case, WLP FO will generate the reference.'
+    title: AuthorizationRestrictionOverrideIdentifier
+  SearchAuthorizationRestrictionResponse:
+    type: object
+    properties:
+      authorizationRestrictions:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorizationRestrictionWithOverrides'
+    title: SearchAuthorizationRestrictionResponse
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  ApiResponseEntityGetAuthorizationRestriction:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/GetAuthorizationRestrictionResponse'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetAuthorizationRestriction
+    description: 'Response to: Retrieve an Authorization Restriction'
+  ApiResponseEntityGetAuthorizationRestrictionOverride:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/GetAuthorizationRestrictionOverrideResponse'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetAuthorizationRestrictionOverride
+    description: 'Response to: Retrieve an Authorization Restriction Override'
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+  AuthorizationRestriction:
+    type: object
+    properties:
+      authorizationRestrictionIdentifier:
+        $ref: '#/definitions/AuthorizationRestrictionIdentifier'
+      conditionCheck:
+        type: boolean
+        description: Overrides the default configured for the corresponding restriction attribute (see configuration entity explanations). In case JSON null is provided then the default becomes effective.
+      conditionCheckOrigin:
+        type: string
+        description: 'Indicates from which level ConditionCheck has been taken. Possible values: Default, Exception, Override, Other.'
+      conditionParameters:
+        type: array
+        description: Overrides the default configured for the corresponding restriction attribute. An item must not have leading or trailing spaces. Moreover it must not contain any comma. In case JSON null is provided then the default becomes effective.
+        items:
+          type: string
+      conditionParametersOrigin:
+        type: string
+        description: 'Indicates from which level ConditionParameters has been taken.
+
+          Possible values: Default, Exception, Override, Other.
+
+          Only present in case ConditionParameters is present.'
+      issuerId:
+        type: string
+        description: Not used, will be removed.
+      name:
+        type: string
+        description: 'minLength: 1
+
+          Descriptive text for the restriction. The caller should be forward compatible regarding the length of this field. The caller should at least support 50 characters length.'
+    title: AuthorizationRestriction
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

@@ -1,0 +1,1999 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Account - Velocity Limit API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Account - Velocity Limit
+  description: Account Velocity Limit Controller
+paths:
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/velocity-limits:
+    get:
+      tags:
+      - Account - Velocity Limit
+      summary: List the Velocity Limits (by issuer ref.)
+      operationId: getMultipleVelocityLimitsByExtAcctRef
+      description: Operation to get the list of Velocity Limits on an Account.
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityLimits'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/velocity-limits/{velocityLimitReference}:
+    get:
+      tags:
+      - Account - Velocity Limit
+      summary: Retrieve a Velocity Limit (by issuer ref.)
+      operationId: getSingleVelocityLimitByExtAcctRef
+      description: Operation to fetch an existing Velocity Limit, identified by its velocityLimitReference.
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityLimit'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/velocity-limits/{velocityLimitReference}/velocity-limit-overrides
+  : get:
+      tags:
+      - Account - Velocity Limit
+      summary: List the Velocity Limit Overrides (by issuer ref.)
+      operationId: getMultipleVelocityLimitOverridesByExtAcctRef
+      description: Operation to get the list of overrides on a Velocity Limit, identified by its velocityLimitReference.
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: all
+        in: query
+        description: all
+        required: false
+        type: boolean
+        default: false
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityOverrides'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      tags:
+      - Account - Velocity Limit
+      summary: Create a Velocity Limit Override (by issuer ref.)
+      operationId: createVelocityLimitOverrideByExtAcctRef
+      description: Operation to override a Velocity Limit, identified by its velocityLimitReference.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/CreateVelocityLimitOverrideRequest'
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateVelocityLimitOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/velocity-limits/{velocityLimitReference}/velocity-limit-overrides/{velocityLimitOverrideReference}
+  : get:
+      tags:
+      - Account - Velocity Limit
+      summary: Retrieve a Velocity Limit Override (by issuer ref.)
+      operationId: getSingleVelocityLimitOverrideByExtAcctRef
+      description: Operation to fetch an existing Velocity Limit Override, identified by its velocityLimitOverrideReference.
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    put:
+      tags:
+      - Account - Velocity Limit
+      summary: Update a Velocity Limit Override (by issuer ref.)
+      operationId: modifyVelocityLimitOverrideByExtAcctRef
+      description: 'Operation to update an existing Velocity Limit Override, identified by its velocityLimitOverrideReference.
+
+        Only the provided attributes are updated (other ones are not modified).
+
+        Optional attributes can be set to null (JSON keyword).'
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/ModifyVelocityLimitOverrideRequest'
+      - name: velocityLimitOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyVelocityLimitOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Account - Velocity Limit
+      summary: Delete a Velocity Limit Override (by issuer ref.)
+      operationId: deleteVelocityLimitOverrideByExtAcctRef
+      description: Operation to delete an existing Velocity Limit Override, identified by its velocityLimitOverrideReference.
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: velocityLimitOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteVelocityLimitOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/velocity-limits:
+    get:
+      tags:
+      - Account - Velocity Limit
+      summary: List the Velocity Limits
+      description: Operation to get the list of Velocity Limits on an Account.
+      operationId: getMultipleVelocityLimits
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityLimits'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/velocity-limits/{velocityLimitReference}:
+    get:
+      tags:
+      - Account - Velocity Limit
+      summary: Retrieve a Velocity Limit
+      description: Operation to fetch an existing Velocity Limit, identified by its velocityLimitReference.
+      operationId: getSingleVelocityLimit
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityLimit'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/velocity-limits/{velocityLimitReference}/velocity-limit-overrides:
+    get:
+      tags:
+      - Account - Velocity Limit
+      summary: List the Velocity Limit Overrides
+      description: Operation to get the list of overrides on a Velocity Limit, identified by its velocityLimitReference.
+      operationId: getMultipleVelocityLimitOverrides
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: all
+        in: query
+        required: false
+        type: boolean
+        default: false
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityOverrides'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      tags:
+      - Account - Velocity Limit
+      summary: Create a Velocity Limit Override
+      description: Operation to override a Velocity Limit, identified by its velocityLimitReference.
+      operationId: createVelocityLimitOverride
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/CreateVelocityLimitOverrideRequest'
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateVelocityLimitOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/{accountReference}/velocity-limits/{velocityLimitReference}/velocity-limit-overrides/{velocityLimitOverrideReference}
+  : get:
+      tags:
+      - Account - Velocity Limit
+      summary: Retrieve a Velocity Limit Override
+      description: Operation to fetch an existing Velocity Limit Override, identified by its velocityLimitOverrideReference.
+      operationId: getSingleVelocityLimitOverride
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    put:
+      tags:
+      - Account - Velocity Limit
+      summary: Update a Velocity Limit Override
+      description: 'Operation to update an existing Velocity Limit Override, identified by its velocityLimitOverrideReference.
+
+        Only the provided attributes are updated (other ones are not modified).
+
+        Optional attributes can be set to null (JSON keyword).'
+      operationId: modifyVelocityLimitOverride
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/ModifyVelocityLimitOverrideRequest'
+      - name: velocityLimitOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyVelocityLimitOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Account - Velocity Limit
+      summary: Delete a Velocity Limit Override
+      description: Operation to delete an existing Velocity Limit Override, identified by its velocityLimitOverrideReference.
+      operationId: deleteVelocityLimitOverride
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitOverrideReference
+        in: path
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteVelocityLimitOverride'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/velocity-limits/{velocityLimitReference}/velocity-limit-overrides/{velocityLimitOverrideReference}/history
+  : get:
+      tags:
+      - Account - Velocity Limit
+      summary: Get velocity limit override history by velocity limit override reference and external account reference
+      operationId: getVelocityLimitOverrideHistoryByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: velocityLimitOverrideReference
+        in: path
+        description: velocityLimitOverrideReference
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        description: velocityLimitReference
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityLimitOverrideHistoryResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+  ? /issuers/{issuerId}/accounts/{accountReference}/velocity-limits/{velocityLimitReference}/velocity-limit-overrides/{velocityLimitOverrideReference}/history
+  : get:
+      tags:
+      - Account - Velocity Limit
+      summary: Get velocity limit override history by velocity limit override reference
+      operationId: getVelocityLimitOverrideHistory
+      produces:
+      - application/json
+      parameters:
+      - name: accountReference
+        in: path
+        description: accountReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: velocityLimitOverrideReference
+        in: path
+        description: velocityLimitOverrideReference
+        required: true
+        type: string
+      - name: velocityLimitReference
+        in: path
+        description: velocityLimitReference
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetVelocityLimitOverrideHistoryResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+definitions:
+  GetVelocityLimitResponse:
+    type: object
+    properties:
+      amount:
+        description: 'Cumulated authorization amount in period. Debits have a positive sign whereas credits have a negative one.
+
+          The returned value is the one being effective at operation execution time.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      collection:
+        type: boolean
+        description: Not used, will be removed
+      count:
+        type: integer
+        format: int32
+        description: 'minimum: 0
+
+          maximum: 999999999
+
+          Number of transactions in period.
+
+          The returned value is the one being effective at operation execution time.'
+      issuerId:
+        type: string
+        description: Not needed, will be removed
+      maximumAmount:
+        description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMaximum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be positive. \nThe returned value is the one being effective at operation execution time. Only present in case MaximumAmountCheck is true."
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      maximumAmountCheck:
+        type: boolean
+        description: Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. The returned value is the one being effective at operation execution time.
+      maximumAmountCheckOrigin:
+        type: string
+        description: 'Indicates from which level MaximumAmountCheck has been taken. Possible values:  Default, Exception, Override, Other. '
+      maximumAmountOrigin:
+        type: string
+        description: 'Indicates from which level MaximumAmountCheck has been taken
+
+          Only present in case MaximumAmount is present.
+
+          Enum:
+
+          [ Default, Exception, Override, Other ]'
+      maximumCount:
+        type: integer
+        format: int32
+        description: "minimum: 0\nmaximum: 999999999\nMaximum threshold for the number of transactions in period. \nThe returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true."
+      maximumCountCheck:
+        type: boolean
+        description: 'Indicates whether the number of transactions in period is compared with a maximum threshold or not.
+
+          The returned value is the one being effective at operation execution time.'
+      maximumCountCheckOrigin:
+        type: string
+        description: 'Indicates from which level MaximumCountCheck has been taken.
+
+          Possible values: Default, Exception, Override, Other.
+
+          '
+      maximumCountOrigin:
+        type: string
+        description: 'Indicates from which level MaximumCount has been taken.
+
+          Possible values: Default, Exception, Override, Other.
+
+          Only present in case MaximumCount is present.'
+      minimumAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Minimum threshold for the cumulated authorization amount in period.
+
+          In most of the cases the value given here will be negative.
+
+          The returned value is the one being effective at operation execution time. Only present in case MinimumAmountCheck is true.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      minimumAmountCheck:
+        type: boolean
+        description: 'Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not.
+
+          The returned value is the one being effective at operation execution time.'
+      minimumAmountCheckOrigin:
+        type: string
+        description: 'Indicates from which level MinimumAmountCheck has been taken.
+
+          Possible values: Default, Exception, Override, Other.'
+      minimumAmountOrigin:
+        type: string
+        description: "Indicates from which level MinimumAmountCheck has been taken. \nPossible values: Default, Exception, Override, Other.\nOnly present in case MinimumAmount is present."
+      name:
+        type: string
+        description: 'minLength: 1
+
+          Descriptive text for the velocity limit, e.g. DAILY CASH'
+      velocityLimitIdentifier:
+        $ref: '#/definitions/VelocityLimitIdentifier'
+      velocityLimitOverrideReference:
+        type: string
+      velocityLimitOverrideStartdate:
+        type: string
+        format: date-time
+      velocityLimitOverrideEnddate:
+        type: string
+        format: date-time
+    title: GetVelocityLimitResponse
+  VelocityLimitOverrideIdentifier:
+    type: object
+    properties:
+      velocityLimitOverrideReference:
+        type: string
+        description: 'minLength: 1
+
+          maxLength: 100
+
+          Identifies the velocity limit override which replaces the default velocity limit.'
+    title: VelocityLimitOverrideIdentifier
+  ApiResponseEntityCreateVelocityLimitOverride:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/VelocityLimitOverrideIdentifier'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityCreateVelocityLimitOverride
+    description: 'Response to: Create a Velocity Limit Override'
+  ApiResponseEntityModifyVelocityLimitOverride:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/VelocityLimitOverrideIdentifier'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityModifyVelocityLimitOverride
+    description: 'Response to: Update a Velocity Limit Override'
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  ApiResponseEntityGetVelocityOverride:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/GetVelocityOverrideResponse'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetVelocityOverride
+    description: 'Response to: Retrieve a Velocity Limit Override'
+  GetVelocityOverrideResponse:
+    type: object
+    properties:
+      activationEndTime:
+        type: string
+        description: Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever.
+      activationStartTime:
+        type: string
+        description: First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately.
+      collection:
+        type: boolean
+        description: Not used, will be removed
+      defaultVelocityLimitReference:
+        $ref: '#/definitions/VelocityLimitIdentifier'
+      deleted:
+        type: boolean
+        description: Indicates whether the override is still taken into account or has been deleted.
+      issuerId:
+        type: string
+        description: Not used, will be removed
+      maximumAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Maximum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be positive. The returned value is the one being effective at operation execution time. Only present in case MaximumAmountCheck is true.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      maximumAmountCheck:
+        type: boolean
+        description: Indicates whether the number of transactions in period is compared with a maximum threshold or not. The returned value is the one being effective at operation execution time.
+      maximumCount:
+        type: integer
+        format: int32
+        description: In case JSON null is provided what is configured on higher levels becomes effective. If MaximumCountCheck = true then a non-null value must be given. Otherwise the field must be absent.
+      maximumCountCheck:
+        type: boolean
+        description: In case JSON null is provided what is configured on higher levels becomes effective.
+      minimumAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Minimum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be negative. The returned value is the one being effective at operation execution time. Only present in case MinimumAmountCheck is true.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      minimumAmountCheck:
+        type: boolean
+        description: Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. The returned value is the one being effective at operation execution time.
+      priority:
+        type: string
+        description: 'minimum: 0
+
+          maximum: 9999
+
+          In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a velocity check and an account. Required field when inserting.'
+      velocityLimitOverrideIdentifier:
+        $ref: '#/definitions/VelocityLimitOverrideIdentifier'
+    title: GetVelocityOverrideResponse
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  VelocityLimitOverride:
+    type: object
+    properties:
+      activationEndTime:
+        type: string
+        description: Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever.
+      activationStartTime:
+        type: string
+        description: First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately.
+      defaultVelocityLimitReference:
+        $ref: '#/definitions/VelocityLimitIdentifier'
+      deleted:
+        type: boolean
+        description: Indicates whether the override is still taken into account or has been deleted.
+      issuerId:
+        type: string
+        description: Not used, to be removed
+      maximumAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Maximum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be positive. The returned value is the one being effective at operation execution time. Only present in case MaximumAmountCheck is true.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      maximumAmountCheck:
+        type: boolean
+        description: Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. The returned value is the one being effective at operation execution time.
+      maximumCount:
+        type: integer
+        format: int32
+        description: 'minimum: 0
+
+          maximum: 999999999
+
+          Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true.'
+      maximumCountCheck:
+        type: boolean
+        description: Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. The returned value is the one being effective at operation execution time.
+      minimumAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Minimum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be negative. The returned value is the one being effective at operation execution time. Only present in case MinimumAmountCheck is true.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      minimumAmountCheck:
+        type: boolean
+        description: Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. The returned value is the one being effective at operation execution time.
+      priority:
+        type: string
+        description: 'minimum: 0
+
+          maximum: 9999
+
+          In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a velocity check and an account. Required field when inserting.'
+      velocityLimitOverrideIdentifier:
+        $ref: '#/definitions/VelocityLimitOverrideIdentifier'
+    title: VelocityLimitOverride
+  VelocityLimit:
+    type: object
+    properties:
+      amount:
+        description: "Cumulated authorization amount in period. Debits have a positive sign whereas credits have a negative one. \nThe returned value is the one being effective at operation execution time."
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      count:
+        type: integer
+        format: int32
+        description: "minimum: 0\nmaximum: 999999999\nCurrent number of transactions in period. \nThe returned value is the one being effective at operation execution time."
+      issuerId:
+        type: string
+        description: Not used, will be removed.
+      maximumAmount:
+        description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMaximum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be positive. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MaximumAmountCheck is true."
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      maximumAmountCheck:
+        type: boolean
+        description: "Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time."
+      maximumAmountCheckOrigin:
+        type: string
+        description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+          Indicates from which entity MaximumAmountCheck has been taken.'
+      maximumAmountOrigin:
+        type: string
+        description: 'Indicates from which level MaximumAmountCheck has been taken
+
+          Only present in case MaximumAmount is present.
+
+          Enum:
+
+          [ Default, Exception, Override, Other ]'
+      maximumCount:
+        type: integer
+        format: int32
+        description: 'minimum: 0
+
+          maximum: 999999999
+
+          Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true. '
+      maximumCountCheck:
+        type: boolean
+        description: "Indicates whether the number of transactions in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time. "
+      maximumCountCheckOrigin:
+        type: string
+        description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+          Indicates from which entity MaximumCountCheck has been taken.'
+      maximumCountOrigin:
+        type: string
+        description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+          Indicates from which entity MaximumCount has been taken.
+
+          Only present if the maximum count check has been performed.'
+      minimumAmount:
+        description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMinimum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be negative. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MinimumAmountCheck is true."
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      minimumAmountCheck:
+        type: boolean
+        description: "Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. \nThe returned value is the one being effective at operation execution time."
+      minimumAmountCheckOrigin:
+        type: string
+        description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+          Indicates from which entity MinimumAmountCheck has been taken.'
+      minimumAmountOrigin:
+        type: string
+        description: "Indicates from which level MinimumAmountCheck has been taken.  \nPossible values: Default, Exception, Override, Other.\nOnly present in case MinimumAmount is present."
+      name:
+        type: string
+        description: 'minLength: 1
+
+          Descriptive text for the velocity limit, e.g. DAILY CASH'
+      velocityLimitIdentifier:
+        $ref: '#/definitions/VelocityLimitIdentifier'
+      velocityLimitOverrideReference:
+        type: string
+      velocityLimitOverrideStartdate:
+        type: string
+        format: date-time
+      velocityLimitOverrideEnddate:
+        type: string
+        format: date-time
+    title: VelocityLimit
+  VelocityLimitIdentifier:
+    type: object
+    properties:
+      velocityLimitReference:
+        type: string
+        description: 'minLength: 1
+
+          maxLength: 60
+
+          Identifies the velocity check.'
+    title: VelocityLimitIdentifier
+  CreateVelocityLimitOverrideRequest:
+    type: object
+    properties:
+      activationEndTime:
+        type: string
+        format: date-time
+        description: "Last point in time at which the override will be considered. If not provided the override will be taken into account forever. UTC time zone. \nFormat: yyyy-MM-dd'T'HH:mm:ssZ"
+      activationStartTime:
+        type: string
+        format: date-time
+        description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately
+
+          Format: yyyy-MM-dd''T''HH:mm:ssZ'
+      maximumAmount:
+        description: Maximum amount
+        $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      maximumAmountCheck:
+        type: boolean
+        description: Maximum amount check
+      maximumCount:
+        type: integer
+        format: int32
+        description: Maximum count
+      maximumCountCheck:
+        type: boolean
+        description: Maximum count check
+      minimumAmount:
+        description: Minimum amount
+        $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      minimumAmountCheck:
+        type: boolean
+        description: Minimum amount check
+      periodLength:
+        type: integer
+        format: int32
+        description: Period Length
+      periodStart:
+        type: integer
+        format: int32
+        description: Period Start
+      periodType:
+        type: string
+        example: Day
+        description: Period Type
+        enum:
+        - Day
+        - Month
+        - Week
+      priority:
+        type: integer
+        format: int32
+        description: Priority of the override
+    title: CreateVelocityLimitOverrideRequest
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  ApiResponseEntityGetVelocityLimitOverrideHistoryResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/VelocityLimitHistory'
+      responseMetadata:
+        description: Response metadata
+        $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetVelocityLimitOverrideHistoryResponse
+    description: Issuer response entity
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  ApiResponseEntityGetVelocityLimit:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/GetVelocityLimitResponse'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetVelocityLimit
+    description: 'Response to: Retrieve a Velocity Limit'
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  ApiResponseEntityGetVelocityOverrides:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/VelocityLimitOverride'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetVelocityOverrides
+    description: 'Response to: List the Velocity Limit Overrides'
+  ModifyVelocityLimitOverrideRequest:
+    type: object
+    properties:
+      activationEndTime:
+        type: string
+        format: date-time
+        description: "Last point in time at which the override will be considered. If not provided the override will be taken into account forever. UTC time zone. \nFormat: yyyy-MM-dd'T'HH:mm:ssZ"
+      activationStartTime:
+        type: string
+        format: date-time
+        description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately
+
+          Format: yyyy-MM-dd''T''HH:mm:ssZ'
+      maximumAmount:
+        description: Maximum amount
+        $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      maximumAmountCheck:
+        type: boolean
+        description: Maximum amount check
+      maximumCount:
+        type: integer
+        format: int32
+        description: Maximum count
+      maximumCountCheck:
+        type: boolean
+        description: Maximum count check
+      minimumAmount:
+        description: Minimum amount
+        $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      minimumAmountCheck:
+        type: boolean
+        description: Minimum amount check
+      periodLength:
+        type: integer
+        format: int32
+        description: Period Length
+      periodStart:
+        type: integer
+        format: int32
+        description: Period Start
+      periodType:
+        type: string
+        example: Day
+        description: Period Type
+        enum:
+        - Day
+        - Month
+        - Week
+      priority:
+        type: integer
+        format: int32
+        description: Priority
+    title: ModifyVelocityLimitOverrideRequest
+  ApiResponseEntityGetVelocityLimits:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/VelocityLimit'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetVelocityLimits
+    description: 'Response to: List the Velocity Limits'
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  VelocityLimitHistory:
+    type: object
+    required:
+    - changeTime
+    - changeType
+    - maximumAmount
+    properties:
+      activationEndTime:
+        type: string
+        description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately.
+
+          Date Time format:  DD/MM/YYYY'
+      activationStartTime:
+        type: string
+        description: "First point in time at which the override will be considered. If not provided the override will be taken into account immediately.\nDate Time format:  DD/MM/YYYY \n"
+      changeTime:
+        type: string
+        description: "Time when the modification has been performed. UTC time zone.\nDate Time format: yyyy-MM-dd’T’HH:mm:ssZ \n"
+      changeType:
+        type: string
+        description: "Indicates which kind of modification has been performed on the velocity check override. Possible values are:\n-\tDelete (no attributes are provided at all)\n-\tReplace (all attributes are provided and not only the changed ones)\n"
+      maximumAmount:
+        description: Overrides what is configured on higher levels for the corresponding velocity check attribute
+        $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      maximumAmountCheck:
+        type: boolean
+      maximumCount:
+        type: integer
+        format: int32
+        description: Overrides what is configured on higher levels for the corresponding velocity check attribute
+      maximumCountCheck:
+        type: boolean
+      minimumAmount:
+        $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      minimumAmountCheck:
+        type: boolean
+      priority:
+        type: integer
+        format: int32
+      requestorReference:
+        type: string
+        description: Identifies the caller which has generated or triggered the modification.
+      userReference:
+        type: string
+    title: VelocityLimitHistory
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  ApiResponseEntityDeleteVelocityLimitOverride:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        allOf:
+        - $ref: '#/definitions/VelocityLimitOverrideIdentifier'
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityDeleteVelocityLimitOverride
+    description: 'Response to: Delete a Velocity Limit Override'
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+  MonetaryAmountAlphaCurrency:
+    type: object
+    properties:
+      exponent:
+        type: integer
+        format: int32
+        example: 2
+        description: 'Exponent of amount currency. Number of decimal digits. Example: 2 for Euro.'
+      isoCode:
+        type: string
+        example: EUR
+        description: 'Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro.'
+      value:
+        type: integer
+        format: int64
+        description: 'Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents).'
+    title: MonetaryAmountAlphaCurrency
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

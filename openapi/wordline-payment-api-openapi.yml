@@ -1,23 +1,26 @@
 swagger: '2.0'
 info:
-  description: This is the API server supplied by equensWorldline.
-  version: '2.0'
-  title: Merchant payments - Payments API
-  contact:
-    name: equensWorldline Acquiring Processing API team.
-    url: https://financial-services.developer.worldline.com/
-    email: dl-fr-dp2si-acquiring@worldline.com
-  license:
-    name: proprietary Worldline Financial Services
-basePath: /MerchantApiPayment/api
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Payment API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Payment
 paths:
   /acquiring/payment/v2.0/acquirers/{acquirerId}/payments/{paymentId}:
     get:
       tags:
       - Payment
       summary: Get payment based on payment id
-      description: |
-        This operation uses the unique acquirerId and payment id to retrieve the payment data
+      description: 'This operation uses the unique acquirerId and payment id to retrieve the payment data
+
+        '
       operationId: getPayment
       consumes:
       - application/json
@@ -30,20 +33,20 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: paymentId
         in: path
         description: Unique identification of the payment in which this transac   tion has been paid out
         required: true
         type: string
-        example: "SO-000000000004665998"
+        example: SO-000000000004665998
       - name: paymentDate
         in: query
         description: Payment Date (yyyy-mm-dd), known as payment posting date
         required: true
         type: string
         format: date
-        example: "2019-03-14"
+        example: '2019-03-14'
       responses:
         '200':
           description: Successful
@@ -66,10 +69,7 @@ paths:
       tags:
       - Payment
       summary: Retrieve payments on search criteria
-      description: |
-        This operation uses the unique acquirerId and IBAN or paymentReference to retrieve all the associated payment(s)
-
-        If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation uses the unique acquirerId and IBAN or paymentReference to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getPaymentsForSearchCriteria
       consumes:
       - application/json
@@ -82,39 +82,43 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: iban
         in: query
-        description: |
-          Iban
-          
+        description: 'Iban
+
+
           paymentReference or Iban must be present
+
+          '
         required: false
         type: string
-        example: "NL52RABO0133334252"
+        example: NL52RABO0133334252
       - name: paymentReference
         in: query
-        description: |
-          Merchant payment identification information; a static number frequently used to indicate store location associated with a payment
-          
+        description: 'Merchant payment identification information; a static number frequently used to indicate store location associated with a payment
+
+
           paymentReference or Iban must be present
+
+          '
         required: false
         type: string
-        example: "4665998"
+        example: '4665998'
       - name: startDate
         in: query
         description: Payment start Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2019-03-01"
+        example: '2019-03-01'
       - name: endDate
         in: query
         description: Payment end Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2019-12-31"
+        example: '2019-12-31'
       - name: merchantPaymentAmountFrom
         in: query
         description: Payment amount (whole units), amount should be greater than or equal to this value
@@ -184,10 +188,7 @@ paths:
       tags:
       - Payment
       summary: Retrieve payments on holding level
-      description: |
-        This operation uses the unique acquirerId and holdingId to retrieve all the associated payment(s)
-
-        If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation uses the unique acquirerId and holdingId to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getPaymentsForHolding
       consumes:
       - application/json
@@ -200,7 +201,7 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: holdingId
         in: path
         description: Unique identification of the holding, determined by equensWorldline
@@ -214,14 +215,14 @@ paths:
         required: true
         type: string
         format: date
-        example: "2019-03-01"
+        example: '2019-03-01'
       - name: endDate
         in: query
         description: Payment end Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2019-12-31"
+        example: '2019-12-31'
       - name: merchantPaymentAmountFrom
         in: query
         description: Payment amount (whole units), amount should be greater than or equal to this value
@@ -291,10 +292,7 @@ paths:
       tags:
       - Payment
       summary: Retrieve payments on merchant level
-      description: |
-        This operation uses the unique acquirerId and merchant id to retrieve all the associated payment(s)
-
-        If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation uses the unique acquirerId and merchant id to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getPaymentsForMerchant
       consumes:
       - application/json
@@ -307,27 +305,27 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: merchantId
         in: path
         description: Unique identification of the merchant, determined by equensWorldline
         required: true
         type: string
-        example: "1100001" 
+        example: '1100001'
       - name: startDate
         in: query
         description: Payment start Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2019-03-01"
+        example: '2019-03-01'
       - name: endDate
         in: query
         description: Payment end Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2019-12-31"
+        example: '2019-12-31'
       - name: merchantPaymentAmountFrom
         in: query
         description: Payment amount (whole units), amount should be greater than or equal to this value
@@ -397,10 +395,7 @@ paths:
       tags:
       - Payment
       summary: Retrieve payments on contract level
-      description: |
-        This operation uses the unique acquirerId and contractId to retrieve all the associated payment(s)
-
-        If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation uses the unique acquirerId and contractId to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getPaymentsForContract
       consumes:
       - application/json
@@ -413,27 +408,27 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
         type: string
-        example: "1000016"
+        example: '1000016'
       - name: startDate
         in: query
         description: Payment start Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2019-03-01"
+        example: '2019-03-01'
       - name: endDate
         in: query
         description: Payment end Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2019-12-31"
+        example: '2019-12-31'
       - name: merchantPaymentAmountFrom
         in: query
         description: Payment amount (whole units), amount should be greater than or equal to this value
@@ -498,9 +493,6 @@ paths:
           description: Unexpected error or Internal error
         '502':
           description: Backend service problem
-################################################################################
-#                                 Definitions                                  #
-################################################################################
 definitions:
   Payment:
     type: object
@@ -512,7 +504,7 @@ definitions:
       brand:
         type: string
         description: Unique identification of the brand (payment product). Maestro MAES, Visa VISA, etc.
-        example: "MAES"
+        example: MAES
       creationDateTime:
         type: string
         format: date-time
@@ -574,7 +566,7 @@ definitions:
       merchantPaymentAggregationLevelCode:
         type: string
         description: Code for the merchant payment aggregation. (00=no aggregation, 01=cluster/holding, 02=contract, 03=site, 04=terminal, 05=imprinter)
-        example: 02
+        example: 2
       merchantPaymentAggregationId:
         type: string
         description: Identification of the level on which the payment is aggregated on. The level is determined by the ‘Merchant payment aggregation code’.
@@ -590,11 +582,11 @@ definitions:
       merchantPaymentPeriodTypeCode:
         type: string
         description: Code to identify the merchant payment periode. (00=no period, 01=day, 02=week, 03=month, 04=year, 05=bi monthly.. etc)
-        example: 02
+        example: 2
       merchantPaymentType:
         type: string
         description: Type of merchant payment
-        example: 03
+        example: 3
       merchantReconciliationReference:
         type: string
         description: Reference the merchant wants to be part of the description lines of the payment on his bank statement
@@ -607,15 +599,15 @@ definitions:
       sddTypeCode:
         type: string
         description: Type of Sepa Direct Debit (001=CORE, 002=COR1, 003=B2B)
-        example: 001
+        example: 1
       sequenceTypeCode:
         type: string
         description: Type of sequence used for SDD (0001=FNAL, 0002=FRST, 0003=OOFF, 0004=RCUR)
-        example: 0001
+        example: 1
       transactionCrossReferenceURI:
         type: string
         description: URI to the MerchantApiTransaction to get the transactions that belongs to this payment
-        example: "acquiring/transaction/v2.0/acquirers/XXX/transactions?paymentId=XXX&paymentDate=YYYY-MM-DD"
+        example: acquiring/transaction/v2.0/acquirers/XXX/transactions?paymentId=XXX&paymentDate=YYYY-MM-DD
       transactionsTotalNumber:
         type: integer
         format: int32
@@ -637,18 +629,35 @@ definitions:
       paymentId:
         type: string
         description: Unique identification of the payment in which this transaction has been paid out
-        example: "SO-000000017036619028"
+        example: SO-000000017036619028
       paymentReference:
         type: string
         description: Merchant payment identification information
         example: 12530776666
+  Amount:
+    type: object
+    properties:
+      amount:
+        type: string
+        format: unlimited size decimal
+        description: 'Amount in the major units of the currency according to ISO 4217.
+
+
+          In case of euro, "3.10" (is 3.10 euro)
+
+          '
+        example: '3.00'
+      currency:
+        type: string
+        description: Currency of the amount
+        example: EUR
   ContractIdentification:
     type: object
     properties:
       acquirerId:
         type: string
         description: Unique identification of the acquirer, determined by equensWorldline
-        example: "671234567"
+        example: '671234567'
       holdingId:
         type: integer
         format: int32
@@ -657,23 +666,13 @@ definitions:
       merchantId:
         type: string
         description: Unique identification of the merchant, determined by the acquirer
-        example: "1280300"
+        example: '1280300'
       contractId:
         type: string
         description: Unique identification of the contract, determined by the acquirer
-        example: "12872"
-  Amount:
-    type: object
-    properties:
-      amount:
-        type: string
-        format: unlimited size decimal
-        description: |
-          Amount in the major units of the currency according to ISO 4217.
-          
-          In case of euro, "3.10" (is 3.10 euro)
-        example: "3.00"
-      currency:
-        type: string
-        description: Currency of the amount
-        example: "EUR"
+        example: '12872'
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

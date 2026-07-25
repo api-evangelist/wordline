@@ -1,0 +1,2193 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Account - Authorization API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Account - Authorization
+  description: Account Authorization Controller
+paths:
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/authorization-business-cases:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get business cases by external account reference
+      operationId: getMultipleBusinessCasesByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: endTime
+        in: query
+        description: endTime
+        required: true
+        type: string
+        format: date-time
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: startTime
+        in: query
+        description: startTime
+        required: true
+        type: string
+        format: date-time
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetBusinessCases'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/authorization-business-cases/search:
+    post:
+      tags:
+      - Account - Authorization
+      summary: Enquire business cases for request
+      operationId: enquireBusinessCases
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: businessCasesEnquiryRequest
+        description: businessCasesEnquiryRequest
+        required: true
+        schema:
+          $ref: '#/definitions/BusinessCasesEnquiryRequest'
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: requestorReference
+        in: query
+        description: Requestor Reference
+        required: false
+        type: string
+      - name: userReference
+        in: query
+        description: User Reference
+        required: false
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetBusinessCases'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/authorization-business-cases/{businessCaseId}
+  : get:
+      tags:
+      - Account - Authorization
+      summary: Get business case by external account reference
+      description: This operation enables to retrieve the details of an authorization identified by its business case Id.
+      operationId: getSingleBusinessCaseByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: businessCaseId
+        in: path
+        description: businessCaseId
+        required: true
+        type: string
+      - name: endTime
+        in: query
+        description: 'example: 2012-12-31T22:00:00.000
+
+          End of time period (excluded) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: startTime
+        in: query
+        description: 'example: 2012-12-31T22:00:00.000
+
+          Start of time period (included) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+        allowEmptyValue: false
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetBusinessCase'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/authorizations:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get authorizations by external account reference
+      operationId: getMultipleAuthorizationsByExtAcctRef
+      description: 'This operation enables to retrieve a list of authorizations associated to an account for a given period.
+
+        In response, for each authorization, the main properties of the authorization are provided such as the type of operation, the amount, the result code, the acceptance context.'
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: endTime
+        in: query
+        description: 'Example: 2012-12-31T22:00:00.000
+
+          End of time period (excluded) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: startTime
+        in: query
+        description: 'Example: 2012-12-31T22:00:00.000
+
+          Start of time period (included) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+        allowEmptyValue: false
+      - name: page
+        in: query
+        description: Page
+        required: false
+        type: integer
+        default: 0
+        format: int32
+        allowEmptyValue: false
+      - name: offset
+        in: query
+        description: 'Offset,  maximum: 100'
+        required: false
+        type: integer
+        default: 100
+        format: int32
+        allowEmptyValue: false
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizations'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/authorizations/{authorizationId}:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get authorization by external account reference
+      description: This operation enables to retrieve the details of an authorization identified by its transaction Id.
+      operationId: getSingleAuthorizationByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: authorizationId
+        in: path
+        description: authorizationId
+        required: true
+        type: string
+      - name: endTime
+        in: query
+        description: 'Example: 2012-12-31T22:00:00.000
+
+          End of time period (excluded) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: Not used, will be removed
+        required: true
+        type: string
+      - name: startTime
+        in: query
+        description: 'Example: 2012-12-31T22:00:00.000
+
+          Start of time period (included) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+        allowEmptyValue: false
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorization'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/authorization-business-cases:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get business cases
+      operationId: getMultipleBusinessCases
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        description: accountReference
+        required: true
+        type: string
+      - name: endTime
+        in: query
+        description: 'example: 2012-12-31T22:00:00.000
+
+          End of time period (excluded) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: startTime
+        in: query
+        description: 'example: 2012-12-31T22:00:00.000
+
+          Start of time period (included) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetBusinessCases'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/authorization-business-cases/{businessCaseId}:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get business case
+      description: This operation enables to retrieve the details of an authorization identified by its business case Id.
+      operationId: getSingleBusinessCase
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        description: accountReference
+        required: true
+        type: string
+      - name: businessCaseId
+        in: path
+        description: businessCaseId
+        required: true
+        type: string
+      - name: endTime
+        in: query
+        description: endTime
+        required: true
+        type: string
+        format: date-time
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: startTime
+        in: query
+        description: startTime
+        required: true
+        type: string
+        format: date-time
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+        allowEmptyValue: false
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetBusinessCase'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/authorizations:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get authorizations
+      operationId: getMultipleAuthorizations
+      description: 'This operation enables to retrieve a list of authorizations associated to an account for a given period.
+
+        In response, for each authorization, the main properties of the authorization are provided such as the type of operation, the amount, the result code, the acceptance context.'
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: WL-Peer-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        description: accountReference
+        required: true
+        type: string
+      - name: endTime
+        in: query
+        description: 'Example: 2012-12-31T22:00:00.000
+
+          End of time period (excluded) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: startTime
+        in: query
+        description: 'Example: 2012-12-31T22:00:00.000
+
+          Start of time period (included) for which transactions have to be provided.'
+        required: true
+        type: string
+        format: date-time
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+        allowEmptyValue: false
+      - name: page
+        in: query
+        description: Page
+        required: false
+        type: integer
+        default: 0
+        format: int32
+        allowEmptyValue: false
+      - name: offset
+        in: query
+        description: 'Offset, maximum: 100'
+        required: false
+        type: integer
+        default: 100
+        format: int32
+        allowEmptyValue: false
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorizations'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/authorizations/{authorizationId}:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get authorization
+      operationId: getSingleAuthorization
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: accountReference
+        in: path
+        description: accountReference
+        required: true
+        type: string
+      - name: authorizationId
+        in: path
+        description: authorizationId
+        required: true
+        type: string
+        x-example: Length should be 18
+      - name: endTime
+        in: query
+        description: endTime
+        required: true
+        type: string
+        format: date-time
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: startTime
+        in: query
+        description: startTime
+        required: true
+        type: string
+        format: date-time
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+        allowEmptyValue: false
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetAuthorization'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/reserves:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get reservations
+      operationId: getReservations
+      produces:
+      - application/json
+      parameters:
+      - name: accountReference
+        in: path
+        description: accountReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetReserves'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/reserves:
+    get:
+      tags:
+      - Account - Authorization
+      summary: Get reservations by external account reference
+      operationId: getReservationsByExtAcctRef
+      produces:
+      - application/json
+      parameters:
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityGetReserves'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+definitions:
+  ApiResponseEntityGetAuthorization:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/GetAuthorizationResponse'
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetAuthorization
+    description: Issuer response entity
+  ApiResponseEntityGetAuthorizations:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Authorization'
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetAuthorizations
+    description: Issuer response entity
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  ApiResponseEntityGetBusinessCase:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/GetBusinessCaseResponse'
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetBusinessCase
+    description: Issuer response entity
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  VelocityLimitIdentifier:
+    type: object
+    properties:
+      velocityLimitReference:
+        type: string
+        description: 'minLength: 1
+
+          maxLength: 60
+
+          Identifies the velocity check.'
+    title: VelocityLimitIdentifier
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  Authorization:
+    type: object
+    properties:
+      accountIdentifier:
+        $ref: '#/definitions/AccountIdentifier'
+      approvalCode:
+        type: string
+        description: 'maxLength: 10
+
+          Code computed at time of authorization and returned to requestor in case of an approval.'
+      authorizationBusinessCaseIdentifier:
+        $ref: '#/definitions/AuthorizationBusinessCaseIdentifier'
+      authorizationIdentifier:
+        $ref: '#/definitions/AuthorizationIdentifier'
+      businessCaseType:
+        type: string
+        description: 'examples: List [ "FinancialRequest", "FinancialVerification", "AccountVerification", "BalanceEnquiry", "StatementEnquiry", "PinChange", "PinUnblock", "PickUp", "CardReturn", "Reconciliation", "ReserveUpdate", "ReserveExpiry", "CardFileOperation", "TokenLifeCycleEvent", "Other", "Unknown" ]
+
+          This value is the same for all transactions belonging to the same business case. '
+      cardAcceptorCity:
+        type: string
+        description: 'maxLength: 60
+
+          City the acceptor is resident (e.g. Frankfurt).'
+      cardAcceptorCountry:
+        type: string
+        description: "minLength: 3\nmaxLength: 3\nISO 3166 numeric country code of the acceptor. \nExample: 076 = Brazil."
+      cardAcceptorName:
+        type: string
+        description: 'maxLength: 50
+
+          This field is not strictly defined and therefore variations are possible.
+
+          Usually it is the merchant name as known to the cardholder.
+
+          For ATMs it could be the location or the branch number. '
+      cardReference:
+        type: string
+        description: 'minLength: 1
+
+          maxLength: 100
+
+          Card Reference from IBO.'
+      cardScheme:
+        type: string
+        description: 'examples: List [ "VISA", "MasterCard", "Diners", "Amex", "JCB", "UnionPay", "RuPay", "Eftpos", "Twint", "Alipay", "WeChatPay", "Payconiq", "PayPal", "Other", "Unknown" ]
+
+          Indicates the card scheme to which the card belongs to.'
+      cashbackAmount:
+        description: 'maximum: 1000000000000000000
+
+          Portion of EnquiredAmount dedicated to cashback. The sign is the same as the one of EnquiredAmount.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      cashbackBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to CashbackAmount but in billing (cardholder) currency. '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      comment:
+        type: string
+        description: 'maxLength: 255
+
+          textual remark given when transaction was triggered. '
+      declineReason:
+        type: string
+        description: 'Examples: List [ "CardBlocked", "FraudSuspected", "Cvv2Missing", "TechnicalError", "OverLimit", "OverUsageLimit", "OverCreditLimit", "Cvv2Wrong", "CvvWrong", "CavvWrong", "CardUnknown", "CardExpired", "PinWrong", "PinTriesOverLimit", "PinTriesAlmostOverLimit", "RestrictionViolated", "ArqcWrong", "TxnNotAllowed", "MerchantUnknown", "ReplyTimeout", "Other", "Unknown" ]'
+      declined:
+        type: boolean
+        description: Indicates whether the transaction was declined or approved.
+      deltaAmount:
+        description: 'maximum: 1000000000000000000
+
+          Increase or decrease from the old to the new total amount of business case in transaction (acceptor) currency.
+
+          That is: New TotalAmount = Old TotalAmount + DeltaAmount. '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      deltaBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to DeltaAmount but in billing (cardholder) currency. '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      enquiredAmount:
+        description: 'maximum: 1000000000000000000
+
+          Requested amount in transaction (acceptor) currency. A positive value is a debit for the cardholder and a credit for the acceptor.
+
+          Whereas a negative value is a credit for the cardholder and a debit for the acceptor.
+
+          A partial approval (including purchase only) can be detected by comparing EnquiredAmount with ApprovedAmount.
+
+          In case they are different it is a partial approval. '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      enquiredBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to EnquiredAmount but in billing (cardholder) currency. '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      entryMode:
+        type: string
+        description: 'Examples: List [ "KeyEntry", "Magstripe", "Chip", "ContactlessMagstripe", "ContactlessChip", "BarCode", "Ocr", "File", "AutoEntry", "Other", "Unknown" ]
+
+          Indicates the way the card data was captured.'
+      environmentType:
+        type: string
+        description: 'Examples: List [ "POI", "MailOrder", "PhoneOrder", "ECommerce", "Voice", "Other", "Unknown" ]
+
+          Indicates the environment in which the transaction took place.'
+      financialType:
+        type: string
+        description: 'Examples: List [ "Cash", "CashRefund", "QuasiCash", "QuasiCashRefund", "Purchase", "Refund", "Load", "Unload", "FundsTransferCredit", "FundsTransferDebit", "OtherCredit", "OtherDebit", "Deposit", "DepositRefund", "Unknown" ]
+
+          Provides more details on the operation in case BusinessCaseType is FinancialRequest or FinancialVerification.This value is the same for all transactions belonging to the same financial business case. '
+      issuerId:
+        type: string
+        description: Not used, will be removed
+      mappedSecurityTypeId:
+        type: string
+        description: Not used, will be removed
+      maskedPan:
+        type: string
+        description: 'maxLength: 28
+
+          Masked card number (PAN). Only the first 6 and the last 4 digits are visible. All other digits are replaced by a hash character.
+
+          Absent if the card number is in scope of PCI and the interface is configured for suppressing the masked card number.'
+      merchantCategoryCode:
+        type: string
+        description: 'maxLength: 4
+
+          MCategory code assigned to the acceptor (MCC).'
+      onPremisesOfAcceptor:
+        type: boolean
+        description: Indicates if authorization was done in the location of the terminal
+      onlinePinCheckResult:
+        type: string
+        description: 'Examples: List [ "Correct", "Wrong", "Unable", "Other", "Unknown" ]'
+      openToBuy:
+        description: 'maximum: 1000000000000000000
+
+          Available line of the cardholder after transaction completion in billing currency. '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      operationDate:
+        type: string
+        format: date-time
+        description: "minLength: 14\nmaxLength: 14\nDate and time at which the transaction took place. \nThe format is YYYYMMDDhhmmss and the time zone is the one of the merchant. "
+      pan:
+        type: string
+        description: 'maxLength: 28
+
+          Clear card number (PAN).
+
+          Absent if the card number is in scope of PCI and the interface is configured for suppressing the clear card number.'
+      panExpiryDate:
+        type: string
+        description: 'minLength: 6
+
+          maxLength: 6
+
+          Expiry date of card/plastic in the format YYYYMM.It is only guaranteed that the string consists of decimal digits.'
+      panReference:
+        type: string
+        description: 'maxLength: 100
+
+          Alternative card number, coming from IBO.
+
+          This card number is optionally used by WLP FO instead of the actual card number (PAN) when communicating with external systems.'
+      panSequenceNumber:
+        type: string
+        description: 'maximum: 9999
+
+          Sequence number of card. '
+      reserveAmount:
+        description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nReserved amount in transaction (acceptor) currency of initial authorization. \nA positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. "
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      resultCode:
+        type: string
+        description: 'maxLength: 20
+
+          Final and detailed result code of transaction. Any automated evaluation of this information has to consider that new result codes are introduced often and even existing ones can disappear or change.
+
+          Therefore this data element should be used for information purpose only. '
+      resultDescription:
+        type: string
+        description: 'maxLength: 300
+
+          English text explaining the meaning of ResultCode.'
+      resultType:
+        type: string
+        description: 'Approval (transaction approved),Decline (transaction refused),Referral (transaction refused),PickUp (transaction refused),Other (transaction refused). '
+      securityTypeId:
+        type: integer
+        format: int32
+        description: 'maximum: 999999999
+
+          Internal unique identifier of security type in WLP FO. '
+      securityTypeName:
+        type: string
+        description: 'maxLength: 100
+
+          English text explaining SecurityTypeId.'
+      standIn:
+        type: boolean
+        description: 'Indicates whether WLP FO has stood in for the switch-out peer (request) or whether the transaction is managed in store-and-forward mode towards the switch-out peer (advice).
+
+          This field is only present if the field SwitchOutPeerId is present.  '
+      surchargeAmount:
+        description: 'maximum: 1000000000000000000
+
+          Portion of EnquiredAmount dedicated to surcharge imposed by the acceptor or the acquirer.
+
+          The sign is the same as the one of EnquiredAmount.  '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      surchargeBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to SurchargeAmount but in billing (cardholder) currency.  '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      terminalId:
+        type: string
+        description: 'maxLength: 20
+
+          Id of terminal.'
+      terminalType:
+        type: string
+        description: 'Examples: List [ "Attended", "Atm", "PetrolPump", "Adm", "LimitedAmountAdm", "Mobile", "InFlight", "ChargingStation", "Other", "Unknown" ]
+
+          Indicates the type of the terminal.'
+      totalAmount:
+        description: "maximum: 1000000000000000000\nOverall reservation/authorization (if capturing is not finalized) or capture amount (if capturing is finalized) of business case in transaction (acceptor) currency after transaction completion. \nA positive value is a debit for the cardholder and a credit for the acceptor.\nWhereas a negative value is a credit for the cardholder and a debit for the acceptor.  "
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      totalBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to TotalAmount but in billing (cardholder) currency.  '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      transactionDate:
+        type: string
+        description: "minLength: 23\nmaxLength: 23\nTime and date at which the transaction took place. \nThe format is 2012-12-31T22:00:00.000 and the time zone is the one of the merchant. \nIt is only guaranteed that the string consists of decimal digits. \nBut it is not ensured the value is valid. For example the month could be outside of the range from 01 to 12."
+      transactionSubType:
+        type: string
+        description: 'Examples: List [ "Request", "Advice", "Other", "Unknown" ]
+
+          Indicates the sub-type of the performed operation for some  Transaction types.'
+      transactionType:
+        type: string
+        description: 'DEPRECATED. Use the field TransactionType2. insteadExamples: List [ "Authorization", "Reversal", "Confirmation", "Rollback", "ReserveUpdate", "ReserveExpiry", "Other", "Unknown" ]
+
+          Indicates the type of the performed operation for some of the listed BusinessCaseType values.'
+      transactionType2:
+        type: string
+        description: 'Examples: List [ "Authorization", "Reversal", "Confirmation", "Rollback", "ReserveUpdate", "ReserveExpiry", "Other", "Unknown" ]
+
+          Indicates the type of the performed operation for some of the listed BusinessCaseType values.'
+      transactionTypeId:
+        type: string
+        description: 'maximum: 999999999
+
+          Internal unique identifier of transaction type in WLP FO.'
+      transactionTypeName:
+        type: string
+        description: 'maxLength: 100
+
+          English text explaining TransactionTypeId.'
+      velocityLimitChecks:
+        type: array
+        items:
+          $ref: '#/definitions/VelocityLimitCheck'
+    title: Authorization
+  ApiResponseEntityGetReserves:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Reserve'
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetReserves
+    description: Issuer response entity
+  GetBusinessCaseResponse:
+    type: object
+    properties:
+      accountReserveBillingAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Fraction of ReserveBillingAmount which has not expired and has not been cancelled (i.e. no clearing and no manual intervention) so far and therefore still influences the open-to-buy via the account reserve (on top of the account balance). A positive value is a debit for the cardholder and a credit for the issuer. Whereas a negative value is a credit for the cardholder and a debit for the issuer.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      accountReserveStatus:
+        type: string
+        example: List'None', 'Active', 'Expired', 'Cancelled', 'Other'
+        description: 'Indicates together with AccountReserveBillingAmount to what extend the business case influences the open-to-buy via the account reserve (on top of the account balance). Possible values are:
+
+          - None (ReserveBillingAmount is and was never part of the account reserve; AccountReserveBillingAmount is absent)
+
+          - Active (ReserveBillingAmount amount is fully or partially part of the account reserve; it can be cancelled or updated; it can expire; AccountReserveBillingAmount is greater than zero)
+
+          - Expired (ReserveBillingAmount has expired and is no longer part of the account reserve; AccountReserveBillingAmount is zero)
+
+          - Cancelled (ReserveBillingAmount has been entirely cancelled (due to clearing or manual intervention) and is no longer part of the account reserve; AccountReserveBillingAmount is zero)
+
+          - Other
+
+          Can only be present in case BusinessCaseType is FinancialRequest. Absent in case Cancelled is true or all associated authorizations have been declined. The caller must be prepared to receive new values in this field at any time.'
+      businessCaseIdentifier:
+        description: Business case to which the transaction belongs. The provided information reflects its status after transaction completion. A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)
+        allOf:
+        - $ref: '#/definitions/BusinessCaseIdentifier'
+      businessCaseType:
+        type: string
+        example: List 'FinancialRequest', 'FinancialVerification', 'AccountVerification', 'BalanceEnquiry', 'StatementEnquiry', 'PinChange', 'PinUnblock', 'PickUp', 'CardReturn', 'Reconciliation', 'ReserveUpdate', 'ReserveExpiry', 'CardFileOperation', 'TokenLifeCycleEvent', 'Other', 'Unknown'
+        description: This value is the same for all transactions belonging to the same business case.
+      cardAcceptorCity:
+        type: string
+        description: 'maxLength: 60
+
+          City the acceptor is resident (e.g. Frankfurt).Often exchanged with other applications via ISO 8583 field DE 43.'
+      cardAcceptorCountry:
+        type: string
+        description: Generic.AlphaNumericAcceptorCountryCode for the initial authorization.
+      cardAcceptorName:
+        type: string
+        description: 'maxLength: 50
+
+          This field is not strictly defined and therefore variations are possible. Usually it is the merchant name as known to the cardholder. For ATMs it could be the location or the branch number. Often exchanged with other applications via ISO 8583 field DE 43.'
+      collection:
+        type: boolean
+        description: Not used, will be removed
+      financialType:
+        type: string
+        example: List 'Cash', 'CashRefund', 'QuasiCash', 'QuasiCashRefund', 'Purchase', 'Refund', 'Load', 'Unload', 'FundsTransferCredit', 'FundsTransferDebit', 'OtherCredit', 'OtherDebit', 'Deposit', 'DepositRefund', 'Unknown'
+        description: Provides more details on the operation in case BusinessCaseType is FinancialRequest or FinancialVerification.This value is the same for all transactions belonging to the same financial business case.
+      firstAuthorizationIdentifier:
+        $ref: '#/definitions/AuthorizationIdentifier'
+      firstAuthorizationTransactionDate:
+        type: string
+        example: '2022-04-01T20:38:39Z'
+        description: 'Time when the transaction referenced by FirstTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ.'
+      issuerId:
+        type: string
+        description: Not used, will be removed
+      lastAuthorizationIdentifier:
+        $ref: '#/definitions/AuthorizationIdentifier'
+      lastAuthorizationTransactionDate:
+        type: string
+        example: '2022-04-01T20:38:39Z'
+        description: 'Time when the transaction referenced by LastTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ.'
+      merchantCategoryCode:
+        type: string
+        description: 'maxLength: 4
+
+          Category code assigned to the acceptor (MCC).'
+      reserveAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Reserved amount in transaction (acceptor) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalAmount.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      reserveBillingAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Reserved amount in billing (cardholder) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalBillingAmount.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      status:
+        type: string
+        description: The status of the business case
+    title: GetBusinessCaseResponse
+  BusinessCaseIdentifier:
+    type: object
+    properties:
+      businessCaseId:
+        type: string
+    title: BusinessCaseIdentifier
+  BusinessCasesEnquiryRequest:
+    type: object
+    required:
+    - endTime
+    - startTime
+    properties:
+      accountReference:
+        type: string
+      businessCaseIds:
+        type: array
+        items:
+          type: string
+      endTime:
+        type: string
+        format: date-time
+      startTime:
+        type: string
+        format: date-time
+    title: BusinessCasesEnquiryRequest
+    description: Request to enquire business cases. Either accountReference or businessCaseIds must be provided.
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  AccountIdentifier:
+    type: object
+    properties:
+      accountReference:
+        type: string
+        description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+      issuerAccountExternalReference:
+        type: string
+        description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+    title: AccountIdentifier
+  VelocityLimitCheck:
+    type: object
+    properties:
+      amount:
+        description: "Cumulated authorization amount in period. Debits have a positive sign whereas credits have a negative one. \nThe returned value is the one being effective at operation execution time."
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      count:
+        type: integer
+        format: int32
+        description: "minimum: 0\nmaximum: 999999999\nCurrent number of transactions in period. \nThe returned value is the one being effective at operation execution time."
+      issuerId:
+        type: string
+        description: Not used, will be removed.
+      maximumAmount:
+        description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMaximum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be positive. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MaximumAmountCheck is true."
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      maximumAmountCheck:
+        type: boolean
+        description: "Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time."
+      maximumAmountCheckOrigin:
+        type: string
+        description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+          Indicates from which entity MaximumAmountCheck has been taken.'
+      maximumAmountOrigin:
+        type: string
+        description: 'Indicates from which level MaximumAmountCheck has been taken
+
+          Only present in case MaximumAmount is present.
+
+          Enum:
+
+          [ Default, Exception, Override, Other ]'
+      maximumCount:
+        type: integer
+        format: int32
+        description: 'minimum: 0
+
+          maximum: 999999999
+
+          Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true. '
+      maximumCountCheck:
+        type: boolean
+        description: "Indicates whether the number of transactions in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time. "
+      maximumCountCheckOrigin:
+        type: string
+        description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+          Indicates from which entity MaximumCountCheck has been taken.'
+      maximumCountOrigin:
+        type: string
+        description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+          Indicates from which entity MaximumCount has been taken.
+
+          Only present if the maximum count check has been performed.'
+      minimumAmount:
+        description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMinimum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be negative. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MinimumAmountCheck is true."
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      minimumAmountCheck:
+        type: boolean
+        description: "Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. \nThe returned value is the one being effective at operation execution time."
+      minimumAmountCheckOrigin:
+        type: string
+        description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+          Indicates from which entity MinimumAmountCheck has been taken.'
+      minimumAmountOrigin:
+        type: string
+        description: "Indicates from which level MinimumAmountCheck has been taken.  \nPossible values: Default, Exception, Override, Other.\nOnly present in case MinimumAmount is present."
+      velocityLimitIdentifier:
+        $ref: '#/definitions/VelocityLimitIdentifier'
+    title: VelocityLimitCheck
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  Reserve:
+    type: object
+    properties:
+      amount:
+        $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      approvalCode:
+        type: string
+      billingAmount:
+        $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      businessCaseIdentifier:
+        $ref: '#/definitions/BusinessCaseIdentifier'
+      cardAcceptorCity:
+        type: string
+      cardAcceptorCountry:
+        type: string
+      cardAcceptorName:
+        type: string
+      expiryTime:
+        type: string
+      financialType:
+        type: string
+      firstAuthorizationIdentifier:
+        $ref: '#/definitions/AuthorizationIdentifier'
+      maskedCardNumber:
+        type: string
+      merchantCategoryCode:
+        type: string
+      operationTime:
+        type: string
+    title: Reserve
+  BusinessCase:
+    type: object
+    properties:
+      accountReserveBillingAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Fraction of ReserveBillingAmount which has not expired and has not been cancelled (i.e. no clearing and no manual intervention) so far and therefore still influences the open-to-buy via the account reserve (on top of the account balance). A positive value is a debit for the cardholder and a credit for the issuer. Whereas a negative value is a credit for the cardholder and a debit for the issuer.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      accountReserveStatus:
+        type: string
+        example: List'None', 'Active', 'Expired', 'Cancelled', 'Other'
+        description: 'Indicates together with AccountReserveBillingAmount to what extend the business case influences the open-to-buy via the account reserve (on top of the account balance). Possible values are:
+
+          - None (ReserveBillingAmount is and was never part of the account reserve; AccountReserveBillingAmount is absent)
+
+          - Active (ReserveBillingAmount amount is fully or partially part of the account reserve; it can be cancelled or updated; it can expire; AccountReserveBillingAmount is greater than zero)
+
+          - Expired (ReserveBillingAmount has expired and is no longer part of the account reserve; AccountReserveBillingAmount is zero)
+
+          - Cancelled (ReserveBillingAmount has been entirely cancelled (due to clearing or manual intervention) and is no longer part of the account reserve; AccountReserveBillingAmount is zero)
+
+          - Other
+
+          Can only be present in case BusinessCaseType is FinancialRequest. Absent in case Cancelled is true or all associated authorizations have been declined. The caller must be prepared to receive new values in this field at any time.'
+      businessCaseIdentifier:
+        description: Business case to which the transaction belongs. The provided information reflects its status after transaction completion. A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)
+        allOf:
+        - $ref: '#/definitions/BusinessCaseIdentifier'
+      businessCaseType:
+        type: string
+        example: List 'FinancialRequest', 'FinancialVerification', 'AccountVerification', 'BalanceEnquiry', 'StatementEnquiry', 'PinChange', 'PinUnblock', 'PickUp', 'CardReturn', 'Reconciliation', 'ReserveUpdate', 'ReserveExpiry', 'CardFileOperation', 'TokenLifeCycleEvent', 'Other', 'Unknown'
+        description: This value is the same for all transactions belonging to the same business case.
+      cardAcceptorCity:
+        type: string
+        description: 'maxLength: 60
+
+          City the acceptor is resident (e.g. Frankfurt).Often exchanged with other applications via ISO 8583 field DE 43.'
+      cardAcceptorCountry:
+        type: string
+        description: Generic.AlphaNumericAcceptorCountryCode for the initial authorization.
+      cardAcceptorName:
+        type: string
+        description: 'maxLength: 50
+
+          This field is not strictly defined and therefore variations are possible. Usually it is the merchant name as known to the cardholder. For ATMs it could be the location or the branch number. Often exchanged with other applications via ISO 8583 field DE 43.'
+      financialType:
+        type: string
+        example: List 'Cash', 'CashRefund', 'QuasiCash', 'QuasiCashRefund', 'Purchase', 'Refund', 'Load', 'Unload', 'FundsTransferCredit', 'FundsTransferDebit', 'OtherCredit', 'OtherDebit', 'Deposit', 'DepositRefund', 'Unknown'
+        description: Provides more details on the operation in case BusinessCaseType is FinancialRequest or FinancialVerification.This value is the same for all transactions belonging to the same financial business case.
+      firstAuthorizationIdentifier:
+        $ref: '#/definitions/AuthorizationIdentifier'
+      firstAuthorizationTransactionDate:
+        type: string
+        example: '2022-04-01T20:38:39Z'
+        description: 'Time when the transaction referenced by FirstTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ.'
+      issuerId:
+        type: string
+        description: Not used, will be removed
+      lastAuthorizationIdentifier:
+        $ref: '#/definitions/AuthorizationIdentifier'
+      lastAuthorizationTransactionDate:
+        type: string
+        example: '2022-04-01T20:38:39Z'
+        description: 'Time when the transaction referenced by LastTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ.'
+      merchantCategoryCode:
+        type: string
+        description: 'maxLength: 4
+
+          Category code assigned to the acceptor (MCC).'
+      reserveAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Reserved amount in transaction (acceptor) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalAmount.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      reserveBillingAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Reserved amount in billing (cardholder) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalBillingAmount.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      status:
+        type: string
+        description: Status of the business case
+    title: BusinessCase
+  AuthorizationBusinessCaseIdentifier:
+    type: object
+    required:
+    - businessCaseId
+    properties:
+      businessCaseId:
+        type: string
+        description: 'Business case to which the transaction belongs.
+
+          The provided information reflects its status after transaction completion.
+
+          A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
+    title: AuthorizationBusinessCaseIdentifier
+  GetAuthorizationResponse:
+    type: object
+    properties:
+      accountIdentifier:
+        $ref: '#/definitions/AccountIdentifier'
+      approvalCode:
+        type: string
+        description: 'maxLength: 10
+
+          Code computed at time of authorization and returned to requestor in case of an approval.Often exchanged with other applications via ISO 8583 field DE 38.'
+      authorizationBusinessCaseIdentifier:
+        $ref: '#/definitions/AuthorizationBusinessCaseIdentifier'
+      authorizationIdentifier:
+        $ref: '#/definitions/AuthorizationIdentifier'
+      businessCaseType:
+        type: string
+        example: List 'FinancialRequest', 'FinancialVerification', 'AccountVerification', 'BalanceEnquiry', 'StatementEnquiry', 'PinChange', 'PinUnblock', 'PickUp', 'CardReturn', 'Reconciliation', 'ReserveUpdate', 'ReserveExpiry', 'CardFileOperation', 'TokenLifeCycleEvent', 'Other', 'Unknown'
+        description: 'This value is the same for all transactions belonging to the same business case. '
+      cardAcceptorCity:
+        type: string
+        description: 'maxLength: 60
+
+          City the acceptor is resident (e.g. Frankfurt).'
+      cardAcceptorCountry:
+        type: string
+        description: Generic.AlphaNumericAcceptorCountryCode for the initial authorization.
+      cardAcceptorName:
+        type: string
+        description: 'maxLength: 50
+
+          This field is not strictly defined and therefore variations are possible. Usually it is the merchant name as known to the cardholder. For ATMs it could be the location or the branch number. Often exchanged with other applications via ISO 8583 field DE 43.'
+      cardReference:
+        type: string
+        description: 'minLength: 1
+
+          maxLength: 100
+
+          Card Reference from IBO.'
+      cardScheme:
+        type: string
+        example: List 'VISA', 'MasterCard', 'Diners', 'Amex', 'JCB', 'UnionPay', 'RuPay', 'Eftpos', 'Twint', 'Alipay', 'WeChatPay', 'Payconiq', 'PayPal', 'Other', 'Unknown'
+        description: Indicates the card scheme to which the card belongs to.
+      cashbackAmount:
+        description: 'maximum: 1000000000000000000
+
+          Portion of EnquiredAmount dedicated to cashback. The sign is the same as the one of EnquiredAmount.  '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      cashbackBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to CashbackAmount but in billing (cardholder) currency. '
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      collection:
+        type: boolean
+        description: Not used, will be removed
+      comment:
+        type: string
+        description: 'maxLength: 255
+
+          Arbitrary textual remark given when transaction was triggered.'
+      declineReason:
+        type: string
+        example: List 'CardBlocked', 'FraudSuspected', 'Cvv2Missing', 'TechnicalError', 'OverLimit', 'OverUsageLimit', 'OverCreditLimit', 'Cvv2Wrong', 'CvvWrong', 'CavvWrong', 'CardUnknown', 'CardExpired', 'PinWrong', 'PinTriesOverLimit', 'PinTriesAlmostOverLimit', 'RestrictionViolated', 'ArqcWrong', 'TxnNotAllowed', 'MerchantUnknown', 'ReplyTimeout', 'Other', 'Unknown'
+        description: 'Depending on the interface configuration on WLP FO either this field or MappedResultCode will be populated in all notifications. '
+      declined:
+        type: boolean
+        description: Indicates whether the transaction was declined or approved.
+      deltaAmount:
+        description: 'maximum: 1000000000000000000
+
+          Increase or decrease from the old to the new total amount of business case in transaction (acceptor) currency. That is: New TotalAmount = Old TotalAmount + DeltaAmount.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      deltaBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to DeltaAmount but in billing (cardholder) currency.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      enquiredAmount:
+        description: 'maximum: 1000000000000000000
+
+          Requested amount in transaction (acceptor) currency. A positive value is a debit for the cardholder and a credit for the acceptor. Whereas a negative value is a credit for the cardholder and a debit for the acceptor. A partial approval (including purchase only) can be detected by comparing EnquiredAmount with ApprovedAmount. In case they are different it is a partial approval.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      enquiredBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to EnquiredAmount but in billing (cardholder) currency.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      entryMode:
+        type: string
+        example: List 'KeyEntry', 'Magstripe', 'Chip', 'ContactlessMagstripe', 'ContactlessChip', 'BarCode', 'Ocr', 'File', 'AutoEntry', 'Other', 'Unknown'
+        description: Indicates the way the card data was captured.
+      environmentType:
+        type: string
+        example: List 'POI', 'MailOrder', 'PhoneOrder', 'ECommerce', 'Voice', 'Other', 'Unknown'
+        description: Indicates the environment in which the transaction took place.
+      financialType:
+        type: string
+        example: List 'Cash', 'CashRefund', 'QuasiCash', 'QuasiCashRefund', 'Purchase', 'Refund', 'Load', 'Unload', 'FundsTransferCredit', 'FundsTransferDebit', 'OtherCredit', 'OtherDebit', 'Deposit', 'DepositRefund', 'Unknown'
+        description: Provides more details on the operation in case BusinessCaseType is FinancialRequest or FinancialVerification.This value is the same for all transactions belonging to the same financial business case.
+      issuerId:
+        type: string
+        description: Not used, will be removed
+      mappedSecurityTypeId:
+        type: string
+        description: Not used, wll be removed
+      maskedPan:
+        type: string
+        description: 'maxLength: 28
+
+          Masked card number (PAN). Only the first 6 and the last 4 digits are visible. All other digits are replaced by a hash character.
+
+          Absent if the card number is in scope of PCI and the interface is configured for suppressing the masked card number.'
+      merchantCategoryCode:
+        type: string
+        description: 'maxLength: 4
+
+          Category code assigned to the acceptor (MCC).'
+      onPremisesOfAcceptor:
+        type: boolean
+        example: List 'OnPremisesOfAcceptor', 'OffPremisesOfAcceptor', 'OnPremisesOfCardholder', 'OffPremisesOfCardholder', 'Other', 'Unknown'
+        description: Indicates the location of the terminal
+      onlinePinCheckResult:
+        type: string
+        example: List 'Correct', 'Wrong', 'Unable', 'Other', 'Unknown'
+        description: OnlinePinCheckResult. See values in examples.
+      openToBuy:
+        description: 'maximum: 1000000000000000000
+
+          Available line of the cardholder after transaction completion in billing currency.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      operationDate:
+        type: string
+        format: date-time
+        example: '2022-04-01T20:38:39Z'
+        description: 'minLength: 14
+
+          maxLength: 14
+
+          Time at which the transaction took place. The format is YYYY-MM-ddThh:mm:ssZ and the time zone is the one of the merchant. It is only guaranteed that the string consists of decimal digits. But it is not ensured the value is valid. For example the month could be outside of the range from 01 to 12.'
+      pan:
+        type: string
+        example: '2022-04-01T20:38:39Z'
+        description: 'maxLength: 28
+
+          Clear card number (PAN).
+
+          Absent if the card number is in scope of PCI and the interface is configured for suppressing the clear card number.'
+      panExpiryDate:
+        type: string
+        description: Expiry date of card/plastic in the format YYYYMM.It is only guaranteed that the string consists of decimal digits. But it is not ensured the value is valid. For example the month could be outside of the range from 01 to 12.
+      panReference:
+        type: string
+        description: 'maxLength: 100
+
+          Alternative card number, coming from IBO. This card number is optionally used by WLP FO instead of the actual card number (PAN) when communicating with external systems.'
+      panSequenceNumber:
+        type: string
+        description: 'maximum: 9999
+
+          Sequence number of card.'
+      reserveAmount:
+        description: 'minimum: -1000000000000000000
+
+          maximum: 1000000000000000000
+
+          Reserved amount in transaction (acceptor) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalAmount.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      resultCode:
+        type: string
+        description: 'maxLength: 20
+
+          Final and detailed result code of transaction. Any automated evaluation of this information has to consider that new result codes are introduced often and even existing ones can disappear or change. Therefore this data element should be used for information purpose only.'
+      resultDescription:
+        type: string
+        description: 'maxLength: 300
+
+          English text explaining the meaning of ResultCode.'
+      resultType:
+        type: string
+        example: List 'Approval', 'Decline', 'Referral', 'PickUp', 'Other'
+        description: Approval (transaction approved),Decline (transaction refused),Referral (transaction refused),PickUp (transaction refused),Other (transaction refused).
+      securityTypeId:
+        type: integer
+        format: int32
+        description: 'maximum: 999999999
+
+          Internal unique identifier of security type in WLP FO.'
+      securityTypeName:
+        type: string
+        description: 'maxLength: 100
+
+          English text explaining SecurityTypeId.'
+      standIn:
+        type: boolean
+        description: Indicates whether WLP FO has stood in for the switch-out peer (request) or whether the transaction is managed in store-and-forward mode towards the switch-out peer (advice).This field is only present if the field SwitchOutPeerId is present.
+      surchargeAmount:
+        description: 'maximum: 1000000000000000000
+
+          Portion of EnquiredAmount dedicated to surcharge imposed by the acceptor or the acquirer. The sign is the same as the one of EnquiredAmount.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      surchargeBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to SurchargeAmount but in billing (cardholder) currency.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      terminalId:
+        type: string
+        description: 'maxLength: 20
+
+          Id of terminal.'
+      terminalType:
+        type: string
+        example: List 'Attended', 'Atm', 'PetrolPump', 'Adm', 'LimitedAmountAdm', 'Mobile', 'InFlight', 'ChargingStation', 'Other', 'Unknown'
+        description: Indicates the type of the terminal.
+      totalAmount:
+        description: 'maximum: 1000000000000000000
+
+          Overall reservation/authorization (if capturing is not finalized) or capture amount (if capturing is finalized) of business case in transaction (acceptor) currency after transaction completion. A positive value is a debit for the cardholder and a credit for the acceptor. Whereas a negative value is a credit for the cardholder and a debit for the acceptor.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      totalBillingAmount:
+        description: 'maximum: 1000000000000000000
+
+          Similar to TotalAmount but in billing (cardholder) currency.'
+        allOf:
+        - $ref: '#/definitions/MonetaryAmountAlphaCurrency'
+      transactionDate:
+        type: string
+        example: '2022-04-01T20:38:39Z'
+        description: Time and date at which the transaction took place. The format is YYYY-MM-ddThh:mm:ssZ and the time zone is the one of the merchant. It is only guaranteed that the string consists of decimal digits. But it is not ensured the value is valid. For example the month could be outside of the range from 01 to 12.
+      transactionSubType:
+        type: string
+        example: List 'Request', 'Advice', 'Other', 'Unknown'
+        description: 'Indicates the sub-type of the performed operation for some of the listed TransactionType_2 and TransactionType_3 values.
+
+          A request asks to business-wise check whether the operation is allowed and can actually be performed whereas an advice is a notification which has to be treated in a suitable way and can not be declined because of business reasons.
+
+          In case TransactionType_3 is Action possible values are Request and Advice. If TransactionType_3 has the value Reversal it is always Advice and for Confirmation it is all the time Unknown.
+
+          The definition is almost the one of the STRAPI field transactionSubType. The only difference is that confirmations on STRAPI are flagged (implicitly) as advices whereas the value here is Unknown.'
+      transactionType:
+        type: string
+        example: List 'Authorization', 'Reversal', 'Confirmation', 'Rollback', 'ReserveUpdate', 'ReserveExpiry', 'Other', 'Unknown
+        description: DEPRECATED. Use the field TransactionType2. Indicates the type of the performed operation for some of the listed BusinessCaseType values.
+      transactionType2:
+        type: string
+        example: List 'Authorization', 'Reversal', 'Confirmation', 'Rollback', 'ReserveUpdate', 'ReserveExpiry', 'Other', 'Unknown
+        description: Indicates the type of the performed operation for some of the listed BusinessCaseType values.
+      transactionTypeId:
+        type: string
+        description: 'maximum: 999999999
+
+          Internal unique identifier of transaction type in WLP FO.'
+      transactionTypeName:
+        type: string
+        description: 'maxLength: 100
+
+          English text explaining TransactionTypeId.'
+      velocityLimitChecks:
+        type: array
+        description: Information on velocity check evaluations done by WLP FO.
+        items:
+          $ref: '#/definitions/VelocityLimitCheck'
+    title: GetAuthorizationResponse
+  ApiResponseEntityGetBusinessCases:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/BusinessCase'
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityGetBusinessCases
+    description: Issuer response entity
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  AuthorizationIdentifier:
+    type: object
+    properties:
+      transactionId:
+        type: string
+        description: 'minLength: 18
+
+          maxLength: 18
+
+          Unique identifier of notified transaction in WLP FO. '
+      issuerExternalAuthorizationReference:
+        type: string
+        description: Issuer external authorization reference
+    title: AuthorizationIdentifier
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+  MonetaryAmountAlphaCurrency:
+    type: object
+    properties:
+      exponent:
+        type: integer
+        format: int32
+        example: 2
+        description: 'Exponent of amount currency. Number of decimal digits. Example: 2 for Euro.'
+      isoCode:
+        type: string
+        example: EUR
+        description: 'Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro.'
+      value:
+        type: integer
+        format: int64
+        description: 'Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents).'
+    title: MonetaryAmountAlphaCurrency
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

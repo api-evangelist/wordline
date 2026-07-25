@@ -1,22 +1,24 @@
 swagger: '2.0'
 info:
-  description: This is the API server supplied by Equens.
-  version: '2.0'
-  title: Merchant payments - InterchangeFee API
-  contact:
-    name: equensWorldline API team. See developer portal
-host: developer.equensworldline.com
-basePath: /MerchantApiInterchangeFee/api
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Interchange fee API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
 schemes:
-  - https
+- https
+tags:
+- name: Interchange fee
 paths:
   /acquiring/interchangefees/v2.0/acquirers/{acquirerId}/transactions/{transactionId}:
     get:
       tags:
       - Interchange fee
       summary: Based on TransactionID
-      description: |
-        This API call will retrieve the interchange fee for a single transaction. 
+      description: "This API call will retrieve the interchange fee for a single transaction. \n"
       operationId: getInterchangeFee
       consumes:
       - application/json
@@ -29,25 +31,25 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: transactionId
         in: path
         description: The Transaction ID identifies a presentment
         required: true
         type: string
-        example: "TDS17133017774902264"
+        example: TDS17133017774902264
       - name: transactionDate
         in: query
         description: Transaction Date (yyyy-mm-dd), known as transaction posting date
         required: true
         type: string
         format: date
-        example: "2017-05-01"
+        example: '2017-05-01'
       responses:
         '200':
           description: Successful
           schema:
-              $ref: '#/definitions/InterchangeFee'
+            $ref: '#/definitions/InterchangeFee'
         '400':
           description: Invalid input provided
         '401':
@@ -65,11 +67,7 @@ paths:
       tags:
       - Interchange fee
       summary: Based on a Payment Id
-      description: |
-        Use this operation to retrieve the interchange fees for a Payment
-        
-        - The result of this operation is a list of interchange fees that belongs to a payment
-        - If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "Use this operation to retrieve the interchange fees for a Payment\n\n- The result of this operation is a list of interchange fees that belongs to a payment\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeListForPayment
       consumes:
       - application/json
@@ -82,20 +80,20 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: paymentId
         in: query
         description: Unique identification of the payment in which this transaction has been paid out
         required: true
         type: string
-        example: "SO-000000017036619028"
+        example: SO-000000017036619028
       - name: paymentDate
         in: query
         description: Payment Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2017-05-01"
+        example: '2017-05-01'
       - name: sortField
         in: query
         description: Sort field
@@ -150,11 +148,7 @@ paths:
       tags:
       - Interchange fee
       summary: holding level
-      description: |
-        This operation retrieves all interchange fees on merchant hierarchy (for example holding) level
-        
-        - The result of this operation is a list of interchange fees that belongs to a contract level.
-        - If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation retrieves all interchange fees on merchant hierarchy (for example holding) level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnMerchantHierarchyLevel
       consumes:
       - application/json
@@ -167,7 +161,7 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: holdingId
         in: path
         description: Unique identification of the holdingId, determined by equensWorldline
@@ -181,14 +175,14 @@ paths:
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 12:30:00"
+        example: '2019-03-01 12:30:00'
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 13:30:00"
+        example: '2019-03-01 13:30:00'
       - name: sortField
         in: query
         description: Sort field
@@ -243,11 +237,7 @@ paths:
       tags:
       - Interchange fee
       summary: Merchant level
-      description: |
-        This operation retrieves all interchange fees on merchant level
-        
-        - The result of this operation is a list of interchange fees that belongs to a contract level.
-        - If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation retrieves all interchange fees on merchant level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnMerchantLevel
       consumes:
       - application/json
@@ -260,27 +250,27 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: merchantId
         in: path
         description: Unique identification of the merchant, determined by equensWorldline
         required: true
         type: string
-        example: "1280300"
+        example: '1280300'
       - name: startDateTime
         in: query
         description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 12:30:00"
+        example: '2019-03-01 12:30:00'
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 13:30:00"
+        example: '2019-03-01 13:30:00'
       - name: sortField
         in: query
         description: Sort field
@@ -335,11 +325,7 @@ paths:
       tags:
       - Interchange fee
       summary: Contract level
-      description: |
-        This operation retrieves all interchange fees on contract level
-        
-        - The result of this operation is a list of interchange fees that belongs to a contract level.
-        - If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation retrieves all interchange fees on contract level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnContractLevel
       consumes:
       - application/json
@@ -352,27 +338,27 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
         type: string
-        example: "12872"
+        example: '12872'
       - name: startDateTime
         in: query
         description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 12:30:00"
+        example: '2019-03-01 12:30:00'
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 13:30:00"
+        example: '2019-03-01 13:30:00'
       - name: sortField
         in: query
         description: Sort field
@@ -427,11 +413,7 @@ paths:
       tags:
       - Interchange fee
       summary: Site level
-      description: |
-        This operation retrieves all interchange fees on site level
-        
-        - The result of this operation is a list of interchange fees that belongs to a contract level.
-        - If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation retrieves all interchange fees on site level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnSiteLevel
       consumes:
       - application/json
@@ -444,13 +426,13 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
         type: string
-        example: "12872"
+        example: '12872'
       - name: siteId
         in: path
         description: Unique identification of the site within the contract
@@ -464,14 +446,14 @@ paths:
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 12:30:00"
+        example: '2019-03-01 12:30:00'
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 13:30:00"
+        example: '2019-03-01 13:30:00'
       - name: sortField
         in: query
         description: Sort field
@@ -526,11 +508,7 @@ paths:
       tags:
       - Interchange fee
       summary: Terminal level
-      description: |
-        This operation retrieves all interchange fees on terminal level
-        
-        - The result of this operation is a list of interchange fees that belongs to a contract level.
-        - If there is a previous and/or next page the http response header will have a link (url) to this data 
+      description: "This operation retrieves all interchange fees on terminal level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnTerminalLevel
       consumes:
       - application/json
@@ -543,13 +521,13 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
         type: string
-        example: "12872"
+        example: '12872'
       - name: siteId
         in: path
         description: Unique identification of the site within the contract
@@ -562,21 +540,21 @@ paths:
         description: Unique code identifying the terminal at the Card acceptor location
         required: true
         type: string
-        example: "20YT45"
+        example: 20YT45
       - name: startDateTime
         in: query
         description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 12:30:00"
+        example: '2019-03-01 12:30:00'
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
         type: string
         format: date-time
-        example: "2019-03-01 13:30:00"
+        example: '2019-03-01 13:30:00'
       - name: sortField
         in: query
         description: Sort field
@@ -626,11 +604,64 @@ paths:
           description: Unexpected error
         '502':
           description: Backend service problem
-
-################################################################################
-#                                 Definitions                                  #
-################################################################################
 definitions:
+  ContractIdentification:
+    type: object
+    properties:
+      acquirerId:
+        type: string
+        description: Unique identification of the acquirer, determined by equensWorldline
+        example: '671234567'
+      holdingId:
+        type: integer
+        format: int32
+        description: Unique identification of the holding, determined by equensWorldline
+        example: 200
+      merchantId:
+        type: string
+        description: Unique identification of the merchant, determined by the acquirer
+        example: '1280300'
+      contractId:
+        type: string
+        description: Unique identification of the contract, determined by the acquirer
+        example: '12872'
+      cardAcceptorId:
+        type: string
+        description: Unique identification of the cardAcceptor within the contract
+        example: '30010'
+      siteId:
+        type: integer
+        format: int32
+        description: Unique identification of the site within the contract
+        example: 30010
+      terminalId:
+        type: string
+        description: Unique code identifying the terminal at the Card acceptor location
+        example: 20YT45
+  TransactionIdentification:
+    type: object
+    properties:
+      transactionId:
+        type: string
+        description: Unique identification for a Cardholder Initiated Transaction
+        example: TDS16172008721825920
+  Amount:
+    type: object
+    properties:
+      amount:
+        type: string
+        format: unlimited size decimal
+        description: 'Amount in the major units of the currency according to ISO 4217.
+
+
+          In case of euro, "3.10" (is 3.10 euro)
+
+          '
+        example: '3.00'
+      currency:
+        type: string
+        description: Currency of the amount
+        example: EUR
   InterchangeFee:
     type: object
     properties:
@@ -646,7 +677,7 @@ definitions:
       transactionFeeType:
         type: string
         description: Type of transaction fee.
-        example: "02"
+        example: '02'
       transactionDateTime:
         type: string
         format: date-time
@@ -657,100 +688,49 @@ definitions:
       interchangeRateDesignatorCode:
         type: string
         description: Interchange Rate Designator Code
-        example: "85"
+        example: '85'
       issuerRegion:
         type: string
         description: Region of the issuer
-        example: "Europe"
+        example: Europe
       issuerRegionCode:
         type: string
         description: Region of the issuer code
-        example: "EU"
+        example: EU
       paymentProductCode:
         type: string
         description: Payment product code
-        example: "Maes"
+        example: Maes
       creditDebitIndicator:
         type: string
         description: Credit or Debit indicator. i.e. C = Credit. D = Debit
-        example: "D"
+        example: D
       paymentProductTypeCode:
         type: string
         description: Card product type code
-        example: "2"
+        example: '2'
       region:
         type: string
         description: Region of the payment scheme. Regional classification used by the schemes which indicates the location of the acquirer compared to the issuer. i.e. VPAY Netherland, Intra-European, VISA Germany
-        example: "VISA Netherland"
+        example: VISA Netherland
       regionCode:
         type: string
         description: Region of the payment scheme code
-        example: "A"
+        example: A
       channel:
         type: string
         description: Processing channel for transactions
-        example: "Point of Sail"
+        example: Point of Sail
       transactionConditionCode:
         type: string
         description: Code for Condition in which the transaction took place
-        example: "23"
+        example: '23'
       brand:
         type: string
         description: Brand
-        example: "MAES"
-  TransactionIdentification:
-    type: object
-    properties:
-      transactionId:
-        type: string
-        description: Unique identification for a Cardholder Initiated Transaction
-        example: "TDS16172008721825920"
-  ContractIdentification:
-    type: object
-    properties:
-      acquirerId:
-        type: string
-        description: Unique identification of the acquirer, determined by equensWorldline
-        example: "671234567"
-      holdingId:
-        type: integer
-        format: int32
-        description: Unique identification of the holding, determined by equensWorldline
-        example: 200
-      merchantId:
-        type: string
-        description: Unique identification of the merchant, determined by the acquirer
-        example: "1280300"
-      contractId:
-        type: string
-        description: Unique identification of the contract, determined by the acquirer
-        example: "12872"
-      cardAcceptorId:
-        type: string
-        description: Unique identification of the cardAcceptor within the contract
-        example: "30010"
-      siteId:
-        type: integer
-        format: int32
-        description: Unique identification of the site within the contract
-        example: 30010
-      terminalId:
-        type: string
-        description: Unique code identifying the terminal at the Card acceptor location
-        example: "20YT45"        
-  Amount:
-    type: object
-    properties:
-      amount:
-        type: string
-        format: unlimited size decimal
-        description: |
-          Amount in the major units of the currency according to ISO 4217.
-          
-          In case of euro, "3.10" (is 3.10 euro)
-        example: "3.00"
-      currency:
-        type: string
-        description: Currency of the amount
-        example: "EUR"
- 
+        example: MAES
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

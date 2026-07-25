@@ -1,0 +1,2607 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Mobile Payment Operations API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Mobile Payment Operations
+  description: Apple Pay Controller
+paths:
+  /issuers/{issuerId}/cards/{cardReference}/create-apple-tokenized-card:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Token Provisioning: Apple push provisioning'
+      description: The following web service generates the complete Payment Data Payload for ApplePay
+      operationId: createAppleTokenizedCard
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: cardReference
+        in: path
+        description: Max 64 length. Anonymized card identifier (Surrogate of PAN), as defined by Issuer
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Content-Type
+        in: header
+        description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAppleTokenizedCardV2Request'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2CreateAppleTokenizedCardV2Response'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/cards/{cardReference}/create-vts-tokenized-card:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Token Provisioning: Google or Samsung push provisioning (Visa variant)'
+      description: Generates the complete Payment Data Payload for VTS
+      operationId: createVtsTokenizedCard
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: cardReference
+        in: path
+        description: Max 64 length. Anonymized card identifier (Surrogate of PAN), as defined by Issuer
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Content-Type
+        in: header
+        description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/VtsCommonPushProvisioningRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2CreateVtsTokenizedCardV2Response'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/cards/{cardReference}/create-mdes-tokenized-card:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Token Provisioning: Google or Samsung push provisioning (Mastercard variant)'
+      description: This service enables generates the complete google Payment Data Payload for MDES
+      operationId: createMdesTokenizedCard
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: cardReference
+        in: path
+        description: Max 64 length. Anonymized card identifier (Surrogate of PAN), as defined by Issuer
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Content-Type
+        in: header
+        description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateMdesTokenizedCardV2Request'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2CreateMdesTokenizedCardV2Response'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/tokens/{tokenReference}/generate-crypto-otp:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Token Provisioning: Get-Crypto-OTP by Token'
+      description: This service computes OTP, according to either VTS or MDES App to App authentication
+      operationId: getCryptoOTPByToken
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: tokenReference
+        in: path
+        description: Max length 64. Anonymized token identifier, as defined by Token Service Provider
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Content-Type
+        in: header
+        description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/AddBaseRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2GetCryptoOTPV2Response'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/cards/{cardReference}/generate-crypto-otp:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Token Provisioning: Get-Crypto-OTP by card reference'
+      description: This service computes OTP, according to either VTS or MDES App to App authentication
+      operationId: getCryptoOTPByCardReference
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: cardReference
+        in: path
+        description: Max 64 length. Anonymized card identifier (Surrogate of PAN), as defined by Issuer
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Content-Type
+        in: header
+        description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/AddBaseRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2GetCryptoOTPV2Response'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/cards/{cardReference}/token-list:
+    get:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Selfcare : Get Token list from a Card Reference'
+      description: This service returns a token list attached to a given card. The data are the current G-itsp data and could face a desynchronization with scheme referential
+      operationId: getTokenData_1
+      produces:
+      - application/json
+      parameters:
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: cardReference
+        in: path
+        description: Max 64 length. Anonymized card identifier (Surrogate of PAN), as defined by Issuer
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2GetTokenDataV2Response'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReC
+                responseDateTime: '2023-03-09T10:23:30.746Z'
+                statusCode: 403
+                statusMessage: NOT_ALLOWED
+                timeTakenMs: 37
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/tokens/{tokenReference}/tokenRequestors/{tokenRequestorId}/details:
+    get:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Selfcare : Get token details'
+      description: This webservice retrieve token information, if existing on G-iTSP side, updated with the tokenProvider data
+      operationId: getTokenDetails
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: tokenReference
+        in: path
+        description: Max length 64. Anonymized token identifier, as defined by Token Service Provider
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: tokenRequestorId
+        in: path
+        description: Max length 11 with only Integers. Id of the token requestor as known today
+        required: true
+        type: string
+        maxLength: 11
+        minLength: 11
+        pattern: \d{11}
+      - name: provider
+        in: query
+        description: Information about the token provider
+        required: true
+        type: string
+        pattern: MDES|VTS
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2DetailsDataResponse'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReC
+                responseDateTime: '2023-03-09T10:23:30.746Z'
+                statusCode: 403
+                statusMessage: NOT_ALLOWED
+                timeTakenMs: 37
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '409':
+          description: Resource belonging to another entity
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReK
+                responseDateTime: '2023-02-09T10:23:30.755Z'
+                statusCode: 409
+                statusMessage: MISMATCH
+                timeTakenMs: 121
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '410':
+          description: Resource is expired
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReH
+                responseDateTime: '2023-03-09T10:23:30.752Z'
+                statusCode: 410
+                statusMessage: EXPIRED
+                timeTakenMs: 136
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/tokens/{tokenReference}/update:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Selfcare : Update a token status'
+      description: This webservice performs update on existing token
+      operationId: updateToken
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: tokenReference
+        in: path
+        description: Max length 64. Anonymized token identifier, as defined by Token Service Provider
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: provider
+        in: query
+        description: Information about the token provider
+        required: true
+        type: string
+        pattern: MDES|VTS
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/TokenSelfcareUpdateRequest'
+      responses:
+        '202':
+          description: Accepted
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReE
+                responseDateTime: '2024-07-11T12:45:18.473Z'
+                statusCode: 202
+                statusMessage: ACCEPTED
+                timeTakenMs: 185
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReC
+                responseDateTime: '2023-03-09T10:23:30.746Z'
+                statusCode: 403
+                statusMessage: NOT_ALLOWED
+                timeTakenMs: 37
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/tokens/{tokenReference}/card-reference:
+    get:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Selfcare : Get Card Reference From Token'
+      description: This webservice allows local lookup for card identifier (issuerCardId) on a specific Token
+      operationId: getCardIdFromToken_1
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 0
+      - name: tokenReference
+        in: path
+        description: Max length 64. Anonymized token identifier, as defined by Token Service Provider
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: provider
+        in: query
+        description: Information about the token provider
+        required: true
+        type: string
+        pattern: MDES|VTS
+        enum:
+        - VTS
+        - MDES
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2GetCardIdFromTokenV2Response'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReC
+                responseDateTime: '2023-03-09T10:23:30.746Z'
+                statusCode: 403
+                statusMessage: NOT_ALLOWED
+                timeTakenMs: 37
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '409':
+          description: Resource belonging to another entity
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReK
+                responseDateTime: '2023-02-09T10:23:30.755Z'
+                statusCode: 409
+                statusMessage: MISMATCH
+                timeTakenMs: 121
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: ''
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/cards/{cardReference}/click-to-pay-enroll:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Click-To-Pay: Enroll a card'
+      description: Enroll a card into click-to-pay. If account does not exist it will be created. For an account creation (first card) full data must be provided
+      operationId: clickToPayEnroll
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - name: Content-Type
+        in: header
+        description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 1
+      - name: cardReference
+        in: path
+        description: Max 64 length. Anonymized card identifier (Surrogate of PAN), as defined by Issuer
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 1
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ClickToPayEnrollUpdateRequest'
+      responses:
+        '202':
+          description: Accepted
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReE
+                responseDateTime: '2024-07-11T12:45:18.473Z'
+                statusCode: 202
+                statusMessage: ACCEPTED
+                timeTakenMs: 185
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReC
+                responseDateTime: '2023-03-09T10:23:30.746Z'
+                statusCode: 403
+                statusMessage: NOT_ALLOWED
+                timeTakenMs: 37
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '422':
+          description: Unprocessable entity
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReK
+                responseDateTime: '2023-02-09T10:23:30.755Z'
+                statusCode: 422
+                statusMessage: UNPROCESSABLE
+                timeTakenMs: 121
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/cards/{cardReference}/click-to-pay-remove:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Click-To-Pay: Remove a card or complete account'
+      description: API to remove a card or complete account from click-to-pay
+      operationId: clickToPayRemove
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - name: Content-Type
+        in: header
+        description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 1
+      - name: cardReference
+        in: path
+        description: Max 64 length. Anonymized card identifier (Surrogate of PAN), as defined by Issuer
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 1
+      - name: removeAll
+        in: query
+        description: Flag to force removal of complete click-to-pay account, including potential other cards.
+        required: true
+        type: boolean
+      responses:
+        '202':
+          description: Accepted
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReE
+                responseDateTime: '2024-07-11T12:45:18.473Z'
+                statusCode: 202
+                statusMessage: ACCEPTED
+                timeTakenMs: 185
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReC
+                responseDateTime: '2023-03-09T10:23:30.746Z'
+                statusCode: 403
+                statusMessage: NOT_ALLOWED
+                timeTakenMs: 37
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '422':
+          description: Unprocessable entity
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReK
+                responseDateTime: '2023-02-09T10:23:30.755Z'
+                statusCode: 422
+                statusMessage: UNPROCESSABLE
+                timeTakenMs: 121
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/cards/{cardReference}/click-to-pay-account-data:
+    get:
+      tags:
+      - Mobile Payment Operations
+      summary: 'Click-To-Pay: Return all data provisioned for a given card'
+      description: This API will return all data stored into Visa Click-to-Pay for a given card.
+      operationId: retrieveAccountData
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: header
+        description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        required: true
+        type: string
+      - name: Content-Type
+        in: header
+        description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        required: true
+        type: string
+      - name: WL-Correlation-ID
+        in: header
+        description: Max length 64. Unique ID for the API request
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 0
+      - name: issuerId
+        in: path
+        description: Max length 32. Unique identifier of the Issuer on I-TSP
+        required: true
+        type: string
+        maxLength: 32
+        minLength: 1
+      - name: cardReference
+        in: path
+        description: Max 64 length. Anonymized card identifier (Surrogate of PAN), as defined by Issuer
+        required: true
+        type: string
+        maxLength: 64
+        minLength: 1
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseV2ClickToPayRetrieveAccountDataResponse'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReC
+                responseDateTime: '2023-03-09T10:23:30.746Z'
+                statusCode: 403
+                statusMessage: NOT_ALLOWED
+                timeTakenMs: 37
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '404':
+          description: Resource not found
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReD
+                responseDateTime: '2023-03-09T10:23:30.747Z'
+                statusCode: 404
+                statusMessage: NOT_FOUND
+                timeTakenMs: 38
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '422':
+          description: Unprocessable entity
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReK
+                responseDateTime: '2023-02-09T10:23:30.755Z'
+                statusCode: 422
+                statusMessage: UNPROCESSABLE
+                timeTakenMs: 121
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+  /issuers/{issuerId}/cardholders/{cardholderReference}/update:
+    post:
+      summary: Update click-to-pay cardholder data
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - description: Max length 64. Unique ID for the API request
+        in: header
+        maxLength: 64
+        minLength: 0
+        name: WL-Correlation-ID
+        required: true
+        type: string
+      - description: Content-Type used in request, For example, “application/json;charset=UTF-8”
+        in: header
+        name: Content-Type
+        required: true
+        type: string
+      - description: Authentication credentials passed in the HTTPS Basic Authorization header. Credentials are provided to the Issuer and need to be different for test and production environments
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Max length 32. Unique identifier of the Issuer on I-TSP
+        in: path
+        maxLength: 32
+        minLength: 1
+        name: issuerId
+        required: true
+        type: string
+      - description: Unique identifier of the Consumer under a given Issuer. This value is common to Visa Click-to-Pay
+        in: path
+        maxLength: 32
+        minLength: 1
+        name: cardholderReference
+        required: true
+        type: string
+      - description: Target Click-to-Pay provider
+        in: query
+        name: c2pProvider
+        pattern: Visa
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ClickToPayEnrollUpdateRequest'
+      responses:
+        '202':
+          description: Accepted
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReE
+                responseDateTime: '2024-07-11T12:45:18.473Z'
+                statusCode: 202
+                statusMessage: ACCEPTED
+                timeTakenMs: 185
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '400':
+          description: Bad Request
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReA
+                responseDateTime: '2023-03-09T10:23:30.748Z'
+                statusCode: 400
+                statusMessage: BAD_DATA
+                timeTakenMs: 35
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '403':
+          description: Forbidden
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReC
+                responseDateTime: '2023-03-09T10:23:30.746Z'
+                statusCode: 403
+                statusMessage: NOT_ALLOWED
+                timeTakenMs: 37
+          schema:
+            $ref: '#/definitions/ResponseV2'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/json:
+              responseMetadata:
+                correlationId: QQI8qq6jIKq5gO78BocFzSSMI9cI2ReB
+                responseDateTime: '2023-03-09T10:23:30.749Z'
+                statusCode: 500
+                statusMessage: TECHNICAL_ERROR
+                timeTakenMs: 36
+          schema:
+            $ref: '#/definitions/ResponseV2'
+      tags:
+      - Mobile Payment Operations
+      description: This web service accept request for updating cardholder data on click-to-pay process. It consumes request, creates an asynchronous message internally and returns accepted response if post goes right
+      operationId: clickToPayUpdate
+  /issuers/{issuerId}/vts-apple-push-data:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: Issuer service aimed to generate data specific elements for push provisioning with ApplePay (MBPAD, MBPAC)
+      operationId: vtsApplePushDataUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      - in: body
+        name: body
+        description: body
+        required: true
+        schema:
+          $ref: '#/definitions/VtsApplePushDataRequest'
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      security:
+      - basic: []
+      deprecated: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseApplePayPushProvisioning'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+  /issuers/{issuerId}/vts-mobile-banking-auth-code:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: Issuer service aimed to generate data specific elements for app to app provisioning (MBAAC)
+      operationId: vtsPushProvisioningRequestUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      - in: body
+        name: body
+        description: body
+        required: true
+        schema:
+          $ref: '#/definitions/VtsMobileBankingAuthCode'
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      security:
+      - basic: []
+      deprecated: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityMobileBankingAppAuthCodeResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+  /issuers/{issuerId}/vts-payment-instrument-details:
+    post:
+      tags:
+      - Mobile Payment Operations
+      summary: Issuer service aimed to generate data specific elements for push provisioning for VTS
+      operationId: vtsPushProvisioningRequestUsingPOST_1
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      - in: body
+        name: body
+        description: body
+        required: true
+        schema:
+          $ref: '#/definitions/VtsPaymentInstrumentsDetailsRequest'
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      security:
+      - basic: []
+      deprecated: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityVtsPushProvisioningResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+definitions:
+  AddBaseRequest:
+    type: object
+    required:
+    - tokenProviderID
+    properties:
+      tokenProviderID:
+        type: string
+        description: Information about the token provider. Values are MDES, VTS
+        pattern: VTS|MDES
+  CreateVtsTokenizedCardV2Response:
+    type: object
+    properties:
+      paymentInstrumentDetails:
+        type: string
+        description: The data that must be returned to the mobile application and transmitted to wallet provider. JWE structure as described in VTS Push Provisioning - Payment Instrument Details v12 specification
+  AddTokenData:
+    type: object
+    required:
+    - tokenProviderID
+    - tokenReferenceID
+    - tokenStatus
+    properties:
+      deviceID:
+        type: string
+        description: For SE or HCE only. Secure Element Id or Digital Wallet ID. Format Hex binary
+        minLength: 0
+        maxLength: 48
+      tokenExpiryMonth:
+        type: string
+        example: '11'
+        description: The month of the token expiration date. For example 11
+        minLength: 2
+        maxLength: 2
+      tokenExpiryYear:
+        type: string
+        example: '2024'
+        description: The year of the token expiration date. For example 2023
+        minLength: 4
+        maxLength: 4
+      tokenProviderID:
+        type: string
+        description: MDES or VTS
+      tokenReferenceID:
+        type: string
+        description: Token reference ID, assigned by the token service provider. Unique under a tokenProviderID
+        minLength: 1
+        maxLength: 64
+      tokenRequestorCategory:
+        type: string
+        description: 'Token Requestor category found in token_requestor table, default value: ecom_cof'
+        minLength: 0
+        maxLength: 32
+      tokenRequestorID:
+        type: integer
+        format: int64
+        description: ID of the token requestor, assigned by the token service provider
+        maximum: 99999999999
+      tokenRequestorName:
+        type: string
+        description: Name of the Token Requestor
+        minLength: 0
+        maxLength: 32
+      tokenStatus:
+        type: string
+        description: "The status of the Token. Possible values are :\r\n IAC (Inactive), ACT (Active), SUS (Suspended), DEA (Deactivated)"
+      tokenType:
+        type: string
+        description: 'Usage scope of token : SE, HCE, COF, ECOM'
+        enum:
+        - SE
+        - HCE
+        - COF
+        - ECOM
+      walletID:
+        type: string
+        description: Wallet account identifier of the wallet provider
+        minLength: 0
+        maxLength: 48
+      deviceType:
+        type: string
+        description: Type of device
+        enum:
+        - UNKNOWN
+        - MOBILE_PHONE
+        - TABLET
+        - WATCH
+        - MOBILEPHONE_OR_TABLET
+        - PERSONAL_COMPUTER
+        - WEARABLE_DEVICE
+        - HOUSEHOLD_DEVICE
+        - AUTOMOBILE_DEVICE
+        - OTHER
+      auxiliaryTokenProviderID:
+        type: string
+        description: Information about the auxiliary token provider, in case this token has an auxiliary one. For now only support BCT
+        enum:
+        - BCT
+      auxiliaryTokenReferenceID:
+        maxLength: 64
+        minLength: 0
+        type: string
+        description: Token reference ID of the auxiliary token, in case this token has one
+    description: Structure used for filling information related to the found tokens. Present if minimum one token found
+  GetCardIdFromTokenV2Response:
+    type: object
+    properties:
+      cardExpiryMonth:
+        type: string
+        example: '02'
+        description: The month of the card expiry date. For example 11
+        minLength: 2
+        maxLength: 2
+      cardExpiryYear:
+        type: string
+        example: '2023'
+        description: The year of the card expiry date. For example 2023
+        minLength: 4
+        maxLength: 4
+      cardLastDigits:
+        type: string
+        example: '4578'
+        description: The 4 last digits of the cardnumber of the customer (PAN)
+        minLength: 4
+        maxLength: 4
+      issuerCardId:
+        type: string
+        example: 52936061AAAP8026
+        description: Anonymized card identifier (Surrogate of PAN), as defined by Issuer. Present if response OK
+        minLength: 0
+        maxLength: 64
+      tokenType:
+        type: string
+        example: HCE
+        description: 'Values are: SECURE_ELEMENT, HCE, CARD_ON_FILE, ECOMMERCE, QRC.'
+        pattern: SECURE_ELEMENT|HCE|CARD_ON_FILE|ECOMMERCE|QRC
+  EncryptedPayload:
+    type: object
+    required:
+    - encryptedData
+    - encryptedKey
+    - publicKeyFingerprint
+    properties:
+      encryptedData:
+        type: string
+        example: fqeftrq1s6541c5v161f2d151e12
+        description: "Contains an encrypted json object. Encrypted by the ephemeral AES key\r\nusing CBC mode (IV as provided in 'iv', or zero if none provided) and\r\nPKCS#7 padding. The JSON object being encrypted will be defined in\r\nthe context of the API call. Hex-encoded data (case-insensitive)"
+        minLength: 1
+        maxLength: 256000
+      encryptedKey:
+        type: string
+        example: ECD12A55458552152154
+        description: "One-time use AES key encrypted by the Mastercard public key (as\r\nidentified by 'publicKeyFingerprint') using the OAEP or RSA Encryption\r\nStandard PKCS #1 v1.5 (depending on the value of\r\n'oaepHashingAlgorithm'.\r\nRequirement is for a 128-bit key (with 256-bit key supported as an\r\noption). Hex-encoded data (case-insensitive)"
+        minLength: 1
+        maxLength: 512
+      iv:
+        type: string
+        example: '000000000000'
+        description: "The initialization vector used when encrypting data using the one-time\r\nuse AES key. Must be exactly 16 bytes (32 character hex string) to\r\nmatch the block size.If not present, an IV of zero is assumed. Hex-encoded data (case-insensitive)"
+        minLength: 0
+        maxLength: 32
+      oaepHashingAlgorithm:
+        type: string
+        example: SHA512
+        description: 'Hashing algorithm used with the OAEP scheme. If omitted, then the RSA Encryption Standard PKCS #1 v1.5 will be used'
+        minLength: 0
+        maxLength: 6
+        pattern: SHA256|SHA512
+      publicKeyFingerprint:
+        type: string
+        example: fingerprint1245421
+        description: The fingerprint of the public key used to encrypt the ephemeral AES key. Hex-encoded data (case-insensitive)
+        minLength: 1
+        maxLength: 64
+    description: EncryptedPayload object containing a FundingAccountData object
+  VtsPushProvisioningResponse:
+    type: object
+    properties:
+      paymentInstrumentDetails:
+        type: string
+    title: VtsPushProvisioningResponse
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  VtsMobileBankingAuthCode:
+    type: object
+    properties:
+      authCode:
+        type: string
+      pan:
+        type: string
+    title: VtsMobileBankingAuthCode
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  VtsPaymentInstrumentsDetailsRequest:
+    type: object
+    properties:
+      billingAddressline1:
+        type: string
+      billingAddressline2:
+        type: string
+      city:
+        type: string
+      clientAppId:
+        type: string
+      clientDeviceId:
+        type: string
+      clientWalletAccountId:
+        type: string
+      clientWalletProvider:
+        type: string
+      country:
+        type: string
+      pan:
+        type: string
+      panExpiryDate:
+        type: string
+      postalCode:
+        type: string
+      state:
+        type: string
+    title: VtsPaymentInstrumentsDetailsRequest
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  ResponseV2CreateVtsTokenizedCardV2Response:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/CreateVtsTokenizedCardV2Response'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  TokenSelfcareUpdateRequest:
+    type: object
+    required:
+    - operationType
+    - tokenRequestorId
+    properties:
+      operationType:
+        type: string
+        description: Type of requested action regarding Card
+        enum:
+        - ACTIVATE
+        - CLOSE
+        - BLOCK
+        - UNBLOCK
+      tokenRequestorId:
+        type: integer
+        format: int64
+        description: ID of the token requestor, assigned by the token service provider
+        minimum: 0
+        maximum: 99999999999
+  VtsCommonPushProvisioningRequest:
+    type: object
+    required:
+    - clientAppID
+    - clientDeviceId
+    - clientWalletAccountID
+    - clientWalletProvider
+    - country
+    properties:
+      clientAppID:
+        type: string
+        description: Unique identifier for the client mobile application. Must be the App ID matching to the cryptographic profile on Visa developer zone
+        minLength: 1
+        maxLength: 36
+      clientDeviceId:
+        type: string
+        description: Device Id as presented by the Wallet service provider (token requestor)
+        minLength: 1
+        maxLength: 24
+      clientWalletAccountID:
+        type: string
+        description: Wallet Id as presented by the Wallet service provider (token Requestor)
+        minLength: 1
+        maxLength: 24
+      clientWalletProvider:
+        type: string
+        description: Client Wallet Provider is the token requestor's ID (TRID) which is returned to the WP as part of onboarding
+        minLength: 11
+        maxLength: 11
+      country:
+        type: string
+        description: Country code, two digit country code as defined in alpha2 ISO 3166-1
+        minLength: 2
+        maxLength: 2
+  MobileBankingAppAuthCodeResponse:
+    type: object
+    properties:
+      mbaac:
+        type: string
+    title: MobileBankingAppAuthCodeResponse
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  ResponseV2DetailsDataResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/DetailsDataResponse'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  FundingAccountInfo:
+    type: object
+    required:
+    - encryptedPayload
+    properties:
+      encryptedPayload:
+        $ref: '#/definitions/EncryptedPayload'
+      panUniqueReference:
+        type: string
+        example: DNHI12354321571354
+        description: Reference to the PAN that is unique per Wallet Provider
+        minLength: 0
+        maxLength: 64
+      tokenUniqueReference:
+        type: string
+        example: 1234567896ABCD456456564
+        description: A unique reference assigned following the allocation of a token used to identify the token for the duration of its lifetime. Required in NotifyServiceActivated
+        minLength: 0
+        maxLength: 64
+    description: Json structure containing encrypted payload
+  CreateMdesTokenizedCardV2Request:
+    type: object
+    required:
+    - clientWalletProvider
+    properties:
+      clientWalletProvider:
+        type: string
+        example: '50120834693'
+        description: Client Wallet Provider is the token requestor's ID (TRID) that designate the encryption key set. For Google, TRID is 50120834693, and Samsung is 50139059239
+        minLength: 11
+        maxLength: 11
+  CardDetails:
+    type: object
+    required:
+    - billingAddress
+    - cardExpiryMonth
+    - cardExpiryYear
+    - cardLastDigits
+    - nameOnCard
+    properties:
+      billingAddress:
+        $ref: '#/definitions/BillingAddress'
+      cardExpiryMonth:
+        type: string
+        example: '11'
+        description: The month of the card expiry date
+        minLength: 2
+        maxLength: 2
+      cardExpiryYear:
+        type: string
+        example: '2050'
+        description: The year of the card expiry date
+        minLength: 4
+        maxLength: 4
+      cardLastDigits:
+        type: string
+        example: '4321'
+        description: The 4 last digits of the cardnumber of the customer (PAN).
+        minLength: 4
+        maxLength: 4
+      cardReference:
+        type: string
+        example: 42936061AAAP8026
+        description: Anonymized card identifier (Surrogate of PAN), as defined by Issuer Card Management System. Only filled for the card in request
+        minLength: 1
+        maxLength: 64
+      nameOnCard:
+        type: string
+        example: John Doe
+        description: The name cardholder (embossed on card), in the format "firstname middlename lastname" or "firstname lastname" (separator space), charset  ISO 8859-1 (aka Latin-1)
+        minLength: 1
+        maxLength: 27
+      tokenStatus:
+        type: string
+        description: The status of the token associated to the card
+        example: ACT
+      tokenReferenceID:
+        maxLength: 64
+        minLength: 1
+        type: string
+        description: The unique identifier of the token associated to the card
+        example: '123456789012345678'
+    description: List of cardDetail structures that contains information on cards associated to a click-to-Pay account. Returned if min one present. See below for subfields
+  CreateAppleTokenizedCardV2Request:
+    type: object
+    required:
+    - applePublicKey
+    - nonce
+    - nonceSignature
+    - tokenProviderID
+    properties:
+      applePublicKey:
+        type: string
+        description: Apple ECDSA public key, in Base 64 format, retrieved from the Apple public certificate
+      nonce:
+        type: string
+        description: Nonce generated by Apple, HEX encoded. Upper or lower letters accepted.
+        pattern: '[0-9a-fA-F]+'
+      nonceSignature:
+        type: string
+        description: Nonce signature generated by Apple, HEX encoded. Upper or lower letters accepted.
+        pattern: '[0-9a-fA-F]+'
+      tokenProviderID:
+        type: string
+        description: Information about the token provider. Values are MDES, VTS
+        pattern: VTS|MDES
+      auxiliaryCardIndicator:
+        type: boolean
+        description: Request to generate additional substructure for auxiliaryCard, in case of co-badging. Default false
+      productType:
+        type: string
+        description: Identifies type of card product. The default value depends on the provider. Must be provided if auxiliaryCardIndicator is true
+  GetTokenDataV2Response:
+    type: object
+    properties:
+      cardExpiryMonth:
+        type: string
+        example: '02'
+        description: The month of the card expiry date. For example 11
+        minLength: 2
+        maxLength: 2
+      cardExpiryYear:
+        type: string
+        example: '2023'
+        description: The year of the card expiry date. For example 2023
+        minLength: 4
+        maxLength: 4
+      cardLastDigits:
+        type: string
+        example: '4578'
+        description: The 4 last digits of the cardnumber of the customer (PAN)
+        minLength: 4
+        maxLength: 4
+      tokenDataList:
+        type: array
+        description: Structure used for filling information related to the found tokens. Present if minimum one token found
+        items:
+          $ref: '#/definitions/AddTokenData'
+  MdesIssuerDigitizationDataResponse:
+    type: object
+    required:
+    - tokenizationAuthenticationValue
+    properties:
+      fundingAccountInfo:
+        $ref: '#/definitions/FundingAccountInfo'
+      tokenizationAuthenticationValue:
+        type: string
+        example: qzmernbhmlkjndpifjnzqef534ez1f65315z4ef61ez
+        description: TAV structure, in Base 64 format
+    description: The data that must be returned to the mobile application and transmitted to wallet provider
+  ConsumerInformation:
+    type: object
+    required:
+    - countryCode
+    - emailAddresses
+    - firstname
+    - lastname
+    - phoneNumbers
+    properties:
+      consentPresenter:
+        type: string
+        example: Bank A
+        description: Identifies the presenter of consent to the consumer
+        minLength: 1
+        maxLength: 30
+      consentVersion:
+        type: string
+        example: '1.0'
+        description: Specific version of the terms and conditions that the customer has accepted for the user solution
+        minLength: 1
+        maxLength: 9
+      countryCode:
+        type: string
+        example: USA
+        description: Country code using 3-character ISO 3166 (Alpha 3) format
+        pattern: '[A-Z]{3}'
+      emailAddresses:
+        type: array
+        example: john.doe@mydomain.com
+        description: List of email addresses
+        items:
+          type: string
+          example: john.doe@mydomain.com
+          description: List of email addresses
+          pattern: '[_A-Za-z0-9-+]+(\.[_A-Za-z0-9-+]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})'
+        maxItems: 5
+        minItems: 1
+      locale:
+        type: string
+        example: en_US
+        description: 'Language and country in which the product communicates with the consumer. Format : ISO-639-1'
+        minLength: 5
+        maxLength: 5
+        pattern: '[a-z]{2}_[A-Z]{2}'
+      firstname:
+        maxLength: 30
+        minLength: 1
+        pattern: ^[^{}\[\]\^:;=!\*\$"`<>&\%]+$
+        type: string
+        description: 'The firstname of the account holder, charset  ISO 8859-1 (aka Latin-1). May contain multiple words, including middle name. Following chars are not accepted : {}[]^:;=!*$"`<>&\%'
+        example: John Michael
+      lastname:
+        maxLength: 30
+        minLength: 1
+        pattern: ^[^{}\[\]\^:;=!\*\$"`<>&\%]+$
+        type: string
+        description: 'The lastname of the account holder, charset  ISO 8859-1 (aka Latin-1). May contain multiple words. Following chars are not accepted : {}[]^:;=!*$"`<>&\%'
+        example: Kennedy
+      phoneNumbers:
+        type: array
+        example: '+33612345678'
+        description: List of phone numbers, with international prefix
+        items:
+          type: string
+          example: '+33612345678'
+          description: List of phone numbers, with international prefix
+          pattern: \+[1-9]\d+
+        maxItems: 5
+        minItems: 1
+      timeOfConsent:
+        type: string
+        example: '2023-02-09T10:23:30.747Z'
+        description: 'Date/Time from which the consent is valid. Format ISO8601 : yyyy-MM-ddTHH:mm:ss.SSSZ'
+        pattern: \d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}\.\d{3}Z
+    description: Structure used for information related to click-to-pay account
+  VtsApplePushDataRequest:
+    type: object
+    properties:
+      authCode:
+        type: string
+      nonce:
+        type: string
+      pan:
+        type: string
+      panExpiryDate:
+        type: string
+    title: VtsApplePushDataRequest
+  BillingAddress:
+    type: object
+    required:
+    - city
+    - country
+    - line1
+    - postalCode
+    properties:
+      city:
+        type: string
+        example: San Francisco
+        description: Part of billing address
+        minLength: 1
+        maxLength: 10
+        pattern: ^[a-zA-Z0-9\s\.,']{1,64}$
+      country:
+        type: string
+        example: USA
+        description: Part of billing address. Country code as defined in alpha3 ISO 3166
+        minLength: 3
+        maxLength: 3
+      line1:
+        type: string
+        example: 1000 Main Street
+        description: Part of billing address
+        minLength: 1
+        maxLength: 64
+        pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
+      line2:
+        type: string
+        example: Building 56
+        description: Part of billing address
+        minLength: 1
+        maxLength: 64
+        pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
+      line3:
+        type: string
+        example: Suite 100
+        description: Part of billing address
+        minLength: 1
+        maxLength: 64
+        pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
+      postalCode:
+        type: string
+        example: '94105'
+        description: Part of billing address
+        minLength: 1
+        maxLength: 10
+      state:
+        type: string
+        example: CA
+        description: Part of billing address
+        minLength: 1
+        maxLength: 2
+  ApiResponseEntityVtsPushProvisioningResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: object
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/VtsPushProvisioningResponse'
+      responseMetadata:
+        type: object
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityVtsPushProvisioningResponse
+    description: Issuer response entity
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  ApplePayPushProvisioningResponse:
+    type: object
+    properties:
+      mbpac:
+        type: string
+      mbpad:
+        type: string
+    title: ApplePayPushProvisioningResponse
+  GetCryptoOTPV2Response:
+    type: object
+    properties:
+      cryptoOTP:
+        type: string
+        description: 'For tokenProviderId VTS : format MBAAC-1-1-ciphertext, in base64 format. For MDES : TAV/activationData'
+  ApiResponseEntityMobileBankingAppAuthCodeResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: object
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/MobileBankingAppAuthCodeResponse'
+      responseMetadata:
+        type: object
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityMobileBankingAppAuthCodeResponse
+    description: Issuer response entity
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  ResponseV2ClickToPayRetrieveAccountDataResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/ClickToPayRetrieveAccountDataResponse'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  ClickToPayRetrieveAccountDataResponse:
+    type: object
+    properties:
+      c2pProvider:
+        type: string
+        example: Visa
+        description: 'Click-to-Pay provider : Visa. Returned if card is valid'
+      cardDetails:
+        type: array
+        description: List of cardDetail structures that contains information on cards associated to a click-to-Pay account. Returned if min one present. See below for subfields
+        items:
+          $ref: '#/definitions/CardDetails'
+      cardholderReference:
+        type: string
+        example: 42936061AAAP8026
+        description: Anonymized card identifier (Surrogate of PAN), as defined by Issuer Card Management System
+      consumerInformation:
+        $ref: '#/definitions/ConsumerInformation'
+  ResponseV2:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: object
+        properties: {}
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  CreateAppleTokenizedCardV2Response:
+    type: object
+    properties:
+      activationData:
+        type: string
+        description: MBPAC element (encrypted activation code). TAV value for MDES or MBPAC value for VTS. Present if responseCode OK
+      encryptedPassData:
+        type: string
+        description: EncryptedPassData (encrypted card data). Present if responseCode OK
+      ephemeralPublicKey:
+        type: string
+        description: Ephemeral ECDSA public key, prefixed with 0x04. Always Base64 in V2 service. Present if responseCode OK
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  ResponseV2CreateMdesTokenizedCardV2Response:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/CreateMdesTokenizedCardV2Response'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  ResponseV2GetCardIdFromTokenV2Response:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/GetCardIdFromTokenV2Response'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  ResponseV2GetTokenDataV2Response:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/GetTokenDataV2Response'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  DetailsDataResponse:
+    type: object
+    properties:
+      deviceID:
+        type: string
+        example: C2ZBY14310005664
+        description: For SE or HCE only. Secure Element Id or Digital Wallet ID. Format Hex binary
+        minLength: 0
+        maxLength: 48
+      deviceName:
+        type: string
+        example: John's phone
+        description: Readable name for the device. Could contain UTF-8 international characters
+      deviceType:
+        type: string
+        example: MOBILEPHONE_OR_TABLET
+        description: Type of device
+        enum:
+        - UNKNOWN
+        - MOBILE_PHONE
+        - TABLET
+        - WATCH
+        - MOBILEPHONE_OR_TABLET
+        - PERSONAL_COMPUTER
+        - OTHER
+      lastTokenStatusUpdatedDate:
+        type: string
+        format: date-time
+        description: 'GMT date of last status update of the token Format ISO8601 : yyyy-MM-ddTHH:mm:ss.SSSZ'
+      tokenActivationDate:
+        type: string
+        format: date-time
+        description: 'GMT date & time of token activation (empty if inactive). Format ISO8601 : yyyy-MM-ddTHH:mm:ss.SSSZ'
+      tokenExpiryDate:
+        type: string
+        example: 2023-11
+        description: The year and month of the token expiry date. Format yyyy-MM
+        minLength: 7
+        maxLength: 7
+      tokenStatus:
+        type: string
+        description: "The status of the Token. Possible values are :\r\n IAC (Inactive), ACT (Active), SUS (Suspended), DEA (Deactivated)"
+      tokenSuffix:
+        type: string
+        example: '7890'
+        description: Last 4 digits of token value
+        minLength: 4
+        maxLength: 4
+      walletAccountId:
+        type: string
+        example: A4DF297BD8466140A4DF297BD8466140
+        description: User identifier on device for SE or HCE only
+        minLength: 0
+        maxLength: 32
+  ClickToPayEnrollUpdateRequest:
+    type: object
+    properties:
+      billingAddress:
+        $ref: '#/definitions/BillingAddress'
+      consumerInformation:
+        $ref: '#/definitions/ConsumerInformation'
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  ResponseV2GetCryptoOTPV2Response:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/GetCryptoOTPV2Response'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  ResponseV2CreateAppleTokenizedCardV2Response:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/CreateAppleTokenizedCardV2Response'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  ApiResponseApplePayPushProvisioning:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: object
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/ApplePayPushProvisioningResponse'
+      responseMetadata:
+        type: object
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseApplePayPushProvisioning
+    description: Issuer response entity
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  CreateMdesTokenizedCardV2Response:
+    type: object
+    properties:
+      issuerInitiatedDigitizationData:
+        $ref: '#/definitions/MdesIssuerDigitizationDataResponse'
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

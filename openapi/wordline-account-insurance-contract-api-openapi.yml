@@ -1,0 +1,1415 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Account - Insurance Contract API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Account - Insurance Contract
+  description: Account Insurance Contract Api Controller
+paths:
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/insurance-contracts:
+    get:
+      tags:
+      - Account - Insurance Contract
+      summary: List insurance contracts for an account by external reference
+      operationId: listInsuranceContractsByIssuerAccExtRef
+      description: "The API allows the list of insurance contracts for an account to be retrieved. \nThe main input fields requested by the API are:\n- The issuer ID\n- The account for which info is requested: It can be provided by using the account reference or the issuer external account reference.\n\nIn return, the list of insurance contracts is provided with the subscribed insurance package, the insurance events, the latest occurring events and the status for each contract.\nThe list of insurance events and their codes are pre-defined and configured in the insurance package.\nThe contracts with a closed status are not provided back.\nThe possible statuses of insurance contracts are:\n- ACTIVE,\n- INTERRUPTED,\n- DISABLED,\n- CLOSED\n\nThe statuses depends on the insurance events configuration."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListInsuranceContract'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Insurance Contract
+      summary: Create insurance contract by external reference
+      operationId: createInsuranceContractByIssuerAccExtRef
+      description: 'The API allows an insurance contract for an account to be activated if the activation was not requested at the contract creation.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference
+
+        - The insurance package reference
+
+        - The insurance event code for activation if the activation by default is not defined in the product setup.
+
+
+        Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system.'
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateInsuranceContractRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateInsuranceContractResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/insurance-contracts/{insurancePackageReference}
+  : get:
+      tags:
+      - Account - Insurance Contract
+      summary: Retrieve an insurance contract for an account by external reference
+      operationId: retrieveInsuranceContractByIssuerAccExtRef
+      description: 'The API allows an insurance contract for an account to be retrieved.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference
+
+        - The insurance package reference.
+
+
+        In return, the insured events and the latest occurring events for the account and insurance package reference are returned.
+
+        The list of insurance events and their codes are a pre-defined and configured in the insurance package.
+
+        The contracts with a closed status are not provided back.
+
+        The possible statuses of insurance contracts are:
+
+        - ACTIVE,
+
+        - INTERRUPTED,
+
+        - DISABLED,
+
+        - CLOSED
+
+
+        The statuses depends on the insurance events configuration.'
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: insurancePackageReference
+        in: path
+        description: Insurance package reference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - insuranceEvents
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityInsuranceContract'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Account - Insurance Contract
+      summary: Close insurance contract by external reference
+      operationId: closeInsuranceContractByIssuerAccExtRef
+      description: 'The API allows an insurance contract for an account to be closed.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference
+
+        - The insurance package identifier'
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: insurancePackageReference
+        in: path
+        description: Insurance package reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCloseInsuranceContractResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/insurance-contracts/{insurancePackageReference}/insurance-events
+  : post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Insurance Contract
+      summary: Add an insurance event to insurance contract for an account by external reference
+      operationId: createInsuranceEventByIssuerAccExtRef
+      description: "The API is used to pst some events to an insurance contract. \nThe complete list of event is defined in the product setup. The actions linked to the event can be:\n- activate insurance,\n- deactivate insurance\n- stop the fee calculation.\n\nThe main input fields requested by the API are:\n- The issuer ID\n- The account for which info is requested: It can be provided by using the account reference or the issuer external account reference\n- The insurance package identifier.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system"
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: insurancePackageReference
+        in: path
+        description: Insurance package reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateInsuranceEventRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateInsuranceEventResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/insurance-contracts:
+    get:
+      tags:
+      - Account - Insurance Contract
+      summary: List insurance contracts for an account
+      operationId: listInsuranceContracts
+      description: "The API allows the list of insurance contracts for an account to be retrieved. \nThe main input fields requested by the API are:\n- The issuer ID\n- The account for which info is requested: It can be provided by using the account reference or the issuer external account reference.\n\nIn return, the list of insurance contracts is provided with the subscribed insurance package, the insurance events, the latest occurring events and the status for each contract.\nThe list of insurance events and their codes are pre-defined and configured in the insurance package.\nThe contracts with a closed status are not provided back.\nThe possible statuses of insurance contracts are:\n- ACTIVE,\n- INTERRUPTED,\n- DISABLED,\n- CLOSED\n\nThe statuses depends on the insurance events configuration."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListInsuranceContract'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Insurance Contract
+      summary: Create insurance contract
+      operationId: createInsuranceContract
+      description: 'The API allows an insurance contract for an account to be activated if the activation was not requested at the contract creation.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference
+
+        - The insurance package reference
+
+        - The insurance event code for activation if the activation by default is not defined in the product setup.
+
+
+        Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system.'
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateInsuranceContractRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateInsuranceContractResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/insurance-contracts/{insurancePackageReference}:
+    get:
+      tags:
+      - Account - Insurance Contract
+      summary: Retrieve an insurance contract for an account
+      operationId: retrieveInsuranceContract
+      description: 'The API allows an insurance contract for an account to be retrieved.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference
+
+        - The insurance package reference.
+
+
+        In return, the insured events and the latest occurring events for the account and insurance package reference are returned.
+
+        The list of insurance events and their codes are a pre-defined and configured in the insurance package.
+
+        The contracts with a closed status are not provided back.
+
+        The possible statuses of insurance contracts are:
+
+        - ACTIVE,
+
+        - INTERRUPTED,
+
+        - DISABLED,
+
+        - CLOSED
+
+
+        The statuses depends on the insurance events configuration.'
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: insurancePackageReference
+        in: path
+        description: Insurance package reference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - insuranceEvents
+        collectionFormat: multi
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityInsuranceContract'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Account - Insurance Contract
+      summary: Close insurance contract
+      operationId: closeInsuranceContract
+      description: 'The API allows an insurance contract for an account to be closed.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference
+
+        - The insurance package identifier'
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: insurancePackageReference
+        in: path
+        description: Insurance package reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCloseInsuranceContractResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/insurance-contracts/{insurancePackageReference}/insurance-events:
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Insurance Contract
+      summary: Add an insurance event to insurance contract for an account
+      operationId: createInsuranceEvent
+      description: "The API is used to pst some events to an insurance contract. \nThe complete list of event is defined in the product setup. The actions linked to the event can be:\n- activate insurance,\n- deactivate insurance\n- stop the fee calculation.\n\nThe main input fields requested by the API are:\n- The issuer ID\n- The account for which info is requested: It can be provided by using the account reference or the issuer external account reference\n- The insurance package identifier.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system"
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: insurancePackageReference
+        in: path
+        description: Insurance package reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateInsuranceEventRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateInsuranceEventResponse'
+      security:
+      - basic: []
+      deprecated: false
+definitions:
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  CreateInsuranceEventResponse:
+    type: object
+    required:
+    - accountIdentifier
+    - insuranceContractIdentifier
+    properties:
+      accountIdentifier:
+        $ref: '#/definitions/AccountIdentifier'
+      insuranceContractIdentifier:
+        $ref: '#/definitions/InsuranceContractIdentifier'
+    title: CreateInsuranceEventResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  InsuranceContractIdentifier:
+    type: object
+    description: 'The insurance package which is linked to this contract '
+    properties:
+      insurancePackageReference:
+        type: string
+        description: Reference of the insurance contract
+    title: InsuranceContractIdentifier
+  CreateInsuranceContractResponse:
+    type: object
+    required:
+    - accountIdentifier
+    - insuranceContractIdentifier
+    properties:
+      accountIdentifier:
+        description: 'The account that insurance contract belongs to '
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      insuranceContractIdentifier:
+        description: The insurance package which is linked to this contract
+        allOf:
+        - $ref: '#/definitions/InsuranceContractIdentifier'
+    title: CreateInsuranceContractResponse
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  InsurancePackageIdentifier:
+    type: object
+    description: Unique identifier of the insurance contract package
+    properties:
+      insurancePackageReference:
+        type: string
+        description: Reference of the insurance package
+    title: InsurancePackageIdentifier
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  InsuranceEvent:
+    type: object
+    properties:
+      insuranceEventCode:
+        type: string
+        description: Insurance event code
+      insuranceEventDate:
+        type: string
+        format: date-time
+        description: Date of insurance event
+      insuranceEventDescription:
+        type: string
+        description: Description of the insurance event
+    title: InsuranceEvent
+  ApiResponseEntityListInsuranceContract:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        type: array
+        description: Response data
+        items:
+          $ref: '#/definitions/InsuranceContract'
+    description: Issuer response entity
+    title: ApiResponseEntityListInsuranceContract
+  CreateInsuranceContractRequest:
+    type: object
+    required:
+    - insurancePackageReference
+    properties:
+      insurancePackageReference:
+        type: string
+        description: Insurance package reference among the ones configured for the issuer
+      insuranceEventCode:
+        type: string
+        description: "Insurance event related to insurance activation can be provided. \nIf not provided, first event with 'Activate Insurance' action of the package is applied. "
+    title: CreateInsuranceContractRequest
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  AccountIdentifier:
+    type: object
+    properties:
+      accountReference:
+        type: string
+        description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+      issuerAccountExternalReference:
+        type: string
+        description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+    title: AccountIdentifier
+  ApiResponseEntityCreateInsuranceEventResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CreateInsuranceEventResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCreateInsuranceEventResponse
+  ApiResponseEntityCreateInsuranceContractResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CreateInsuranceContractResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCreateInsuranceContractResponse
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  CloseInsuranceContractResponse:
+    type: object
+    required:
+    - accountIdentifier
+    - insuranceContractIdentifier
+    properties:
+      accountIdentifier:
+        description: 'The account that insurance contract belongs to '
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      insuranceContractIdentifier:
+        description: The insurance package which is linked to this contract
+        allOf:
+        - $ref: '#/definitions/InsuranceContractIdentifier'
+    title: CloseInsuranceContractResponse
+  ApiResponseEntityInsuranceContract:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/InsuranceContract'
+    description: Issuer response entity
+    title: ApiResponseEntityInsuranceContract
+  CreateInsuranceEventRequest:
+    type: object
+    required:
+    - insuranceEventCode
+    - insuranceEventDate
+    properties:
+      insuranceEventCode:
+        type: string
+        description: Insurance event code
+      insuranceEventDate:
+        type: string
+        format: date-time
+        description: Insurance event date
+      insuranceEventDescription:
+        type: string
+        description: Insurance event description (free text)
+    title: CreateInsuranceEventRequest
+  InsuranceContractPackage:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier of the insurance package
+      insurancePackageIdentifier:
+        description: Unique identifier of the insurance contract package
+        allOf:
+        - $ref: '#/definitions/InsurancePackageIdentifier'
+    title: InsuranceContractPackage
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  InsuranceContract:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      insuranceContractIdentifier:
+        description: Unique identifier of the insurance contract
+        allOf:
+        - $ref: '#/definitions/InsuranceContractIdentifier'
+      accountIdentifier:
+        description: The account linked to the insurance contract
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      lastInsuranceEventCode:
+        type: string
+        description: Last insurance event code
+      lastInsuranceEventDate:
+        type: string
+        format: date-time
+        description: Last event date
+      insuranceEvents:
+        type: array
+        description: 'The list of insurance events linked to this contract.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/InsuranceEvent'
+      status:
+        type: string
+        description: Status of insurance contract
+      validFrom:
+        type: string
+        format: date-time
+        description: From when the contract is valid
+      accountOwnerBirthDate:
+        type: string
+        format: date-time
+        description: Owner's birth date
+      insurancePackage:
+        allOf:
+        - $ref: '#/definitions/InsuranceContractPackage'
+    title: InsuranceContract
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  ApiResponseEntityCloseInsuranceContractResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CloseInsuranceContractResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCloseInsuranceContractResponse
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

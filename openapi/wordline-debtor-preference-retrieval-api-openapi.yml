@@ -1,0 +1,328 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Debtor Preference Retrieval API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Debtor Preference Retrieval
+paths:
+  /preferences/{Psuid}/:
+    get:
+      security:
+      - Authorization: []
+      tags:
+      - Debtor Preference Retrieval
+      description: 'Currently could be used only for iDEAL 2.0 payments
+
+        '
+      summary: Get PSU preferred bank and preferred account
+      operationId: getAllPsuBanksWithAccounts
+      parameters:
+      - $ref: '#/components/parameters/Psuid'
+      - $ref: '#/components/parameters/X-Request-ID'
+      - $ref: '#/components/parameters/MessageCreateDateTime'
+      - $ref: '#/components/parameters/Signature'
+      - $ref: '#/components/parameters/Digest'
+      - $ref: '#/components/parameters/AspspId'
+      - $ref: '#/components/parameters/InitiatingPartySubId'
+      responses:
+        200:
+          description: OK
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+            MessageCreateDateTime:
+              $ref: '#/components/headers/MessageCreateDateTime'
+            Signature:
+              $ref: '#/components/headers/Signature'
+            Digest:
+              $ref: '#/components/headers/Digest'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PsuBankPreferences'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Missing or wrong IP Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Expired IP Token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          $ref: '#/components/responses/404'
+        415:
+          $ref: '#/components/responses/415'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  headers:
+    X-Request-ID:
+      required: true
+      description: 'UUID for unique request identification
+
+        '
+      schema:
+        type: string
+        maxLength: 36
+        minLength: 1
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    Signature:
+      required: false
+      description: 'Required for IDEAL payments.
+
+        '
+      schema:
+        type: string
+    MessageCreateDateTime:
+      required: true
+      schema:
+        type: string
+        format: date-time
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      example: '2020-09-25T08:15:00.856Z'
+    Digest:
+      description: Is contained if and only if the `Signature` element is contained in the header of the request.
+      schema:
+        type: string
+      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
+  schemas:
+    PsuBankPreferences:
+      type: object
+      additionalProperties: false
+      description: 'The PSU preferenes details saved in the PSU Management
+
+        '
+      properties:
+        AspspName:
+          type: string
+          description: 'The name of the ASPSP/Issuer
+
+            '
+        AspspLogoUrl:
+          type: string
+          description: 'the logo url of the ASPSP/Issuer
+
+            '
+        DebtorAccountIdentification:
+          type: string
+          description: 'The masked IBAN or any other identifier recognized by the PSU and ASPSP/Issuer
+
+            '
+    Error:
+      required:
+      - Code
+      - Message
+      type: object
+      additionalProperties: false
+      properties:
+        Code:
+          pattern: '[0-9]{1,3}'
+          type: string
+        Message:
+          maxLength: 140
+          minLength: 1
+          type: string
+        Details:
+          type: string
+        Link:
+          $ref: '#/components/schemas/Link'
+      description: '|HTTP Status|Code |Description
+
+        |-----------|-----|---------------------------------------
+
+        |400        |001  |Bad client request
+
+        |           |002  |The message does not comply the schema definition
+
+        |           |008  |Duplicate message
+
+        |           |101  |The client or merchant is unknown
+
+        |           |102  |The client or merchant is inactive
+
+        |           |105  |The aspsp is not active
+
+        |           |122  |The PSU consent is not valid
+
+        |           |133  |A conditional field is missing
+
+        |           |136  |Consent could not be found
+
+        |           |159  |Request is locked by another concurrent request, please try again later
+
+        |401        |003  |Invalid signature
+
+        |           |021  |Unauthorized
+
+        |           |123  |The PSU consent is expired
+
+        |           |132  |A pre-authentication is required - but could not be found
+
+        |           |135  |The status of the payment does not allow cancellation.
+
+        |           |140  |The transaction authentication number is wrong
+
+        |           |141  |The transaction authentication number is not valid anymore.
+
+        |           |142  |The transaction authentication number has expired.
+
+        |           |143  |The transaction authentication number is not active anymore.
+
+        |           |144  |The user account is locked.
+
+        |           |145  |The user account is temporarily locked.
+
+        |           |146  |The user password has expired.
+
+        |           |147  |The user account does not support a second factor.
+
+        |           |148  |The user password has expired.
+
+        |           |149  |User credential validation failed.
+
+        |           |153  |The online refunds API has not been activated for your tenant.
+
+        |           |154  |Invalid digest
+
+        |403        |007  |Initiating Party is not authorised
+
+        |           |017  |Initiating party access token is expired
+
+        |           |119  |A PSU subscription is present, but inactive
+
+        |           |120  |Payment status is not in the AUTHORISED state and cannot be confirmed
+
+        |           |134  |The payment amount is above the limit set in your PIS subscription
+
+        |404        |104  |The Aspsp is unknown
+
+        |           |110  |Resource could not be found
+
+        |           |150  |No pre-authentication found
+
+        |405        |137  |Request is not supported by Aspsp
+
+        |415        |158  |Unsupported media type
+
+        |500        |004  |An internal error occurred
+
+        |           |116  |The aspsp responded with an error
+
+        |           |152  |Invalid response from ASPSP
+
+        |           |160  |Exchange rate information is not available for the requested date.
+
+        |502        |012  |Aspsp did not authorise
+
+        |503        |016  |Request limit of the ASPSP server exceeded
+
+        '
+    Link:
+      required:
+      - Href
+      type: object
+      additionalProperties: false
+      properties:
+        Href:
+          maxLength: 1024
+          minLength: 1
+          type: string
+  parameters:
+    Signature:
+      name: Signature
+      in: header
+      description: 'Conditionally required for iDEAL payments. The signature in the request should include a keyId with the value of fingerprint of the certificate
+
+        '
+      schema:
+        type: string
+    Psuid:
+      name: Psuid
+      in: path
+      description: 'The Id of the PSU registered at the Open Banking Service
+
+        '
+      required: true
+      schema:
+        type: string
+      example: 12345
+    X-Request-ID:
+      name: X-Request-ID
+      in: header
+      description: 'UUID for unique request identification.
+
+        '
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 1
+        type: string
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    InitiatingPartySubId:
+      name: InitiatingPartySubId
+      in: header
+      schema:
+        type: string
+      description: 'External identification of the subsidiary initiating party.
+
+        '
+    MessageCreateDateTime:
+      name: MessageCreateDateTime
+      in: header
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2020-09-25T08:15:00.856Z'
+    AspspId:
+      name: AspspId
+      in: header
+      description: The AspspId used within the Open Banking Service to identify a specific ASPSP.
+      schema:
+        type: string
+      example: '121'
+    Digest:
+      name: Digest
+      in: header
+      description: Is contained if and only if the `Signature` element is contained in the header of the request.
+      schema:
+        type: string
+      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

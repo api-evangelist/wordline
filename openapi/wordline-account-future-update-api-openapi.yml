@@ -1,0 +1,1771 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Account - Future Update API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Account - Future Update
+  description: Account Future Updates Api Controller
+paths:
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/account-future-updates:
+    get:
+      tags:
+      - Account - Future Update
+      summary: Retrieve list of future changes of the account by external reference
+      description: 'The API is used to get the account updates that have to be applied at a schedule date.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        In response, a list of updates with the schedule date is provided.
+
+
+        It is also possible to request the account updates planned in the past and already processed.'
+      operationId: listAccountFutureUpdatesByIssuerExtRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: all
+        in: query
+        description: Retrieve also updates already processed
+        required: false
+        type: boolean
+        default: false
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListAccountFutureUpdate'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Future Update
+      summary: Schedule new account parameters update in future by external reference
+      description: 'The API is used to enter the account updates that should be applied on a schedule date.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        - The plan date
+
+        - The updates
+
+
+        Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system.'
+      operationId: createAccountFutureUpdateByIssuerExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAccountFutureUpdateRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAccountFutureUpdateResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/account-future-updates/{futureChangeReference}
+  : get:
+      tags:
+      - Account - Future Update
+      summary: Retrieve future changes for the account by external reference
+      description: 'The API allows to get the account updates that have to be applied at a schedule date.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        - The future change reference (unique per account)'
+      operationId: retrieveAccountFutureUpdateByIssuerExtRefAndFutureRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: futureChangeReference
+        in: path
+        description: future change reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityAccountFutureUpdate'
+      security:
+      - basic: []
+      deprecated: false
+    patch:
+      tags:
+      - Account - Future Update
+      summary: Update future changes of the account by external reference
+      description: 'The API is used to modify the account updates that should be applied on a schedule date (not yet reached).
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        - The future change reference (unique per account)
+
+        - The updates
+
+        - The reason of the future update modification'
+      operationId: modifyAccountFutureUpdateByExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: futureChangeReference
+        in: path
+        description: Future Change Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ModifyAccountFutureUpdateRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyAccountFutureUpdateResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/account-future-updates:
+    get:
+      tags:
+      - Account - Future Update
+      summary: Retrieve list of future changes of the account
+      description: 'The API is used to get the account updates that have to be applied at a schedule date.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        In response, a list of updates with the schedule date is provided.
+
+
+        It is also possible to request the account updates planned in the past and already processed.'
+      operationId: listAccountFutureUpdates
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: all
+        in: query
+        description: Retrieve also updates already processed
+        required: false
+        type: boolean
+        default: false
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListAccountFutureUpdate'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Future Update
+      summary: Schedule new account parameters update in future
+      description: 'The API is used to enter the account updates that should be applied on a schedule date.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        - The plan date
+
+        - The updates
+
+
+        Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system.'
+      operationId: createAccountFutureUpdate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAccountFutureUpdateRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAccountFutureUpdateResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/account-future-updates/{futureChangeReference}:
+    get:
+      tags:
+      - Account - Future Update
+      summary: Retrieve future changes for the account
+      description: 'The API allows to get the account updates that have to be applied at a schedule date.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        - The future change reference (unique per account)'
+      operationId: retrieveAccountFutureUpdateByFutureRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: futureChangeReference
+        in: path
+        description: future change reference
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityAccountFutureUpdate'
+      security:
+      - basic: []
+      deprecated: false
+    patch:
+      tags:
+      - Account - Future Update
+      summary: Update future changes of the account
+      description: 'The API is used to modify the account updates that should be applied on a schedule date (not yet reached).
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        - The future change reference (unique per account)
+
+        - The updates
+
+        - The reason of the future update modification'
+      operationId: modifyAccountFutureUpdate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: futureChangeReference
+        in: path
+        description: Future Change Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ModifyAccountFutureUpdateRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyAccountFutureUpdateResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/account-future-updates/{futureChangeReference}/cancel:
+    post:
+      tags:
+      - Account - Future Update
+      summary: Cancel future changes of the account
+      description: 'The API is used to cancel the account updates that should be applied on a schedule date (not yet reached).
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        - The future change reference (unique per account)
+
+        - The reason of the future update cancellation'
+      operationId: cancelAccountFutureUpdate
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: futureChangeReference
+        in: path
+        description: Future Change Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CancelAccountFutureUpdateRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCancelAccountFutureUpdateResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/account-future-updates/{futureChangeReference}/cancel
+  : post:
+      tags:
+      - Account - Future Update
+      summary: Cancel future changes of the account by external reference
+      description: 'The API is used to cancel the account updates that should be applied on a schedule date (not yet reached).
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account involved by the change: It can be provided by using the account reference or the issuer external account reference
+
+        - The future change reference (unique per account)
+
+        - The reason of the future update cancellation '
+      operationId: cancelAccountFutureUpdateByExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: issuerAccountExternalReference
+        required: true
+        type: string
+      - name: futureChangeReference
+        in: path
+        description: Future Change Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CancelAccountFutureUpdateRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCancelAccountFutureUpdateResponse'
+      security:
+      - basic: []
+      deprecated: false
+definitions:
+  ApiResponseEntityModifyAccountFutureUpdateResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/ModifyAccountFutureUpdateResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityModifyAccountFutureUpdateResponse
+  ModifyAccountFutureUpdateRequest:
+    type: object
+    properties:
+      futureChangeDate:
+        description: Refer to AccountFutureUpdate.futureChangeDate
+        type: string
+        format: date-time
+      iban:
+        description: 'Refer to Account.iban
+
+          Has to be provided as part of future update mandate input, except if the SEPA mandate UMR is provided (comes from another system).'
+        type: string
+      updateReason:
+        description: Refer to AccountFutureUpdate.updateReason
+        type: string
+      ibanOwnerName:
+        description: 'Refer to Account.ibanOwnerName
+
+          Has to be provided as part of future update mandate input, except if the SEPA mandate UMR is provided (comes from another system).'
+        type: string
+      bic:
+        description: Refer to Account.bic
+        type: string
+      amountDueFixedAmount:
+        description: Refer to Account.amountDueFixedAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      amountDueMinAmount:
+        description: Refer to Account.amountDueMinAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      greaterOrLesserAmountDue:
+        description: Refer to Account.greaterOrLesserAmountDue
+        type: string
+      amountDuePercentage:
+        description: Refer to Account.amountDuePercentage
+        type: string
+      directDebitFixedAmount:
+        description: Refer to Account.directDebitFixedAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      directDebitPercentage:
+        description: Refer to Account.directDebitPercentage
+        type: string
+      selectedModels:
+        type: array
+        description: Select the required model from the list.
+        items:
+          $ref: '#/definitions/AccountModel'
+      sepaIndicator:
+        type: boolean
+        description: Refer to AccountFutureUpdate.sepaIndicator
+      secondIban:
+        type: string
+        description: Refer to Account.secondIban
+      paymentMode:
+        type: string
+        description: Refer to Account.paymentMode
+      sepaMandateUmr:
+        description: 'Refer to Account.sepaMandateUmr
+
+          The unique reference to identify the SEPA mandate can be provided to our system if mandate is created explicitly by another system.'
+        type: string
+      debtorPhoneNumber:
+        description: Refer to AccountFutureUpdate.debtorPhoneNumber
+        type: string
+      debtorEmail:
+        description: Refer to AccountFutureUpdate.debtorEmail
+        type: string
+      debtorPostalAddress:
+        description: Refer to AccountFutureUpdate.debtorPostalAddress
+        allOf:
+        - $ref: '#/definitions/SepaMandateMailAddress'
+      mandateContractId:
+        description: Refer to AccountFutureUpdate.mandateContractId
+        type: string
+      mandateNatureType:
+        description: Refer to AccountFutureUpdate.mandateNatureType
+        type: string
+      mandateSignDate:
+        description: 'Refer to AccountFutureUpdate.mandateSignDate
+
+          Has to be provided as part of future update mandate input, except if the SEPA mandate UMR is provided (comes from another system).'
+        type: string
+        format: date-time
+      mandateSignCity:
+        description: Refer to AccountFutureUpdate.mandateSignCity
+        type: string
+    title: ModifyAccountFutureUpdateRequest
+  AccountFutureUpdateIdentifier:
+    type: object
+    properties:
+      futureChangeReference:
+        type: string
+        description: A reference of an account future update (unique per account) that may be used to carry out research, find information, etc.
+    title: AccountFutureUpdateIdentifier
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  CancelAccountFutureUpdateResponse:
+    type: object
+    required:
+    - updateStatus
+    properties:
+      accountIdentifier:
+        description: Identifier of an account
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      accountFutureUpdateIdentifier:
+        description: Refer to AccountFutureUpdateIdentifier data type
+        allOf:
+        - $ref: '#/definitions/AccountFutureUpdateIdentifier'
+      updateStatus:
+        type: string
+        description: Refer to AccountFutureUpdate.updateStatus
+    title: CancelAccountFutureUpdateResponse
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  SepaMandateMailAddress:
+    type: object
+    properties:
+      typeCode:
+        type: string
+        description: DEPRECATED
+      line1:
+        type: string
+        description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line2:
+        type: string
+        description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line3:
+        type: string
+        description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line4:
+        type: string
+        description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line5:
+        type: string
+        description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      buildingNumber:
+        type: string
+        description: Building number of the address (optional)
+      boxNumber:
+        type: string
+        description: Box number of the address (optional)
+      streetName:
+        type: string
+        description: Street name of the address (optional)
+      postCode:
+        type: string
+        description: zip code of the address (optional)
+      townName:
+        type: string
+        description: City corresponding to the address
+      countrySubdivision:
+        type: string
+        description: Subdivision of the country (optional)
+      country:
+        type: string
+        description: Code of the country.Free text.
+    title: SepaMandateMailAddress
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  AccountModel:
+    type: object
+    properties:
+      type:
+        type: string
+        description: "Type of an account model\nPossible values:\n•\teventFeeModel\n•\ttransactionFeeModel\n•\tmarkupFeeModel\n•\trestrictionModel\n•\tdebitInterestModel\n•\tinterestModel\n•\tdirectDebitAmountModel\n•\taccountAmountDueModel \n•\tstatementModel"
+      reference:
+        type: string
+        description: Reference to the particular model that has been selected in selectedModels
+      originalModelReference:
+        type: string
+        description: DEPRECATED
+    title: AccountModel
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  CreateAccountFutureUpdateResponse:
+    type: object
+    required:
+    - accountFutureUpdateIdentifier
+    properties:
+      creationDate:
+        description: Indicates the date when the future update was created (mandatory)
+        type: string
+        format: date-time
+      futureChangeDate:
+        description: Refer to AccountFutureUpdate.futureChangeDate
+        type: string
+        format: date-time
+      accountIdentifier:
+        description: Account identifier
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      accountFutureUpdateIdentifier:
+        description: Refer to AccountFutureUpdateIdentifier data type
+        allOf:
+        - $ref: '#/definitions/AccountFutureUpdateIdentifier'
+    title: CreateAccountFutureUpdateResponse
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  CancelAccountFutureUpdateRequest:
+    type: object
+    required:
+    - futureChangeDate
+    properties:
+      updateReason:
+        description: 'Refer to AccountFutureUpdate.updateReason
+
+          Empty if no provided.'
+        type: string
+    title: CancelAccountFutureUpdateRequest
+  AccountIdentifier:
+    type: object
+    properties:
+      accountReference:
+        type: string
+        description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+      issuerAccountExternalReference:
+        type: string
+        description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+    title: AccountIdentifier
+  CreateAccountFutureUpdateRequest:
+    type: object
+    required:
+    - futureChangeDate
+    properties:
+      futureChangeDate:
+        description: Refer to AccountFutureUpdate.futureChangeDate
+        type: string
+        format: date-time
+      accountFutureUpdateIdentifier:
+        description: 'Refer to AccountFutureUpdateIdentifier data type Can be provided by the issuer (e.g. used as identifier in Issuer''s system).
+
+          If not provided by the issuer, it is filled by default with the reference generated by our system.'
+        allOf:
+        - $ref: '#/definitions/AccountFutureUpdateIdentifier'
+      sepaMandate:
+        description: The issuer can provide SEPA mandate
+        allOf:
+        - $ref: '#/definitions/CreateAccountFutureUpdateRequestSepaMandate'
+      iban:
+        description: 'Refer to Account.iban
+
+          Has to be provided as part of future update mandate input, except if the SEPA mandate UMR is provided (comes from another system).'
+        type: string
+      updateReason:
+        description: 'Refer to AccountFutureUpdate.updateReason
+
+          Empty if no provided.'
+        type: string
+      ibanOwnerName:
+        description: 'Refer to Account.ibanOwnerName
+
+          Has to be provided as part of future update mandate input, except if the SEPA mandate UMR is provided (comes from another system).'
+        type: string
+      bic:
+        description: Refer to Account.bic
+        type: string
+      amountDueFixedAmount:
+        description: Refer to Account.amountDueFixedAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      amountDueMinAmount:
+        description: Refer to Account.amountDueMinAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      greaterOrLesserAmountDue:
+        description: Refer to Account.greaterOrLesserAmountDue
+        type: string
+      amountDuePercentage:
+        description: Refer to Account.amountDuePercentage
+        type: string
+      directDebitFixedAmount:
+        description: Refer to Account.directDebitFixedAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      directDebitPercentage:
+        description: Refer to Account.directDebitPercentage
+        type: string
+      selectedModels:
+        type: array
+        description: 'Select the required model from the list.
+
+          Only types ''directDebitAmountModel'',''accountAmountDueModel'' are managed for future updates'
+        items:
+          $ref: '#/definitions/AccountModel'
+      sepaIndicator:
+        type: boolean
+        description: AccountFutureUpdate.sepaIndicator
+      secondIban:
+        type: string
+        description: Refer to Account.secondIban
+      paymentMode:
+        type: string
+        description: Refer to Account.paymentMode
+    title: CreateAccountFutureUpdateRequest
+  CreateAccountFutureUpdateRequestSepaMandate:
+    type: object
+    properties:
+      debtorPostalAddress:
+        description: Refer to AccountFutureUpdate.debtorPostalAddress
+        allOf:
+        - $ref: '#/definitions/SepaMandateMailAddress'
+      debtorEmail:
+        type: string
+        description: Refer to AccountFutureUpdate.debtorEmail
+      debtorPhoneNumber:
+        type: string
+        description: Refer to AccountFutureUpdate.debtorPhoneNumber
+      mandateContractId:
+        type: string
+        description: Refer to AccountFutureUpdate.mandateContractId
+      mandateNatureType:
+        type: string
+        description: Refer to AccountFutureUpdate.mandateNatureType
+      mandateSignCity:
+        type: string
+        description: Refer to AccountFutureUpdate.mandateSignCity
+      mandateSignDate:
+        type: string
+        description: 'Refer to AccountFutureUpdate.mandateSignDate
+
+          The mandate signature date has to be provided except if the SEPA mandate UMR is provided (comes from another system).'
+        format: date-time
+      sepaMandateUmr:
+        type: string
+        description: 'Refer to Account.sepaMandateUmr
+
+          The unique reference to identify the SEPA mandate can be provided to our system if mandate is created explicitly by another system.'
+    title: CreateAccountFutureUpdateRequestSepaMandate
+  ApiResponseEntityCreateAccountFutureUpdateResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CreateAccountFutureUpdateResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCreateAccountFutureUpdateResponse
+  Amount:
+    type: object
+    required:
+    - value
+    - exponent
+    - isoCode
+    properties:
+      value:
+        type: integer
+        format: int64
+        description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+      exponent:
+        type: integer
+        format: int32
+        description: Exponent of Amount. Number of decimal digits.
+      isoCode:
+        type: string
+        description: 'Currency code of amount
+
+          The currency in ISO4217 alphabetic format.
+
+          Example: EUR for Euro'
+    title: Amount
+  ApiResponseEntityCancelAccountFutureUpdateResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CancelAccountFutureUpdateResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCancelAccountFutureUpdateResponse
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  AccountFutureUpdate:
+    type: object
+    required:
+    - futureChangeDate
+    - creationDate
+    - processed
+    properties:
+      issuerId:
+        description: Issuer identifier (unique per platform)
+        type: string
+      accountIdentifier:
+        description: Refer to Account.accountIdentifier
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      futureChangeDate:
+        description: Indicates the schedule date of the updates
+        type: string
+        format: date-time
+      creationDate:
+        description: Indicates the creation date of the future update
+        type: string
+        format: date-time
+      processed:
+        description: 'DEPRECATED
+
+          Replaced by updateStatus'
+        type: boolean
+      updateStatus:
+        description: 'Indicates the future update processing status:
+
+          CREATED - future update is created by the issuer and is not yet processed
+
+          PROCESSING - future update is being processed (applies for change paying account only)
+
+          PROCESSED - future update is processed successfully
+
+          REJECTED - future update processing is failed
+
+          CANCELLED - future update is cancelled by the issuer'
+        type: string
+      accountFutureUpdateIdentifier:
+        description: Refert to AccountFutureUpdateIdentifier data type
+        allOf:
+        - $ref: '#/definitions/AccountFutureUpdateIdentifier'
+      updateReason:
+        description: Indicates the reason of the future update
+        type: string
+      lastUpdateDate:
+        description: Indicates the last update date of the future update
+        type: string
+        format: date-time
+      sepaCreditorId:
+        description: Refer to Account.sepaCreditorId
+        type: string
+      sepaMandateStatus:
+        description: Refer to Account.sepaMandateStatus
+        type: string
+      sepaMandateUir:
+        description: Refer to Account.sepaMandateUir
+        type: string
+      sepaMandateUmr:
+        description: Refer to Account.sepaMandateUmr
+        type: string
+      debtorPhoneNumber:
+        description: SEPA debtor phone number
+        type: string
+      debtorEmail:
+        description: SEPA debtor e-mail
+        type: string
+      debtorPostalAddress:
+        description: Address lines 1 and 2, street name, building number, post code, town name, country and country subdivision can be provided in certain cases - refer to SEPA rules when debtor's address is required.
+        allOf:
+        - $ref: '#/definitions/SepaMandateMailAddress'
+      mandateContractId:
+        description: Mandate underlying contract identifier (external reference) used by the issuer. E.g., if the mandate is set up along with the contract creation, it may contain the application number, etc.
+        type: string
+      mandateNatureType:
+        description: 'SEPA mandate nature type. PAPER_MANDATE is taken as a default.
+
+          List of mandate possible nature types (for future usage only, not to be used):
+
+          COMPUTING_MIGRATION_NO_SIGNATURE, COMPUTING_MIGRATION_WITH_SIGNATURE, FR_MIGRATION_DOMESTIC_FILES,
+
+          MANDATE_FROMDIGITALIZATION, e_MANDATE, SIGNATURE_MANDATE, MYBANK_e_MANDATE, IDEAL_e_MANDATE'
+        type: string
+      mandateSignDate:
+        description: SEPA mandate date of signature
+        type: string
+        format: date-time
+      mandateSignCity:
+        description: SEPA mandate city of signature
+        type: string
+      iban:
+        description: Refer to Account.iban
+        type: string
+      ibanOwnerName:
+        description: Refer to Account.ibanOwnerName
+        type: string
+      bic:
+        description: Refer to Account.bic
+        type: string
+      amountDueFixedAmount:
+        description: Refer to Account.amountDueFixedAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      amountDueMinAmount:
+        description: Refer to Account.amountDueMinAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      greaterOrLesserAmountDue:
+        description: Refer to Account.greaterOrLesserAmountDue
+        type: string
+      amountDuePercentage:
+        description: Refer to Account.amountDuePercentage
+        type: string
+      directDebitFixedAmount:
+        description: Refer to Account.directDebitFixedAmount
+        allOf:
+        - $ref: '#/definitions/Amount'
+      directDebitPercentage:
+        description: Refer to Account.directDebitPercentage
+        type: string
+      selectedModels:
+        type: array
+        description: Refer to Account.selectedModels
+        items:
+          $ref: '#/definitions/AccountModel'
+      sepaIndicator:
+        type: boolean
+        description: AccountFutureUpdate.sepaIndicator
+      secondIban:
+        type: string
+        description: Refer to Account.secondIban
+      paymentMode:
+        type: string
+        description: Refer to Account.paymentMode
+    title: AccountFutureUpdate
+  ApiResponseEntityListAccountFutureUpdate:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        type: array
+        description: Response data
+        items:
+          $ref: '#/definitions/AccountFutureUpdate'
+    description: Issuer response entity
+    title: ApiResponseEntityListAccountFutureUpdate
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  ApiResponseEntityAccountFutureUpdate:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/AccountFutureUpdate'
+    description: Issuer response entity
+    title: ApiResponseEntityAccountFutureUpdate
+  ModifyAccountFutureUpdateResponse:
+    type: object
+    required:
+    - lastUpdateDate
+    - futureChangeDate
+    - accountIdentifier
+    - accountFutureUpdateIdentifier
+    properties:
+      lastUpdateDate:
+        description: Refer to AccountFutureUpdate.lastUpdateDate
+        type: string
+        format: date-time
+      futureChangeDate:
+        description: Refer to AccountFutureUpdate.futureChangeDate
+        type: string
+        format: date-time
+      accountIdentifier:
+        description: Identifier of an account
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      accountFutureUpdateIdentifier:
+        description: Refer to AccountFutureUpdateIdentifier data type
+        allOf:
+        - $ref: '#/definitions/AccountFutureUpdateIdentifier'
+    title: ModifyAccountFutureUpdateResponse
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

@@ -1,0 +1,1266 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Account - Offline Reservation API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Account - Offline Reservation
+  description: Account Offline Reservation Api Controller
+paths:
+  /issuers/{issuerId}/accounts/{accountReference}/offline-reservations:
+    get:
+      tags:
+      - Account - Offline Reservation
+      summary: List offline reservations for an account (beta)
+      description: 'The API allows the offline reservations of an account to be listed.
+
+        Either only active offline reservations are listed or all'
+      operationId: listOfflineReservationsForAccount
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: all
+        in: query
+        description: Returnes list of active offline reservations for the given account. If True - returnes active and cancelled offline reservations
+        required: false
+        type: boolean
+        default: false
+      - name: periodStartDateTime
+        in: query
+        description: Defines the start date and time of the period the reservations are requested. Format - yyyy-MM-ddTHH:mm:ssZ
+        required: false
+        type: string
+      - name: periodEndDateTime
+        in: query
+        description: Defines the end date and time of the period the reservations are requested. Format - yyyy-MM-ddTHH:mm:ssZ
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: '0'
+        required: false
+        type: integer
+        default: 0
+        format: int32
+      - name: offset
+        in: query
+        description: '100'
+        required: false
+        type: integer
+        default: 100
+        format: int32
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListOfflineReservationsResponse'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Offline Reservation
+      summary: Create an offline reservation (beta)
+      description: 'The API allows a offline reservation on an account to be created.
+
+        An offline reservation is used to block funds on the account.
+
+        An offline reservation is relevant for any account having a credit limit and has an impact on the Open to Buy (decreased).
+
+        An offline reservation is also relevant for an account having a credit balance. The reserved amount of each call can''t be higher than the own funds
+
+        Several offline reservations can be created for an account and are considered to maintain (to increase) the total offline reservation of the account.
+
+        The main input fields are:
+
+        - The issuer ID
+
+        - The issuer offline reservation external reference.
+
+        - The reserved amount
+
+        - The reason of the reservation'
+      operationId: createOfflineReservation
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateOfflineReservationRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateOfflineReservationResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/offline-reservations:
+    get:
+      tags:
+      - Account - Offline Reservation
+      summary: List offline reservations for an account by external reference (beta)
+      description: 'The API allows the offline reservations of an account to be listed.
+
+        Either only active offline reservations are listed or all'
+      operationId: listOfflineReservationsForAccountByExtRef
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: all
+        in: query
+        description: Returnes list of active offline reservations for the given account. If True - returnes active and cancelled offline reservations
+        required: false
+        type: boolean
+        default: false
+      - name: periodStartDateTime
+        in: query
+        description: Defines the start date and time of the period the reservations are requested. Format - yyyy-MM-ddTHH:mm:ssZ
+        required: false
+        type: string
+      - name: periodEndDateTime
+        in: query
+        description: Defines the end date and time of the period the reservations are requested. Format - yyyy-MM-ddTHH:mm:ssZ
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: '0'
+        required: false
+        type: integer
+        default: 0
+        format: int32
+      - name: offset
+        in: query
+        description: '100'
+        required: false
+        type: integer
+        default: 100
+        format: int32
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListOfflineReservationsResponse'
+      security:
+      - basic: []
+      deprecated: false
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Offline Reservation
+      summary: Create an offline reservation by external reference (beta)
+      description: 'The API allows a offline reservation on an account to be created.
+
+        An offline reservation is used to block funds on the account.
+
+        An offline reservation is relevant for any account having a credit limit and has an impact on the Open to Buy (decreased).
+
+        An offline reservation is also relevant for an account having a credit balance. The reserved amount of each call can''t be higher than the own funds
+
+        Several offline reservations can be created for an account and are considered to maintain (to increase) the total offline reservation of the account.
+
+        The main input fields are:
+
+        - The issuer ID
+
+        - The issuer offline reservation external reference.
+
+        - The reserved amount
+
+        - The reason of the reservation'
+      operationId: createOfflineReservationByExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateOfflineReservationRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateOfflineReservationResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/accounts/{accountReference}/offline-reservations/{reservationReference}/cancel:
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Offline Reservation
+      summary: Cancel an offline reservation (beta)
+      description: 'The API allows an offline reservation of an account to be cancelled.
+
+        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation  of the account.
+
+        The main input fields are:
+
+        - The issuer ID
+
+        - The offline reservation reference/issuer offline reservation external reference to be cancelled
+
+        - The reason of the cancellation'
+      operationId: cancelOfflineReservation
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: reservationReference
+        in: path
+        description: Reservation Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CancelOfflineReservationRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCancelOfflineReservationResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/{accountReference}/offline-reservations/external-offline-reservations/{issuerReservationExternalReference}/cancel
+  : post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Offline Reservation
+      summary: Cancel an offline reservation by reservation external reference (beta)
+      description: 'The API allows an offline reservation of an account to be cancelled.
+
+        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation  of the account.
+
+        The main input fields are:
+
+        - The issuer ID
+
+        - The offline reservation reference/issuer offline reservation external reference to be cancelled
+
+        - The reason of the cancellation'
+      operationId: cancelOfflineReservationByReservationExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: accountReference
+        in: path
+        description: Account Reference
+        required: true
+        type: string
+      - name: issuerReservationExternalReference
+        in: path
+        description: Issuer Reservation External Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CancelOfflineReservationRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCancelOfflineReservationResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/offline-reservations/{reservationReference}/cancel
+  : post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Offline Reservation
+      summary: Cancel an offline reservation by account external reference (beta)
+      description: 'The API allows an offline reservation of an account to be cancelled.
+
+        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation  of the account.
+
+        The main input fields are:
+
+        - The issuer ID
+
+        - The offline reservation reference/issuer offline reservation external reference to be cancelled
+
+        - The reason of the cancellation'
+      operationId: cancelOfflineReservationByAccountExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: reservationReference
+        in: path
+        description: Reservation Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CancelOfflineReservationRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCancelOfflineReservationResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/offline-reservations/external-offline-reservations/{issuerReservationExternalReference}/cancel
+  : post:
+      x-wl-idempotent: true
+      tags:
+      - Account - Offline Reservation
+      summary: Cancel an offline reservation by reservation external reference by account external reference (beta)
+      description: 'The API allows an offline reservation of an account to be cancelled.
+
+        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation  of the account.
+
+        The main input fields are:
+
+        - The issuer ID
+
+        - The offline reservation reference/issuer offline reservation external reference to be cancelled
+
+        - The reason of the cancellation'
+      operationId: cancelOfflineReservationByAccountExtRefAndByIssuerReservationExtRef
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerAccountExternalReference
+        in: path
+        description: Issuer Account External Reference
+        required: true
+        type: string
+      - name: issuerReservationExternalReference
+        in: path
+        description: Issuer Reservation External Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CancelOfflineReservationRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCancelOfflineReservationResponse'
+      security:
+      - basic: []
+      deprecated: false
+definitions:
+  OfflineReservationIdentifier:
+    type: object
+    properties:
+      issuerReservationExternalReference:
+        type: string
+        description: 'Reference of the offline reservation provided by the issuer
+
+          Must be unique per issuer'
+      reservationReference:
+        type: string
+        description: 'Reference of the offline reservation generated by the system
+
+          Must be unique per issuer'
+    title: OfflineReservationIdentifier
+  ApiResponseEntityListOfflineReservationsResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/ListOfflineReservationsResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityListOfflineReservationsResponse
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+  CancelOfflineReservationResponse:
+    type: object
+    required:
+    - offlineReservationIdentifier
+    properties:
+      offlineReservationIdentifier:
+        description: Offline reservation identifier
+        allOf:
+        - $ref: '#/definitions/OfflineReservationIdentifier'
+    title: CancelOfflineReservationResponse
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  CreateOfflineReservationRequest:
+    type: object
+    required:
+    - reservedAmount
+    properties:
+      issuerReservationExternalReference:
+        description: 'Reference of the offline reservation provided by the issuer
+
+          Must be unique per issuer'
+        type: string
+      reason:
+        description: 'Reason for which the offline reservation is created
+
+          Free text'
+        type: string
+      reservedAmount:
+        description: 'Offline reservation amount
+
+          Must be in the account currency and > 0
+
+          Must be lower than the own funds (credit balance)'
+        allOf:
+        - $ref: '#/definitions/Amount'
+    title: CreateOfflineReservationRequest
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  OfflineReservation:
+    type: object
+    properties:
+      offlineReservationIdentifier:
+        description: Offline reservation identifier
+        allOf:
+        - $ref: '#/definitions/OfflineReservationIdentifier'
+      creationDate:
+        type: string
+        format: date-time
+        description: Creation date/time of the offline reservation
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      reason:
+        type: string
+        description: 'Reason for which the offline reservation is created
+
+          Free text'
+      username:
+        type: string
+        description: User who has created the offline reservation
+      cancelled:
+        type: boolean
+        description: Indicates if the offline reservation is cancelled
+      cancellationDate:
+        type: string
+        format: date-time
+        description: Cancellation Date/time of the offline reservation
+      cancellationReason:
+        type: string
+        description: 'Reason of the cancellation
+
+          Free text'
+      reservedAmount:
+        description: Amount of the offline reservation
+        allOf:
+        - $ref: '#/definitions/Amount'
+      account:
+        allOf:
+        - $ref: '#/definitions/OfflineReservationAccount'
+        description: Account information
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  CreateOfflineReservationResponse:
+    type: object
+    required:
+    - offlineReservationIdentifier
+    properties:
+      offlineReservationIdentifier:
+        description: Offline reservation identifier
+        allOf:
+        - $ref: '#/definitions/OfflineReservationIdentifier'
+    title: CreateOfflineReservationResponse
+  CancelOfflineReservationRequest:
+    type: object
+    properties:
+      cancellationReason:
+        description: 'Reason for which the offline reservation is cancelled
+
+          Free text'
+        type: string
+    title: CancelOfflineReservationRequest
+  OfflineReservationAccount:
+    type: object
+    properties:
+      accountIdentifier:
+        description: Account identifier
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      reservedAmount:
+        description: Offline reserved amount cumulated at account level
+        allOf:
+        - $ref: '#/definitions/Amount'
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  ApiResponseEntityCreateOfflineReservationResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CreateOfflineReservationResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCreateOfflineReservationResponse
+  ApiResponseEntityCancelOfflineReservationResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CancelOfflineReservationResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCancelOfflineReservationResponse
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  AccountIdentifier:
+    type: object
+    properties:
+      accountReference:
+        type: string
+        description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+      issuerAccountExternalReference:
+        type: string
+        description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+    title: AccountIdentifier
+  Amount:
+    type: object
+    required:
+    - value
+    - exponent
+    - isoCode
+    properties:
+      value:
+        type: integer
+        format: int64
+        description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+      exponent:
+        type: integer
+        format: int32
+        description: Exponent of Amount. Number of decimal digits.
+      isoCode:
+        type: string
+        description: 'Currency code of amount
+
+          The currency in ISO4217 alphabetic format.
+
+          Example: EUR for Euro'
+    title: Amount
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ListOfflineReservationsResponse:
+    type: object
+    properties:
+      offlineReservation:
+        type: array
+        description: List of Offline Reservations
+        items:
+          $ref: '#/definitions/OfflineReservation'
+    title: ListOfflineReservationsResponse
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

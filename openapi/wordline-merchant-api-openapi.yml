@@ -1,0 +1,1136 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Merchant API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Merchant
+paths:
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/merchants:
+    get:
+      tags:
+      - Merchant
+      summary: Search merchants
+      description: 'This operation retrieves a list of merchants. Terminated merchants are excluded.
+
+
+        If there is a previous and/or next page the http response header will have a link (url) to this data
+
+        '
+      operationId: getMerchantOverviewList
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: iban
+        in: query
+        description: 'International Bank Account Number for merchant payments
+
+          '
+        schema:
+          type: string
+      - name: holdingId
+        in: query
+        description: 'Unique identification of the holding, determined by equensWorldline
+
+          '
+        schema:
+          type: integer
+          format: int32
+      - name: merchantId
+        in: query
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        schema:
+          type: string
+      - name: merchantName
+        in: query
+        description: 'Name of the merchant
+
+          '
+        schema:
+          type: string
+      - name: postalCode
+        in: query
+        description: 'Postal code of business address.
+
+          '
+        schema:
+          type: string
+      - name: houseNumber
+        in: query
+        description: 'Housenumber of business address. Note, Postalcode must be given too
+
+          '
+        schema:
+          type: integer
+          format: int32
+      - name: terminalId
+        in: query
+        description: 'Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
+
+          '
+        schema:
+          type: string
+      - name: cardAcceptorId
+        in: query
+        description: 'Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+
+          '
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: 'Sort field
+
+          '
+        schema:
+          type: string
+          enum:
+          - merchantId
+          - merchantName
+      - name: sortOrder
+        in: query
+        description: 'Sort order
+
+          '
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (Max page size is 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MerchantListData'
+              example:
+              - contractIdentification:
+                  acquirerId: '315000001'
+                  holdingId: 200
+                merchantId: '1001'
+                merchantName: Event Payment Solutions 1
+                status: Active
+                address:
+                  streetName: Stootblok
+                  houseNumber: 14
+                  postalCode: 3071AP
+                  city: Rotterdam
+                  countryCode: 528
+                  contactPersonName: M. Scott
+                  email: M.Scott@eventpaymentsolutions.com
+                merchantDetailsURI: acquiring/contract/v2.0/acquirers/315000001/merchants/1001
+              - contractIdentification:
+                  acquirerId: '315000001'
+                  holdingId: 300
+                merchantId: '2001'
+                merchantName: Great Groceries 1
+                status: Active
+                address:
+                  streetName: Utrechtsestraat
+                  houseNumber: 17
+                  postalCode: 1017VH
+                  city: Amsterdam
+                  countryCode: 528
+                  contactPersonName: W. Kilbourne
+                  email: W.Kilbourne@GreatGroceries.com
+                merchantDetailsURI: acquiring/contract/v2.0/acquirers/315000001/merchants/2001
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    post:
+      tags:
+      - Merchant
+      summary: Add a merchant
+      operationId: PostMerchant
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PostMerchant'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostMerchant'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PostMerchant'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PostMerchant'
+        required: true
+      responses:
+        201:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostMerchantResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/merchants/{merchantId}:
+    get:
+      tags:
+      - Merchant
+      summary: Retrieve a merchant
+      description: 'This operation retrieves a merchant.
+
+        '
+      operationId: getMerchant
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: merchantId
+        in: path
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantData'
+              example:
+                contractIdentification:
+                  acquirerId: '315000001'
+                  merchantId: '1001'
+                basic:
+                  acquirerName: Worldline Sandbox Bank
+                  merchantName: Event Payment Solutions 1
+                  MasterCardPaymentFacilitatorId: '200000'
+                  VisaPaymentFacilitatorId: '10000000'
+                refundLimits:
+                  maximumDailyRefundAmountMerchant: '200000.00'
+                status:
+                  status: Active
+                  commencementDate: 2022-12-09
+                addressDetailsURI: acquiring/contract/v2.0/acquirers/315000001/merchants/1001/addresses
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    delete:
+      tags:
+      - Merchant
+      summary: Delete a merchant
+      operationId: deleteMerchant
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: merchantId
+        in: path
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Termination of the merchant is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    patch:
+      tags:
+      - Merchant
+      summary: Update a merchant
+      description: "Based on a GET Merchant call a PATCH Merchant call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Sample request:  \r\n\r\n    [\r\n       {\r\n           \"value\": \"MyMerchant\",\r\n           \"path\": \"/basic/merchantName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"NL12121\",\r\n           \"path\": \"/externalIds/vatNumber\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+      operationId: patchMerchant
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: merchantId
+        in: path
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+        required: false
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/merchants/{merchantId}/addresses:
+    get:
+      tags:
+      - Merchant
+      summary: Retrieve the addresses of a merchant
+      description: 'This operation retrieves addresses of a merchant.
+
+        '
+      operationId: getMerchantAddresses
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: merchantId
+        in: path
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantAddressData'
+              example:
+                contractIdentification:
+                  acquirerId: '315000001'
+                  merchantId: '1001'
+                addresses:
+                - addressType: Business
+                  streetName: Stootblok
+                  houseNumber: 14
+                  postalCode: 3071AP
+                  city: Rotterdam
+                  countryCode: 528
+                  contactPersonName: M. Scott
+                  email: M.Scott@eventpaymentsolutions.com
+                  communicationLanguage: eng
+                  communicationPreference: 3
+                - addressType: Postal
+                  streetName: Postbus
+                  houseNumber: 2341
+                  postalCode: 3000CH
+                  city: Rotterdam
+                  countryCode: 528
+                  contactPersonName: S. Chadwick
+                  email: S.Chadwick@eventpaymentsolutions.com
+                  communicationLanguage: eng
+                  communicationPreference: 3
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    post:
+      tags:
+      - Merchant
+      summary: Add addresses to a Merchant
+      operationId: postMerchantAddresses
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: merchantId
+        in: path
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PostMerchantAddresses'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostMerchantAddresses'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PostMerchantAddresses'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PostMerchantAddresses'
+        required: true
+      responses:
+        201:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Returns when business errors are found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    patch:
+      tags:
+      - Merchant
+      summary: Update the addresses of a Merchant
+      description: "Based on a GET Merchant Addresses call a PATCH Merchant Addresses call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Sample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Mainstreet\",\r\n           \"path\": \"/addresses/0/streetName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": 12,\r\n           \"path\": \"/addresses/0/houseNumber\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+      operationId: patchMerchantAddresses
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: merchantId
+        in: path
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+        required: false
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Returns when business errors are found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/merchants/{merchantId}/addresses/{addressType}:
+    delete:
+      tags:
+      - Merchant
+      summary: Delete an address from a merchant
+      description: 'This operation deletes a merchant address
+
+        '
+      operationId: deleteMerchantAddresses
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: merchantId
+        in: path
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: addressType
+        in: path
+        description: Type of the address. Values [Business, Chargeback, Creditor, Debtor, Invoice, Location, Postal, Private]
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Delete is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+components:
+  schemas:
+    PostMerchantContractIdentification:
+      type: object
+      properties:
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1001'
+    MerchantAddressData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantContractIdentification'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
+    AddressDetails:
+      required:
+      - addressType
+      - city
+      - countryCode
+      type: object
+      properties:
+        addressType:
+          type: string
+          description: Type of the address. Values [Business, Chargeback, Creditor, Debtor, Invoice, Location, Postal, Private]
+          example: Business
+        streetName:
+          type: string
+          description: Street name and house number of the address. In case of a Dutch address only Street name
+          example: Stootblok
+        houseNumber:
+          type: integer
+          description: House number. Only used for Dutch addresses
+          format: int32
+          example: 14
+        houseAddition:
+          type: string
+          description: House number addition. Only used for Dutch addresses
+          example: bis
+        postalCode:
+          type: string
+          description: Postal code of the address
+          example: 3071AP
+        city:
+          type: string
+          description: City of the address
+          example: Rotterdam
+        region:
+          type: string
+          description: Region of the address. Only applicable for specific countries
+          example: Zuid-Holland
+        countryCode:
+          type: string
+          description: Country of the address according to ISO 3166-1 (numeric-3)
+          example: '528'
+        departmentName:
+          type: string
+          description: Department of the contact person registered with the address
+          example: Finance
+        contactPersonName:
+          type: string
+          description: Name of the contact person registered with the address
+          example: M. Scott
+        postalRoom:
+          type: string
+          description: Postal room of the contact person registered with the address
+          example: 2N.17
+        telephoneNumber:
+          type: string
+          description: Telephone number of contact person registered with the address
+          example: +31-63864055
+        faxNumber:
+          type: string
+          description: Fax number of the contact person registered with the address
+          example: +31-24683905
+        email:
+          type: string
+          description: E-mail address of the contact person registered with the address
+          example: M.Scott@eventpaymentsolutions.com
+        communicationLanguage:
+          type: string
+          description: Preferred communication language of the contact person registered with the address accrding to ISO 639-2 (alphanumeric-3)
+          example: eng
+        communicationPreference:
+          type: integer
+          description: Preferred communication type of the contact person registered with the address. Values [1 = Post, 2 = Fax, 3 = E-mail]
+          format: int32
+          example: 3
+    MerchantRefundLimits:
+      type: object
+      properties:
+        maximumDailyRefundAmountMerchant:
+          type: string
+          description: Maximum daily total refund amount per merchant in Euro
+          example: '200000.00'
+    MerchantIdentificationResponse:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        holdingId:
+          type: string
+          description: Unique identification of the holding, determined by equensWorldline
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '10011'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int64
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+        terminalId:
+          type: string
+          description: Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
+    Address:
+      type: object
+      properties:
+        streetName:
+          type: string
+          description: Street name and house number of the address. In case of a Dutch address only Street name
+          example: Stootblok
+        houseNumber:
+          type: integer
+          description: House number. Only used for Dutch addresses
+          format: int32
+          example: 14
+        houseAddition:
+          type: string
+          description: House number addition. Only used for Dutch addresses
+          example: bis
+        postalCode:
+          type: string
+          description: Postal code of the address
+          example: 3071AP
+        city:
+          type: string
+          description: City of the address
+          example: Rotterdam
+        region:
+          type: string
+          description: Region of the address. Only applicable for specific countries
+          example: Zuid-Holland
+        countryCode:
+          type: string
+          description: Country of the address according to ISO 3166-1 (numeric-3)
+          example: '528'
+        contactPersonName:
+          type: string
+          description: Name of the contact person registered with the address
+          example: M. Scott
+        telephoneNumber:
+          type: string
+          description: Telephone number of contact person registered with the address
+          example: 0883855111
+        email:
+          type: string
+          description: E-mail address of the contact person registered with the address
+          example: M.Scott@eventpaymentsolutions.com
+    MerchantClusters:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of the cluster
+        name:
+          type: string
+          description: Name of the cluster
+    Operation:
+      type: object
+      properties:
+        value:
+          type: object
+          properties: {}
+        path:
+          type: string
+          description: 'A pointer to a specific value (field) that needs to be changed
+
+
+            examples /basic/merchantCategoryCode, brands/0/brandParameters/allowedServices/refundService
+
+            '
+        op:
+          type: string
+          description: 'The following operations are implemented
+
+            - replace - change the value of a specific field
+
+            - remove -  remove the value of a specific field (only allowed for optional fields)
+
+            '
+        from:
+          type: string
+          description: Not elevant for currently supported operations
+    MerchantListData:
+      type: object
+      properties:
+        contractIdentification:
+          type: object
+          properties:
+            acquirerId:
+              type: string
+              description: Unique identification of the acquirer, determined by equensWorldline
+              example: '315000001'
+            holdingId:
+              type: integer
+              description: Unique identification of the holding, determined by equensWorldline
+              format: int32
+              example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1001'
+        merchantName:
+          type: string
+          description: Name of the merchant
+          example: Event Payment Solutions 1
+        status:
+          type: string
+          description: The status of this entity. Values [Active]
+          example: Active
+        address:
+          $ref: '#/components/schemas/Address'
+        merchantDetailsURI:
+          type: string
+          description: URI to get the merchant details
+          example: acquiring/contract/v2.0/acquirers/XXX/merchants/XXX
+    MerchantContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        holdingId:
+          type: string
+          description: Unique identification of the holding, determined by equensWorldline
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+    PostMerchantResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          format: uuid
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantIdentificationResponse'
+    ExternalIds:
+      type: object
+      properties:
+        vatNumber:
+          type: string
+          description: VAT number of the merchant
+          example: NL123456789B01
+        chamberOfCommerce:
+          type: string
+          description: Chamber of commerce number of the merchant
+          example: '12345678'
+        socialSecurityNumber:
+          type: string
+          description: Social security number of the merchant (only allowed in specific countries)
+          example: '123456789'
+        branchOrganisationId:
+          type: string
+          description: Identification of the merchant by his branch organization
+          example: '1234'
+    MerchantStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the merchant. Values [Active]
+        commencementDate:
+          type: string
+          description: Date at which the merchant was registered
+    PostMerchantBasic:
+      type: object
+      properties:
+        merchantName:
+          type: string
+          description: Name of the merchant
+          example: Event Payment Solutions 1
+        masterCardAssignedId:
+          type: string
+          description: Unique identifier of the merchant, issued by Mastercard
+          example: '123456'
+        visaMerchantVerificationValue:
+          type: string
+          description: Unique identifier of the merchant, issued by VISA
+          example: '1234567890'
+        visaMerchantVolumeIndicator:
+          format: int32
+          type: integer
+        participationMupp:
+          type: boolean
+          description: Indicates whether the merchant is enrolled in the Mastercard Utility Payment Program
+          example: false
+        masterCardPaymentFacilitatorId:
+          type: integer
+          description: Payment facilitator ID, issued by Mastercard
+          format: int64
+          example: 200000
+        visaPaymentFacilitatorId:
+          type: integer
+          description: Payment facilitator ID, issued by VISA
+          format: int64
+          example: 10000000
+        paymentFacilitatorName:
+          type: string
+          description: (Abbreviation of the) name of the payment facilitator to be used as first part of the card acceptor name
+        countryOfOrigin:
+          type: integer
+          description: Country of origin (home country) of a merchant that is owned by or under control of a government
+          format: int32
+          example: 729
+    CorrelationResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Unique ID that was generated for the specific change
+          format: uuid
+    ErrorData:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Unique code of the error as returned by the system handling the request
+        keyword:
+          type: string
+          description: JSON keyword from the request message that triggered the error
+        errorMessage:
+          type: string
+          description: Message explaining the error
+    MerchantData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantContractIdentification'
+        basic:
+          $ref: '#/components/schemas/MerchantBasic'
+        externalIds:
+          $ref: '#/components/schemas/ExternalIds'
+        refundLimits:
+          $ref: '#/components/schemas/MerchantRefundLimits'
+        clusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/MerchantClusters'
+        status:
+          $ref: '#/components/schemas/MerchantStatus'
+        addressDetailsURI:
+          type: string
+          description: URI to get the merchant address details
+          example: acquiring/contract/v2.0/acquirers/XXX/merchants/XXX/addresses
+    PostMerchantAddresses:
+      required:
+      - addresses
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorData'
+    PostMerchant:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/PostMerchantContractIdentification'
+        basic:
+          $ref: '#/components/schemas/PostMerchantBasic'
+        externalIds:
+          $ref: '#/components/schemas/ExternalIds'
+        refundLimits:
+          $ref: '#/components/schemas/MerchantRefundLimits'
+    MerchantBasic:
+      type: object
+      properties:
+        acquirerName:
+          type: string
+          description: Name of the acquirer
+        holdingName:
+          type: string
+          description: Name of the holding
+        merchantName:
+          type: string
+          description: Name of the merchant
+        masterCardAssignedId:
+          type: string
+          description: Unique identifier of the merchant, issued by Mastercard
+        visaMerchantVerificationValue:
+          type: string
+          description: Unique identifier of the merchant, issued by VISA
+        visaMerchantVolumeIndicator:
+          format: int32
+          type: integer
+          description: Used to identify merchant volume thresholds to be defined by Visa
+        participationMupp:
+          type: string
+          description: Indicates whether the merchant is enrolled in the Mastercard Utility Payment Program
+        masterCardPaymentFacilitatorId:
+          type: string
+          description: Payment facilitator ID, issued by Mastercard
+        visaPaymentFacilitatorId:
+          type: string
+          description: Payment facilitator ID, issued by VISA
+        paymentFacilitatorName:
+          type: string
+          description: (Abbreviation of the) name of the payment facilitator to be used as first part of the card acceptor name
+        countryOfOrigin:
+          type: string
+          description: Country of origin (home country) of a merchant that is owned by or under control of a government
+        merchantProfileId:
+          type: string
+          description: Unique identification of the merchant profile
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

@@ -1,0 +1,3427 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Corporate Contract - Global Search API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Corporate Contract - Global Search
+  description: Corporate Contract Global Search API Controller
+paths:
+  /search-corporate-contracts:
+    post:
+      tags:
+      - Corporate Contract - Global Search
+      summary: Search corporate contracts
+      operationId: searchCorporateContracts
+      description: "The API provides possibility to retrieve a list of corporate contracts, based on certain criteria.\n\nOnly one of the following criteria for searching must be provided:\n* the corporate name and optionally company postal address information (street name, building number, zip code).\n* or the reference of the company : it can be provided by using the customer reference or the issuer customer external reference.  \n\nIf requested, the API input parameters allows also to:\n* search from an issuer and optionally with sub-issuers OR search from a list of issuers (by default, the search is performed on all issuers allowed for the user depending on its rights)\n* retrieve contract owner information\n* request to enrich the response with additional data relative to the root account, the companies, the current addresses of the companies, the corporate contract entities and the corporate employee accounts by using embedded fields\n\nThe API response contains all matched corporate contracts and for each returned corporate contract some information is provided such as\n•\tcontract identifier with the contract reference, the issuer external contract reference if originally provided\n•\tembedded fields if requested such as root account, list of all companies (limited to 100) with their addresses linked to this corporate contract, corporate contract entities(limited to 100), corporate employee accounts(limited to 100)."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - rootAccount
+          - contractCompanies
+          - contractCompanies.addresses
+          - corporateContractEntities
+          - corporateEmployeeAccounts
+        collectionFormat: multi
+      - name: page
+        in: query
+        description: '0'
+        required: false
+        type: integer
+        default: 0
+        format: int32
+      - name: offset
+        in: query
+        description: '10'
+        required: false
+        type: integer
+        default: 10
+        format: int32
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/GlobalSearchCorporateContractRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityListCorporateContracts'
+      security:
+      - basic: []
+      deprecated: false
+definitions:
+  CustomerIdentifier:
+    type: object
+    description: Identification of the updated customer either by Issuer customer external reference or by customer reference
+    properties:
+      customerReference:
+        type: string
+        description: Reference computed internally by our system
+      issuerCustomerExternalReference:
+        type: string
+        description: Reference provided by the Issuer
+    title: CustomerIdentifier
+  CardIdentifier:
+    type: object
+    description: Identification of the card either by Issuer card external reference or by card reference
+    properties:
+      cardReference:
+        type: string
+        description: 'Reference of the card generated by our system, unique per platform.
+
+          This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
+      issuerCardExternalReference:
+        type: string
+        description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+
+          This reference is unique per issuer and may be used to carry out research and find information.'
+    title: CardIdentifier
+  CorporateContractFee:
+    type: object
+    allOf:
+    - $ref: '#/definitions/ContractFee'
+    - properties:
+        entityIdentifierMembershipFeePosting:
+          description: The corresponding entity identifier for Membership Fee posting
+          allOf:
+          - $ref: '#/definitions/FeePostingEntityIdentifier'
+        entityIdentifierAccountSetupFeePosting:
+          description: The corresponding entity identifier for Account Setup Fee posting
+          allOf:
+          - $ref: '#/definitions/FeePostingEntityIdentifier'
+    description: Specify the corporate contract Fee
+    title: CorporateContractFee
+  Customer:
+    type: object
+    required:
+    - onlineRiskCategory
+    - offlineRiskCategory
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      customerIdentifier:
+        description: Unique identifier. Refer to Customer Identifier data type for detail information
+        allOf:
+        - $ref: '#/definitions/CustomerIdentifier'
+      active:
+        type: boolean
+        description: DEPRECATED
+      birthDate:
+        type: string
+        format: date-time
+        description: Birth date of Person Customer (conditional depending on the card profile configuration). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+      birthPlace:
+        type: string
+        description: 'Birth Place of Person Customer (optional).
+
+          Free text'
+      commercialStatus:
+        type: string
+        description: Defines the commercial status of a Person Customer among a list of possible values configured per issuer. One of the possible values can be set as default value (eg. Normal, Address Only, Bankruptcy, Active Customer). (mandatory)
+      courtesyTitle:
+        type: string
+        description: Courtesy Title of Person Customer (optional). Free text. If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+      customerClass:
+        type: string
+        description: for future use (optional)
+      doNotContact:
+        type: boolean
+        description: if the Person Customer does not want to be contacted by the issuer set to 'true' otherwise to be set to 'false'. If not provided, value is NULL(optional)
+      employee:
+        type: boolean
+        description: Flag indicating if the Person Customer is an employee of the issuer. If not provided, value is NULL(optional)
+      employerAddress:
+        type: string
+        description: 'Employer''s Address of Person Customer (optional).
+
+          Free text'
+      employerName:
+        type: string
+        description: 'Employer''s Name of Person Customer. (optional).
+
+          Free text'
+      firstName:
+        type: string
+        description: First Name of Person Customer (mandatory)
+      lastName:
+        type: string
+        description: Last Name of Person Customer (mandatory)
+      maidenName:
+        type: string
+        description: Maiden Name of Person Customer (optional)
+      correspondenceName:
+        type: string
+        description: Correspondence Name of Person Customer (optional).
+      maritalStatus:
+        type: string
+        description: Marital Status of Person Customer. Free text (optional)
+      monthlySalary:
+        type: string
+        description: Average monthly salary of Person Customer (optional)
+      nationality:
+        type: string
+        description: Nationality of Person Customer(optional). Free text.
+      offlineRiskCategory:
+        type: string
+        description: 'Categorizes the person for offline risk management. List of possible values is defined per Issuer  (eg.Business, Student, Teenager, Standard). '
+      onlineRiskCategory:
+        type: string
+        description: 'Categorizes the person for online risk management. List of possible values is defined per Issuer (eg.Business, Student, Teenager, Standard) (mandatory) '
+      partnerExternalReference:
+        type: string
+        description: External Reference provided by the issuer (optional)
+      picture:
+        type: string
+        description: 'Picture reference of the Person Customer (eg url, filename). Free text.
+
+          (optional)'
+      preferredCorrespondanceLanguage:
+        type: string
+        description: Deprecated
+      preferredCorrespondenceLanguage:
+        type: string
+        description: Preferred correspondence language of the Person Customer (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+      profession:
+        type: string
+        description: 'Profession of Person Customer. Free text.
+
+          (optional)'
+      secondFirstName:
+        type: string
+        description: Second First Name of Person Customer (optional)
+      secretAnswer:
+        type: string
+        description: Answer to Secret Question for security (optional)
+      secretQuestion:
+        type: string
+        description: Secret Question for security (optional)
+      sex:
+        type: string
+        description: Gender of Person Customer (optional). Free text. If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to a customer that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      url1:
+        type: string
+        description: First URL of the Person Customer (optional)
+      url2:
+        type: string
+        description: Second URL of the Person Customer (optional)
+      vatCountry:
+        type: string
+        description: 'Tax country. Useful if Person is indeed a company.
+
+          (optional)'
+      vatNumber:
+        type: string
+        description: 'Tax number. Useful if Person is indeed a company.
+
+          (optional)'
+      addressIdentifiers:
+        type: array
+        description: 'List of active address references whatever their type (MAIL, EMAIL, PHONE). The address can be a temporary address if it is active at the time of the request.
+
+          At least, the main postal address reference should be retrieved (mandatory)
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/AddressIdentifier'
+      addresses:
+        type: array
+        description: 'List of active addresses whatever their type (MAIL, EMAIL, PHONE). See the Address''s datatype for the detail list of the attributes
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Address'
+      vulnerabilities:
+        description: List of vulnerabilities applicable to the customer.
+        type: array
+        items:
+          $ref: '#/definitions/Vulnerability'
+      vulnerabilityIndicator:
+        type: boolean
+        description: indicates if the client is vulnerable
+      vulnerabilityNote:
+        type: string
+        description: note about the client's vulnerability (free text)
+      contactIdentifiers:
+        type: array
+        description: 'List of contact references of the customer.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/ContactIdentifier'
+      contacts:
+        type: array
+        description: 'List of contacts of the customer.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Contact'
+      lastUpdateDate:
+        type: string
+        format: date-time
+        description: Indicates the date when the update is processed
+    title: Customer
+  ProductIdentifier:
+    type: object
+    properties:
+      issuerProductExternalReference:
+        type: string
+        description: Product External Reference provided by the issuer
+      productReference:
+        type: string
+        description: Reference of the product in our system, unique per platform
+    title: ProductIdentifier
+  AccountStatusHistory:
+    type: object
+    properties:
+      status:
+        type: string
+        description: Status of the account on the particular statusDate (optional)
+      statusDate:
+        type: string
+        format: date-time
+        description: Date of the account status change (optional)
+      reason:
+        type: string
+        description: Reason the status has been set (optional)
+    title: AccountStatusHistory
+  InsurancePackageIdentifier:
+    type: object
+    description: Unique identifier of the insurance contract package
+    properties:
+      insurancePackageReference:
+        type: string
+        description: Reference of the insurance package
+    title: InsurancePackageIdentifier
+  CycleInformation:
+    type: object
+    description: Dates related to the closure calendar for the open closure cycle
+    properties:
+      cycleStartDate:
+        type: string
+        format: date-time
+        description: Date when the cycle is opened
+      cycleClosureDate:
+        type: string
+        format: date-time
+        description: Date when the open cycle is closed
+      statementGenerationDate:
+        type: string
+        format: date-time
+        description: Date when the statement is produced for the cycle
+      directDebitIssuingDate:
+        type: string
+        format: date-time
+        description: Direct debit issuing date of the cycle
+      directDebitDueDate:
+        type: string
+        format: date-time
+        description: Direct debit due date of the cycle
+      gracePeriodEndDate:
+        type: string
+        format: date-time
+        description: Grace period end date of the cycle
+      dueDateForSelfPayer:
+        type: string
+        format: date-time
+        description: Due date for self payer of the cycle
+      cycleDueDate:
+        type: string
+        format: date-time
+        description: Due date of the cycle, used for monitoring process (delinquency)
+      statementEffectiveStartDate:
+        type: string
+        format: date
+        description: "Effective start date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
+      statementEffectiveEndDate:
+        type: string
+        format: date
+        description: "Effective end date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
+    title: CycleInformation
+  ContractModel:
+    type: object
+    properties:
+      reference:
+        type: string
+        description: Model Reference
+      type:
+        type: string
+        description: 'Type of model
+
+          Possible values:
+
+          - ACCOUNT_SETUP_FEE
+
+          - MEMBERSHIP_FEE'
+    description: Model containing predefined configuration for fee generation applicable on a contract
+    title: ContractModel
+  EncryptedPan:
+    type: object
+    properties:
+      encryptedValue:
+        type: string
+      publicKeyIdentifier:
+        type: string
+    title: EncryptedPan
+  PinInheritanceExternalCardIdentifier:
+    type: object
+    properties:
+      pinInheritanceExternalCardReference:
+        type: string
+        description: Reference of the external card used when the card is only known by the PIN management module (used in migration context)
+    title: PinInheritanceExternalCardIdentifier
+  ContactIdentifier:
+    type: object
+    properties:
+      contactReference:
+        type: string
+        description: Contact identifier (unique per company)
+    title: ContactIdentifier
+  GlobalSearchCorporateContractRequestPostalAddress:
+    type: object
+    properties:
+      streetName:
+        type: string
+        description: 'The street name where is located the company.
+
+          This criteria is optional and accept wildcards (''%'' allows to achieve a search with only a partial input, ''Plat%'', ''%hill'', ''Al%gang'')'
+      buildingNumber:
+        type: string
+        description: 'The building number where is located the company.
+
+          This criteria is optional and accept wildcards (''%'' allows to achieve a search with only a partial input, ''12t%'', ''%4bll'')'
+      postCode:
+        type: string
+        description: 'The postal code where is located the company.
+
+          This criteria is optional and accept wildcards (''%'' allows to achieve a search with only a partial input, ''91%'', ''%41l'')'
+    title: GlobalSearchCorporateContractRequest.PostalAddress
+  Order:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      orderType:
+        type: string
+        description: 'The order can correspond to a card, a PIN mailer or a TAN mailer.
+
+          Possible values are : CardOrder, PinMailerOrder, TanMailerOrder'
+      orderIdentifier:
+        description: 'Unique identifier of the order (mandatory)
+
+          Refer to OrderIdentifier data type for detail information'
+        allOf:
+        - $ref: '#/definitions/OrderIdentifier'
+      currentExternalStatus:
+        type: string
+        description: 'Current external status of the order (optional)
+
+          The list of external statuses is configurable per issuer.
+
+          The external status can be used to follow the card producing status for the card order e.g. received, embossed, sent, etc.'
+      currentExternalStatusDate:
+        type: string
+        format: date-time
+        description: Modification date of the last external status of the order (optional)
+      currentInternalStatus:
+        type: string
+        description: 'Current internal status of the order (mandatory)
+
+          Possible values: are: CREATED, CONFIRMED, ORDERED, REJECTED, CANCELLED, FINISHED, ORDERABLE'
+      currentInternalStatusDate:
+        type: string
+        format: date-time
+        description: Last modification date of the internal status of the order (optional)
+      sendingMode:
+        type: string
+        description: 'Code identifying the desired sending mode for the order (mandatory)
+
+          Example: Normal, Urgent, Ultra Urgent'
+      deliveryChannel:
+        type: string
+        description: 'Code of the delivery channel for the card
+
+          The list of delivery channels is configurable per Issuer.'
+      deliveryType:
+        type: string
+        description: 'Indicates whether the delivery of the card should be to branch or customer (instead of the one from the distribution rule of the card product) (optional)
+
+          Possible values: CUSTOMER (the card is to be delivered to the customer address, BRANCH (the card is to be delivered to the bank branch)'
+      orderReason:
+        type: string
+        description: 'Reason why the order is done (mandatory)
+
+          Possible values are: CARD_RENEWAL, PIN_CARD_RENEWAL, FIRST_CARD_ISSUE, FIRST_PIN_CARD_ISSUE, CARD_REPLACEMENT, PIN_CARD_REPLACEMENT, PIN_REMINDER, PIN_REORDER, TAN_REQUEST'
+      statusHistory:
+        type: array
+        description: 'List of order status history data
+
+          Refer to OrderStatusHistory data type for detail information.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/OrderStatusHistory'
+      cardProducer:
+        type: string
+        description: 'It is the card producer or embosser.
+
+          It is present if it is different than the default one (defined in the card profile) and was provided when requesting the card creation.
+
+          The list of allowed card producer is configurable per issuer.'
+      pinMailerEditor:
+        type: string
+        description: 'It is the PIN mailer printer.
+
+          It is present if it is different than the default one (defined in the card profile) and was provided when requesting the card/PIN creation.
+
+          The list of allowed PIN mailer editors is configurable by issuer.'
+      deliveryBranchCode:
+        type: string
+        description: 'Code of the delivery branch (mandatory only if card delivery type is BRANCH)
+
+          The list of issuer branches is configurable  per Issuer.
+
+          The branch code is used to access a preconfigured Postal address (configured in the system).'
+      customDeliveryAddressee:
+        type: string
+        description: "Custom postal address to send the order \n Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information."
+      customDeliveryAddress:
+        description: 'Custom postal address to send the order
+
+          Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information.'
+        allOf:
+        - $ref: '#/definitions/MailAddress'
+      customDeliveryPhone:
+        description: 'Custom phone to send the card.
+
+          NOT USED'
+        allOf:
+        - $ref: '#/definitions/PhoneNumber'
+      customDeliveryEmail:
+        description: 'Custom email to send the card.
+
+          NOT USED'
+        allOf:
+        - $ref: '#/definitions/EmailAddress'
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to an order that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      card:
+        description: 'Card information related to the order.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/Card'
+      cardIdentifier:
+        description: Unique identifier of the card
+        allOf:
+        - $ref: '#/definitions/CardIdentifier'
+      embossingFileName:
+        type: string
+        description: Embossing file name in CardOrder
+      tanOrigin:
+        type: string
+        description: Origin of the TAN request, e.g. GUI. (free text)
+      tanBackupMethod:
+        type: string
+        description: The backup method that should be applied for TAN mailer order.
+      tanExpiryDate:
+        type: string
+        format: date-time
+        description: Expiry date of the TAN, date until which the TAN can used (mandatory for TanMailerOrder)
+      tanStatus:
+        type: string
+        description: 'Status of the TAN (mandatory for TanMailerOrder)
+
+          Possible values: CREATED, FAILED, ACTIVE, USED, EXPIRED'
+      freeTanMailerCounter:
+        type: integer
+        description: Number of free TAN requests (optional)
+      tanUsageDate:
+        type: string
+        format: date-time
+        description: Date when the TAN was used to change the PIN (optional)
+      free:
+        type: boolean
+        description: Indicates if the operation is free (true) or not (false). Default value is false (mandatory)
+      tanValue:
+        type: string
+        description: Clear value of the TAN (mandatory for TanMailerOrder)
+      feeConditions:
+        type: array
+        description: Conditions of the fee generation (if fee configured in the product) (optional)
+        items:
+          $ref: '#/definitions/FeeCondition'
+      notExtractedReason:
+        type: string
+        description: In case the order will not be extracted because of invalid customer address, then it will be indicated in this field
+      notExtractedUpdateDate:
+        type: string
+        format: date-time
+        description: The last update date of notExtractedReason field
+      waitingPin:
+        type: boolean
+        format: date-time
+        description: 'This flag is used only for a card order or a PIN mailer order.
+
+          - If this flag is true, the PIN is waiting to be provided by the cardholder (the mode “Self Selected Pin” is activated in the PIN production model). Depending on the configuration, after x days, the card is extracted with a default PIN if the cardholder has not provided a PIN.
+
+          - If this flag is false, the PIN is not waiting to be provided , e.g. the PIN has been generated by PMM or provided by the cardholder.'
+    title: Order
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  GlobalSearchCorporateContractRequest:
+    type: object
+    required:
+    - contractCompany
+    properties:
+      contractCompany:
+        type: object
+        description: The issuer must provide some information related to the company to filter the corporate contracts to be returned.
+        allOf:
+        - $ref: '#/definitions/GlobalSearchCorporateContractRequestCompany'
+      issuerId:
+        type: string
+        description: 'The search is performed by default on all issuers allowed for the user (depending on its rights)
+
+          - The user can limit the search to one issuer (optional).
+
+          - If provided, the list of issuerIds must not be provided, otherwise the search is not performed (an error is generated).'
+      includeSubIssuers:
+        type: boolean
+        description: 'The user can request to include in the search the sub issuers of an issuer, limited to issuers allowed for the user depending on its rights, only if an issuerId is provided.
+
+          Default value is false.'
+        default: false
+      issuerIds:
+        type: array
+        description: 'The search is performed by default on all issuers allowed for the user (depending on its rights)
+
+          - The user can limit the search to a list of issuers (optional)
+
+          - If provided, the issuerId must not be provided, otherwise the search is not performed (an error is generated).
+
+          - If at least one issuer is not allowed for this user among the provided list of issuers, the search is not performed (an error is generated).'
+        items:
+          type: string
+      retrieveContractOwner:
+        type: boolean
+        description: "Optional parameter to enrich the information retrieved.\n If the parameter is set to true, the contract owner will be retrieved in the list of companies.\n If the embed parameter contractCompanies is not requested and the parameter is set to true, an error will be raised."
+    title: GlobalSearchCorporateContractRequest
+  Card:
+    type: object
+    required:
+    - issuerId
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      cardIdentifier:
+        description: Identification of the card either by Issuer card external reference or by card reference
+        allOf:
+        - $ref: '#/definitions/CardIdentifier'
+      encryptedPan:
+        description: This field returns the encrypted PAN and the public key identifier if the encryption is activated on the platform.
+        allOf:
+        - $ref: '#/definitions/EncryptedPan'
+      pan:
+        type: string
+        description: "Primary Account Number (PAN) also called card number (mandatory) \n It is calculated by our system from the BIN range associated to the card product or provided by the issuer."
+      maskedPan:
+        type: string
+        description: "Masked Primary Account Number (PAN) of the card (optional). \nExample: 445442******0275\nThe mask is defined per platform."
+      panReference:
+        type: string
+        description: "Reference related to the PAN\nCards having the same PAN have the same PAN reference.\nPAN reference is generated in the system according to the following algorithm : \n1 (VISA) or 2 (MCI) + 3 last digit of issuer + UUID (without the -)\nExample : 1006f041ae6814bf4f068aa501141c85d57d"
+      expiryDate:
+        type: string
+        description: 'Card expiry date (mandatory)
+
+          Format is MMYY (month and year)'
+      panSequenceNumber:
+        type: string
+        description: PAN sequence number is a number (usually from 1 to N) that allows identifying either cards with same PAN or cards with same PAN and same Expiry date
+      status:
+        type: string
+        description: "Current status of the card (mandatory) \n Possible values: CREATED, ACTIVE, BLOCKED, DEACTIVATED, CANCELLED\n Status of the card (mandatory)\n The card status is changing during its life cycle according to business processes in the system.\n Possible values are :\n CREATED : The first status when the card is created. The card is not usable.\n ACTIVE : Card is active and ready for authorizations processing\n Examples of business processes triggering this status: contract creation request as per product configuration, card activation request, contract creation after a product change request.\n BLOCKED : card is blocked permanently (final status) or temporarily. Related authorizations are declined.\n DEACTIVATED : Card is deactivated (final status) and related authorizations are declined\n Examples of business processes triggering this status: contract closing request, card contract closing, contract closure after a product change request. Card was in ACTIVE status previously.\n CANCELLED : Card is cancelled (final status). Card has never been activated.\n Examples of business processes triggering this status: contract closing request, card contract closing, contract closure after a product change request. Card was in CREATED status previously."
+      statusDate:
+        type: string
+        format: date-time
+        description: Last card status change date (mandatory)
+      externalStatus:
+        type: string
+        description: 'External status of the card
+
+          Possible values are:
+
+          - IN_PROGRESS (it implies the card has not registered in all the WL systems)
+
+          - CREATED (it implies the card is registered in all the WL systems and ready for use)
+
+          - ERROR (the synchronization process between WL systems is failed)'
+      statusHistory:
+        type: array
+        description: 'List of card status history
+
+          Refer to resource CardStatusHistory for detail information
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/CardStatusHistory'
+      embossingName:
+        type: string
+        description: 'First line of the name embossed on the physical card (mandatory)
+
+          It can be provided by the issuer or calculated by our system (if allowed within card Technology and Application model and depending on the selected embossing name calculation algorithm)'
+      embossingName2ndLine:
+        type: string
+        description: 'Second line of the name embossed on the physical card, optional, can be provided only in addition to the first line.
+
+          It can be provided by the issuer or calculated by our system (if embossing name is required within card Technology and Application model and depending on the selected embossing name calculation algorithm)'
+      embossingLine5:
+        type: string
+        description: 'Specific additional embossing line that can be used by the issuer (mandatory only if required within card Technology and Application model)
+
+          It is sent out to the embosser with card order.'
+      artwork:
+        type: string
+        description: Artwork (card design) used for the physical card (mandatory)
+      permanentlyBlocked:
+        type: boolean
+        description: Indicates if the card is permanently blocked (true) or not (false). Default value is false
+      emergencyCard:
+        type: boolean
+        description: This attribute indicates if the card is an emergency card (scheme emergency card service).
+      emergencyCashAdvance:
+        type: boolean
+        description: Deprecated - Not used
+      renewed:
+        type: boolean
+        description: Indicates if the card is renewed (true) or not (false). Default value is false
+      replaced:
+        type: boolean
+        description: Indicates if the card is replaced (true) or not (false). Default value is false
+      replacementReason:
+        type: string
+        description: 'Reason for replacing a card (mandatory only if the card is replaced)
+
+          The list of replacing reasons is configurable per issuer (For example, LOST, STOLEN, FRAUDULENT …)'
+      blockingReason:
+        type: string
+        description: 'Reason for blocking a card (mandatory only if card status is blocked)
+
+          The list of blocking reasons is configurable per issuer (For example, LOST, STOLEN, FRAUDULENT …)'
+      pinInheritanceCardIdentifier:
+        description: Identifier of the card from which the PIN is inherited (card is known in the issuing system).
+        allOf:
+        - $ref: '#/definitions/PinInheritanceCardIdentifier'
+      pinInheritanceCardReference:
+        type: string
+        description: Deprecated
+      pinInheritanceExternalCardIdentifier:
+        description: Identifier of the external card used when the card is only known by the PIN management module.
+        allOf:
+        - $ref: '#/definitions/PinInheritanceExternalCardIdentifier'
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to a card that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      renewedBy:
+        description: 'Card identifier of the new card created during the renewal process.
+
+          Relevant information for the renewed card.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/CardIdentifier'
+      replacementBy:
+        description: 'Card identifier of the new card created during the replacement process.
+
+          Relevant information for the replaced card.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/CardIdentifier'
+      renewedFor:
+        description: 'Card identifier of the renewed card.
+
+          Relevant information for the new card created during the renewal process.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/CardIdentifier'
+      replacementFor:
+        description: 'Card identifier of the replaced card.
+
+          Relevant information for the new card created during the replacement process.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/CardIdentifier'
+      cardContractIdentifier:
+        description: Card Contract Identifier
+        allOf:
+        - $ref: '#/definitions/CardContractIdentifier'
+      cardContract:
+        description: 'Card Contract
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/CardContract'
+      orderIdentifiers:
+        type: array
+        description: 'Order Identifiers
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/OrderIdentifier'
+      orders:
+        type: array
+        description: 'List of orders linked to the Card
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Order'
+      isCardDigitalizationAllowed:
+        type: boolean
+        description: "Indicates if the digitalization of the card is allowed (true) or not (false, default value). \nThis attribute is returned during wallets (e.g. GooglePay, ApplePay) enrollment process to e.g. the Issuer TSP (in case the card digitalization is not allowed then the Issuer TSP should decline the enrollment)."
+        default: false
+      multiCardInfo:
+        description: Multi card set if the card belongs to a multi card set
+        allOf:
+        - $ref: '#/definitions/MultiCardInfo'
+      cardScheme:
+        type: string
+        description: 'Card scheme to which the BIN of the card is belonging '
+      virtual:
+        type: boolean
+        description: Indicates if the card is physical or virtual
+      contactlessEnabled:
+        type: boolean
+        description: Indicates if the chip contactless capability enabled or not
+      technologyType:
+        type: string
+        description: "Technology of the card (code/short name)\nPossible values are : \n- VIRTUAL\n- EMV\n- MAGSTRIPE\n- EMV_MAGSTRIPE\n- CONTACT_ONLY (contact only for EMV card with magstripe)\n- DUAL_INTERFACE (contact+contactless for EMV card with magstripe)"
+      techAndAppModelName:
+        type: string
+        description: Technology and application model name of the card
+      photoReference:
+        type: string
+        description: Reference of the photo sent to the embosser and retrieved from the card contract during the card order extraction (optional).
+      pictureReference:
+        type: string
+        description: Reference of the picture sent to the embosser and retrieved from the card contract during the card order extraction (optional).
+      logoReference:
+        type: string
+        description: 'Reference of the company logo sent to the embosser and retrieved from the card contract during the card order extraction (optional).
+
+          Relevant only for corporate cards.'
+      dispatchCode:
+        type: string
+        description: If present the dispatch code is sent to the embosser. The dispatch code defines the corporate card orders delivery address which is known and managed by the embosser (Corporate cards only). If not present the standard process is applied to retrieve the card delivery address.
+      automaticDeactivationDate:
+        type: string
+        format: date-time
+        description: Date when the card is deactivated automatically (x days after its replacement if the feature is enabled).
+      contractType:
+        type: string
+        description: "Indicates if the card is a consumer (private) or corporate card. \n Possible values: \n CORPORATE \nCONSUMER "
+        enum:
+        - CORPORATE
+        - CONSUMER
+      cardDeactivationRuleOverride:
+        type: string
+        description: 'Indicates which card deactivation rule is enabled for the card. It overrides the product card deactivation rule Possible value : FIRST_APPROVED_AUTHO (1st approved online authorization)'
+      partnerExternalCardReference:
+        type: string
+        description: This reference is generated by our system using rules define with the issuer that needs it.
+      recovered:
+        type: boolean
+        description: Indicates if the card is recovered (true) or not (false). Default value is false.
+      recoveryDate:
+        type: string
+        format: date-time
+        description: Date when the card was recovered. Only relevant if the card is recovered.
+      lastSavingMeasureCode:
+        type: string
+        description: 'Indicates the last saving measure applied (a saving measure is used to forbid some actions or remove the forbidding. For example: block the card replacement, the card renewal, the PIN mailer reprint)'
+    title: Card
+  FeeCondition:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Conditions of the fee generation for the event (optional)
+      operationType:
+        type: string
+        description: 'Contains the type of the operation on which the criteria applies
+
+          For example: PinOrderIssuing - PIN_REQUEST (optional)'
+      criteria:
+        type: string
+        description: 'Criteria of the fee condition
+
+          For example:
+
+          (counter[''ALL''] - counter[''IVR''] ) > 1 => If the condition is successfull, one Fee is allocated (optional)'
+    title: FeeCondition
+  FeePostingEntityIdentifier:
+    type: object
+    properties:
+      postingEntityAccountIdentifier:
+        description: The account identifier of the entity on which Membership Fee or Account setup Fee will be posted
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      postingEntityCompanyExternalReference:
+        type: string
+        description: The external reference of the entity, provided by the Company, on which Membership Fee or Account setup Fee will be posted
+      postingEntityLevel:
+        type: integer
+        description: The corporate entitity level number on which Membership Fee or Account setup Fee will be posted
+    title: FeePostingEntityIdentifier
+  MailAddress:
+    type: object
+    required:
+    - country
+    properties:
+      typeCode:
+        type: string
+        description: Deprecated field
+      line1:
+        type: string
+        description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line2:
+        type: string
+        description: Address line 2 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line3:
+        type: string
+        description: Address line 3 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line4:
+        type: string
+        description: Address line 4 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line5:
+        type: string
+        description: Address line 5 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      buildingNumber:
+        type: string
+        description: Building number of the address (optional)
+      boxNumber:
+        type: string
+        description: Box number of the address (optional)
+      streetName:
+        type: string
+        description: Street name of the address (optional)
+      postCode:
+        type: string
+        description: Zip Code of the address (optional)
+      townName:
+        type: string
+        description: 'City corresponding to the address '
+      countrySubdivision:
+        type: string
+        description: Subdivision of the country (optional)
+      country:
+        type: string
+        description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+      countryName:
+        type: string
+        description: Country Name of the address. Free text
+      courtesyTitle:
+        type: string
+        description: Courtesy title of the address. Free text
+    title: MailAddress
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  AccountOutgoingCreditTransferFeature:
+    type: object
+    properties:
+      periodicOctAllowed:
+        type: boolean
+        description: "This field indicates if the issuer can override  the  periodic OCT option. \nTo override the option, the reimbursement model attached to the contract must be configured to accept the change of the default choice."
+      periodicOctType:
+        type: string
+        description: "This field indicates the periodic OCT type \nPossibles values:\n- DAILY (OCT can be triggered on a daily basis if account is in credit position)\n- CYCLIC (OCT can be triggered at cycle closure date if account is in credit position).\nIt can be overridden if the reimbursement model accepts the change of the default choice."
+        enum:
+        - DAILY
+        - CYCLIC
+      periodicMaxThreshold:
+        description: 'Threshold amount used for generating the periodic OCT. When the account balance is greater than the threshold, the OCT amount will be equal to the (account credit balance - threshold amount). Ex: threshold is 10.000€ and credit balance is : 15.000€: the OCT amount is 5.000€.
+
+          The threshold amount can be overridden if the reimbursement model accepts the change of the default threshold.'
+        allOf:
+        - $ref: '#/definitions/Amount'
+      octOnContractTerminationAllowed:
+        type: boolean
+        description: 'This field indicates the "OCT on contract termination" option
+
+          The option can be modified if it is allowed within the reimbursement model to change the default choice.'
+      octOnAccountTerminationAllowed:
+        type: boolean
+        description: 'This field indicates the option to generate an OCT when card account is closed.
+
+          The option can be modified if it is allowed within the reimbursement model to change the default choice.'
+      octOnContractSuspensionAllowed:
+        type: boolean
+        description: 'This field indicates if an Outgoing Credit Transfer is required or not when the contract is suspended.
+
+          The value is initialized from the product and can be overridden if this is allowed by the product (in reimbursement model).'
+      octOnDemandAllowed:
+        type: boolean
+        description: "This field indicates the \"OCT on demand\" option. \nThe option can be modifed if it is allowed within the reimbursement model to change the default choice."
+      octOnDemandLimitType:
+        type: string
+        description: 'This field indicates the limit type of the "OCT on demand" option.
+
+          Possible values:
+
+          - BALANCE (= a customer can only request an OCT in case of account in credit position)
+
+          - OTB (open-to-buy) (=a customer can request an OCT from its current Open-to-buy (so from its credit limit allowed by the issuer)
+
+          The limit type can be modified if it is allowed within the reimbursement model.'
+        enum:
+        - OTB
+        - BALANCE
+      octOnContractTerminationType:
+        type: string
+        enum:
+        - CONTRACT_TERMINATION
+        - ACCOUNT_CLOSING
+    description: Specify OctFeature (periodicOct, periodicOctType, periodicOctMaxThreshold, etc.)
+    title: AccountOutgoingCreditTransferFeature
+  CorporateContractLevel:
+    type: object
+    properties:
+      level:
+        type: string
+        description: Level number in the company organization (e.g. 1 corresponding to the company, 2 corresponding to country)
+        example: '1'
+      levelDescription:
+        type: string
+        description: Description of the level in the company organization (e.g. Company for level 1, Country for level 2)
+    description: Specify the level in the company organization
+    title: CorporateContractLevel
+  ProductExtensionIdentifier:
+    properties:
+      issuerProductExtensionExternalReference:
+        description: External reference of the product extension provided by the issuer and defined for a product (e.g. it can be used when adding cards and accounts to a contract )
+        type: string
+    title: ProductExtensionIdentifier
+    type: object
+  CorporateEmployeeAccount:
+    type: object
+    properties:
+      accountIdentifier:
+        description: Identifier of the employee account
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      account:
+        description: 'List of all accounts (with account data) linked to the employee.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/Account'
+      parentCompanyEntityExternalReference:
+        type: string
+        description: "Entity external reference of the parent account \nEmpty for the root"
+      cardContracts:
+        type: array
+        description: 'List of all cardContracts (with cardContract data) belonging to this corporate contract.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/CardContract'
+      customerIdentifiers:
+        type: array
+        description: List of customers (only identifiers) belonging to this corporate employee account as e.g. account owner, cardholder.
+        items:
+          $ref: '#/definitions/CustomerIdentifier'
+      customers:
+        type: array
+        description: 'List of customers (with customer data) belonging to this corporate employee account as e.g. account owner, cardholder.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Customer'
+      parentAccountIdentifier:
+        description: Account identifier of the parent account. Each card account is linked to a parent account of the hierarchy (entity)
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      companyEntityExternalReference:
+        type: string
+        description: External reference of the entity used for the employee account
+      advertisementFlags:
+        description: Specify possible channels used to provide advertisements (email, letter, phone, statement, sms) for the employee account
+        allOf:
+        - $ref: '#/definitions/AdvertisementFlags'
+      deliveryChannel:
+        description: 'Specify the channel for letter delivery used for the employee account
+
+          Possible values: WEB, LETTER, LETTER_AND_WEB'
+        allOf:
+        - $ref: '#/definitions/DeliveryChannel'
+      postingAccountForMembershipFee:
+        type: string
+        description: DEPRECATED
+      postingAccountForAccountSetupFee:
+        type: string
+        description: DEPRECATED
+      waiveFee:
+        type: boolean
+        description: Indicates if contract related fees, membership fee and account setup fee, are waived (true) or not (false, by default) for this employee account.
+        default: false
+      corporateProductType:
+        type: string
+        description: 'Type indicating if the account represents an employee, a company or an intermediate
+
+          Possible values: EMPLOYEE, COMPANY, INTERMEDIARY'
+      contractFee:
+        description: Contract Fee Models used for the account (Account setup fee and/or Membership fee models).
+        allOf:
+        - $ref: '#/definitions/CorporateContractFee'
+      entityIdentifierMembershipFeePosting:
+        description: DEPRECATED
+        allOf:
+        - $ref: '#/definitions/FeePostingEntityIdentifier'
+      entityIdentifierAccountSetupFeePosting:
+        description: DEPRECATED
+        allOf:
+        - $ref: '#/definitions/FeePostingEntityIdentifier'
+    description: Specify the corporate employee account
+    title: CorporateEmployeeAccount
+  AddressUsage:
+    type: object
+    required:
+    - addressUsageName
+    - serviceCode
+    properties:
+      addressUsageName:
+        type: string
+        example: STATEMENT_SENDING
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+      entityReference:
+        type: string
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+      serviceCode:
+        type: string
+        example: ACCOUNT_SERVICE
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
+    title: AddressUsage
+  ApiResponseEntityListCorporateContracts:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        type: array
+        description: Response data
+        items:
+          $ref: '#/definitions/CorporateContract'
+    description: Issuer response entity
+    title: ApiResponseEntityListCompany
+  MultiCardInfo:
+    type: object
+    properties:
+      multiCardReference:
+        type: string
+        description: Main card reference
+      samePin:
+        type: boolean
+        description: Indicate if multi card set shares same PIN
+      multiCards:
+        type: array
+        description: List of multi cards
+        items:
+          $ref: '#/definitions/MultiCard'
+    title: MultiCardInfo
+  AccountModel:
+    type: object
+    properties:
+      type:
+        type: string
+        description: "Type of an account model\nPossible values:\n•\teventFeeModel\n•\ttransactionFeeModel\n•\tmarkupFeeModel\n•\trestrictionModel\n•\tdebitInterestModel\n•\tinterestModel\n•\tdirectDebitAmountModel\n•\taccountAmountDueModel \n•\tstatementModel"
+      reference:
+        type: string
+        description: Reference to the particular model that has been selected in selectedModels
+      originalModelReference:
+        type: string
+        description: DEPRECATED
+    title: AccountModel
+  AccountHierarchyModel:
+    type: object
+    properties:
+      type:
+        type: string
+        description: 'Model type of the account hierarchy
+
+          Possible value:
+
+          • reimbursementModel.'
+      reference:
+        type: string
+        description: Reference to the particular model that has been selected in hierarchySelectedModels.
+    title: AccountHierarchyModel
+  ExternalRestriction:
+    type: object
+    required:
+    - externalRestrictionIdentifier
+    properties:
+      externalRestrictionIdentifier:
+        description: Reference value for external restriction (Velocity limit) (mandatory)
+        allOf:
+        - $ref: '#/definitions/ExternalRestrictionIdentifier'
+      maximumAmount:
+        description: Maximum amount of provided velocity limit (optional)
+        allOf:
+        - $ref: '#/definitions/Amount'
+      minimumAmount:
+        description: Minimum amount of provided velocity limit (optional)
+        allOf:
+        - $ref: '#/definitions/Amount'
+      maximumCount:
+        type: integer
+        description: Maximum count of transaction to be done using velocity limit
+      priority:
+        type: string
+        description: In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a velocity check and an account
+    title: ExternalRestriction
+  HierarchyOutgoingCreditTransferFeature:
+    type: object
+    properties:
+      periodicOct:
+        type: boolean
+        description: "This field indicates if the issuer can override  the  periodic OCT option. \nTo override the option, the reimbursement model attached to the contract must be configured to accept the change of the default choice.\n"
+      periodicOctType:
+        type: string
+        description: "This field indicates the periodic OCT type \nPossibles values:\n- DAILY (OCT can be triggered on a daily basis if account is in credit position)\n- CYCLIC (OCT can be triggered at cycle closure date if account is in credit position).\nIt can be overridden if the reimbursement model accepts the change of the default choice."
+        enum:
+        - DAILY
+        - CYCLIC
+      periodicMaxThreshold:
+        description: 'Threshold amount used for generating the periodic OCT. When the account balance is greater than the threshold, the OCT amount will be equal to the (account credit balance - threshold amount). Ex: threshold is 10.000€ and credit balance is : 15.000€: the OCT amount is 5.000€.
+
+          The threshold amount can be overridden if the reimbursement model accepts the change of the default threshold.'
+        allOf:
+        - $ref: '#/definitions/Amount'
+      octOnContractTerminationAllowed:
+        type: boolean
+        description: 'This field indicates the "OCT on contract termination" option
+
+          The option can be modified if it is allowed within the reimbursement model to change the default choice.'
+      octOnAccountTerminationAllowed:
+        type: boolean
+        description: 'This field indicates the option to generate an OCT when card account is closed
+
+          The option can be modified if it is allowed within the reimbursement model to change the default choice.'
+      octOnContractSuspensionAllowed:
+        type: boolean
+        description: 'This field indicates if an Outgoing Credit Transfer is required or not when the contract is suspended.
+
+          The value is initialized from the product and can be overridden if this is allowed by the product (in reimbursement model).'
+      octOnDemandAllowed:
+        type: boolean
+        description: "This field indicates the \"OCT on demand\" option. \nThe option can be modified if it is allowed within the reimbursement model to change the default choice."
+      octOnDemandLimitType:
+        type: string
+        description: 'This field indicates the limit type of the "OCT on demand" option.
+
+          Possible values:
+
+          - BALANCE (= a customer can only request an OCT in case of account in credit position)
+
+          - OTB (open-to-buy) (=a customer can request an OCT from its current Open-to-buy (so from its credit limit allowed by the issuer)
+
+          The limit type can be modified if it is allowed within the reimbursement model.'
+        enum:
+        - OTB
+        - BALANCE
+      octOnContractTerminationType:
+        type: string
+        enum:
+        - CONTRACT_TERMINATION
+        - ACCOUNT_CLOSING
+    description: Specify OctFeature (periodicOct, periodicOctType, periodicOctMaxThreshold, etc.)
+    title: HierarchyOutgoingCreditTransferFeature
+  DeliveryChannel:
+    type: object
+    properties:
+      contractLetterType:
+        type: string
+        description: "Delivery channel used for card contract letters (optional) \nPossible values: EMAIL, WEB, LETTER, LETTER_AND_WEB, PUSH and MOBILE_APP"
+        enum:
+        - EMAIL
+        - WEB
+        - LETTER
+        - LETTER_AND_WEB
+        - PUSH
+        - MOBILE_APP
+        example: LETTER
+      disputeLetterType:
+        type: string
+        description: "Delivery channel used for dispute letters (optional) \nPossible values: EMAIL, WEB, LETTER, LETTER_AND_WEB, PUSH and MOBILE_APP"
+        enum:
+        - EMAIL
+        - WEB
+        - LETTER
+        - LETTER_AND_WEB
+        - PUSH
+        - MOBILE_APP
+        example: LETTER
+      statementType:
+        type: string
+        description: "Delivery channel used for statements (optional) \nPossible values: EMAIL, WEB, LETTER, LETTER_AND_WEB, PUSH and MOBILE_APP"
+        enum:
+        - EMAIL
+        - WEB
+        - LETTER
+        - LETTER_AND_WEB
+        - PUSH
+        - MOBILE_APP
+        example: LETTER
+    description: Specify the channel for letter delivery used for this contract
+    title: DeliveryChannel
+  AccountIdentifier:
+    type: object
+    properties:
+      accountReference:
+        type: string
+        description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+      issuerAccountExternalReference:
+        type: string
+        description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+    title: AccountIdentifier
+  EmailAddress:
+    type: object
+    required:
+    - email
+    properties:
+      email:
+        type: string
+        description: 'Email address of the Customer (mandatory). The email address should have the following format: aaa@bbb.ccc
+
+          aaa, bbb, ccc are character string.'
+    title: EmailAddress
+  InsuranceContract:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      insuranceContractIdentifier:
+        description: Unique identifier of the insurance contract
+        allOf:
+        - $ref: '#/definitions/InsuranceContractIdentifier'
+      accountIdentifier:
+        description: The account linked to the insurance contract
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      lastInsuranceEventCode:
+        type: string
+        description: Last insurance event code
+      lastInsuranceEventDate:
+        type: string
+        format: date-time
+        description: Last event date
+      insuranceEvents:
+        type: array
+        description: 'The list of insurance events linked to this contract.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/InsuranceEvent'
+      status:
+        type: string
+        description: Status of insurance contract
+      validFrom:
+        type: string
+        format: date-time
+        description: From when the contract is valid
+      accountOwnerBirthDate:
+        type: string
+        format: date-time
+        description: Owner's birth date
+      insurancePackage:
+        allOf:
+        - $ref: '#/definitions/InsuranceContractPackage'
+    title: InsuranceContract
+  CardContract:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      cardContractIdentifier:
+        description: Identification of the card contract either by Issuer card contract external reference or by card contract reference
+        allOf:
+        - $ref: '#/definitions/CardContractIdentifier'
+      cardTemplateReference:
+        type: string
+        description: Card template reference used for card contract creation
+      cardTypeCode:
+        type: string
+        description: Scheme card type from the card profile
+      cardTypeLabel:
+        type: string
+        description: Scheme card type label from the card profile
+      status:
+        type: string
+        description: 'Status of the card contract (mandatory)
+
+          The status of the card contract is changing during its life cycle according to business processes in the system.
+
+          Possible values are :
+
+          - CREATED : The first status when the card contract is created. Related card is not activated.
+
+          - ACTIVE : The card contract is active. Related card is activated as per product configuration
+
+          Examples of business processes triggering this status: contract creation request, contract creation after a product change request.
+
+          - CLOSED : The card contract is closed and the associated card is deactivated/cancelled (if not already permanently blocked). Card renewal and card replacement are not possible.
+
+          Examples of business processes triggering this status: contract closing request, card contract closing request, contract closure after a product change request.'
+      openingDate:
+        type: string
+        format: date-time
+        description: Creation date of the card contract (mandatory)
+      activationDate:
+        type: string
+        format: date-time
+        description: Date when the card contract becomes active in our system
+      closingDate:
+        type: string
+        format: date-time
+        description: Closing date of the card contract (present only in case of card contract is already closed or card contract closing is scheduled)
+      closingComment:
+        type: string
+        description: 'Comment associated with the card contract closing action (optional)
+
+          Free text'
+      closingReason:
+        type: string
+        description: Indicates the reason for closing the card contract (present only in case of card contract is already closed or card contract closing is scheduled) Free text
+      closingDelayType:
+        type: string
+        description: 'The closing type of the card contract (present only in case of card contract is already closed or card contract closing is scheduled)
+
+          The closing type can be:
+
+          IMMEDIATE (at current date)
+
+          SCHEDULED (at future date, greater than the current date)
+
+          SCHEDULED_EXP_DATE (at the expiration date of active card)'
+      trustedAuthenticationReference:
+        type: string
+        description: 'Unique reference generated by card management system used as trusted authentication credential
+
+          It is related to a card. Same reference is used in case of card renewal/replacement.
+
+          Used for ACS enrolment (3D Secure)'
+      newCardRenewalAllowed:
+        type: boolean
+        description: "Indicates if the renewal is allowed for a card (true) or not (false). \nDefault value is true."
+      blockingRenewalReasonCode:
+        type: string
+        description: 'Reason for blocking the renewal of a card (optional)
+
+          The list of renewal blocking reasons is configurable per issuer (For example : LOST, CREDIT_RISK, FRAUDULENT …)'
+      newCardReplacementAllowed:
+        type: boolean
+        description: 'Indicates if the replacement is allowed for a card (true) or not (false). Default value is false '
+      blockingReplacementReasonCode:
+        type: string
+        description: Reason for blocking the replacement of a card (optional) The list of replacement blocking reasons is configurable per issuer (For example, CONTRACT_SUSPENSION …)
+      blockingPinReorderReasonCode:
+        type: string
+        description: 'Mandatory reason to be set for blocking a pin reorder
+
+          The list of blocking reasons for pin reorder is configurable per issuer (For example, CONTRACT_SUSPENSION …)'
+      newPinReorderAllowed:
+        type: boolean
+        description: The pin reorder process can be blocked (blocking pin reorder reason code must be provided) or not.
+      blockingPinReminderReasonCode:
+        type: string
+        description: 'Mandatory reason to be set for blocking pin reminder
+
+          The list of blocking reasons for pin reminder is configurable per issuer (For example, CONTRACT_SUSPENSION …)'
+      newPinReminderAllowed:
+        type: boolean
+        description: The pin reminder process can be blocked (blocking pin reminder reason code must be provided) or not.
+      issuerBranchCode:
+        type: string
+        description: 'The Branch code (optional)
+
+          By default, the value is NO_BRANCH.'
+      artwork:
+        type: string
+        description: Artwork (card design) defined for the card contract (mandatory)
+      forcedEmbossingName:
+        type: string
+        description: First line of the name to be embossed on the next physical card if provided by the issuer (optional)
+      forcedEmbossingName2ndLine:
+        type: string
+        description: 'The second line of the name to be embossed on the physical card if provided by the issuer (optional)
+
+          Can be present (optional) only if first line of forced embossing name is present and if embossing name calculation algorithm accepts a second line.'
+      schemeDeclarationOptOut:
+        type: boolean
+        description: DEPRECATED
+      schemeReportDeclarationBehavior:
+        type: string
+        description: 'The issuer can indicate if the card events are reported to the scheme. Relevant only if the ABU-VAU program is enabled. If the ABU-VAU program is disabled, the use of this attribute generates an error. Possible values are: OPT_IN: the card events are reported to the scheme, OPT_OUT: the card events are not reported to the scheme. If the ABU-VAU program is enabled and the attribute is empty, the default value set on card product is applied.'
+      principalSupplementaryCardIndicator:
+        type: string
+        description: 'Indicates if it is a Principal card or an additional card (mandatory)
+
+          Possible values: PRINCIPAL, SUPPLEMENTARY'
+      productCategory:
+        type: string
+        description: 'Defines the category of the product (mandatory)
+
+          The list of product categories is configurable per issuer (e.g. CREDIT, DEBIT, PREPAID)'
+      productCategoryLabel:
+        type: string
+        description: 'Label of the product category (optional)
+
+          Example: IMMEDIATE_DEBIT_DEBIT, REVOLVING_CREDIT_CREDIT, DIFFERED_DEBIT_CREDIT'
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to a card contract that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      productIdentifier:
+        description: Identifier of the product used to create the contract to which the card contract is belonging. It corresponds also to the identifier of the product used to create the card contract if the card contract is created from the product directly.
+        allOf:
+        - $ref: '#/definitions/ProductIdentifier'
+      productExtensionIdentifier:
+        description: "Identifier of the product extension used to create the card contract. \n Relevant if the card contract is created from a product extension."
+        allOf:
+        - $ref: '#/definitions/ProductExtensionIdentifier'
+      selectedModels:
+        type: array
+        description: 'List of models linked to the card contract
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/CardContractModel'
+      cardClass:
+        type: string
+        description: 'Information provided by the issuer to categorize cards within a contract.
+
+          The list of allowed card classes is defined by the issuer at its convenience according to its own business rules (e.g special conditions on fees for example) and is configured at product level to be controlled at card creation.'
+      cardIdentifiers:
+        type: array
+        description: 'Card Identifiers
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/CardIdentifier'
+      cards:
+        type: array
+        description: 'List of cards linked to the card contract. See the Card''s datatype for the detail list of the attributes
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Card'
+      cardHolderIdentifier:
+        description: Card Holder Identifier
+        allOf:
+        - $ref: '#/definitions/CustomerIdentifier'
+      vipFlag:
+        type: boolean
+        default: false
+        description: "Indicates if the holder of the priority pass is a VIP or not. This information is used to determine the priority pass fees to apply. \n if true, VIP fees are applied.  \n If false, standard fees are applied. \n By default, the value is false."
+      contractIdentifier:
+        description: Contract Identifier
+        allOf:
+        - $ref: '#/definitions/ContractIdentifier'
+      relatedAccounts:
+        type: array
+        description: 'List of posting accounts linked to a card contract
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/AccountRelation'
+      cardProfileDescription:
+        type: string
+        description: Description of the card profile linked to a card
+      originalCardContractIdentifier:
+        description: CardContract Identifier of the original cardContract in case of ProductChange
+        allOf:
+        - $ref: '#/definitions/CardContractIdentifier'
+      changedCardContractIdentifier:
+        description: CardContract Identifier of the new cardContract in case of ProductChange
+        allOf:
+        - $ref: '#/definitions/CardContractIdentifier'
+      photoReference:
+        type: string
+        description: Reference of a cardholder photo used to personalise the card (free text), e.g. URL where object is stored, a reference (optional).
+      pictureReference:
+        type: string
+        description: Reference of an image used to personalise the card (free text), e.g. URL where object is stored, a reference (optional).
+      cardProfileReference:
+        type: string
+        description: Reference of the card profile.
+      mainCardIndicator:
+        type: boolean
+        description: Indicates whether the card is the main one or not for a mutli cards product
+      logoReference:
+        type: string
+        description: For a corporate card a logo reference can be provided (free text), e.g. alphanumeric value, numeric value, URL where the logo is stored. This logo reference is sent to the embosser with the card order data.
+      cardContractGroupReference:
+        type: string
+        description: Unique reference to group card contracts calculated by the system if required by the product configuration
+      contractType:
+        type: string
+        description: "Indicates if it is a consumer (private) or corporate card. \n Possible values: \n CORPORATE \n CONSUMER"
+        enum:
+        - CORPORATE
+        - CONSUMER
+      deviceTokensNumber:
+        type: integer
+        description: Indicates the number of device tokens on the card attached to the card contract
+      commercialProductReference:
+        type: string
+        description: Commercial reference of the card profile linked to a card
+      commercialProductDescription:
+        type: string
+        description: Commercial description of the card profile linked to a card
+      merchantTokensNumber:
+        type: integer
+        description: Indicates the number of merchant tokens on the card attached to the card contract
+      authorizationDataValidation:
+        description: Cardholder data defined at card contract level and used by the Front Office for verification (AVS/ANI)
+        allOf:
+        - $ref: '#/definitions/AuthorizationDataValidation'
+      contactCenters:
+        type: array
+        items:
+          $ref: '#/definitions/ContactCenter'
+      clickToPayEnrollment:
+        type: string
+        description: 'Indicates if the card enrollment in Click to Pay service is requested or not.
+
+          Possible values are :
+
+          - OPT_IN : enrollment of the card in Click to Pay service is requested.
+
+          - OPT_OUT : enrollment of the card in Click to Pay service is not requested.
+
+
+          Relevant only if the Click to Pay feature is enabled.'
+    title: CardContract
+  ExternalVelocityLimitIdentifier:
+    type: object
+    properties:
+      externalVelocityLimitReference:
+        description: Reference value for external Velocity limit (mandatory)
+        type: string
+    title: ExternalVelocityLimitIdentifier
+  AddressVersionIdentifier:
+    type: object
+    properties:
+      addressVersionReference:
+        type: string
+        description: 'Identifies the version of the address
+
+          A new version of the address is created when a change is done on the address.'
+    title: AddressVersionIdentifier
+  OrderIdentifier:
+    type: object
+    description: Order reference calculated by our system
+    properties:
+      orderReference:
+        type: string
+        description: 'The reference of the order in our system, unique per platform
+
+          This reference is calculated from an algorithm configurable per issuer (currently a unique algorithm is defined).
+
+          The reference is composed of the  creation date of the order (YYYYMMDD) + a sequence number of 16 digits (e;g; 202203212000000000097002, where 20220321 is the date when the order is created)'
+    title: OrderIdentifier
+  ExternalRestrictionIdentifier:
+    type: object
+    properties:
+      externalRestrictionReference:
+        type: string
+    title: ExternalRestrictionIdentifier
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  CorporateContract:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      contractIdentifier:
+        description: Identification of the corporate contract either by Issuer contract external reference or by contract reference.
+        allOf:
+        - $ref: '#/definitions/ContractIdentifier'
+      closingComment:
+        type: string
+        description: 'Comment associated with the corporate contract closing action (optional)
+
+          Free text.'
+      closingDate:
+        type: string
+        format: date-time
+        description: Closing date of the corporate contract (present only in case of contract is already closed or contract closing is scheduled)
+      closingReason:
+        type: string
+        description: 'Indicates the reason for closing the contract (present only if the contract is already closed or if the contract closing is scheduled)
+
+          (free text)'
+      closureDelayType:
+        type: string
+        description: "The closing type of the contract (present only in case of contract is already closed or contract closing is scheduled)\nThe provided closing type corresponds to the value provided in the close corporate contract API request.\nPossible values :\n- IMMEDIATE \n- SCHEDULED"
+      signatureDate:
+        type: string
+        format: date-time
+        description: Date when the corporate contract was signed (mandatory if the contract is in SIGNED status)
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to a corporate contract that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      status:
+        type: string
+        description: 'Current status of the corporate contract in our system (mandatory)
+
+          Possible values:
+
+          SIGNED: the contract was signed, e.g. by the customer, the issuer after N days (no automatic process in our system)
+
+          CLOSED:The contract is permanently closed (final status)'
+      statusDate:
+        type: string
+        format: date-time
+        description: Date when the current status of the corporate contract was set.
+      contractOwnerIdentifier:
+        description: Identifier of the contract owner. It can be a customer or a company.
+        allOf:
+        - $ref: '#/definitions/CustomerIdentifier'
+      contractCustomers:
+        type: array
+        description: 'List of all customers (with customer data) belonging to this corporate contract as e;g. contract owner, account owner, account guarantor, or cardholder.
+
+          This list of customers can not exceed a limit of occurrences (100).
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Customer'
+      contractCompanies:
+        type: array
+        description: 'List of all companies (with company data) belonging to this corporate contract as e.g. contract owner or account owner.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Company'
+      rootAccountIdentifier:
+        description: Identifier of the root account (in the account hierarchy) linked to this corporate contract
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      productIdentifier:
+        description: Identifier of the product which the corporate contract is based on
+        allOf:
+        - $ref: '#/definitions/ProductIdentifier'
+      customerIdentifier:
+        type: array
+        description: List of all customers (identifiers only) belonging to this corporate contract as e.g. contract owner, account owner, account guarantor, or cardholder.
+        items:
+          $ref: '#/definitions/CustomerIdentifier'
+      statementDuplicatedForCompany:
+        type: boolean
+        description: Indicates if the company receives a duplicate for statement generated by other paying accounts in the corporate contract
+        default: false
+      logoReference:
+        type: string
+        description: Reference of the logo to be present on card in the corporate contract (can be replaced by another logo when requesting to create a card from this contract).
+      dispatchCode:
+        type: string
+        description: Disptach code to be used by the embosser to send the cards for the corporate contract
+      hierarchyDefaultResetCreditLimit:
+        type: boolean
+        description: Indicates, for a corporate contract only, the default value at contract level to be applied for each account if the Open-to-buy should be reset to its maximum Credit limit at Authorization system side as soon as an account cycle is closed. Of course the amount due (minimum payment amount) is considered as to be repaid by the customer by our solution.
+        default: false
+      postingAccountForMembershipFee:
+        type: string
+        description: "Indicates if the membership fees have to be posted to employee card accounts, interemdiate entity account or to the root (as default value, usually paid by the company) for the corporate contract.\nPossible values:\n- ROOT_ACCOUNT \n- CARD_ACCOUNT\n- ENTITY_ACCOUNT"
+      postingAccountForAccountSetupFee:
+        type: string
+        description: "Indicates if the account setup fees have to be posted to employee card accounts, interemdiate entity account or to the root (as default value, usually paid by the company) for the corporate contract.\nPossible values:\n- ROOT_ACCOUNT \n- CARD_ACCOUNT\n- ENTITY_ACCOUNT"
+      feeReimbursementAtCardContractClosing:
+        type: boolean
+        description: "Parameter used to specify if membership fee has to be reimbursed in case of card contract closing. \nBy default, the issuer parameter is used (but can be customized at contract level)."
+      corporateContractLevels:
+        type: array
+        description: List of all levels of a company organization belonging to the corporate contract
+        items:
+          $ref: '#/definitions/CorporateContractLevel'
+      corporateContractEntities:
+        type: array
+        description: 'List of all entities of a company organization (company itself, divisions, departments, …)   belonging to the corporate contract.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/CorporateContractEntity'
+      corporateEmployeeAccounts:
+        type: array
+        description: 'List of employee accounts that belong to a corporate contract.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/CorporateEmployeeAccount'
+      rootAccount:
+        description: 'The root account linked to the corporate contract.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/Account'
+      postingEntityLevelForMembershipFee:
+        type: integer
+        description: Defines the corresponding Entity level of the corporate contract on which the Membership fee will be posted (if fees have to be posted to the interemdiate entity account)
+      postingEntityLevelForAccountSetupFee:
+        type: integer
+        description: Defines the corresponding Entity level of the corporate contract on which the Account Setup fee will be posted (if fees have to be posted to the interemdiate entity account)
+      numberOfFreeCardsMembershipFee:
+        type: integer
+        format: int32
+        description: Number of cards for which membership fee is not generated (optional)
+      numberOfFreeCardsAccountSetupFee:
+        type: integer
+        format: int32
+        description: Number of cards for which account setup fee is not generated (optional)
+    title: CorporateContract
+  CardContractIdentifier:
+    type: object
+    description: Identification of the card contract either by Issuer card contract external reference or by card contract reference
+    properties:
+      cardContractReference:
+        type: string
+        description: 'The reference of the card contract in our system, unique per platform
+
+          This reference is calculated from an algorithm (currently a unique algorithm ''DefaultCardContractReferenceAlgorithm'' referenced in the card profile version).
+
+          The reference is composed of the issuerId + a sequence number of 16 digits (e;g; 100042000000000095003, where 10004 is the issuerId)'
+      issuerCardContractExternalReference:
+        type: string
+        description: 'The external reference of the card contract provided by the issuer
+
+          This reference is unique per issuer and may be used to carry out research and find information.'
+    title: CardContractIdentifier
+  Account:
+    type: object
+    required:
+    - accountHierarchyReference
+    - accountProfileReference
+    - iban
+    - root
+    - status
+    - statusDate
+    - workingCurrencyCode
+    - workingMode
+    - accountOwnerIdentifier
+    - contractIdentifier
+    - rootAccountIdentifier
+    - accountTemplateReference
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      accountIdentifier:
+        description: Account references known in the system
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      root:
+        type: boolean
+        description: Indicates if the account is a root account (true) or not (false).
+      accountBalance:
+        description: Current account balance
+        allOf:
+        - $ref: '#/definitions/Amount'
+      accountClosingType:
+        type: string
+        description: Specified closing type for account. Possible values are SCHEDULED_CLOSING and FORCED_CLOSING.
+      bic:
+        type: string
+        description: BIC or Bank Identification Code (optional)
+      status:
+        type: string
+        description: 'Current status of the account
+
+          Possible values:
+
+          AWAITING_SIGNATURE: The first status when an account is created (contract is also in AWAITING_SIGNATURE status). No operation can be processed on an account when in this state
+
+          ACTIVE: The account has been activated and is ACTIVE. Operation processing can be done in this state
+
+          BEING-CLOSED:  The closing process is started, the account will be permanently closed depending on certain rules, such as after xx days, no ongoing disputes.
+
+          CLOSED: The account is permanently closed (final status), no possible activity (e.g. operations posting)'
+      statusDate:
+        type: string
+        format: date-time
+        description: The date when the status of an account has been changed for the last time
+      statusHistory:
+        type: array
+        description: 'Refer to AccountStatusHistory data subresource
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/AccountStatusHistory'
+      closingDueDate:
+        type: string
+        format: date-time
+        description: DEPRECATED
+      exclusiveCurrency:
+        type: boolean
+        description: 'Defines if the working currency is exclusive or not (conditional). If the account currency is exclusive then only operation with the account currency can be posted on the account. Otherwise currency conversion is performed to post the amount (ex. account currency is USD and exclusive, the operation in EUR cannot be posted on the account, and in the opposite, the account currency is USD and not exclusive, the operation in EUR can be posted on the account after conversion). '
+      activationDate:
+        type: string
+        format: date-time
+        description: Date on which Account is activated
+      finalClosingDate:
+        type: string
+        format: date-time
+        description: Date at which the status of the account is changed to CLOSED
+      iban:
+        type: string
+        description: International Bank Account Number of the customer (debtor). E.g Can be used for repayment via Direct Debit.
+      secondIban:
+        type: string
+        description: Debtor second IBAN (can be used for specific business processes if needed)
+      ibanOwnerName:
+        type: string
+        description: Iban owner’s name, can be different from the account owner’s name
+      name:
+        type: string
+        description: The name of the account provided by the issuer at creation time or by default, the account template reference which was used to create the account
+      paymentMode:
+        type: string
+        description: "The payment mode the customer uses (mandatory, pay later). \nThe values are:\n- CARDHOLDER_DETERMINED: customer repays its debt by itself (fund transfer to the issuer)\n- AUTOPAYMENT: customer repays its debt via Direct Debit (issued by issuer and paid automatically after X days)\n- DIRECTDEBIT_WITH_CONFIRMATION : customer repays its debt via Direct Debit but payment is confirmed by issuer"
+      scheduledClosingDate:
+        type: string
+        format: date-time
+        description: Date at which account should be set to BEING_CLOSED status (conditional). Mandatory when scheduledClosingDateType Is MANUAL.
+      scheduledClosingDateType:
+        type: string
+        description: 'Type of scheduled Closing Date (conditional) Mandatory for SCHEDULED_CLOSING:
+
+          Value =
+
+          - MANUAL
+
+          - NEXT_CYCLIC_CLOSURE_DATE
+
+          - ANNUAL_FEE_DUE_DATE
+
+          - NOW_DATE'
+      workingCurrencyCode:
+        type: string
+        description: The Currency Code fixed in the current account (EUR for Euro, USD for dollar...)
+      originalWorkingMode:
+        type: string
+        description: not used – deprecated
+      workingMode:
+        type: string
+        description: 'It is the working mode of the account (Pay before/Pay later/Pay now) '
+      subscriptionSwitch:
+        type: boolean
+        description: Not used – deprecated
+      toBeSwitched:
+        type: boolean
+        description: Not used – deprecated
+      lastSubscriptionFeeDate:
+        type: string
+        format: date-time
+        description: The date of the previous charge for subscription
+      nextSubscriptionFeeDate:
+        type: string
+        format: date-time
+        description: The date of the next charge for subscription
+      accountHierarchyReference:
+        type: string
+        description: Identifier of Account Hierarchy
+      structureType:
+        type: string
+        description: 'The issuer can provide this field for e.g. the root account, for information only (no check, no related business process), to indicate if the contract contains a single card only or can have several cards.
+
+          Possible values are:
+
+          FAMILY : the contract can have 1 or several cards
+
+          REGULAR : the contract can have a single card only'
+      dunningCaseStatus:
+        type: string
+        description: 'Status of the Dunning Case (optional, pay later):
+
+          - ACTIVE
+
+          - CLOSED'
+      collectionCaseStatus:
+        type: string
+        description: 'Status of the Collection Case (optional, pay later):
+
+          - ACTIVE
+
+          - CLOSED'
+      sepaIndicator:
+        type: boolean
+        description: Indicates whether the payment processing channel is SEPA for direct debit and credit transfer
+      sepaCreditorId:
+        type: string
+        description: SEPA Creditor Identifier (conditional). Mandatory if sepaMandate=True (pay later)
+      sepaMandate:
+        type: boolean
+        description: Indicates whether SEPA mandate exists (mandatory, pay later). If true then sepaCreditorId, sepaMandateUir, sepaMandateUmr and sepaMandateStatus attributes are mandatory.
+      sepaMandateUmr:
+        type: string
+        description: SEPA Unique Mandate Reference (conditional, pay later). Mandatory if sepaMandate=True
+      sepaMandateUir:
+        type: string
+        description: SEPA Unique Internal Reference (conditional, pay later). Mandatory if sepaMandate=True
+      sepaMandateStatus:
+        type: string
+        description: SEPA Mandate Status (conditional, pay later). Mandatory if sepaMandate=True
+      originalPaymentMode:
+        type: string
+        description: Previous paymentMode when paymentMode has been modified (optional, pay later)
+      accountMembershipNumber1:
+        type: string
+        description: 1st membership number
+      accountMembershipNumber2:
+        type: string
+        description: 2nd membership number
+      amountDueMinAmount:
+        description: Minimum amount due defined at paying account level that overrides the default value defined in the accountAmountDue model when the amount due algorithm of the model is "Amount due percentage"  (optional, pay later account)
+        allOf:
+        - $ref: '#/definitions/Amount'
+      amountDueFixedAmount:
+        description: Fixed amount due applied at paying account level that overrides the default value defined in the accountAmountDue model when the amount due algorithm of the model is “Amount Due fixed amount” (optional, pay later account)
+        allOf:
+        - $ref: '#/definitions/Amount'
+      greaterOrLesserAmountDue:
+        type: string
+        description: "Possible values : \n- GREATER (the highest amount between the amount due calculated and the minimum amount due defined is considered)\n- LESSER (the lowest amount is considered between the amount due calculated and the minimum amount due defined)\nUseful for credit cards and partial payer"
+      directDebitAlgorithmReference:
+        type: string
+        description: 'DEPRECATED
+
+          Replaced by DirectDebitAmountDue model.'
+      directDebitFixedAmount:
+        description: Used to calculate the Direct Debit Amount (conditional, pay later). Mandatory if Direct Debit Algorithm requires Fixed Amount. If directDebitAlgorithm= DirectDebit Fixed Amount Standard, DirectDebit Fixed Amount Debit. Only, DirectDebit Fixed Amount in the Direct debit Amount Model
+        allOf:
+        - $ref: '#/definitions/Amount'
+      directDebitPercentage:
+        type: string
+        description: Used to calculate the Direct Debit Amount (conditional, pay later). In case if the Direct Debit Algorithm is selected, the percentage is used to calculate direct debit amount instead of the amount due conditions (eg. amount due = 30% of the statement balance, and for direct debit algorithm, the direct debit percentage is 70%).
+      creditInstalmentBalance:
+        description: The current balance of the credit instalment on the account (optional)
+        allOf:
+        - $ref: '#/definitions/Amount'
+      gracePeriodType:
+        type: string
+        description: 'The type of grace period for debit interest calculation (optional, pay later)
+
+          Possible values:
+
+          NEXT_CYCLE_GRACE_DATE
+
+          NO_GRACE_PERIOD_USED'
+      noGraceOnTheFirstCycle:
+        type: boolean
+        description: Indicates if no grace period is set for the first cycle (optional, pay later)
+      accountAmountDueAlgorithmName:
+        type: string
+        description: 'DEPRECATED
+
+          Replaced by Account amount due model.'
+      amountDuePercentage:
+        type: string
+        description: Percentage of the balance to be claimed defined at paying account level that overrides the default value defined in the accountAmountDue model when the amount due algorithm of the model is "Amount due percentage" (optional, pay later account).
+      amountDueCalculationLevel:
+        type: string
+        description: "DEPRECATED\nShows the level on which the amount due is calculated (optional, pay later). Values: \nACCOUNT_LEVEL, \nCOMPONENT_LEVEL "
+      creditBureauContractFlag:
+        type: boolean
+        description: This information specifies if the Credit Bureau part of the contract has been signed by the credit card owner (optional, pay later)
+      loyaltyPoints:
+        type: array
+        description: 'When the account has loyalty points, value of the balance in point at the end of the closure cycle (optional).
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/LoyaltyPoint'
+      insuranceContracts:
+        type: array
+        description: 'List of insurance contracts linked to an account (optional, pay later)
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/InsuranceContract'
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to an account that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      accountHierarchySpecificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to an account hierarchy that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} like {"costCenter":"445475","brand":"VIS","acc_struct":"PRIV","statement_type":"ST1","paymentCode":"01","statementMailingCode":"ORD"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      productIdentifier:
+        description: Identifier of the product used to create the contract to which the account is belonging. It corresponds also to the identifier of the product used to create the account if the account is created from the product directly.
+        allOf:
+        - $ref: '#/definitions/ProductIdentifier'
+      productExtensionIdentifier:
+        description: "Identifier of the product extension used to create the account. \nRelevant if the account is created from a product extension."
+        allOf:
+        - $ref: '#/definitions/ProductExtensionIdentifier'
+      selectedModels:
+        type: array
+        description: "The models depends on the account type.\n\nFor a PayNow account\nEvent Fee Model: Defines fees which are triggered by Account events (ex: balance enquiry fee, statement fee, fee for returned payment)\nTransaction Fee Model: Defines fees which apply to particular transactions at the moment they are processed\nMarkup Fee Model: Defines fees which apply to particular transactions at the moment they are processed (used more particurlarly for foreign transactions)\n\nPayLater account\nEvent Fee Model: Defines fees which are triggered by Account events (ex: balance enquiry fee, statement fee, fee for returned payment)\nTransaction Fee Model: Defines fees which apply to particular transactions at the moment they are processed\nMarkup Fee Model: Defines fees which apply to particular transactions at the moment they are processed (used more particurlarly for foreign transactions)\nRestriction Model: Used to manage the credit limit \nStatement Model: Used to define the kind of statement\nDebit Interest Model: Used to define the algorithm and conditions for the calcul of debit interests\nInterest Model: Used to define the algorithm and conditions for the calcul of credit interests\nAccount Amount Due Model: Used to define the algorithm at account level for the amount due calculation (part of issuer terms and conditions)\nDirect Debit Amount Model: Used to define the algorithm for the direct debit amount calculation (part of customer terms and conditions)\nReimbursement Model - Used to configure and apply OCT different features in case of credit balance (per account hierarchy)\nRetrocession Rule Model: Used to configure different rules based on which there will be a sender and received operations cretaed, for the transactions meeting the rule criteria\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._"
+        items:
+          $ref: '#/definitions/AccountModel'
+      accountProfileReference:
+        type: string
+        description: Reference to the Account profile which stores allowed configuration elements (e.g. list of available closure calendar)
+      accountTemplateReference:
+        type: string
+        description: Reference of the account template used to instantiate this account
+      closureCalendar:
+        type: string
+        description: External reference of the closure calendar linked to the account (contains all dates of Issuer's cycle, used to realize its processing) (mandatory).
+      overlimitContribution:
+        type: string
+        description: DEPRECATED
+      spareChangeSaving:
+        type: boolean
+        description: Indicates if the function Spare Change Savings  (Keep the change) is applied on the account. (credit account only)
+      childrenAccountIdentifiers:
+        type: array
+        description: 'Identifier of children accounts (if exist). Reference to accountIdentifier
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/AccountIdentifier'
+      rootAccountIdentifier:
+        description: "The AccountIdentifier data type consist of two parameters:\n1. accountReference - Account number is to identify the Account on which reimbursement is made.\n2. issuerAccountExternalReference - External issuer account reference is to identify the Account. \n\nThe root account is either the account number or the issuerAccountExternalReference, or, if both are provided then only the account number is used. The account should exist and it should be a pay Later Account."
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      rootAccount:
+        description: 'Root account data only if the account is not the root account (i.e. flag root is false, otherwise root account data are not returned)
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        allOf:
+        - $ref: '#/definitions/Account'
+      parentAccountIdentifier:
+        description: Account reference and issuer account external reference (optional) of the parent account. Is empty if it is a root account. Mandatory if not root account
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      payingAccountIdentifier:
+        description: The account reference of paying account
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      accountOwnerIdentifier:
+        description: Account owner reference
+        allOf:
+        - $ref: '#/definitions/CustomerIdentifier'
+      accountGuarantorIdentifier:
+        description: Guarantor of an account
+        allOf:
+        - $ref: '#/definitions/CustomerIdentifier'
+      contractIdentifier:
+        description: OPC contract Identifier
+        allOf:
+        - $ref: '#/definitions/ContractIdentifier'
+      delinquent:
+        type: boolean
+        description: Indicates if the account is delinquent (true) or not (false) (optional, only used for pay later)
+      originalAccountIdentifier:
+        description: 'In case the account was created from a product change, account number of original account
+
+          In case the account was created from a product change or employee reallocation, account number of original account.'
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      changedAccountIdentifier:
+        description: 'in case the account had a product change, account number of new account created
+
+          In case the account had a product change or employee reallocation took place, account number of new account created'
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      payingAccountType:
+        type: string
+        description: 'Indicates for corporate contract only if the account is paid by the root account, a parent entity account or the account itself
+
+          Possible values:
+
+          ROOT_PAYS
+
+          ENTITY_PAYS
+
+          ITSELF_PAYS
+
+
+          E.g. A corporate contract can have cards paid by the company (ROOT_PAYS, usually the root account is the company account), and/or paid by the intermediate entities (ENTITY_PAYS), and/or paid by cardholders them-selves (ITSELF_PAYS).'
+        enum:
+        - ROOT_PAYS
+        - ITSELF_PAYS
+        - ENTITY_PAYS
+      companyEntityExternalReference:
+        type: string
+        description: This is the reference of an entity (e.g. cost center, department, division, country) in the company organization. This is required for reporting, etc so that the company can identify the entity in its own system.
+      noOtbCheck:
+        type: boolean
+        description: 'Indicates if for this account (credit only) the Open-to-buy should be checked or not when an operation is posted during both authorizations and transactions processing.
+
+          E.g. A contract with 2 prepaid cards having 1 card account per prepaid card and the root account: OTB check is disabled for both card accounts so when an operation is posted to card account 1 the OTB of its root account is checked only - this allows having shared loaded amount on root account for both cards.'
+      noParentNotification:
+        type: boolean
+        description: 'Indicates if operations (authorizations and transactions) should be posted to the parent account during the authorization and the transaction processing (e.g. incoming purchase authorization, first presentment, transaction fee, membership fee).
+
+          E.g. this enables the issuer to stop the authorization/transaction processing to the entry account (card account), or at upper level (e.g. for corporate cards authorization/transaction amount can be checked against card account and Department account Open-to-buy only and not propagated to upper levels such as division, country, company accounts).'
+      contractType:
+        type: string
+        description: "Contract type. \nPossible values: CORPORATE, CONSUMER"
+        enum:
+        - CORPORATE
+        - CONSUMER
+      resetCreditLimit:
+        type: boolean
+        description: 'Indicates if the Open-to-buy should be reset to its maximum Credit limit at Authorization system side as soon as a cycle is closed. Of course the amount due (minimum payment amount) is considered as to be repaid by the customer by our solution.
+
+          The value of this flag overrides the value of the "defaultResetCreditLimit" flag.'
+      liabilityType:
+        type: string
+        description: Indicates the liability type of the account (free text provided by the issuer). This liability type can be different for each issuer and is stored in our solution for information purpose (e.g. can be used for reporting), not used by any business process.
+      hierarchyDebitOrderDueDateDelay:
+        type: integer
+        description: The issuer can provide the debit order due date delay at hierarchy level (number of days). This delay is used to calculate the Direct Debit payment date for each cycle of repayment (Optional). This value overrides the one from the closure calendar.
+      accountDebitOrderDueDateDelay:
+        type: integer
+        description: The issuer can provide the debit order due date delay for the account (number of days). This delay is used to calculate the Direct Debit payment date for each cycle of repayment. (Optional). This value overrides the one from the closure calendar and the hierarchy.
+      hierarchyOutgoingCreditTransferFeature:
+        description: Description of OCT features at account hierarchy level if different from the configuration
+        allOf:
+        - $ref: '#/definitions/HierarchyOutgoingCreditTransferFeature'
+      accountOutgoingCreditTransferFeature:
+        description: Description of OCT features at account level if different from the configuration or definition at account hierarchy level
+        allOf:
+        - $ref: '#/definitions/AccountOutgoingCreditTransferFeature'
+      'preDelinquent ':
+        type: boolean
+        description: 'Indicates if the account is pre-delinquent (true) or not (false) (optional, pay later)
+
+          Relevant only if account is not delinquent, a returned debit note with specific reason is received and total due amount is greater than 0.
+
+          An account is either delinquent or pre-delinquent (can’t be both at the same time).'
+      externalRestrictions:
+        type: array
+        description: Derprecated - Replaced by externalVelocityLimits.
+        items:
+          $ref: '#/definitions/ExternalRestriction'
+      externalVelocityLimits:
+        type: array
+        description: List of external velocity limits which can be provided by issuers at account creation time (mainly when creating a contract and the first card, when adding new card and card account) in order to update the corresponding velocity limits on the authorization system.
+        items:
+          $ref: '#/definitions/ExternalVelocityLimit'
+      defaultResetCreditLimit:
+        type: string
+        description: "Corresponds to the reset credit limit flag defined at contract level and which is the default value for the account in case nothing is configured in its resetCreditLimit flag. \nWhen the value is true, by default, the remaining due amount is not considered in the Open-To-Buy except if the flag \"resetCreditLimit\" is false\nWhen the value is false, the remaining due amount is considered in the Open-To-Buy except if the flag \"resetCreditLimit\" is true."
+      lastImpactDate:
+        type: string
+        format: date-time
+        description: The date at which the account balance was last impacted by an operation
+      coBrander:
+        type: string
+        description: CoBrander inherited from the consumer contract.
+      resetLimitBalance:
+        description: Will be fed only in case reset credit is active for the account, and that contain in this case the application of the reset limit which means it will contain account balance” – “remaining amount due of that individual account.
+        allOf:
+        - $ref: '#/definitions/Amount'
+      hierarchyPayingAccountType:
+        type: string
+        description: 'Indicates for corporate contract only if each account in the hierarchy is paid by the root account or the account itself
+
+          Possible values:
+
+          ROOT_PAYS
+
+          ITSELF_PAYS'
+      hierarchyBonusProgramReferences:
+        type: array
+        description: Reference of the Bonus/loyalty programs linked to the account hierarchy
+        items:
+          type: string
+      openCycleInformation:
+        $ref: '#/definitions/CycleInformation'
+      isChangeOfPayerAtNextCycle:
+        type: boolean
+        description: The attribute is showing whether there is scheduled change of paying account type at the cycle closure date or not
+      hierarchySelectedModels:
+        type: array
+        description: 'The models depends on the account type.
+
+
+          Currently only Reimbursement Model: used to configure and apply OCT different features in case of credit balance (per account hierarchy)'
+        items:
+          $ref: '#/definitions/AccountHierarchyModel'
+      originalAccountIdentifierType:
+        type: string
+        description: '"PRODUCT_CHANGE" in case the account was created from a product change
+
+          "CARD_REALLOCATION" in case the account was created from an employee reallocation.'
+      changedAccountIdentifierType:
+        type: string
+        description: '"PRODUCT_CHANGE" in case the account was created from a product change
+
+          "CARD_REALLOCATION" in case the account was created from an employee reallocation.'
+      hierarchyOperationStatus:
+        description: The issuer can update blocking information for the account hierarchy.
+        allOf:
+        - $ref: '#/definitions/HierarchyOperationStatus'
+      hierarchyOperationStatusHistory:
+        type: array
+        description: 'The operation status change history information can be checked in this object.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/HierarchyOperationStatusHistory'
+    title: Account
+  InsuranceEvent:
+    type: object
+    properties:
+      insuranceEventCode:
+        type: string
+        description: Insurance event code
+      insuranceEventDate:
+        type: string
+        format: date-time
+        description: Date of insurance event
+      insuranceEventDescription:
+        type: string
+        description: Description of the insurance event
+    title: InsuranceEvent
+  HierarchyOperationStatus:
+    type: object
+    properties:
+      paymentsBlocking:
+        type: boolean
+        description: Indicates if the online payments are blocked for the account hierarchy (true) or not (false).By default, value is false.
+      reimbursementsBlocking:
+        type: boolean
+        description: Indicates if the online reimbursements are blocked for the account hierarchy (true) or not (false).By default, value is false.
+      authorizationsBlocking:
+        type: boolean
+        description: Indicates if the authorizations are blocked for the account hierarchy (true) or not (false).By default, value is false.
+      statusDate:
+        type: string
+        format: date-time
+        description: Date of the last change.
+    title: HierarchyOperationStatus
+  MultiCard:
+    type: object
+    properties:
+      cardId:
+        type: string
+        description: Card ID
+      cardIdentifier:
+        description: Unique identifier of the card
+        allOf:
+        - $ref: '#/definitions/CardIdentifier'
+      cardStatus:
+        type: string
+        description: "Current status of the card \n Possible values: CREATED, ACTIVE, BLOCKED, DEACTIVATED, CANCELLED"
+      permanentlyBlocked:
+        type: boolean
+        description: Indicates if the card is permanently blocked (true) or not (false). Default value is false
+      renewed:
+        type: boolean
+        description: Indicates if the card is renewed (true) or not (false). Default value is false
+      replaced:
+        type: boolean
+        description: Indicates if the card is replaced (true) or not (false). Default value is false
+    title: MultiCard
+  AdvertisementFlags:
+    type: object
+    properties:
+      general:
+        type: boolean
+        description: 'General advertisement flag. By default, value is false.
+
+          If this flag is false, other flags are ignored (email, letter, phone, statement, sms flags).'
+      email:
+        type: boolean
+        description: Indicates if the email advertisement is enabled (true) or not (false). By default, value is false.
+      letter:
+        type: boolean
+        description: Indicates if the letter advertisement is enabled (true) or not (false). By default, value is false.
+      phone:
+        type: boolean
+        description: Indicates if the phone advertisement is enabled (true) or not (false). By default, value is false.
+      statement:
+        type: boolean
+        description: Indicates if the statement advertisement is enabled (true) or not (false). By default, value is false.
+      sms:
+        type: boolean
+        description: Indicates if the sms advertisement is enabled (true) or not (false). By default, value is false.
+    description: Specify possible channels used to provide advertisements
+    title: AdvertisementFlags
+  PinInheritanceCardIdentifier:
+    type: object
+    properties:
+      pinInheritanceCardReference:
+        type: string
+        description: The reference of the card from which the PIN is inherited.
+      pinInheritanceIssuerCardExternalReference:
+        type: string
+        description: The external reference of the card from which the PIN is inherited.
+    title: PinInheritanceCardIdentifier
+  HierarchyOperationStatusHistory:
+    type: object
+    properties:
+      paymentsBlocking:
+        type: boolean
+        description: Indicates if the online payments are blocked for the account hierarchy (true) or not (false).By default, value is false.
+      reimbursementsBlocking:
+        type: boolean
+        description: Indicates if the online reimbursements are blocked for the account hierarchy (true) or not (false).By default, value is false.
+      authorizationsBlocking:
+        type: boolean
+        description: Indicates if the authorizations are blocked for the account hierarchy (true) or not (false).By default, value is false.
+      statusDate:
+        type: string
+        format: date-time
+        description: Date of the change.
+      blockingReason:
+        type: string
+        description: Reason why the operations are blocked.
+      comment:
+        type: string
+        description: Comment for blocking operations Free text.
+    title: HierarchyOperationStatusHistory
+  Amount:
+    type: object
+    required:
+    - value
+    - exponent
+    - isoCode
+    properties:
+      value:
+        type: integer
+        format: int64
+        description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+      exponent:
+        type: integer
+        format: int32
+        description: Exponent of Amount. Number of decimal digits.
+      isoCode:
+        type: string
+        description: 'Currency code of amount
+
+          The currency in ISO4217 alphabetic format.
+
+          Example: EUR for Euro'
+    title: Amount
+  CardContractModel:
+    type: object
+    properties:
+      reference:
+        type: string
+        description: Reference of a card contract model
+      type:
+        type: string
+        description: 'Type of a card contract model
+
+          Possible values: CARD_CREATION_MODEL, CARD_AUTONUMBERING_MODEL, TECHNOLOGY_AND_APPLICATION_MODEL, EVENT_FEE_MODEL, CARD_RENEWAL_MODEL, CARD_REPLACEMENT_MODEL, PIN_PRODUCTION_MODEL, DISTRIBUTION_MODEL'
+    title: CardContractModel
+  ContactCenterIdentifier:
+    type: object
+    properties:
+      contactCenterReference:
+        type: string
+        description: Contact center dentifier (unique per issuer)
+    title: ContactCenterIdentifier
+  AuthorizationDataValidation:
+    type: object
+    description: The issuer can update cardholder data used by the Front Office for verification (AVS/ANI).
+    properties:
+      firstName:
+        type: string
+        description: First name of the cardholder
+      lastName:
+        type: string
+        description: Last name of the cardholder
+      secondFirstName:
+        type: string
+        description: Second first name of the cardholder
+      streetName:
+        type: string
+        description: Street name of the cardholder address
+      zipCode:
+        type: string
+        description: Zip code of the cardholder address
+      birthDate:
+        type: string
+        format: date-time
+        description: Birth date of the cardholder
+  ContactCenter:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Description of the contact center. Free text
+      addressType:
+        type: string
+        description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
+      contactCenterIdentifier:
+        description: Unique reference of the contact center within the issuer
+        allOf:
+        - $ref: '#/definitions/ContactCenterIdentifier'
+      postalAddress:
+        description: The postal adress of the contact center
+        allOf:
+        - $ref: '#/definitions/MailAddress'
+      emailAddress:
+        description: The email adress of the contact center
+        allOf:
+        - $ref: '#/definitions/EmailAddress'
+      phone:
+        description: The phone number of the contact center
+        allOf:
+        - $ref: '#/definitions/PhoneNumber'
+    title: ContactCenter
+  Contact:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      name:
+        type: string
+        description: Contact name
+      firstName:
+        type: string
+        description: Contact first name
+      departmentName:
+        type: string
+        description: Contact department name. Free text.
+      sex:
+        type: string
+        description: Sex of the contact
+      description:
+        type: string
+        description: Description of the role in the company (e.g. 'sales manager'). Free text
+      courtesyTitle:
+        type: string
+        description: Title of the contact. Free text
+      contactIdentifier:
+        description: Unique contact identifier
+        allOf:
+        - $ref: '#/definitions/ContactIdentifier'
+      type:
+        type: string
+        description: "Represents the type of contact for customer (person). The  possible values are configured per Issuer. \nAn example can be: Power_of_Attorney or Legal_Representative"
+      birthDate:
+        type: string
+        format: date
+        description: Birth date of the contact
+      postalAddress:
+        description: The postal adress of the contact
+        allOf:
+        - $ref: '#/definitions/MailAddress'
+    title: Contact
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  CardStatusHistory:
+    type: object
+    properties:
+      eventType:
+        type: string
+        description: 'Event type associated to a card status and an event date (mandatory)
+
+          Example: CardActivation, CardIssuing, CardCancellation, CardDeactivation, CardBlocking, CardUnblocking'
+      eventDate:
+        type: string
+        format: date-time
+        description: 'Date time when an event is performed on the card by our system (mandatory)
+
+          Example: blocking card, unblocking card, replacement card'
+      reason:
+        type: string
+        description: 'Reason associated to a card status (mandatory)
+
+          The list of  reasons is configurable per issuer (example: ActivationReason, CancellationReason, DeactivationReason, CardBlockingReason)'
+      comment:
+        type: string
+        description: A comment (free text) used in case of blocking or unblocking a card (optional)
+      waiveFee:
+        type: boolean
+        description: Indicates if the fee was waived (true) or not (false). By default, value is false.
+      blockingInformation:
+        description: Information related to the card blocking (present if the card is blocked)
+        allOf:
+        - $ref: '#/definitions/CardBlockingInformation'
+    title: CardStatusHistory
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  PhoneNumber:
+    type: object
+    required:
+    - localPhoneNumber
+    properties:
+      countryCode:
+        type: string
+        description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
+      localPhoneNumber:
+        type: string
+        description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
+      internationalPhoneNumber:
+        type: string
+        description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
+    title: PhoneNumber
+  ExternalVelocityLimit:
+    type: object
+    required:
+    - externalVelocityLimitIdentifier
+    properties:
+      externalVelocityLimitIdentifier:
+        description: Unique reference of the external velocity limit
+        allOf:
+        - $ref: '#/definitions/ExternalVelocityLimitIdentifier'
+      maximumAmount:
+        description: Maximum amount of provided velocity limit (optional)
+        allOf:
+        - $ref: '#/definitions/Amount'
+      minimumAmount:
+        description: Minimum amount of provided velocity limit (optional)
+        allOf:
+        - $ref: '#/definitions/Amount'
+      maximumCount:
+        type: integer
+        description: Maximum count of transaction to be done using velocity limit
+      priority:
+        type: string
+        description: In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a velocity check and an account
+      activationStartTime:
+        type: string
+        format: date-time
+        description: The date time the velocity limit is active
+      activationEndTime:
+        type: string
+        format: date-time
+        description: The date time the velocity limit finished if present
+    title: ExternalVelocityLimit
+  ContractIdentifier:
+    type: object
+    description: Identification of thecorporate contract either by Issuer contract external reference or by contract reference
+    properties:
+      contractReference:
+        type: string
+        description: 'The unique reference of the contract in our system, unique per platform
+
+          This reference is an UUID (universally unique identifier) on 36 digits (e.g.196c2215-9a80-4b8b-868c-18beb8c8c9).'
+      issuerContractExternalReference:
+        type: string
+        description: 'The external reference of the contract provided by the issuer
+
+          This reference is unique per issuer and may be used to carry out research and find information.'
+    title: ContractIdentifier
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+  Company:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      customerIdentifier:
+        description: Unique identifier. Refer to Customer Identifier data type for detail information
+        allOf:
+        - $ref: '#/definitions/CustomerIdentifier'
+      active:
+        type: boolean
+        description: DEPRECATED
+      corporateName:
+        type: string
+        description: Name of the company
+      nationalFiscalIdentifier:
+        type: string
+        description: National fiscal identifier of the company (for information only)
+      vatCode:
+        type: string
+        description: Value added tax code of the company (for information only). Free text.
+      type:
+        type: string
+        description: Type of company (e.g. Governmental, public company, private company). For information only. Free text.
+      size:
+        type: string
+        description: Size of the company. Free text (e.g. small, medium, 100).
+      businessArea:
+        type: string
+        description: Definition of the activity of the company. Free text.
+      activityCode:
+        type: string
+        description: Activity of the company (e.g. 'rent car', 'retailer'). Free text.
+      revenue:
+        type: string
+        description: Annual turnover of the company. Free text
+      legalForm:
+        type: string
+        description: 'Definition of the legal form of the company (e.g. in France : SA, SARL, EURL). Free text.'
+      commercialStatus:
+        type: string
+        description: Commercial status of the company (e.g. 'normal', 'Active in Liquidation', 'Inactive'). List of possible values is determined per issuer. A default value is defined for each issuer.
+      preferredCorrespondenceLanguage:
+        type: string
+        description: Preferred correspondence language of the company (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to a company that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      partnerExternalReference:
+        type: string
+        description: External Reference provided by the issuer (optional)
+      addressIdentifiers:
+        type: array
+        description: 'List of address references whatever their type (MAIL, EMAIL, PHONE). The address can be a temporary address.At least, the main postal address reference should be retrieved (mandatory).
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/AddressIdentifier'
+      addresses:
+        type: array
+        description: 'List of addresses whatever their type (MAIL, EMAIL, PHONE). See the Address''s datatype for the detail list of the attributes.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Address'
+      contactIdentifiers:
+        type: array
+        description: 'List of contact references of the company.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/ContactIdentifier'
+      contacts:
+        type: array
+        description: 'List of contacts of the company.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Contact'
+      lastUpdateDate:
+        type: string
+        format: date-time
+        description: Indicates the date when the update is processed
+    title: Company
+  Vulnerability:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        description: Type of vulnerability applicable to the customer (free text).
+      comment:
+        type: string
+        description: Details about the vulnerability of the customer (free text).
+  CardBlockingInformation:
+    type: object
+    required:
+    - cardBlockingDateTime
+    properties:
+      cardBlockingDateTime:
+        type: string
+        format: date-time
+        description: Date and time when the card has been blocked by our system
+      blockAgent:
+        type: string
+        description: Operator who blocked the card (mandatory only if the card is blocked). It corresponds to the name of the user, referenced in our system, mentioned at the card blocking time.
+      blockingReason:
+        type: string
+        description: 'Reason for blocking a card (mandatory only if the card is blocked)
+
+          The list of blocking reasons is configurable per issuer (For example, LOST, STOLEN, FRAUDULENT …)'
+      blockingReasonDetail:
+        type: string
+        description: 'Complementary information describing the defined blocking reason
+
+          Free text'
+      lostStolenDate:
+        type: string
+        format: date-time
+        description: 'Date when the card has been lost or stolen
+
+          This date is provided in addition to the blocking reason (required only if the card is blocked in a context of loss/theft)'
+      lossPlace:
+        type: string
+        description: 'Place where the card has been lost
+
+          Free text'
+      lossCountry:
+        type: string
+        description: 'Country of card loss or steal
+
+          Can be required in certain countries (e.g. french issuers with CB)
+
+          Free text (not check on the provided value)'
+      lastUsageDate:
+        type: string
+        format: date-time
+        description: ' Date of last use of the card
+
+          Example: for lost or stolen reason'
+      lastUsagePlace:
+        type: string
+        description: 'Last place where the card has been used
+
+          Example: for lost or stolen reason'
+      lossCircumstances:
+        type: string
+        description: 'Description of the circumstances of the card loss
+
+          Free text'
+      lossReportedBy:
+        type: string
+        description: 'Person who has reported the card loss
+
+          Free text'
+      lossReportedVia:
+        type: string
+        description: 'How was reported the loss (channel)
+
+          Free  text'
+      fraudCode:
+        type: string
+        description: 'Fraud code can be used in the context of dispute management.
+
+          Fraud code (free text) is provided in case of Fraud for Fraud declaration to the schemes (VISA, MasterCard).
+
+          The value must be a value expected by the schemes.'
+      contactData:
+        type: string
+        description: 'Indicates contact data (usually phone number)
+
+          Free text'
+      pinCompromised:
+        type: boolean
+        description: 'Indicates if the PIN is compromised (true) or not (false) only in case of lost or stolen reason. Default value is false '
+      customerRequestingBlockDate:
+        type: string
+        format: date-time
+        description: 'Date when the customer has declared the blocking request.
+
+          For example, the cardholder calls the customer service at 4 pm to declare he lost his card and the card blocking request can only be sent at 5 pm to the system: then the customerRequestingBlockDateTime is 4 pm.'
+      transferEffectiveDate:
+        type: string
+        format: date-time
+        description: Transfer effective date (either a date prior to the card blocking date time or it is the card blocking date time in our system)
+      noReplacementReason:
+        type: string
+        description: 'The reason why the card is not replaced.
+
+          Free text'
+      comment:
+        type: string
+        description: 'Comment associated with the card blocking action
+
+          Free text'
+      cppFlag:
+        type: boolean
+        description: DEPRECATED
+      fraudProcess:
+        type: string
+        description: "Fraud process in which the card is blocked. \nPossible values : \n•\tCPP : the card is in CCP list \n•\tTFI : Fraud detected for a single card \n•\tMBA : Fraud detected for several cards (Mass action)"
+      scheduledCardBlockingDate:
+        type: string
+        format: date-time
+        description: Date when the permanent card blocking is scheduled
+      scheduledCardBlockingDelay:
+        type: integer
+        description: Delay in calendar days used to permanently block the card in the future
+      scheduledCardBlockingReason:
+        type: string
+        description: 'Blocking reason used when the card is blocked in the future
+
+          Relevant if a scheduled permanent blocking is requested at the same time as an immediate temporary card blocking.
+
+          Permanent blocking reasons used context of loss/theft are not allowed.'
+      transactionId:
+        type: string
+        description: Indicates the transactionId of the suspicious transaction that has triggered the card blocking.
+    title: CardBlockingInformation
+  InsuranceContractIdentifier:
+    type: object
+    description: 'The insurance package which is linked to this contract '
+    properties:
+      insurancePackageReference:
+        type: string
+        description: Reference of the insurance contract
+    title: InsuranceContractIdentifier
+  AddressIdentifier:
+    type: object
+    properties:
+      addressReference:
+        type: string
+        description: Unique internal identifier computed with a specific algorithm (mandatory)
+      issuerAddressExternalReference:
+        type: string
+        description: Unique external identifier provided by the issuer (optional)
+    title: AddressIdentifier
+  LoyaltyPoint:
+    type: object
+    properties:
+      unit:
+        type: string
+        description: ' Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional).'
+      cumulatedValue:
+        type: integer
+        format: int64
+        description: Total number of loyalty points (optional).
+    title: LoyaltyPoint
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  Address:
+    type: object
+    required:
+    - addressLabel
+    - addressType
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      addressIdentifier:
+        description: Unique identifier of the address. See the AddressIdentifier's datatype for a detail description
+        allOf:
+        - $ref: '#/definitions/AddressIdentifier'
+      addressVersionIdentifier:
+        allOf:
+        - $ref: '#/definitions/AddressVersionIdentifier'
+      addressLabel:
+        type: string
+        example: MAIN_POSTAL_ADDRESS
+        description: "example: MAIN_POSTAL_ADDRESS Indicate the class of the address amongst a list of possible values such as MAIN_POSTAL_ADDRESS, SECOND_POSTAL_ADDRESS, HOME_PHONE_NUMBER, PRIVATE_MOBILE_PHONE, PERSONAL_EMAIL. This list of values is shared between WL and the issuer during issuer configuration. \n Every label corresponds to a unique type of address. A customer (person) has at least one MAIN_POSTAL_ADDRESS (mandatory) and a company has at least one HEAD_OFFICE."
+      addressType:
+        type: string
+        example: POSTAL_MAIL
+        description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
+        enum:
+        - PHONE
+        - POSTAL_MAIL
+        - E_MAIL
+      postalAddress:
+        description: "Customer Postal Address. This field is mandatory only if AddressType is POSTAL_MAIL. \n Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information."
+        allOf:
+        - $ref: '#/definitions/MailAddress'
+      emailAddress:
+        description: Customer Email. This field is mandatory only if AddressType is E_MAIL. See the EmailAddress' datatype for the detail list of the attributes.
+        allOf:
+        - $ref: '#/definitions/EmailAddress'
+      phone:
+        description: Customer Phone details. This field is mandatory only if AddressType is PHONE. See the PhoneNumber's datatype for the detail list of the attributes.
+        allOf:
+        - $ref: '#/definitions/PhoneNumber'
+      addressUsages:
+        type: array
+        description: 'List of the usages linked to the address if any exists. See the AddressUsage''s datatype for the detail list of the attributes (optional)
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/AddressUsage'
+      status:
+        type: string
+        description: Status of the address (ACTIVE or INACTIVE). If value is not provided, by default 'ACTIVE'
+      statusDate:
+        type: string
+        description: 'If the address is INACTIVE, the date corresponds to the inactivation date.
+
+          If the address is ACTIVE, the date corresponds to the last activation date.'
+        format: date-time
+      startDate:
+        type: string
+        description: Date when the address starts to be active
+        format: date-time
+      endDate:
+        type: string
+        description: 'This attribute represents :
+
+          • in case of a permanent address : the last date the address has been active. This information is computed based on the next future address start date if any exists else this attribute is empty.
+
+          • in case of a temporary address : the end date where this address is active. This end date is mandatory when a temporary address is created.'
+        format: date-time
+      invalid:
+        type: boolean
+        description: "Indicates if an address is invalid (by default false).\nThis feature is currently only accurate for the mail address and apply only on the current permanent address.\nIn case a postal address is invalid, this address cannot be used anymore for letters, cards, pin mailers, statement sending. \nThis feature is active only depending on an issuer configuration. "
+        default: false
+      temporary:
+        type: boolean
+        description: 'indicates if the address is a temporary one (by default ''false'').
+
+          In case of a temporary address, the end date is mandatory.'
+        default: false
+    title: Address
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  AccountRelation:
+    type: object
+    required:
+    - relation
+    - accountIdentifier
+    properties:
+      relation:
+        type: string
+        description: Is a combination of criteria to describe the posting rule (one criteria or combination of several ones such as transaction currency = XXX) for each posting account - DEFAULT for the default posting account.
+      accountIdentifier:
+        description: Identification of the account either by the Issuer account external reference or by the account reference.
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+    title: AccountRelation
+  OrderStatusHistory:
+    type: object
+    properties:
+      type:
+        type: string
+        description: 'Type of the history order status (mandatory)
+
+          Possible values: InternalStatus or ProducerStatus'
+      date:
+        type: string
+        format: date-time
+        description: Date of the history order status (mandatory)
+      status:
+        type: string
+        description: 'Status of the history order (mandatory)
+
+          The possible values are the same the ones defined for the current internal status and the current external status depending on the type of the order status.  '
+    title: OrderStatusHistory
+  CorporateContractEntity:
+    type: object
+    properties:
+      accountIdentifier:
+        description: Identifier of the entity account
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      parentAccountIdentifier:
+        description: Parent account identifier of the parent entity
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      account:
+        description: List of accounts (with account data) related to the entity
+        allOf:
+        - $ref: '#/definitions/Account'
+      level:
+        type: integer
+        description: Level number in the company organization (e.g. 1 corresponding to the company, 2 corresponding to country)
+        example: 2
+      companyEntityExternalReference:
+        type: string
+        description: 'External reference of the entity within the company organization (e.g. a code representing the country: FRAN for France)'
+      parentCompanyEntityExternalReference:
+        type: string
+        description: "Entity external reference of the parent entity \nEmpty for the root"
+      deliveryChannel:
+        description: 'Specify the channel for letter delivery used for an entity of the company organization.
+
+          Possible values: WEB, LETTER, LETTER_AND_WEB'
+        allOf:
+        - $ref: '#/definitions/DeliveryChannel'
+      advertisementFlags:
+        description: Specify possible channels used to provide advertisements (email, letter, phone, statement, sms) for an entity of the company organization.
+        allOf:
+        - $ref: '#/definitions/AdvertisementFlags'
+    description: Specify the corporate contract entity
+    title: CorporateContractEntity
+  GlobalSearchCorporateContractRequestCompany:
+    type: object
+    properties:
+      corporateName:
+        type: string
+        description: "The corporate name is used to filter the corporate contracts where the company is the corporate contract owner or an account owner.\n The field accept wildcards ('%' allows to achieve a search with only a partial input, 'Plat%', '%hill', 'Al%gang'). A miniimum of 3 significative characters are expected else an error will be raised.Either the corporate name or the reference of the company must be provided. If both are provided, the search will be rejected."
+      postalAddress:
+        type: object
+        description: The issuer can provide some information related to the address of the company to filter the corporate contracts to be returned only if the search is done on the corporate name. Otherwise the search will be rejected.
+        allOf:
+        - $ref: '#/definitions/GlobalSearchCorporateContractRequestPostalAddress'
+      customerIdentifier:
+        description: The reference of the company can be used (by providing either the customer reference or the issuer customer external reference) to filter the corporate contracts where the company is the corporate contract owner or an account owner.Either the corporate name or the reference of the company must be provided. If both are provided, the search will be rejected.
+        allOf:
+        - $ref: '#/definitions/CustomerIdentifier'
+    title: GlobalSearchCorporateContractRequest.Company
+  ContractFee:
+    type: object
+    properties:
+      accountIdentifier:
+        description: Contract fees related account identifier
+        allOf:
+        - $ref: '#/definitions/AccountIdentifier'
+      selectedModels:
+        type: array
+        description: Fee Model used for the contract (mandatory, Account setup fee and/or Membership fee models).
+        items:
+          $ref: '#/definitions/ContractModel'
+      membershipFeeAnniversaryDate:
+        description: Next anniversary date of the membership fee (optional) for the account
+        type: string
+        format: date-time
+      postingAccountForMembershipFee:
+        description: 'For a consumer contract, indicates if the membership fees have to be posted to card accounts or to the root account as default value for the contract.
+
+          Possible values are :
+
+          ROOT_ACCOUNT, CARD_ACCOUNT.For a corporate contract, indicates if the membership fees have to be posted to employee card accounts, interemdiate entity account or to the root (usually paid by the company) as default value for the contract.
+
+          Possible values are :
+
+          ROOT_ACCOUNT, CARD_ACCOUNT, ENTITY_ACCOUNT.'
+        type: string
+      postingAccountForAccountSetupFee:
+        description: 'For a consumer contract, indicates if the account setup fees have to be posted to card accounts or to the root account as default value for the contract.
+
+          Possible values are :
+
+          ROOT_ACCOUNT, CARD_ACCOUNT.For a corporate contract, indicates if the account setup fees have to be posted to employee card accounts, interemdiate entity account or to the root (usually paid by the company) as default value for the contract.
+
+          Possible values are :
+
+          ROOT_ACCOUNT, CARD_ACCOUNT, ENTITY_ACCOUNT.'
+        type: string
+      membershipFeePromotionalPeriod:
+        description: 'Membership fee promotional period
+
+          Indicates the period (number of years/months (depending on the frequency defined in the membership fee model)) during which the promotional membership fee amount (if any) is applied from the card creation.
+
+          If the issuer configuration allows it, it is possible to extend the default promotional period defined in the membership fee model. The value must be greater than the default value and greater than the already passed promotional period.'
+        type: integer
+    title: ContractFee
+  InsuranceContractPackage:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier of the insurance package
+      insurancePackageIdentifier:
+        description: Unique identifier of the insurance contract package
+        allOf:
+        - $ref: '#/definitions/InsurancePackageIdentifier'
+    title: InsuranceContractPackage
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

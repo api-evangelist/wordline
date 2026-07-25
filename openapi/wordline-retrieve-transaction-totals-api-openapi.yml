@@ -1,0 +1,228 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Retrieve transaction totals API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Retrieve transaction totals
+paths:
+  /v1/analysis/totals/day/levelid/{levelId}/levelidvalue/{levelIdValue}:
+    get:
+      tags:
+      - Retrieve transaction totals
+      summary: Retrieve daily totals
+      description: "This operation of the Analysis API will help you to retrieve daily aggregated totals.\nYou can do this using by providing an entity from the equensWorldline contract hierarchy, such as a contractId. \nThe results are aggregated transaction numbers and revenue on a daily basis, divided by type Purchases, refunds and chargebacks.\n"
+      operationId: getTotalsPerDayUsingGET
+      consumes:
+      - application/json
+      - '*/*'
+      produces:
+      - application/json
+      parameters:
+      - name: levelId
+        in: path
+        description: Any ID of a level of the Equens contract administration
+        required: true
+        type: string
+        enum:
+        - cluster_id
+        - merchant_id
+        - contract_id
+        - location_id
+        - terminal_id
+        example: terminal_id
+      - name: levelIdValue
+        in: path
+        description: 'ID value at this level.
+
+          Example value
+
+          clusterId 1000,
+
+          merchantId 2000,
+
+          contractId 3000,
+
+          siteId 4000,
+
+          terminalId 5000
+
+          '
+        required: true
+        type: string
+        example: '5000'
+      - name: type
+        in: query
+        description: "Transaction type Filter. \nValues (optional):\npurchase, refund or chargeback\n"
+        required: false
+        type: string
+        enum:
+        - purchase
+        - refund
+        - chargeback
+      - name: begin
+        in: query
+        description: 'Start day (yyyymmdd)
+
+          '
+        required: true
+        type: string
+        example: '20160901'
+      - name: end
+        in: query
+        description: 'End day (yyyymmdd)
+
+          '
+        required: true
+        type: string
+        example: '20160920'
+      responses:
+        '200':
+          description: Successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RestPeriodTotal'
+        '400':
+          description: Invalid input provided
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Unexpected error
+        '502':
+          description: Backend service not available
+  /v1/analysis/totals/month/levelid/{levelId}/levelidvalue/{levelIdValue}:
+    get:
+      tags:
+      - Retrieve transaction totals
+      summary: Retrieve monthly totals
+      description: "This operation of the Analysis API will help you to retrieve monthly aggregated totals. \nYou can do this using by providing an entity from the equensWorldline contract hierarchy, \nsuch as a contractId. The results are aggregated transaction numbers and revenue on a monthly basis, \ndivided by type Purchases, refunds and chargebacks.\n"
+      operationId: getTotalsPerMonthUsingGET
+      consumes:
+      - application/json
+      - '*/*'
+      produces:
+      - application/json
+      parameters:
+      - name: levelId
+        in: path
+        description: Any ID of a level of the Equens contract administration
+        required: true
+        type: string
+        enum:
+        - cluster_id
+        - merchant_id
+        - contract_id
+        - location_id
+        - terminal_id
+        example: terminal_id
+      - name: levelIdValue
+        in: path
+        description: 'ID value at this level.
+
+          Example value
+
+          clusterId 1000,
+
+          merchantId 2000,
+
+          contractId 3000,
+
+          siteId 4000,
+
+          terminalId 5000
+
+          '
+        required: true
+        type: string
+        example: '5000'
+      - name: type
+        in: query
+        description: "Transaction type Filter. \nValues (optional): \npurchase, refund or chargeback\n"
+        required: false
+        type: string
+        enum:
+        - purchase
+        - refund
+        - chargeback
+      - name: begin
+        in: query
+        description: 'Start month (yyyymm)
+
+          '
+        required: true
+        type: string
+        example: '201609'
+      - name: end
+        in: query
+        description: 'End month (yyyymm)
+
+          '
+        required: true
+        type: string
+        example: '201610'
+      responses:
+        '200':
+          description: Successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RestPeriodTotal'
+        '400':
+          description: Invalid input provided
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Unexpected error
+        '502':
+          description: Backend service not available
+definitions:
+  RestTotal:
+    type: object
+    properties:
+      amountPurchases:
+        type: number
+        description: Total amount purchases
+      amountRefunds:
+        type: number
+        description: Total amount refunds
+      amountChargebacks:
+        type: number
+        description: Total amount chargebacks
+      numberPurchases:
+        type: integer
+        format: int64
+        description: Total number of purchases
+      numberRefunds:
+        type: integer
+        format: int64
+        description: Total number of refunds
+      numberChargebacks:
+        type: integer
+        format: int64
+        description: Total number of chargebacks
+  RestPeriodTotal:
+    type: object
+    properties:
+      period:
+        type: string
+        description: YYYYMMDD for day-period. YYYYMM for month-period
+        example: 20161231 for day-period or 201612 for month-period
+      total:
+        $ref: '#/definitions/RestTotal'
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

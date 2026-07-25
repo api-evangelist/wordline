@@ -1,0 +1,307 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Registration Resource API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Registration Resource
+paths:
+  /v1.0/webauthn/register:
+    post:
+      summary: Initiate fido registration
+      tags:
+      - Registration Resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegOptionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegOptionResponse'
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Allowed
+    patch:
+      summary: Finish fido registration
+      tags:
+      - Registration Resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttestationResponse'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Allowed
+components:
+  schemas:
+    AuthenticatorSelectionCriteria:
+      type: object
+      properties:
+        authenticatorAttachment:
+          $ref: '#/components/schemas/AuthenticatorAttachment'
+        requireResidentKey:
+          type: boolean
+        residentKey:
+          $ref: '#/components/schemas/ResidentKeyRequirement'
+        userVerification:
+          $ref: '#/components/schemas/UserVerificationRequirement'
+    PublicKeyCredentialRpEntity:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+    COSEAlgorithmIdentifier:
+      type: object
+      properties:
+        value:
+          format: int64
+          type: integer
+    AttestationConveyancePreference:
+      type: object
+      properties:
+        value:
+          type: string
+    RegOptionRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
+        friendlyName:
+          type: string
+        authenticatorSelection:
+          $ref: '#/components/schemas/AuthenticatorSelection'
+        attestation:
+          type: string
+        extensions:
+          type: object
+          additionalProperties:
+            type: string
+    RegOptionResponse:
+      type: object
+      properties:
+        rp:
+          $ref: '#/components/schemas/PublicKeyCredentialRpEntity'
+        user:
+          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
+        challenge:
+          type: string
+        pubKeyCredParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKeyCredentialParameters'
+        timeout:
+          format: int64
+          type: integer
+        excludeCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKeyCredentialDescriptor'
+        authenticatorSelection:
+          $ref: '#/components/schemas/AuthenticatorSelectionCriteria'
+        attestation:
+          $ref: '#/components/schemas/AttestationConveyancePreference'
+        extensions:
+          $ref: '#/components/schemas/AuthenticationExtensionsClientInputsRegistrationExtensionClientInput'
+        status:
+          type: string
+        errorMessage:
+          type: string
+        sessionId:
+          type: string
+    AttestationResponse:
+      required:
+      - sessionId
+      type: object
+      properties:
+        sessionId:
+          minLength: 1
+          type: string
+        attestationBlob:
+          $ref: '#/components/schemas/PublicKeyCredentialAttestation'
+    UserVerificationRequirement:
+      type: object
+      properties:
+        value:
+          type: string
+    PublicKeyCredentialType:
+      type: object
+      properties:
+        value:
+          type: string
+    CredentialProtectionPolicy:
+      enum:
+      - USER_VERIFICATION_OPTIONAL
+      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
+      - USER_VERIFICATION_REQUIRED
+      type: string
+    AuthenticationExtensionsClientInputsRegistrationExtensionClientInput:
+      type: object
+      properties:
+        appid:
+          type: string
+          writeOnly: true
+        appidExclude:
+          type: string
+          writeOnly: true
+        uvm:
+          type: boolean
+          writeOnly: true
+        credProps:
+          type: boolean
+          writeOnly: true
+        credentialProtectionPolicy:
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/CredentialProtectionPolicy'
+          writeOnly: true
+        enforceCredentialProtectionPolicy:
+          type: boolean
+          writeOnly: true
+        hmacCreateSecret:
+          type: boolean
+        hmacGetSecret:
+          $ref: '#/components/schemas/HMACGetSecretInput'
+    HMACGetSecretInput:
+      type: object
+      properties:
+        salt1:
+          format: binary
+          type: string
+        salt2:
+          format: binary
+          type: string
+    PublicKeyCredentialAttestation:
+      required:
+      - response
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+        rawId:
+          type: string
+        response:
+          $ref: '#/components/schemas/AuthenticatorAttestationResponse'
+        type:
+          minLength: 1
+          pattern: public-key
+          type: string
+        getClientExtensionResults:
+          type: object
+          additionalProperties:
+            type: string
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    AuthenticatorAttachment:
+      type: object
+      properties:
+        value:
+          type: string
+    AuthenticatorAttestationResponse:
+      required:
+      - clientDataJSON
+      - attestationObject
+      type: object
+      properties:
+        clientDataJSON:
+          minLength: 1
+          type: string
+        attestationObject:
+          minLength: 1
+          type: string
+    AuthenticatorSelection:
+      type: object
+      properties:
+        authenticatorAttachment:
+          type: string
+        residentKey:
+          type: string
+        requireResidentKey:
+          type: boolean
+        userVerification:
+          type: string
+    PublicKeyCredentialUserEntity:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+        id:
+          type: string
+        displayName:
+          type: string
+    ServerResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        errorMessage:
+          type: string
+    Status:
+      enum:
+      - OK
+      - FAILED
+      type: string
+    PublicKeyCredentialDescriptor:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PublicKeyCredentialType'
+        id:
+          type: string
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticatorTransport'
+    AuthenticatorTransport:
+      type: object
+      properties:
+        value:
+          type: string
+    ResidentKeyRequirement:
+      type: object
+      properties:
+        value:
+          type: string
+    PublicKeyCredentialParameters:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PublicKeyCredentialType'
+        alg:
+          $ref: '#/components/schemas/COSEAlgorithmIdentifier'
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

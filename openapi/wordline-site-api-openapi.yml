@@ -1,0 +1,2560 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Site API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Site
+paths:
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/sites:
+    get:
+      tags:
+      - Site
+      summary: Search sites
+      description: 'This operation retrieves a list of sites. Terminated sites are excluded.
+
+        '
+      operationId: getSiteOverviewList
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: iban
+        in: query
+        description: 'International Bank Account Number for merchant payments
+
+          '
+        schema:
+          type: string
+      - name: holdingId
+        in: query
+        description: 'Unique identification of the holding, determined by equensWorldline
+
+          '
+        schema:
+          type: integer
+          format: int32
+      - name: merchantId
+        in: query
+        description: 'Unique identification of the merchant, determined by the acquirer
+
+          '
+        schema:
+          type: string
+      - name: contractId
+        in: query
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        schema:
+          type: string
+      - name: postalCode
+        in: query
+        description: 'Postal code of site address
+
+          '
+        schema:
+          type: string
+      - name: houseNumber
+        in: query
+        description: 'House number of site address. Note, Postal code must be given as well
+
+          '
+        schema:
+          type: integer
+          format: int32
+      - name: siteId
+        in: query
+        description: 'Unique identification of the site within the contract
+
+          '
+        schema:
+          type: integer
+          format: int32
+      - name: cardAcceptorId
+        in: query
+        description: 'Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+
+          '
+        schema:
+          type: string
+      - name: terminalId
+        in: query
+        description: 'Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
+
+          '
+        schema:
+          type: string
+      - name: merchantName
+        in: query
+        description: 'Name of the merchant
+
+          '
+        schema:
+          type: string
+      - name: contractName
+        in: query
+        description: 'Optional name for this specific contract
+
+          '
+        schema:
+          type: string
+      - name: siteName
+        in: query
+        description: 'Name of the site
+
+          '
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: 'Sort field
+
+          '
+        schema:
+          type: string
+          enum:
+          - siteId
+          - siteName
+      - name: sortOrder
+        in: query
+        description: 'Sort order
+
+          '
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (Max page size is 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SiteListData'
+              example:
+              - contractIdentification:
+                  acquirerId: '315000001'
+                  holdingId: 200
+                  merchantId: '1001'
+                  contractId: '10011'
+                cardAcceptorId: '90100110'
+                siteId: 100110
+                siteName: EPS*Home Festival
+                channel: 2
+                commencementDate: 2022-12-09
+                status: Active
+                address:
+                  streetName: Tynjestrjitte
+                  houseNumber: 1
+                  postalCode: 8763ML
+                  city: Parrega
+                  countryCode: 528
+                  contactPersonName: H. Cook
+                  email: H.Cook@homefestival.nl
+                siteDetailsURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100110
+              - contractIdentification:
+                  acquirerId: '315000001'
+                  holdingId: 200
+                  merchantId: '1001'
+                  contractId: '10011'
+                cardAcceptorId: '1001'
+                siteId: 100111
+                siteName: EPS*Metal Festival
+                channel: 1
+                commencementDate: 2022-12-09
+                status: Active
+                address:
+                  streetName: Nieuwstraat
+                  houseNumber: 12
+                  postalCode: 3267AR
+                  city: Goudswaard
+                  countryCode: 528
+                  contactPersonName: M. Cohen
+                  email: M.Cohen@metalfestival.nl
+                siteDetailsURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100111
+              - contractIdentification:
+                  acquirerId: '315000001'
+                  holdingId: 300
+                  merchantId: '2001'
+                  contractId: '20011'
+                cardAcceptorId: '90200110'
+                siteId: 200110
+                siteName: GreatGroceries.com
+                channel: 2
+                commencementDate: 2022-12-09
+                status: Active
+                address:
+                  streetName: Laakweg
+                  houseNumber: 126
+                  postalCode: 2521SC
+                  city: Den Haag
+                  countryCode: 528
+                  contactPersonName: H. Gunes
+                  email: H.Gunes@GreatGroceries.com
+                siteDetailsURI: acquiring/contract/v2.0/acquirers/315000001/contracts/20011/sites/200110
+              - contractIdentification:
+                  acquirerId: '315000001'
+                  holdingId: 300
+                  merchantId: '2001'
+                  contractId: '20011'
+                cardAcceptorId: '2001'
+                siteId: 200111
+                siteName: GG Nijmegen
+                channel: 1
+                commencementDate: 2022-12-09
+                status: Active
+                address:
+                  streetName: Lange Hezelstraat
+                  houseNumber: 14
+                  postalCode: 6511CJ
+                  city: Nijmegen
+                  countryCode: 528
+                  contactPersonName: J. Gonzalez
+                  email: J.Gonzalez@GreatGroceries.com
+                siteDetailsURI: acquiring/contract/v2.0/acquirers/315000001/contracts/20011/sites/200111
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    post:
+      tags:
+      - Site
+      summary: Add a site (based on Card Acceptor ID)
+      operationId: postSiteCaid
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PostSite'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostSite'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PostSite'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PostSite'
+        required: true
+      responses:
+        201:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostSiteResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/sites/{cardAcceptorId}:
+    get:
+      tags:
+      - Site
+      summary: Retrieve a site (based on Card Acceptor ID)
+      operationId: getSiteCaid
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: cardAcceptorId
+        in: path
+        description: Unique identification of the card acceptor, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteData'
+              example:
+                contractIdentification:
+                  acquirerId: '315000001'
+                  contractId: '10011'
+                  siteId: 100111
+                  cardAcceptorId: '1001'
+                basic:
+                  acquirerName: Worldline Sandbox Bank
+                  contractName: Music Festivals
+                  siteName: EPS*Metal Festival
+                  channel: 1
+                  terminalDomainId: 1
+                  subMerchantId: 111
+                  merchantCategoryCode: '7999'
+                  transactionReference: false
+                refundLimits:
+                  maximumRefundAmount: '56.00'
+                  maximumDailyRefundAmount: '200000.00'
+                  maximumDailyNumberOfRefunds: 3000
+                status:
+                  status: Active
+                  commencementDate: 2022-12-09
+                addressDetailsURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100111/addresses
+                balanceDataURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100111/balances
+                brandDataURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100111/brands
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    delete:
+      tags:
+      - Site
+      summary: Terminate a site (based on Card Acceptor ID)
+      operationId: deleteSiteCaid
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: cardAcceptorId
+        in: path
+        description: Unique identification of the card acceptor, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    patch:
+      tags:
+      - Site
+      summary: Update a site (based on Card Acceptor ID)
+      description: "Fields that can be used: **/basic/siteName, /basic/subMerchantId**\r\nOperations that can be used: **replace, remove**\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"MySite\",\r\n           \"path\": \"/basic/siteName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"123456\",\r\n           \"path\": \"/basic/subMerchantId\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+      operationId: patchSiteCaid
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: cardAcceptorId
+        in: path
+        description: Unique identification of the card acceptor, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+        required: false
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/sites/{cardAcceptorId}/addresses:
+    get:
+      tags:
+      - Site
+      summary: Retrieve addresses of a site (based on Card Acceptor ID)
+      operationId: getSiteAddressesCaid
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: cardAcceptorId
+        in: path
+        description: Unique identification of the card acceptor, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteAddressData'
+              example:
+                contractIdentification:
+                  acquirerId: '315000001'
+                  contractId: '10011'
+                  siteId: 100111
+                  cardAcceptorId: '1001'
+                addresses:
+                - addressType: Location
+                  streetName: Nieuwstraat
+                  houseNumber: 12
+                  postalCode: 3267AR
+                  city: Goudswaard
+                  countryCode: 528
+                  contactPersonName: M. Cohen
+                  email: M.Cohen@metalfestival.nl
+                  communicationLanguage: eng
+                  communicationPreference: 3
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    patch:
+      tags:
+      - Site
+      summary: Update addresses of a site (based on Card Acceptor ID)
+      description: "Fields that can be used: **/addresses/0/streetName, /addresses/0/houseNumber**\r\nOperations that can be used: **replace, remove**\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Mainstreet\",\r\n           \"path\": \"/addresses/0/streetName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": 12,\r\n           \"path\": \"/addresses/0/houseNumber\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+      operationId: patchSitePatchSiteAddressCaidAddresses
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: cardAcceptorId
+        in: path
+        description: Unique identification of the card acceptor, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+        required: false
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites:
+    post:
+      tags:
+      - Site
+      summary: Add a site
+      operationId: postSite
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PostSite'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostSite'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PostSite'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PostSite'
+        required: true
+      responses:
+        201:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostSiteResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites/{siteId}:
+    get:
+      tags:
+      - Site
+      summary: Retrieve a site
+      description: 'This operation retrieves a site.
+
+        '
+      operationId: getSite
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteData'
+              examples:
+                POS:
+                  value:
+                    contractIdentification:
+                      acquirerId: '315000001'
+                      contractId: '10011'
+                      siteId: 100111
+                      cardAcceptorId: '1001'
+                    basic:
+                      acquirerName: Worldline Sandbox Bank
+                      contractName: Music Festivals
+                      siteName: EPS*Metal Festival
+                      channel: 1
+                      terminalDomainId: 1
+                      subMerchantId: 111
+                      merchantCategoryCode: '7999'
+                      transactionReference: false
+                    refundLimits:
+                      maximumRefundAmount: '56.00'
+                      maximumDailyRefundAmount: '200000.00'
+                      maximumDailyNumberOfRefunds: 3000
+                    status:
+                      status: Active
+                      commencementDate: 2022-12-09
+                    addressDetailsURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100111/addresses
+                    balanceDataURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100111/balances
+                    brandDataURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100111/brands
+                E-commerce:
+                  value:
+                    contractIdentification:
+                      acquirerId: '315000001'
+                      contractId: '10011'
+                      siteId: 100110
+                      cardAcceptorId: '90100110'
+                    basic:
+                      acquirerName: Worldline Sandbox Bank
+                      contractName: Music Festivals
+                      siteName: EPS*Home Festival
+                      channel: 2
+                      subMerchantId: 111
+                      merchantCategoryCode: '7999'
+                    status:
+                      status: Active
+                      commencementDate: 2022-12-09
+                    addressDetailsURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100110/addresses
+                    balanceDataURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100110/balances
+                    brandDataURI: acquiring/contract/v2.0/acquirers/315000001/contracts/10011/sites/100110/brands
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    delete:
+      tags:
+      - Site
+      summary: Delete a site
+      operationId: deleteSite
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    patch:
+      tags:
+      - Site
+      summary: Update a site
+      description: "Based on a GET Site call a PATCH Site call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"MySite\",\r\n           \"path\": \"/basic/siteName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"123456\",\r\n           \"path\": \"/basic/subMerchantId\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+      operationId: patchSite
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+        required: false
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites/{siteId}/addresses:
+    get:
+      tags:
+      - Site
+      summary: Retrieve the addresses of a site
+      description: 'This operation retrieves addresses of a site.
+
+        '
+      operationId: getSiteAddresses
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteAddressData'
+              example:
+                contractIdentification:
+                  acquirerId: '315000001'
+                  contractId: '10011'
+                  siteId: 100111
+                  cardAcceptorId: '1001'
+                addresses:
+                - addressType: Location
+                  streetName: Nieuwstraat
+                  houseNumber: 12
+                  postalCode: 3267AR
+                  city: Goudswaard
+                  countryCode: 528
+                  contactPersonName: M. Cohen
+                  email: M.Cohen@metalfestival.nl
+                  communicationLanguage: eng
+                  communicationPreference: 3
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    patch:
+      tags:
+      - Site
+      summary: Updates the adresses of a site
+      description: "Based on a GET Site Addresses call a PATCH Site Addresses call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Since a site only has one address the index is always 0\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Mainstreet\",\r\n           \"path\": \"/addresses/0/streetName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": 12,\r\n           \"path\": \"/addresses/0/houseNumber\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+      operationId: patchSiteAddresses
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+        required: false
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites/{siteId}/balances:
+    get:
+      tags:
+      - Site
+      summary: Retrieve the balances of a site
+      description: 'This operation retrieves balances of a site.
+
+        '
+      operationId: getSiteBalances
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteBalanceData'
+              example:
+                contractIdentification:
+                  acquirerId: '315000001'
+                  contractId: '10011'
+                  siteId: 100111
+                  cardAcceptorId: '1001'
+                balances:
+                - balanceNumber: 1
+                  paymentLevel: 4
+                  paymentAggregation: 1
+                  paymentFrequency: 4
+                  paymentDelay: 0
+                  bankAccounts:
+                  - currency: EUR
+                    bankAccountType: 1
+                    bic: BITSNL2A
+                    iban: NL76BITS1234567890
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    patch:
+      tags:
+      - Site
+      summary: Update the balances of a site
+      description: "Based on a GET Site Balances call a PATCH Site Balances call can be generated to change one or more fields of one or more balances. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. To reference a specific balance the index of that balance in the GET call needs to be used.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Shop123\",\r\n           \"path\": \"/balances/0/merchantReconciliationReference\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"NL94PCGD0000000222\",\r\n           \"path\": \"/balances/0/bankAccounts/0/iban\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+      operationId: patchSiteBalances
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+        required: false
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+  /acquiring/contract/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites/{siteId}/brands:
+    get:
+      tags:
+      - Site
+      summary: Retrieve the brand parameters of a site
+      description: 'This operation retrieves brands of a site.
+
+        '
+      operationId: getSiteBrands
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: includeTerminated
+        in: header
+        description: Indicates whether terminated items should be included in the response of the GET call. Default value is 'false' (no terminated items included).
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteBrandData'
+              example:
+                contractIdentification:
+                  acquirerId: '315000001'
+                  contractId: '10011'
+                  siteId: 100111
+                  cardAcceptorId: '1001'
+                brands:
+                - label: MAST
+                  brand: Mastercard
+                  brandParameters:
+                  - offlineManualEntryAllowed: true
+                    magstripeTransactionProcessingOptions: 2
+                    amounts:
+                    - currency: EUR
+                      magstripeOfflineFloorLimit: '0.00'
+                      iccOfflineFloorLimit: '0.00'
+                      transactionLimitContactless: '99999.99'
+                      offlineFloorLimitContactless: '0.00'
+                      cardholderVerificationLimit: '50.00'
+                      receiptLimit: '0.00'
+                      noCvmLimit: '0.00'
+                      maximumCashBackAmount: '0.00'
+                      matMaximumTransactionAmount: '0.00'
+                    offlineMaximumTipPercentage: 0
+                    noCvmAllowed: false
+                    offlineBackupModeAllowed: false
+                    allowedServices:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                    manualEntryProcessingOptions:
+                      refuseTransaction: false
+                      performOnlineTransaction: true
+                      pinRequired: false
+                      signatureRequired: true
+                      cvc2OrCvv2Required: false
+                      luhnDigitCheckRequired: true
+                    cardEntryModes:
+                      manualEntry: false
+                      magstripe: true
+                      iccEmv: true
+                      contactlessMagstripe: true
+                      contactlessIccEmv: true
+                    allowedServicesContactless:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                    rejectedProductTypes:
+                      eeaDebit: false
+                      eeaCredit: false
+                      eeaCommercial: false
+                      eeaPrepaid: false
+                - label: VISA
+                  brand: Visa
+                  brandParameters:
+                  - offlineManualEntryAllowed: true
+                    magstripeTransactionProcessingOptions: 2
+                    amounts:
+                    - currency: EUR
+                      magstripeOfflineFloorLimit: '0.00'
+                      iccOfflineFloorLimit: '0.00'
+                      transactionLimitContactless: '99999.99'
+                      offlineFloorLimitContactless: '0.00'
+                      cardholderVerificationLimit: '50.00'
+                      receiptLimit: '0.00'
+                      noCvmLimit: '0.00'
+                      maximumCashBackAmount: '0.00'
+                      matMaximumTransactionAmount: '0.00'
+                    offlineMaximumTipPercentage: 0
+                    noCvmAllowed: false
+                    offlineBackupModeAllowed: false
+                    allowedServices:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                    manualEntryProcessingOptions:
+                      refuseTransaction: false
+                      performOnlineTransaction: true
+                      pinRequired: false
+                      signatureRequired: true
+                      cvc2OrCvv2Required: false
+                      luhnDigitCheckRequired: true
+                    cardEntryModes:
+                      manualEntry: false
+                      magstripe: true
+                      iccEmv: true
+                      contactlessMagstripe: true
+                      contactlessIccEmv: true
+                    allowedServicesContactless:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                    rejectedProductTypes:
+                      eeaDebit: false
+                      eeaCredit: false
+                      eeaCommercial: false
+                      eeaPrepaid: false
+                - label: MAES
+                  brand: Maestro
+                  brandParameters:
+                  - magstripeTransactionProcessingOptions: 1
+                    amounts:
+                    - currency: EUR
+                      transactionLimitContactless: '99999.99'
+                      offlineFloorLimitContactless: '0.00'
+                      cardholderVerificationLimit: '50.00'
+                      receiptLimit: '0.00'
+                      noCvmLimit: '0.00'
+                      maximumCashBackAmount: '0.00'
+                      matMaximumTransactionAmount: '0.00'
+                    offlineMaximumTipPercentage: 0
+                    noCvmAllowed: false
+                    offlineBackupModeAllowed: false
+                    allowedServices:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                    manualEntryProcessingOptions:
+                      refuseTransaction: false
+                      performOnlineTransaction: false
+                      pinRequired: false
+                      signatureRequired: false
+                      cvc2OrCvv2Required: false
+                      luhnDigitCheckRequired: false
+                    cardEntryModes:
+                      manualEntry: false
+                      magstripe: false
+                      iccEmv: true
+                      contactlessMagstripe: true
+                      contactlessIccEmv: true
+                    allowedServicesContactless:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                - label: VPAY
+                  brand: V Pay
+                  brandParameters:
+                  - magstripeTransactionProcessingOptions: 1
+                    amounts:
+                    - currency: EUR
+                      transactionLimitContactless: '99999.99'
+                      offlineFloorLimitContactless: '0.00'
+                      cardholderVerificationLimit: '50.00'
+                      receiptLimit: '0.00'
+                      noCvmLimit: '0.00'
+                      maximumCashBackAmount: '0.00'
+                      matMaximumTransactionAmount: '0.00'
+                    offlineMaximumTipPercentage: 0
+                    noCvmAllowed: false
+                    offlineBackupModeAllowed: false
+                    allowedServices:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                    manualEntryProcessingOptions:
+                      refuseTransaction: false
+                      performOnlineTransaction: false
+                      pinRequired: false
+                      signatureRequired: false
+                      cvc2OrCvv2Required: false
+                      luhnDigitCheckRequired: false
+                    cardEntryModes:
+                      manualEntry: false
+                      magstripe: false
+                      iccEmv: true
+                      contactlessMagstripe: true
+                      contactlessIccEmv: true
+                    allowedServicesContactless:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                - label: DBMC
+                  brand: Debit Mastercard
+                  brandParameters:
+                  - magstripeTransactionProcessingOptions: 1
+                    amounts:
+                    - currency: EUR
+                      transactionLimitContactless: '99999.99'
+                      offlineFloorLimitContactless: '0.00'
+                      cardholderVerificationLimit: '50.00'
+                      receiptLimit: '0.00'
+                      noCvmLimit: '0.00'
+                      maximumCashBackAmount: '0.00'
+                      matMaximumTransactionAmount: '0.00'
+                    offlineMaximumTipPercentage: 0
+                    noCvmAllowed: false
+                    offlineBackupModeAllowed: false
+                    allowedServices:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                    manualEntryProcessingOptions:
+                      refuseTransaction: false
+                      performOnlineTransaction: false
+                      pinRequired: false
+                      signatureRequired: false
+                      cvc2OrCvv2Required: false
+                      luhnDigitCheckRequired: false
+                    cardEntryModes:
+                      manualEntry: false
+                      magstripe: false
+                      iccEmv: true
+                      contactlessMagstripe: true
+                      contactlessIccEmv: true
+                    allowedServicesContactless:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                - label: VIDB
+                  brand: Visa Debit
+                  brandParameters:
+                  - magstripeTransactionProcessingOptions: 1
+                    amounts:
+                    - currency: EUR
+                      transactionLimitContactless: '99999.99'
+                      offlineFloorLimitContactless: '0.00'
+                      cardholderVerificationLimit: '50.00'
+                      receiptLimit: '0.00'
+                      noCvmLimit: '0.00'
+                      maximumCashBackAmount: '0.00'
+                      matMaximumTransactionAmount: '0.00'
+                    offlineMaximumTipPercentage: 0
+                    noCvmAllowed: false
+                    offlineBackupModeAllowed: false
+                    allowedServices:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+                    manualEntryProcessingOptions:
+                      refuseTransaction: false
+                      performOnlineTransaction: false
+                      pinRequired: false
+                      signatureRequired: false
+                      cvc2OrCvv2Required: false
+                      luhnDigitCheckRequired: false
+                    cardEntryModes:
+                      manualEntry: false
+                      magstripe: false
+                      iccEmv: true
+                      contactlessMagstripe: true
+                      contactlessIccEmv: true
+                    allowedServicesContactless:
+                      purchaseService: true
+                      cashAdvanceService: false
+                      reservationService: false
+                      purchaseAfterReservationService: false
+                      cardValidityCheckService: false
+                      refundService: true
+                      deferredSaleService: false
+                      cancellationService: true
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+    patch:
+      tags:
+      - Site
+      summary: Update the brand parameters of a site
+      description: "Based on a GET Site Brands call a PATCH Site Brands call can be generated to change one or more fields of one or more brands. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. To reference a specific brand the index of that brand in the GET call needs to be used.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"true\",\r\n           \"path\": \"brands/0/brandParameters/allowedServices/refundService\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"path\": \"brands/0/brandParameters/allowedServicesContactless/refundService\",\r\n           \"op\": \"remove\"             \r\n       }\r\n    ]"
+      operationId: patchSiteBrands
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: 'Unique identification of the contract, determined by the acquirer
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: siteId
+        in: path
+        description: Unique identification of the site within the contract
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: applyToAll
+        in: query
+        description: If value is true then the changes made to 1 brand (with index 0) will automatically apply to all brands
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Operation'
+        required: false
+      responses:
+        200:
+          description: Change is processed with correlation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrelationResponse'
+        400:
+          description: Invalid input provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+components:
+  schemas:
+    BrandParameters:
+      type: object
+      properties:
+        offlineManualEntryAllowed:
+          type: boolean
+          description: Indicates whether manual entry of card data (PAN, expiry date) is allowed for transactions which are processed offline
+        magstripeTransactionProcessingOptions:
+          type: integer
+          description: Used to select the cardholder verification method for magnetic stripe based transactions. Values [1 = PIN required, 2 = Signature required, 3 = PIN or signature required based on card service code]
+          format: int32
+        amounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Amount'
+        offlineMaximumTipPercentage:
+          type: integer
+          description: The maximum tip amount, represented as a percentage of the transaction amount, that is allowed as extra
+          format: int32
+        noCvmAllowed:
+          type: boolean
+          description: Indicates whether transactions (chip with contacts) without cardholder verification (No-CVM) are allowed beneath the maximum amount set by the scheme
+        maximumDailyTransactionNumber:
+          type: integer
+          description: The maximum number of online transactions for a site per day
+          format: int32
+        maxDailyVoiceAuthorizationNumber:
+          type: integer
+          description: The maximum number of voice authorizations for a site per day
+          format: int32
+        tokenization:
+          type: boolean
+          description: Indicates whether C-TAP tokenization is allowed on the terminal
+        dynamicDescriptor:
+          type: boolean
+          description: Card brand parameter which indicates towards the front office, whether a terminal or website is allowed to use Dynamic Descriptors. Dynamic descriptors allow merchants to add relevant information (invoice number or some other details) about a transaction to the payment description so that it shows up on bank statements of consumers. The dynamic descriptor data is sent both in authorization and clearing messages
+        preAuthorizationPanClipping:
+          type: boolean
+          description: Indicates whether the PAN must be clipped or not on merchant’s ticket for pre-authorization
+        offlineBackupModeAllowed:
+          type: boolean
+          description: The backup mode allows the merchant to let the terminal approve offline transactions, which normally require going online, when it is temporarily unable to go online. It is an indicator telling if the backup mode can be activated or not by the terminal
+        allowedServices:
+          $ref: '#/components/schemas/AllowedServices'
+        manualEntryProcessingOptions:
+          $ref: '#/components/schemas/ManualEntryProcessingOptions'
+        cardEntryModes:
+          $ref: '#/components/schemas/CardEntryModes'
+        allowedServicesContactLess:
+          $ref: '#/components/schemas/AllowedServices'
+        rejectedProductTypes:
+          $ref: '#/components/schemas/RejectedProductTypes'
+    AddressDetails:
+      required:
+      - addressType
+      - city
+      - countryCode
+      type: object
+      properties:
+        addressType:
+          type: string
+          description: Type of the address. Values [Business, Chargeback, Creditor, Debtor, Invoice, Location, Postal, Private]
+          example: Business
+        streetName:
+          type: string
+          description: Street name and house number of the address. In case of a Dutch address only Street name
+          example: Stootblok
+        houseNumber:
+          type: integer
+          description: House number. Only used for Dutch addresses
+          format: int32
+          example: 14
+        houseAddition:
+          type: string
+          description: House number addition. Only used for Dutch addresses
+          example: bis
+        postalCode:
+          type: string
+          description: Postal code of the address
+          example: 3071AP
+        city:
+          type: string
+          description: City of the address
+          example: Rotterdam
+        region:
+          type: string
+          description: Region of the address. Only applicable for specific countries
+          example: Zuid-Holland
+        countryCode:
+          type: string
+          description: Country of the address according to ISO 3166-1 (numeric-3)
+          example: '528'
+        departmentName:
+          type: string
+          description: Department of the contact person registered with the address
+          example: Finance
+        contactPersonName:
+          type: string
+          description: Name of the contact person registered with the address
+          example: M. Scott
+        postalRoom:
+          type: string
+          description: Postal room of the contact person registered with the address
+          example: 2N.17
+        telephoneNumber:
+          type: string
+          description: Telephone number of contact person registered with the address
+          example: +31-63864055
+        faxNumber:
+          type: string
+          description: Fax number of the contact person registered with the address
+          example: +31-24683905
+        email:
+          type: string
+          description: E-mail address of the contact person registered with the address
+          example: M.Scott@eventpaymentsolutions.com
+        communicationLanguage:
+          type: string
+          description: Preferred communication language of the contact person registered with the address accrding to ISO 639-2 (alphanumeric-3)
+          example: eng
+        communicationPreference:
+          type: integer
+          description: Preferred communication type of the contact person registered with the address. Values [1 = Post, 2 = Fax, 3 = E-mail]
+          format: int32
+          example: 3
+    Amount:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Transaction currency according to ISO 4217 (alphanumeric-3)
+        magstripeOfflineFloorLimit:
+          type: string
+          description: 'Floor limit for magnetic stripe based transactions. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        iccOfflineFloorLimit:
+          type: string
+          description: 'Floor limit for chip based EMV transactions. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        transactionLimitContactless:
+          type: string
+          description: 'Transaction limit for contactless transactions. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        offlineFloorLimitContactless:
+          type: string
+          description: 'Offline floor limit for contactless transactions. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        cardholderVerificationLimit:
+          type: string
+          description: 'Cardholder verification limit. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        receiptLimit:
+          type: string
+          description: 'The maximum amount allowed for which a receipt does not have to be printed. A receipt must be given for all transaction amounts above this. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        noCvmLimit:
+          type: string
+          description: 'The amount under which transactions (chip with contacts) without cardholder verification (No-CVM) are allowed. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        maximumCashBackAmount:
+          type: string
+          description: 'The maximum amount a merchant is allowed to pay as cash back. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        maximumDailyTransactionAmount:
+          type: string
+          description: 'The maximum total amount of online transactions for a site per day. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        maximumTransactionAmount:
+          type: string
+          description: 'The maximum amount of a single transaction. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        maxDailyVoiceAuthorizationAmount:
+          type: string
+          description: 'The maximum total amount of voice authorizations for a site per day. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        maxVoiceAuthorizationAmount:
+          type: string
+          description: 'The maximum amount of a single voice authorization. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        matMaximumTransactionAmount:
+          type: string
+          description: Restricts the amount of transactions in the backup mode. If the transaction amount is greater than the maximum backup transaction amount, then the backup transaction is not accepted offline.
+        matTransactionLimitContactless:
+          type: string
+          description: Restricts the amount of the contactless transaction in backup mode
+        matCardholderVerificationLimit:
+          type: string
+          description: Restricts the amount of the contactless transaction without “Offline On Device Cardholder Verification” in the backup mode
+    CardEntryModes:
+      type: object
+      properties:
+        manualEntry:
+          type: boolean
+          description: Indicates whether manual entry (keying) is allowed
+        magstripe:
+          type: boolean
+          description: Indicates whether the use of magnetic stripe is allowed
+        iccEmv:
+          type: boolean
+          description: Indicates whether the use of EMV chip is allowed
+        contactlessMagstripe:
+          type: boolean
+          description: Indicates whether the use of magnetic stripe for contactless transactions is allowed
+        contactlessIccEmv:
+          type: boolean
+          description: Indicates whether the use of EMV chip for contactless transactions is allowed
+    Balance:
+      type: object
+      properties:
+        balanceNumber:
+          type: integer
+          description: Number of the balance. Values [1, 2, 3]
+          format: int32
+        merchantReconciliationReference:
+          type: string
+          description: Reference the merchant wants to be part of the description lines of the payment on his bank statement
+        paymentLevel:
+          type: integer
+          description: Level of the merchant hierarchy at which the merchant is paid. Values [4 = Contract, 5 = Site, 6 = Terminal]
+          format: int32
+        paymentAggregation:
+          type: integer
+          description: Indicates whether the merchant is paid per brand, per scheme or totalized. Values [1 = Totalized payment, 2 = Payment per brand, 3 = Payment per scheme]
+          format: int32
+        paymentFrequency:
+          type: integer
+          description: Frequency in which the balance is settled with the merchant. Values [1 = Accounting period, 2 = Weekly, 3 = Monthly, 4 = Daily, 5 = Twice a month, 6 = Per external batch, 7 = Across batches, 8 = Merchant manual cut-off, 9 = Merchant automatic cut-off]
+          format: int32
+        paymentDay:
+          type: integer
+          description: Specific day of the week or month the merchant is paid. Values in case of weekly [1 to 7], values in case of monthly [1 to 31]
+          format: int32
+        paymentDelay:
+          type: integer
+          description: Payment delay in days. Values [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 30, 60, 90]
+          format: int32
+        terminalPeriodClosureLevel:
+          type: integer
+          description: The level on which the financial counter information for the transactions cut-off period are consulted, used by the merchant to align it with the used reconciliation period when the merchant has chosen to  manual cut-off the booking period of the transactions. Values [0 = Terminal, 1 = Site]
+          format: int32
+        terminalPeriodCutoffTime:
+          type: string
+          description: The fixed time (hours and minutes, without date and seconds) of the daily moment - defined by the merchant - when the cut-off of the financial counter information, used by the merchant to align it with the used reconciliation period when the merchant has chosen for automatically cut off the booking period of the transactions
+        bankAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TerminalBalancebankAccount'
+    Address:
+      type: object
+      properties:
+        streetName:
+          type: string
+          description: Street name and house number of the address. In case of a Dutch address only Street name
+          example: Stootblok
+        houseNumber:
+          type: integer
+          description: House number. Only used for Dutch addresses
+          format: int32
+          example: 14
+        houseAddition:
+          type: string
+          description: House number addition. Only used for Dutch addresses
+          example: bis
+        postalCode:
+          type: string
+          description: Postal code of the address
+          example: 3071AP
+        city:
+          type: string
+          description: City of the address
+          example: Rotterdam
+        region:
+          type: string
+          description: Region of the address. Only applicable for specific countries
+          example: Zuid-Holland
+        countryCode:
+          type: string
+          description: Country of the address according to ISO 3166-1 (numeric-3)
+          example: '528'
+        contactPersonName:
+          type: string
+          description: Name of the contact person registered with the address
+          example: M. Scott
+        telephoneNumber:
+          type: string
+          description: Telephone number of contact person registered with the address
+          example: 0883855111
+        email:
+          type: string
+          description: E-mail address of the contact person registered with the address
+          example: M.Scott@eventpaymentsolutions.com
+    PostSiteResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Unique ID that was generated for the specific change
+          format: uuid
+        contractIdentification:
+          $ref: '#/components/schemas/SiteContractIdentification'
+    RefundLimits:
+      type: object
+      properties:
+        maximumRefundAmount:
+          type: string
+          description: 'Maximum refund amount in Euro. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        maximumDailyRefundAmount:
+          type: string
+          description: 'Maximum daily total refund amount per site in Euro. Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        maximumDailyNumberOfRefunds:
+          type: integer
+          description: Maximum daily total number of refunds per site
+          format: int32
+    PostSite:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/PostSiteContractIdentification'
+        basic:
+          $ref: '#/components/schemas/PostSiteBasic'
+        serviceProviders:
+          $ref: '#/components/schemas/ServiceProviders'
+        refundLimits:
+          $ref: '#/components/schemas/RefundLimits'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
+    Operation:
+      type: object
+      properties:
+        value:
+          type: object
+          properties: {}
+        path:
+          type: string
+          description: 'A pointer to a specific value (field) that needs to be changed
+
+
+            examples /basic/merchantCategoryCode, brands/0/brandParameters/allowedServices/refundService
+
+            '
+        op:
+          type: string
+          description: 'The following operations are implemented
+
+            - replace - change the value of a specific field
+
+            - remove -  remove the value of a specific field (only allowed for optional fields)
+
+            '
+        from:
+          type: string
+          description: Not elevant for currently supported operations
+    SiteData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/SiteContractIdentification'
+        basic:
+          $ref: '#/components/schemas/SiteBasic'
+        serviceProviders:
+          $ref: '#/components/schemas/SiteServiceProviders'
+        refundLimits:
+          $ref: '#/components/schemas/RefundLimits'
+        status:
+          $ref: '#/components/schemas/Status'
+        addressDetailsURI:
+          type: string
+          description: URI to get the site address details
+          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/addresses
+        balanceDataURI:
+          type: string
+          description: URI to get the site balance data
+          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/balances
+        brandDataURI:
+          type: string
+          description: URI to get the site brand data
+          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/brands
+    AllowedServices:
+      type: object
+      properties:
+        purchaseService:
+          type: boolean
+          description: Indicates whether purchase is allowed
+        cashAdvanceService:
+          type: boolean
+          description: Indicates whether cash advance is allowed
+        reservationService:
+          type: boolean
+          description: Indicates whether reservation is allowed
+        purchaseAfterReservationService:
+          type: boolean
+          description: Indicates whether purchase after reservation is allowed
+        cardValidityCheckService:
+          type: boolean
+          description: Indicates whether card validity check is allowed
+        refundService:
+          type: boolean
+          description: Indicates whether refund is allowed
+        deferredSaleService:
+          type: boolean
+          description: Indicates whether deferred sale is allowed
+        cancellationService:
+          type: boolean
+          description: Indicates whether cancellation of a purchase is allowed
+        saleWithCashback:
+          type: boolean
+          description: Indicates whether the sale with cashback is allowed
+        saleWithIncreasedAmount:
+          type: boolean
+          description: Indicates whether sale with increased amount is allowed
+        quasiCashSale:
+          type: boolean
+          description: Indicates whether quasi cash is allowed
+        cancellationOfSaleAfterReservation:
+          type: boolean
+          description: Indicates whether cancellation of a sale after reservation is allowed
+        cancellationOfCashAdvance:
+          type: boolean
+          description: Indicates whether cancellattion of cash advance is allowed
+        recurringSale:
+          type: boolean
+          description: Indicates whether recurring sale is allowed
+        cancellationOfReservation:
+          type: boolean
+          description: Indicates whether cancellation of a reservation is allowed
+        saleWithDcc:
+          type: boolean
+          description: Indicates whether sale with DCC is allowed
+        saleAfterReservationWithDcc:
+          type: boolean
+          description: Indicates whether sales after reservation with DCC is allowed
+        cashAdvanceWithDcc:
+          type: boolean
+          description: Indicates whether cash advance with DCC is allowed
+        refundWithDcc:
+          type: boolean
+          description: Indicates whether refund with DCC is allowed
+        reservationDcc:
+          type: boolean
+          description: Indicates whether reservation with DCC is allowed
+    SiteBalanceData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/SiteContractIdentification'
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+    TerminalBalancebankAccount:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: (Local) Payment Currency according to ISO 4217 (alphanumeric-3)
+        bankAccountType:
+          type: integer
+          description: Describes whether a bank account number is of the type IBAN or not (Other). In the latter case it can be for example an American or South-African bank account number. Values [1 = IBAN, 99 = Other]
+          format: int32
+        bic:
+          type: string
+          description: Bank Institution Code for merchant payment. A BIC needs to be registered for each payment currency of the merchant
+        iban:
+          type: string
+          description: International Bank Account Number for merchant payments. An IBAN needs to be registered for each payment currency of the merchant
+        threshold:
+          type: integer
+          description: Amount of the threshold. The acquirer can choose to hold an amount in reserve before paying the merchant. This is usually done for risk mitigation. The threshold is registered at balance 1. An amount can be registered for each payment currency of the merchant
+          format: int32
+    SiteContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '10011'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+    SiteServiceProviders:
+      type: object
+      properties:
+        networkServiceProviderName:
+          type: string
+          description: Name of the network service provider
+        visaEnablerVerificationValue:
+          type: string
+          description: Visa Enabler Verification Value (EVV)
+    SiteBasic:
+      type: object
+      properties:
+        acquirerName:
+          type: string
+          description: Name of the acquirer
+        contractName:
+          type: string
+          description: Optional name for this specific contract
+        siteName:
+          type: string
+          description: Name of the site
+        channel:
+          type: integer
+          description: Channel of the site. Values [1 = POS, 2 = eCommerce, 3 = MOTO]
+          format: int32
+        terminalDomainId:
+          type: integer
+          description: A domain of merchants, acquirers, terminal vendors and terminals in which a common POS terminal protocol (e.g. C-TAP) is used and in which a certain authority (e.g. Acquiris, Nets) is responsible for identifiers of acquirers and processors. Values [1 = Dutch C-TAP / IFSF, 2 = Finnish EMV, 3 = International C-TAP]
+          format: int32
+        subMerchantId:
+          type: string
+          description: Sub merchant ID, defined by a payment facilitator (merchant). Each merchant that is considered to be a payment facilitator by the payment schemes needs to uniquely identify all of its sites with a sub merchant ID
+        terminalModel:
+          type: integer
+          description: Indicates which model for terminal management applies. Values [1 = Processor defined terminal ID, 2 = Merchant specific terminal ID in contract management, 3 = Merchant specific terminal ID, no terminals in contract management, 4 = Third party hosting]
+          format: int32
+        merchantCategoryCode:
+          type: string
+          description: The MCC is used to classify a business by the types of goods or services it provides, according to ISO 18245 for retail financial services
+        transactionReference:
+          type: boolean
+          description: Indicates whether the merchant is allowed to add a reference to a C-TAP POS transaction
+    SiteBrandData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/SiteContractIdentification'
+        brands:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrandData'
+    SiteListData:
+      type: object
+      properties:
+        contractIdentification:
+          type: object
+          properties:
+            acquirerId:
+              type: string
+              description: Unique identification of the acquirer, determined by equensWorldline
+              example: '315000001'
+            holdingId:
+              type: integer
+              description: Unique identification of the holding, determined by equensWorldline
+              format: int32
+              example: 200
+            merchantId:
+              type: string
+              description: Unique identification of the merchant, determined by the acquirer
+              example: '1001'
+            contractId:
+              type: string
+              description: Unique identification of the contract, determined by the acquirer
+              example: '10011'
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+          example: '90100110'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+          example: 100110
+        siteName:
+          type: string
+          description: Name of the site
+          example: EPS*Metal Festival
+        channel:
+          type: integer
+          description: Channel of the contract. Values [1 = POS, 2 = eCommerce, 3 = MOTO]
+          format: int32
+        startDateTime:
+          type: string
+          description: Start date of the entity (yyyy-mm-dd hh:mm:ss). FIELD DEPRECATED
+          format: date-time
+        commencementDate:
+          type: string
+          description: Date at which contract, site or terminal was registered
+        paymentBlockDate:
+          type: string
+          description: Date at which the payment for the contract or site has been blocked (yyyy-mm-dd)
+          format: date-time
+        transactionBlockDate:
+          type: string
+          description: Date at which the transactions for the contract or site has been blocked (yyyy-mm-dd)
+          format: date-time
+        status:
+          type: string
+          description: The status of this entity. Values [Active, Blocked (Trx & Pmts), Blocked (Trx), Blocked (Pmts)]
+          example: Active
+        address:
+          $ref: '#/components/schemas/Address'
+        siteDetailsURI:
+          type: string
+          description: URI to get the site details
+          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX
+    BrandData:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Unique identification of the brand (payment product). Maestro = MAES, American Express = AMEX, Visa = VISA, etc.
+        brand:
+          type: string
+          description: Name of the brand
+        brandParameters:
+          $ref: '#/components/schemas/BrandParameters'
+    SiteAddressData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/SiteContractIdentification'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
+    CorrelationResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Unique ID that was generated for the specific change
+          format: uuid
+    ErrorData:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Unique code of the error as returned by the system handling the request
+        keyword:
+          type: string
+          description: JSON keyword from the request message that triggered the error
+        errorMessage:
+          type: string
+          description: Message explaining the error
+    PostSiteContractIdentification:
+      type: object
+      properties:
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int64
+          example: 100111
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '10011'
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field for POS. In that case it contains the merchant ID. For channel eCommerce it is always mandatory
+          example: '90100110'
+    ManualEntryProcessingOptions:
+      type: object
+      properties:
+        refuseTransaction:
+          type: boolean
+          description: Indicates whether the transaction should be refused
+        performOnlineTransaction:
+          type: boolean
+          description: Indicates whether the transaction should be performed online
+        pinRequired:
+          type: boolean
+          description: Indicates whether PIN entry is required
+        signatureRequired:
+          type: boolean
+          description: Indicates whether signature is required
+        cvc2OrCvv2Required:
+          type: boolean
+          description: Indicates whether CVC2 (MasterCard) or CVV2 (Visa) is required
+        luhnDigitCheckRequired:
+          type: boolean
+          description: Indicates whether Luhn check digit check is required
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorData'
+    ServiceProviders:
+      type: object
+      properties:
+        visaEnablerVerificationValue:
+          type: string
+          description: Visa Enabler Verification Value (EVV)
+    Status:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of this entity. Values [Active, Blocked (Trx & Pmts), Blocked (Trx), Blocked (Pmts), Terminated]
+        statusReasonId:
+          type: integer
+          description: Reason for blocking or terminating the contract, the site or the terminal. Values [1 = Bankrupt, 2 = Clean Up, 3 = Closed, 4 = Finance request, 5 = Suspected fraud, 6 = Legal request, 7 = To other acquirer, 8 = Incorrect bank Account, 9 = Negative balance, 10 = PCI non-compliance]
+          format: int32
+        commencementDate:
+          type: string
+          description: Date at which contract, site or terminal was registered
+        terminationDate:
+          type: string
+          description: Date at which the contract, site or terminal was terminated
+        transactionBlockDate:
+          type: string
+          description: Date at which the transactions for the contract or site were blocked
+        paymentBlockDate:
+          type: string
+          description: Date at which the payments for the contract or site were blocked
+    RejectedProductTypes:
+      type: object
+      properties:
+        eeaDebit:
+          type: boolean
+          description: Indicates whether transactions with the card product EEA Debit should be rejected by the terminal
+        eeaCredit:
+          type: boolean
+          description: Indicates whether transactions with the card product EEA Credit should be rejected by the terminal
+        eeaCommercial:
+          type: boolean
+          description: Indicates whether transactions with the card product EEA Commercial should be rejected by the terminal
+        eeaPrepaid:
+          type: boolean
+          description: Indicates whether transactions with the card product EEA Pre-paid should be rejected by the terminal
+    PostSiteBasic:
+      type: object
+      properties:
+        siteName:
+          type: string
+          description: Name of the site
+          example: EPS*Metal Festival
+        channel:
+          type: integer
+          description: Channel of the site. Values [1 = POS, 2 = eCommerce, 3 = MOTO]
+          format: int32
+          example: 1
+        terminalDomainId:
+          type: integer
+          description: A domain of merchants, acquirers, terminal vendors and terminals in which a common POS terminal protocol (e.g. C-TAP) is used and in which a certain authority (e.g. Acquiris, Nets) is responsible for identifiers of acquirers and processors. Values [1 = Dutch C-TAP / IFSF, 2 = Finnish EMV, 3 = International C-TAP]
+          format: int32
+          example: 1
+        subMerchantId:
+          type: string
+          description: Sub merchant ID, defined by a payment facilitator (merchant). Each merchant that is considered to be a payment facilitator by the payment schemes needs to uniquely identify all of its sites with a sub merchant ID
+          example: '110'
+        merchantCategoryCode:
+          type: string
+          description: The MCC is used to classify a business by the types of goods or services it provides, according to ISO 18245 for retail financial services
+          example: '7999'
+        transactionReference:
+          type: boolean
+          description: Indicates whether the merchant is allowed to add a reference to a C-TAP POS transaction
+          example: false
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

@@ -1,0 +1,726 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Message - Subscription API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Message - Subscription
+  description: Message Subscription Api Controller
+paths:
+  /issuers/{issuerId}/subscriptions:
+    post:
+      tags:
+      - Message - Subscription
+      summary: Create a new WL Message subscription
+      operationId: createSubscription
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      - name: issuerId
+        in: path
+        description: Id of the issuing bank
+        required: true
+        type: string
+      - in: body
+        name: subscription
+        description: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/Subscription'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateSubscription'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+  /issuers/{issuerId}/subscriptions/search:
+    get:
+      tags:
+      - Message - Subscription
+      summary: Search for subscriptions (with non-pci search terms)
+      operationId: searchSubscriptions
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      - name: cardContractReference
+        in: query
+        description: Card Contract Reference
+        required: false
+        type: string
+        allowEmptyValue: false
+      - name: issuerId
+        in: path
+        description: Id of the issuing bank
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntitySearchSubscription'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+  /issuers/{issuerId}/subscriptions/{subscriptionReference}:
+    get:
+      tags:
+      - Message - Subscription
+      summary: Retrieve subscription by reference
+      operationId: getSubscriptionByReference
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      - name: issuerId
+        in: path
+        description: Id of the issuing bank
+        required: true
+        type: string
+      - name: subscriptionReference
+        in: path
+        description: Reference of the subscription
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntitySubscription'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+    put:
+      tags:
+      - Message - Subscription
+      summary: Modify subscription by reference
+      operationId: modifySubscriptionByReference
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      - name: issuerId
+        in: path
+        description: Id of the issuing bank
+        required: true
+        type: string
+      - in: body
+        name: subscription
+        description: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/Subscription'
+      - name: subscriptionReference
+        in: path
+        description: Reference of the subscription
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifySubscription'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+    delete:
+      tags:
+      - Message - Subscription
+      summary: Delete subscription by reference
+      operationId: deleteSubscriptionByReference
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        description: WL-Correlation-ID
+        required: false
+        type: string
+      - name: issuerId
+        in: path
+        description: Id of the issuing bank
+        required: true
+        type: string
+      - name: subscriptionReference
+        in: path
+        description: Reference of the subscription
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteSubscription'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponseMetadata'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+definitions:
+  SubscriptionIdentifier:
+    type: object
+    properties:
+      subscriptionReference:
+        type: string
+    title: SubscriptionIdentifier
+  ApiResponseEntityCreateSubscription:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/SubscriptionResponse'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityCreateSubscription
+    description: Issuer response entity
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  ApiResponseEntitySearchSubscription:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Subscription'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntitySearchSubscription
+    description: Issuer response entity
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  Subscription:
+    type: object
+    required:
+    - cardContractReference
+    - services
+    properties:
+      cardContractReference:
+        type: string
+        example: 9.9999e+20
+      customerInfo:
+        type: object
+        example:
+          additionalKey1: some-value
+          additionalKey2: another-value
+        description: Key/value object, entries will be part of each notification for this subscription (max. length of the keys is 32 characters)
+        additionalProperties:
+          type: string
+      services:
+        type: array
+        items:
+          $ref: '#/definitions/SubscriptionService'
+      subscriptionIdentifier:
+        $ref: '#/definitions/SubscriptionIdentifier'
+    title: Subscription
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  ApiResponseEntityDeleteSubscription:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/SubscriptionResponse'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityDeleteSubscription
+    description: Issuer response entity
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  ApiResponseEntityModifySubscription:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/SubscriptionResponse'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntityModifySubscription
+    description: Issuer response entity
+  SubscriptionResponse:
+    type: object
+    properties:
+      subscriptionIdentifier:
+        $ref: '#/definitions/SubscriptionIdentifier'
+    title: SubscriptionResponse
+  SubscriptionEvent:
+    type: object
+    required:
+    - eventName
+    properties:
+      eventName:
+        type: string
+        example: XX_Approve_FO
+      externalReference:
+        type: string
+        description: Optional external event identifier
+      parameters:
+        type: array
+        description: Optional list of parameters to customize the criteria values for events
+        items:
+          $ref: '#/definitions/SubscriptionParameter'
+      subscriptionEventIdentifier:
+        $ref: '#/definitions/SubscriptionEventIdentifier'
+    title: SubscriptionEvent
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  SubscriptionServiceIdentifier:
+    type: object
+    properties:
+      subscriptionServiceReference:
+        type: string
+    title: SubscriptionServiceIdentifier
+  SubscriptionService:
+    type: object
+    required:
+    - serviceType
+    properties:
+      contacts:
+        type: array
+        description: List of addresses for an ALERT subscription (required if serviceType is ALERT)
+        items:
+          $ref: '#/definitions/SubscriptionContact'
+      events:
+        type: array
+        description: List of events this subscription will be notified for
+        items:
+          $ref: '#/definitions/SubscriptionEvent'
+      packet:
+        type: string
+        description: ALERT packet name from the issuer configuration (required if serviceType is ALERT)
+      serviceType:
+        type: string
+        example: MESSAGE_SERVICE
+        enum:
+        - ALERT
+        - INSTALMENT
+        - MESSAGE_SERVICE
+      subscriptionServiceIdentifier:
+        $ref: '#/definitions/SubscriptionServiceIdentifier'
+    title: SubscriptionService
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  SubscriptionContact:
+    type: object
+    required:
+    - type
+    - value
+    properties:
+      pushDeviceType:
+        type: string
+        description: Type of (mobile) device (required if type is PUSH)
+        enum:
+        - ANDROID
+        - IOS
+      type:
+        type: string
+        example: MSISDN
+        enum:
+        - MSISDN
+        - EMAIL
+        - PUSH
+      value:
+        type: string
+        example: '+49171000000001'
+    title: SubscriptionContact
+  SubscriptionParameter:
+    type: object
+    required:
+    - criteria
+    - value
+    properties:
+      criteria:
+        type: string
+      value:
+        type: string
+    title: SubscriptionParameter
+  SubscriptionEventIdentifier:
+    type: object
+    properties:
+      subscriptionEventReference:
+        type: string
+    title: SubscriptionEventIdentifier
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ApiResponseEntitySubscription:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      data:
+        $ref: '#/definitions/Subscription'
+      responseMetadata:
+        $ref: '#/definitions/ResponseMetadata'
+    title: ApiResponseEntitySubscription
+    description: Issuer response entity
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

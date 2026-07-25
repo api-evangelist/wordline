@@ -1,0 +1,345 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Authorization API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Authorization
+paths:
+  /acquiring/transaction/v2.0/acquirers/{acquirerId}/authorizations:
+    get:
+      tags:
+      - Authorization
+      summary: Retrieve authorizations
+      description: "This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated authorization(s) data. \nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+      operationId: getAuthorizations
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        schema:
+          type: string
+      - name: acquirerRefNo
+        in: query
+        description: 'Data supplied by an acquirer to assist in identifying an authorization.
+
+          (Note: acquirerRefNo = acquirerReferenceNumber)
+
+
+          examples ARN29851, 74875009071000046650752
+
+          '
+        required: true
+        schema:
+          type: string
+      - name: transactionAmountFrom
+        in: query
+        description: Transaction amount (whole units), amount should be greater than or equal to this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountTo
+        in: query
+        description: Transaction amount (whole units), amount should be less than this value
+        schema:
+          type: integer
+          format: int32
+      - name: transactionAmountCurrency
+        in: query
+        description: Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR
+        schema:
+          type: string
+      - name: sortField
+        in: query
+        description: Sort field
+        schema:
+          type: string
+          enum:
+          - TransactionId
+          - AuthorizationDateTime
+          - Brand
+          - TruncatedPan
+      - name: sortOrder
+        in: query
+        description: Sort order
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
+      - name: pageSize
+        in: query
+        description: Page size (max 300)
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Page number
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful
+          headers:
+            Link:
+              description: Link header for pagination. Only available if there is a next and/or prev page.
+              schema:
+                type: string
+              example: </acquiring/transaction/v2.0/acquirers/abc/authorizations&pageNumber=3>; rel="next", </acquiring/transaction/v2.0/acquirers/abc/authorizations&pageNumber=1>; rel="prev"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Authorization'
+        400:
+          description: Invalid input provided
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Resource not found
+          content: {}
+        500:
+          description: Unexpected error or Internal error
+          content: {}
+        502:
+          description: Backend service problem
+          content: {}
+components:
+  schemas:
+    Authorization:
+      type: object
+      properties:
+        transactionIdentification:
+          $ref: '#/components/schemas/TransactionIdentification'
+        contractIdentification:
+          $ref: '#/components/schemas/ContractIdentification'
+        approvalCode:
+          type: string
+          description: Code assigned by the authorising institution indicating approval
+          example: AB90EF
+        authorizationDateTime:
+          type: string
+          description: authorisation date-time (RFC 3339)
+          format: date-time
+        brand:
+          type: string
+          description: Brand
+          example: MAES
+        cardAcceptorNameLocation:
+          type: string
+          description: The name and place where the terminal is located. Note - A backslash is not valid json. So a backslash will be escaped (with a backslash)
+          example: Purchase Merchant/ CC \ARNHEM       \NLD
+        cardExpiryDate:
+          type: integer
+          description: The year and month after which the card expires
+          format: int32
+          example: 2104
+        cardSequenceNumber:
+          type: integer
+          description: card sequence number
+          format: int32
+          example: 123
+        cardValidationResult:
+          type: string
+          description: Contains the result of a CVC2/CVV2 validation or the (i)CVC/CVV validation
+          example: M
+        channel:
+          type: integer
+          description: Channel code (0 atm, 1 pos, 2 eCommerce, 3 moto)
+          format: int32
+        contactlessIndicator:
+          type: integer
+          description: Indicates whether the transaction has been done contactless (0 no, 1 yes)
+          format: int32
+          example: 1
+        ecommerceIndicator:
+          type: string
+          description: Electronic Commerce Indicators
+          example: '2100000'
+        forwardingInstitutionId:
+          type: string
+          description: Code identifying the acquirer processor or card acceptor
+          example: '671734512'
+        iccDateFilled:
+          type: string
+          description: EMV data present. Y or N
+          example: Y
+        merchantCategoryCode:
+          type: integer
+          description: Merchant Catogory Code
+          format: int32
+          example: 7000
+        paymentFacilitatorId:
+          type: string
+          description: Identifier for a Payment Facilitator which allows anyone who wants to offer merchant services on a sub-merchant platform.
+          example: '10000000000'
+        pointOfServiceDataOnline:
+          type: string
+          description: A code used to indicate the local conditions at the point-of-service device, at the time a card payment transaction was initiated.
+          example: 0123456789012345678901245
+        pointOfServiceDataOffline:
+          type: string
+          description: A code used to identify terminal capability, terminal environment and presentation of security data.
+          example: '111121613024'
+        posEntryMode:
+          type: string
+          description: A code that identifies how the carddata was entered on the terminal and which PINentry capabilities the terminal possesses.
+          example: 79x
+        processingCode:
+          type: string
+          description: Code which indicates the type of transaction being undertaken. Used in conjunction with the Account type code as part of the Processing code.
+          example: '010000'
+        responseCodeInternal:
+          type: string
+          description: response code internal
+          example: '00'
+        responseCodeExternal:
+          type: string
+          description: Response Code from the authorization response received from the brand gateway
+          example: '00'
+        retrievalReferenceNumber:
+          type: string
+          description: Retrieval Reference Number from the authorization request sent to Mastercard/Visa
+          example: 012345678901
+        serviceCode:
+          type: string
+          description: The service code from the track
+          example: '945'
+        subMerchantId:
+          type: string
+          description: Sub Merchant ID, defined by a Payment Facilitator (merchant). Each merchant that is considered to be a “Payment Facilitator” by MasterCard needs to uniquely identify all of its sites with a sub merchant ID
+          example: '734188'
+        terminalBatchReference:
+          type: string
+          description: Reference of the terminal batch
+          example: '0000000216'
+        terminalProtocol:
+          type: string
+          description: Terminal Protocol
+          example: '02'
+        truncatedPan:
+          type: string
+          description: truncated pan. Only the first 6 and last 3 digits are present. Values inbetween are zeros
+          example: '6731230000000123'
+        cashBackAmount:
+          $ref: '#/components/schemas/Amount'
+        originalAmountRequested:
+          $ref: '#/components/schemas/Amount'
+        amountAuthorized:
+          $ref: '#/components/schemas/Amount'
+        tipAmount:
+          $ref: '#/components/schemas/Amount'
+    Amount:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: 'Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        currency:
+          type: string
+          description: Currency of the amount
+          example: EUR
+    ContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+          example: '671234567'
+        pspId:
+          type: string
+          description: Psp Id
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1280300'
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '12872'
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the cardAcceptor within the contract
+          example: '30010'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+          example: 30010
+        terminalId:
+          type: string
+          description: Unique code identifying the terminal at the Card acceptor location
+          example: 20YT45
+    TransactionIdentification:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique identification for a Cardholder Initiated Transaction
+          example: TDS16172008721825920
+        actionId:
+          type: string
+          description: Action ID in UUID format
+          example: 432956ee-6974-42d2-bfdb-878997f21653
+        acquirerReferenceNumber:
+          type: string
+          description: Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks
+          example: '11223344662288134679854'
+        merchantReference:
+          type: string
+          description: Merchant Reference. This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.
+          example: trx reference by merchant
+        merchantTransactionReference:
+          type: string
+          description: '*** DEPRECATED*** (Not available in v2.1. please use merchantReference)
+
+            Merchant Reference. This is a reference that the merchant can
+
+            add to an authorization request towards the terminal by entering it via
+
+            the keyboard of the merchant.
+
+            '
+          example: DEPRECATED. Not available in v2.1. Please use merchantReference
+        pspReference:
+          type: string
+          description: Additional information provided by the concentrator to return on his statement.
+        retrievalReferenceNumber:
+          type: string
+          description: External retrieval reference number.
+        stan:
+          type: integer
+          description: Systems Trace Audit Number
+          format: int32
+          example: 12752
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

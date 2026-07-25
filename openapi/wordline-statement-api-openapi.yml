@@ -1,22 +1,26 @@
 swagger: '2.0'
 info:
-  description: This is the API server supplied by equensWorldline.
-  version: '2.0'
-  title: Merchant payments - Statements API
-  contact:
-    name: equensWorldline API team. See developer portal
-host: developer.equensworldline.com
-basePath: /MerchantApiStatement/api
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Statement API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
 schemes:
-  - https
+- https
+tags:
+- name: Statement
 paths:
   /acquiring/statement/v2.0/acquirers/{acquirerId}/statements/{statementId}:
     get:
       tags:
       - Statement
       summary: based on statement id
-      description: |
-        This operation uses the unique statement id to retrieve the statement data
+      description: 'This operation uses the unique statement id to retrieve the statement data
+
+        '
       operationId: getStatement
       produces:
       - application/pdf
@@ -26,34 +30,39 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: statementId
         in: path
         description: Unique identification of the statement in which this transaction has been paid out
         required: true
         type: string
-        example: "8736-1201748"
+        example: 8736-1201748
       - name: languageCode
         in: query
-        description: |
-          The language of the statement.
-          
+        description: 'The language of the statement.
+
+
           Composed of two parts, separated by an underscore.
+
           The ISO 639-1 alpha-2 codes for languages, and the ISO 3166 alpha-2 codes for regions.
-          
-          ISO 639-1 alpha-2 codes 'de', 'en', 'fi', 'fr', 'nl', 'sv'.
-          
-          ISO 3166  alpha-2 codes 'de', 'fi', 'fr', 'gb', 'nl'.
+
+
+          ISO 639-1 alpha-2 codes ''de'', ''en'', ''fi'', ''fr'', ''nl'', ''sv''.
+
+
+          ISO 3166  alpha-2 codes ''de'', ''fi'', ''fr'', ''gb'', ''nl''.
+
+          '
         required: true
         type: string
-        example: "nl_nl"
+        example: nl_nl
       - name: statementDate
         in: query
         description: Statement creation Date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2016-01-31"
+        example: '2016-01-31'
       responses:
         '200':
           description: Successful
@@ -74,8 +83,9 @@ paths:
       tags:
       - Statement
       summary: based on search parameters
-      description: |
-        Retrieve statements for an acquirer and optional search parameters like amount, date-time and period
+      description: 'Retrieve statements for an acquirer and optional search parameters like amount, date-time and period
+
+        '
       operationId: searchStatements
       produces:
       - application/json
@@ -85,21 +95,21 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: statementDateFrom
         in: query
         description: Statement search from date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2016-01-01"
+        example: '2016-01-01'
       - name: statementDateTo
         in: query
         description: Statement search to date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2016-01-31"
+        example: '2016-01-31'
       - name: statementAmountFrom
         in: query
         description: Statement amount (whole units), amount should be greater than or equal to this value
@@ -114,18 +124,21 @@ paths:
         format: int32
       - name: statementPeriod
         in: query
-        description: |
-          Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
-          
+        description: 'Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
+
+
           examples
+
           2016w04, 2016m01
+
+          '
         required: false
         type: string
       responses:
         '200':
           description: Successful
           schema:
-              $ref: '#/definitions/Statement'
+            $ref: '#/definitions/Statement'
         '400':
           description: Invalid input provided
         '401':
@@ -143,8 +156,9 @@ paths:
       tags:
       - Statement
       summary: based on merchantId and search parameters
-      description: |
-        Retrieve statements for a merchant and optional search parameters like amount, date-time and period
+      description: 'Retrieve statements for a merchant and optional search parameters like amount, date-time and period
+
+        '
       operationId: searchStatementsByMerchantId
       produces:
       - application/json
@@ -154,27 +168,27 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: merchantId
         in: path
         description: Unique identification of the merchant, determined by equensWorldline
         required: true
         type: string
-        example: "1280300"
+        example: '1280300'
       - name: statementDateFrom
         in: query
         description: Statement search from date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2016-01-01"
+        example: '2016-01-01'
       - name: statementDateTo
         in: query
         description: Statement search to date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2016-01-31"
+        example: '2016-01-31'
       - name: statementAmountFrom
         in: query
         description: Statement amount (whole units), amount should be greater than or equal to this value
@@ -189,18 +203,21 @@ paths:
         format: int32
       - name: statementPeriod
         in: query
-        description: |
-          Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
-          
+        description: 'Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
+
+
           examples
+
           2016w04, 2016m01
+
+          '
         required: false
         type: string
       responses:
         '200':
           description: Successful
           schema:
-              $ref: '#/definitions/Statement'
+            $ref: '#/definitions/Statement'
         '400':
           description: Invalid input provided
         '401':
@@ -218,8 +235,9 @@ paths:
       tags:
       - Statement
       summary: based on contractId and search parameters
-      description: |
-        Retrieve statements for a contract and optional search parameters like amount, date-time and period
+      description: 'Retrieve statements for a contract and optional search parameters like amount, date-time and period
+
+        '
       operationId: searchStatementsByContractId
       produces:
       - application/json
@@ -229,33 +247,33 @@ paths:
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
         type: string
-        example: "671234567"
+        example: '671234567'
       - name: merchantId
         in: path
         description: Unique identification of the merchant, determined by equensWorldline
         required: true
         type: string
-        example: "1280300"
+        example: '1280300'
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
         type: string
-        example: "12872"
+        example: '12872'
       - name: statementDateFrom
         in: query
         description: Statement search from date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2016-01-01"
+        example: '2016-01-01'
       - name: statementDateTo
         in: query
         description: Statement search to date (yyyy-mm-dd)
         required: true
         type: string
         format: date
-        example: "2016-01-31"
+        example: '2016-01-31'
       - name: statementAmountFrom
         in: query
         description: Statement amount (whole units), amount should be greater than or equal to this value
@@ -270,18 +288,21 @@ paths:
         format: int32
       - name: statementPeriod
         in: query
-        description: |
-          Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
-          
+        description: 'Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
+
+
           examples
+
           2016w04, 2016m01
+
+          '
         required: false
         type: string
       responses:
         '200':
           description: Successful
           schema:
-              $ref: '#/definitions/Statement'
+            $ref: '#/definitions/Statement'
         '400':
           description: Invalid input provided
         '401':
@@ -294,10 +315,6 @@ paths:
           description: Unexpected error
         '502':
           description: Backend service problem
-
-################################################################################
-#                                 Definitions                                  #
-################################################################################
 definitions:
   Statement:
     type: object
@@ -305,7 +322,7 @@ definitions:
       statementId:
         type: string
         description: A unique identification of this document
-        example: "8621-1201748"
+        example: 8621-1201748
       statementDate:
         type: string
         format: date-time
@@ -314,7 +331,7 @@ definitions:
       statementPeriod:
         type: string
         description: Statement Period code
-        example: "2017w12"
+        example: 2017w12
       statementAmount:
         $ref: '#/definitions/Amount'
       acquirerId:
@@ -325,24 +342,30 @@ definitions:
       merchantId:
         type: string
         description: Unique identification of the merchant, determined by the acquirer
-        example: "1280300"
+        example: '1280300'
       contractId:
         type: string
         description: Unique identification of the contract, determined by the acquirer
-        example: "12872"
+        example: '12872'
   Amount:
     type: object
     properties:
       amount:
         type: string
         format: unlimited size decimal
-        description: |
-          Amount in the minor units of the currency i.e. eurocents for EUR, (amount could still be in decimals) according to ISO 4127.
-          
+        description: 'Amount in the minor units of the currency i.e. eurocents for EUR, (amount could still be in decimals) according to ISO 4127.
+
+
           In case of euro, "310" (is 3.10 euro) or "50.32" (is 0.5032 euro). Fee amounts could have decimals.
-        example: "300"
+
+          '
+        example: '300'
       currency:
         type: string
         description: Currency of the amount
-        example: "EUR"
-                
+        example: EUR
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

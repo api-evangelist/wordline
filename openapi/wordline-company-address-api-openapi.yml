@@ -1,0 +1,3267 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Company - Address API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Company - Address
+  description: Company Address Api Controller
+paths:
+  /issuers/{issuerId}/companies/{customerReference}/addresses:
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Company - Address
+      summary: Create address for a company customer
+      operationId: createCompanyAddressByCustomerRef
+      description: "The API allows to create either a permanent address or a temporary address for the company, identified with his reference. \nTo identify the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)\nAn address includes the following information:\n•\tthe issuer address external reference \n•\tthe label (e.g. HEAD_OFFICE)\n•\tthe type (mail address, phone number, email) and the corresponding data\n•\tthe address usages\n•\tthe start date (optional, by default the current date is used)\n•\tthe end date (conditional, is mandatory when creating a temporary address)\n\nWhen creating a temporary address, If a temporary address already exists with an overlap on the activity period then only the newly created address will be kept and the old one will be removed. \nThe temporary address is active between its start date and end date.\n\nOne or several address usages can be added to the address (in order to retrieve this address). An address usage is used for specific business process/service. When adding a usage to an address, the usage is immediately active and if it is already assigned to another address, it is removed from this latter. \n\nFor information, the head office address is mandatory.\nIn return, the API provides the address reference calculated by the system.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: Customer Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CreateAddressRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAddressResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/{customerReference}/addresses/{addressReference}:
+    get:
+      tags:
+      - Company - Address
+      summary: Retrieve company's address information by address ref
+      operationId: retrieveCompanyAddressByCustomerRefAndAddressRef
+      description: "The API returns the current version of a company's address.\nInformation to be provided in input:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)\n- The address reference or the issuer address reference \nThe address identifiers, address attributes, address usages and entity reference (application domain of the address) are displayed in the response."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: customerReference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: addressReference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - addressUsages
+        collectionFormat: multi
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCompany'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    put:
+      tags:
+      - Company - Address
+      summary: Update company address
+      operationId: modifyCompanyAddress
+      description: "The API updates all the attributes of a company's address.\nTo identify the address of the company for which updates are required, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nAll the attributes must be provided even those unchanged (except for the usages).\nThe API allows to validate an address ('invalid' status is set to false). But it's not possible to invalidate an address changing the value of the invalid 'flag' to true. If the user tries to do this action, an error message is returned.\n\nOne or several address usages can be added to the address (in order to retrieve this address). An address usage is used for specific business process/service. When adding a usage to an address, the usage is immediately active and if it is already assigned to another address, it is removed from this latter. \nAll the usages already linked to the address cannot be removed via this API."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: Customer Reference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: Address Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/ModifyAddressRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyAddressResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/{customerReference}/addresses/external-addresses/{issuerAddressExternalReference}:
+    get:
+      tags:
+      - Company - Address
+      summary: Retrieve company's address information by address external reference
+      operationId: retrieveCompanyAddressByCustomerRefAndExtAddressRef
+      description: "The API returns the current version of a company's address.\nInformation to be provided in input:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)\n- The address reference or the issuer address reference \nThe address identifiers, address attributes, address usages and entity reference (application domain of the address) are displayed in the response."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: customerReference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: issuerAddressExternalReference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - addressUsages
+        collectionFormat: multi
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCompany'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    put:
+      tags:
+      - Company - Address
+      summary: Update company address by external address reference
+      operationId: modifyCompanyAddressByCustomerRefAndExtAddressRef
+      description: "The API updates all the attributes of a company's address.\nTo identify the address of the company for which updates are required, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nAll the attributes must be provided even those unchanged (except for the usages).\nThe API allows to validate an address ('invalid' status is set to false). But it's not possible to invalidate an address changing the value of the invalid 'flag' to true. If the user tries to do this action, an error message is returned.\n\nOne or several address usages can be added to the address (in order to retrieve this address). An address usage is used for specific business process/service. When adding a usage to an address, the usage is immediately active and if it is already assigned to another address, it is removed from this latter. \nAll the usages already linked to the address cannot be removed via this API."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: Customer Reference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: Issuer Address External Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/ModifyAddressRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyAddressResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses:
+    post:
+      x-wl-idempotent: true
+      tags:
+      - Company - Address
+      summary: Create address for a company by external reference
+      operationId: createCompanyAddressByCustomerIssuerExtRef
+      description: "The API allows to create either a permanent address or a temporary address for the company, identified with his reference. \nTo identify the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)\nAn address includes the following information:\n•\tthe issuer address external reference \n•\tthe label (e.g. HEAD_OFFICE)\n•\tthe type (mail address, phone number, email) and the corresponding data\n•\tthe address usages\n•\tthe start date (optional, by default the current date is used)\n•\tthe end date (conditional, is mandatory when creating a temporary address)\n\nWhen creating a temporary address, If a temporary address already exists with an overlap on the activity period then only the newly created address will be kept and the old one will be removed. \nThe temporary address is active between its start date and end date.\n\nOne or several address usages can be added to the address (in order to retrieve this address). An address usage is used for specific business process/service. When adding a usage to an address, the usage is immediately active and if it is already assigned to another address, it is removed from this latter. \n\nFor information, the head office address is mandatory.\nIn return, the API provides the address reference calculated by the system.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: Issuer Customer External Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CreateAddressRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAddressResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses/{addressReference}:
+    get:
+      tags:
+      - Company - Address
+      summary: Retrieve address information by company external reference
+      operationId: retrieveCompanyByIssuerExtRefAndAddressRef
+      description: "The API returns the current version of a company's address.\nInformation to be provided in input:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)\n- The address reference or the issuer address reference \nThe address identifiers, address attributes, address usages and entity reference (application domain of the address) are displayed in the response."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: issuerCustomerExternalReference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: addressReference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - addressUsages
+        collectionFormat: multi
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCompany'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    put:
+      tags:
+      - Company - Address
+      summary: Update company address by company external reference
+      operationId: modifyCompanyAddressByCustomerExtRefAndAddressRef
+      description: "The API updates all the attributes of a company's address.\nTo identify the address of the company for which updates are required, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nAll the attributes must be provided even those unchanged (except for the usages).\nThe API allows to validate an address ('invalid' status is set to false). But it's not possible to invalidate an address changing the value of the invalid 'flag' to true. If the user tries to do this action, an error message is returned.\n\nOne or several address usages can be added to the address (in order to retrieve this address). An address usage is used for specific business process/service. When adding a usage to an address, the usage is immediately active and if it is already assigned to another address, it is removed from this latter. \nAll the usages already linked to the address cannot be removed via this API."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: issuer Customer External Reference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: address Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/ModifyAddressRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyAddressResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses/external-addresses/{issuerAddressExternalReference}
+  : get:
+      tags:
+      - Company - Address
+      summary: Retrieve address information by company external reference and address external reference
+      operationId: retrieveCompanyAddressByIssuerExtRefAndAddressExtRef
+      description: "The API returns the current version of a company's address.\nInformation to be provided in input:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)\n- The address reference or the issuer address reference \nThe address identifiers, address attributes, address usages and entity reference (application domain of the address) are displayed in the response."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: issuerCustomerExternalReference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: issuerAddressExternalReference
+        required: true
+        type: string
+      - name: embed
+        in: query
+        description: Embedded Fields
+        required: false
+        type: array
+        items:
+          type: string
+          enum:
+          - addressUsages
+        collectionFormat: multi
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCompany'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+    put:
+      tags:
+      - Company - Address
+      summary: Update company address by company external reference and address external reference
+      operationId: modifyCompanyAddressByCustomerExtRefAndAddressExtRef
+      description: "The API updates all the attributes of a company's address.\nTo identify the address of the company for which updates are required, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nAll the attributes must be provided even those unchanged (except for the usages).\nThe API allows to validate an address ('invalid' status is set to false). But it's not possible to invalidate an address changing the value of the invalid 'flag' to true. If the user tries to do this action, an error message is returned.\n\nOne or several address usages can be added to the address (in order to retrieve this address). An address usage is used for specific business process/service. When adding a usage to an address, the usage is immediately active and if it is already assigned to another address, it is removed from this latter. \nAll the usages already linked to the address cannot be removed via this API."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: issuer Customer External Reference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: issuer Address External Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/ModifyAddressRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityModifyAddressResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/{customerReference}/addresses/{addressReference}/activate:
+    post:
+      tags:
+      - Company - Address
+      summary: Activate address of a company
+      operationId: activateCompanyAddressByCustomerRefAndAddressRef
+      description: "The API allows to activate on demand of an address.\nTo activate the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nIf a temporary address exists, it becomes also active.\nThe address identifiers, address attributes and address usages are displayed in the response."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: customerReference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: addressReference
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityActivateAddressResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses/{addressReference}/activate:
+    post:
+      tags:
+      - Company - Address
+      summary: Activate address of a company by company external reference
+      operationId: activateCompanyAddressByCustomerExtRefAndAddressRef
+      description: "The API allows to activate on demand of an address.\nTo activate the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nIf a temporary address exists, it becomes also active.\nThe address identifiers, address attributes and address usages are displayed in the response."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: issuerCustomerExternalReference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: addressReference
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityActivateAddressResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/{customerReference}/addresses/external-addresses/{issuerAddressExternalReference}/activate:
+    post:
+      tags:
+      - Company - Address
+      summary: Activate address of a company by address external reference
+      operationId: activateCompanyAddressByCustomerRefAndAddressExtRef
+      description: "The API allows to activate on demand of an address.\nTo activate the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nIf a temporary address exists, it becomes also active.\nThe address identifiers, address attributes and address usages are displayed in the response."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: customerReference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: issuerAddressExternalReference
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityActivateAddressResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses/external-addresses/{issuerAddressExternalReference}/activate
+  : post:
+      tags:
+      - Company - Address
+      summary: Activate address of a company by company external reference and address external reference
+      operationId: activateCompanyAddressByCustomerExtRefAndAddressExtRef
+      description: "The API allows to activate on demand of an address.\nTo activate the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nIf a temporary address exists, it becomes also active.\nThe address identifiers, address attributes and address usages are displayed in the response."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: issuerCustomerExternalReference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: issuerAddressExternalReference
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityActivateAddressResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/{customerReference}/addresses/{addressReference}/deactivate:
+    post:
+      tags:
+      - Company - Address
+      summary: Deactivate address of a company
+      operationId: deactivateCompanyAddressByCustomerRefAndAddressRef
+      description: "The API is used to deactivate the address.\nTo deactivate the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nThe status becomes \"INACTIVE\".\nThis action is forbidden in case of:\n- the address label is the HEAD_OFFICE\n- an usage is linked to the address."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: customerReference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: addressReference
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeactivateAddressResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses/{addressReference}/deactivate:
+    post:
+      tags:
+      - Company - Address
+      summary: Deactivate address of a company by company external reference
+      operationId: deactivateCompanyAddressByCustomerExtRefAndAddressRef
+      description: "The API is used to deactivate the address.\nTo deactivate the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nThe status becomes \"INACTIVE\".\nThis action is forbidden in case of:\n- the address label is the HEAD_OFFICE\n- an usage is linked to the address."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: issuerCustomerExternalReference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: addressReference
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeactivateAddressResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/{customerReference}/addresses/external-addresses/{issuerAddressExternalReference}/deactivate:
+    post:
+      tags:
+      - Company - Address
+      summary: Deactivate address of a company by address external reference
+      operationId: deactivateCompanyAddressByCustomerRefAndAddressExtRef
+      description: "The API is used to deactivate the address.\nTo deactivate the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nThe status becomes \"INACTIVE\".\nThis action is forbidden in case of:\n- the address label is the HEAD_OFFICE\n- an usage is linked to the address."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: customerReference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: issuerAddressExternalReference
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeactivateAddressResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses/external-addresses/{issuerAddressExternalReference}/deactivate
+  : post:
+      tags:
+      - Company - Address
+      summary: Deactivate address of a company by company external reference and address external reference
+      operationId: deactivateCompanyAddressByCustomerExtRefAndAddressExtRef
+      description: "The API is used to deactivate the address.\nTo deactivate the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference\nThe status becomes \"INACTIVE\".\nThis action is forbidden in case of:\n- the address label is the HEAD_OFFICE\n- an usage is linked to the address."
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: issuerId
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: issuerCustomerExternalReference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: issuerAddressExternalReference
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeactivateAddressResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+      security:
+      - basic: []
+      deprecated: false
+  /issuers/{issuerId}/companies/{customerReference}/addresses/{addressReference}/address-usages:
+    post:
+      tags:
+      - Company - Address
+      summary: Create an address usage for a company
+      operationId: createAddressUsageForCompany
+      description: 'The address usage describes in which business case the address will be used (eg statement sending, card delivery, ...). The complete authorized values list is shared during the product configuration between the issuer and WL.
+
+        This API allows a usage determined by its name (e.g. STATEMENT_SENDING) to be linked to the entity reference of the address (e.g. card contract reference) and the service code (e.g. ACCOUNT_SERVICE).
+
+        To create an address usage, it is needed to provide:
+
+        - The issuer ID
+
+        - The customer reference or the issuer customer reference (as company)
+
+        - The address reference or the issuer address reference'
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: Customer Reference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: Address Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CreateAddressUsageRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAddressUsageResponse'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Company - Address
+      summary: Remove an address usage of a company
+      operationId: deleteAddressUsageForCompany
+      description: "The API deletes the address usages linked to one address.\nTo identify the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference. \nThe address usages are filtered by the request params :\n- addressUsageName (for definition see the resource addressUsage), mandatory \n- entityReference (for definition see the resource addressUsage), optional\n- serviceCode (for definition see the resource addressUsage), mandatory\nIf the entityReference is empty and the API finds several addressUsages (for the addressUsageName and serviceCode in request param), then the list of addressUsages will be deleted."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: Customer Reference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: Address Reference
+        required: true
+        type: string
+      - name: serviceCode
+        in: query
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE. Mandatory '
+        required: true
+        type: string
+      - name: entityReference
+        in: query
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+        required: false
+        type: string
+      - name: addressUsageName
+        in: query
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteAddressUsageResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses/{addressReference}/address-usages
+  : post:
+      tags:
+      - Company - Address
+      summary: Create an address usage for a company by company external reference
+      operationId: createAddressUsageForCompanyByCustomerIssuerExtRef
+      description: 'The address usage describes in which business case the address will be used (eg statement sending, card delivery, ...). The complete authorized values list is shared during the product configuration between the issuer and WL.
+
+        This API allows a usage determined by its name (e.g. STATEMENT_SENDING) to be linked to the entity reference of the address (e.g. card contract reference) and the service code (e.g. ACCOUNT_SERVICE).
+
+        To create an address usage, it is needed to provide:
+
+        - The issuer ID
+
+        - The customer reference or the issuer customer reference (as company)
+
+        - The address reference or the issuer address reference'
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: Issuer Customer External Reference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: Address Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CreateAddressUsageRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAddressUsageResponse'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Company - Address
+      summary: Remove an address usage of a company by company external reference
+      operationId: deleteAddressUsageForCompanyByCustomerIssuerExtRef
+      description: "The API deletes the address usages linked to one address.\nTo identify the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference. \nThe address usages are filtered by the request params :\n- addressUsageName (for definition see the resource addressUsage), mandatory \n- entityReference (for definition see the resource addressUsage), optional\n- serviceCode (for definition see the resource addressUsage), mandatory\nIf the entityReference is empty and the API finds several addressUsages (for the addressUsageName and serviceCode in request param), then the list of addressUsages will be deleted."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: Issuer Customer External Reference
+        required: true
+        type: string
+      - name: addressReference
+        in: path
+        description: Address Reference
+        required: true
+        type: string
+      - name: serviceCode
+        in: query
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE. Mandatory '
+        required: true
+        type: string
+      - name: entityReference
+        in: query
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+        required: false
+        type: string
+      - name: addressUsageName
+        in: query
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteAddressUsageResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/companies/{customerReference}/addresses/external-addresses/{issuerAddressExternalReference}/address-usages
+  : post:
+      tags:
+      - Company - Address
+      summary: Create an address usage for a company by address external reference
+      operationId: createAddressUsageForCompanyByIssuerExtRef
+      description: 'The address usage describes in which business case the address will be used (eg statement sending, card delivery, ...). The complete authorized values list is shared during the product configuration between the issuer and WL.
+
+        This API allows a usage determined by its name (e.g. STATEMENT_SENDING) to be linked to the entity reference of the address (e.g. card contract reference) and the service code (e.g. ACCOUNT_SERVICE).
+
+        To create an address usage, it is needed to provide:
+
+        - The issuer ID
+
+        - The customer reference or the issuer customer reference (as company)
+
+        - The address reference or the issuer address reference'
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: Customer Reference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: Issuer address external reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CreateAddressUsageRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAddressUsageResponse'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Company - Address
+      summary: Remove an address usage of a company by address external reference
+      operationId: deleteAddressUsageForCompanyByIssuerExtRef
+      description: "The API deletes the address usages linked to one address.\nTo identify the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference. \nThe address usages are filtered by the request params :\n- addressUsageName (for definition see the resource addressUsage), mandatory \n- entityReference (for definition see the resource addressUsage), optional\n- serviceCode (for definition see the resource addressUsage), mandatory\nIf the entityReference is empty and the API finds several addressUsages (for the addressUsageName and serviceCode in request param), then the list of addressUsages will be deleted."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: customerReference
+        in: path
+        description: Customer Reference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: Issuer address external reference
+        required: true
+        type: string
+      - name: serviceCode
+        in: query
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE. Mandatory '
+        required: true
+        type: string
+      - name: entityReference
+        in: query
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+        required: false
+        type: string
+      - name: addressUsageName
+        in: query
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteAddressUsageResponse'
+      security:
+      - basic: []
+      deprecated: false
+  ? /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/addresses/external-addresses/{issuerAddressExternalReference}/address-usages
+  : post:
+      tags:
+      - Company - Address
+      summary: Create an address usage for a company by company external reference and address external reference
+      operationId: createAddressUsageForCompanyByIssuerExtRefAndCustomerIssuerExtRef
+      description: 'The address usage describes in which business case the address will be used (eg statement sending, card delivery, ...). The complete authorized values list is shared during the product configuration between the issuer and WL.
+
+        This API allows a usage determined by its name (e.g. STATEMENT_SENDING) to be linked to the entity reference of the address (e.g. card contract reference) and the service code (e.g. ACCOUNT_SERVICE).
+
+        To create an address usage, it is needed to provide:
+
+        - The issuer ID
+
+        - The customer reference or the issuer customer reference (as company)
+
+        - The address reference or the issuer address reference'
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: Issuer Customer External Reference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: Issuer address external reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/CreateAddressUsageRequest'
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityCreateAddressUsageResponse'
+      security:
+      - basic: []
+      deprecated: false
+    delete:
+      tags:
+      - Company - Address
+      summary: Remove an address usage of a company by company external reference and address external reference
+      operationId: deleteAddressUsageForCompanyByIssuerExtRefAndCustomerIssuerExtRef
+      description: "The API deletes the address usages linked to one address.\nTo identify the address of the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company) \n- The address reference or the issuer address reference. \nThe address usages are filtered by the request params :\n- addressUsageName (for definition see the ressource addressUsage), mandatory \n- entityReference (for definition see the resource addressUsage), optional\n- serviceCode (for definition see the resource addressUsage), mandatory\nIf the entityReference is empty and the API finds several addressUsages (for the addressUsageName and serviceCode in request param), then the list of addressUsages will be deleted."
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: WL-Correlation-ID
+        in: header
+        required: false
+        type: string
+      - name: WL-Origin
+        in: header
+        required: false
+        type: string
+      - name: WL-Username
+        in: header
+        required: false
+        type: string
+      - name: filter
+        in: query
+        description: Filtered Fields
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: issuerId
+        in: path
+        description: Issuer ID
+        required: true
+        type: string
+      - name: issuerCustomerExternalReference
+        in: path
+        description: Issuer Customer External Reference
+        required: true
+        type: string
+      - name: issuerAddressExternalReference
+        in: path
+        description: Issuer address external reference
+        required: true
+        type: string
+      - name: serviceCode
+        in: query
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE. Mandatory '
+        required: true
+        type: string
+      - name: entityReference
+        in: query
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+        required: false
+        type: string
+      - name: addressUsageName
+        in: query
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+        required: true
+        type: string
+      responses:
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/BadRequestErrorApiResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ForbiddenErrorApiResponse'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFoundErrorApiResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+        '502':
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/BadGatewayErrorApiResponse'
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApiResponseEntityDeleteAddressUsageResponse'
+      security:
+      - basic: []
+      deprecated: false
+definitions:
+  CustomerIdentifier:
+    type: object
+    description: Identification of the updated customer either by Issuer customer external reference or by customer reference
+    properties:
+      customerReference:
+        type: string
+        description: Reference computed internally by our system
+      issuerCustomerExternalReference:
+        type: string
+        description: Reference provided by the Issuer
+    title: CustomerIdentifier
+  MailAddress:
+    type: object
+    required:
+    - country
+    properties:
+      typeCode:
+        type: string
+        description: Deprecated field
+      line1:
+        type: string
+        description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line2:
+        type: string
+        description: Address line 2 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line3:
+        type: string
+        description: Address line 3 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line4:
+        type: string
+        description: Address line 4 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line5:
+        type: string
+        description: Address line 5 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      buildingNumber:
+        type: string
+        description: Building number of the address (optional)
+      boxNumber:
+        type: string
+        description: Box number of the address (optional)
+      streetName:
+        type: string
+        description: Street name of the address (optional)
+      postCode:
+        type: string
+        description: Zip Code of the address (optional)
+      townName:
+        type: string
+        description: 'City corresponding to the address '
+      countrySubdivision:
+        type: string
+        description: Subdivision of the country (optional)
+      country:
+        type: string
+        description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+      countryName:
+        type: string
+        description: Country Name of the address. Free text
+      courtesyTitle:
+        type: string
+        description: Courtesy title of the address. Free text
+    title: MailAddress
+  ApiResponseEntityCreateAddressResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CreateAddressResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCreateAddressResponse
+  CreateAddressRequestPhoneNumber:
+    type: object
+    required:
+    - localPhoneNumber
+    properties:
+      countryCode:
+        type: string
+        description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
+      localPhoneNumber:
+        type: string
+        description: 'Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level.'
+    title: CreateAddressRequest.PhoneNumber
+  AddressVersionIdentifier:
+    type: object
+    properties:
+      addressVersionReference:
+        type: string
+        description: 'Identifies the version of the address
+
+          A new version of the address is created when a change is done on the address.'
+    title: AddressVersionIdentifier
+  NotFoundErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/NotFoundResponseMetadata'
+    title: NotFoundErrorApiResponse
+  ApiResponseEntityDeleteAddressUsageResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/DeleteAddressUsageResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityDeleteAddressUsageResponse
+  BadGatewayErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadGatewayResponseMetadata'
+    title: BadGatewayErrorApiResponse
+  InternalServerErrorErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
+    title: InternalServerErrorErrorApiResponse
+  InternalServerErrorResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 500
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Internal server error
+        description: Executed REST API status message
+    title: InternalServerErrorResponseMetadata
+  UnauthorizedErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/UnauthorizedResponseMetadata'
+    title: UnauthorizedResponseMetadata
+  ModifyAddressRequestPhoneNumber:
+    type: object
+    required:
+    - localPhoneNumber
+    properties:
+      countryCode:
+        type: string
+        description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
+      localPhoneNumber:
+        type: string
+        description: 'Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level.'
+    title: ModifyAddressRequest.PhoneNumber
+  CreateAddressResponse:
+    type: object
+    properties:
+      addressIdentifier:
+        description: Identification of the customer address either by Issuer address external reference or by address reference
+        allOf:
+        - $ref: '#/definitions/AddressIdentifier'
+    title: CreateAddressResponse
+  DeleteAddressUsageResponse:
+    type: object
+    required:
+    - addressUsageName
+    - serviceCode
+    properties:
+      addressUsages:
+        type: array
+        description: List of deleted address usages
+        items:
+          $ref: '#/definitions/DeleteAddressUsageResponseAddressUsage'
+    title: DeleteAddressUsageResponse
+  AddressIdentifier:
+    type: object
+    properties:
+      addressReference:
+        type: string
+        description: Unique internal identifier computed with a specific algorithm (mandatory)
+      issuerAddressExternalReference:
+        type: string
+        description: Unique external identifier provided by the issuer (optional)
+    title: AddressIdentifier
+  AddressUsage:
+    type: object
+    required:
+    - addressUsageName
+    - serviceCode
+    properties:
+      addressUsageName:
+        type: string
+        example: STATEMENT_SENDING
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+      entityReference:
+        type: string
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+      serviceCode:
+        type: string
+        example: ACCOUNT_SERVICE
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
+    title: AddressUsage
+  Links:
+    type: object
+    required:
+    - self
+    properties:
+      self:
+        type: string
+        example: /x/{x}?x=x
+        description: Service method URL
+      next:
+        type: string
+        example: /x/{x}?page[offset]=2
+        description: URL pagination query parameter next page
+    title: Links
+  CreateAddressUsageRequest:
+    type: object
+    required:
+    - addressUsageName
+    - serviceCode
+    properties:
+      addressUsageName:
+        type: string
+        example: STATEMENT_SENDING
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+      entityReference:
+        type: string
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+      serviceCode:
+        type: string
+        example: ACCOUNT_SERVICE
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
+    title: CreateAddressUsageRequest
+  ModifyAddressRequest:
+    type: object
+    required:
+    - addressLabel
+    - addressType
+    properties:
+      issuerAddressExternalReference:
+        type: string
+        description: Deprecated field - not to be used
+      addressLabel:
+        type: string
+        example: MAIN_POSTAL_ADDRESS
+        description: Indicate the class of the address amongst a list of possible values such as MAIN_POSTAL_ADDRESS, SECOND_POSTAL_ADDRESS, HOME_PHONE_NUMBER, PRIVATE_MOBILE_PHONE, PERSONAL_EMAIL. This list of values is shared between WL and the issuer during issuer configuration.Every label corresponds to a unique type of address. A customer (person) has at least one MAIN_POSTAL_ADDRESS (mandatory) and a company has at least one HEAD_OFFICE.
+      addressType:
+        type: string
+        example: POSTAL_MAIL
+        description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
+        enum:
+        - PHONE
+        - POSTAL_MAIL
+        - E_MAIL
+      postalAddress:
+        description: Customer Postal Address. This field is mandatory only if AddressType is POSTAL_MAIL.Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information.
+        allOf:
+        - $ref: '#/definitions/ModifyAddressRequestMailAddress'
+      emailAddress:
+        description: Customer Email. This field is mandatory only if AddressType is E_MAIL.
+        allOf:
+        - $ref: '#/definitions/EmailAddress'
+      phone:
+        description: 'Customer Phone details. This field is mandatory only if AddressType is PHONE. '
+        allOf:
+        - $ref: '#/definitions/ModifyAddressRequestPhoneNumber'
+      addressUsages:
+        type: array
+        description: List of the usages linked to the address if any exists
+        items:
+          $ref: '#/definitions/AddressUsage'
+      invalid:
+        type: boolean
+        default: false
+        description: Deprecated
+    title: ModifyAddressRequest
+  UnauthorizedResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 401
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Unauthorized
+        description: Executed REST API status message
+    title: UnauthorizedResponseMetadata
+  ApiResponseEntityCompany:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/Company'
+    description: Issuer response entity
+    title: ApiResponseEntityCompany
+  Address:
+    type: object
+    required:
+    - addressLabel
+    - addressType
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      addressIdentifier:
+        description: Unique identifier of the address. See the AddressIdentifier's datatype for a detail description
+        allOf:
+        - $ref: '#/definitions/AddressIdentifier'
+      addressVersionIdentifier:
+        allOf:
+        - $ref: '#/definitions/AddressVersionIdentifier'
+      addressLabel:
+        type: string
+        example: MAIN_POSTAL_ADDRESS
+        description: "example: MAIN_POSTAL_ADDRESS Indicate the class of the address amongst a list of possible values such as MAIN_POSTAL_ADDRESS, SECOND_POSTAL_ADDRESS, HOME_PHONE_NUMBER, PRIVATE_MOBILE_PHONE, PERSONAL_EMAIL. This list of values is shared between WL and the issuer during issuer configuration. \n Every label corresponds to a unique type of address. A customer (person) has at least one MAIN_POSTAL_ADDRESS (mandatory) and a company has at least one HEAD_OFFICE."
+      addressType:
+        type: string
+        example: POSTAL_MAIL
+        description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
+        enum:
+        - PHONE
+        - POSTAL_MAIL
+        - E_MAIL
+      postalAddress:
+        description: "Customer Postal Address. This field is mandatory only if AddressType is POSTAL_MAIL. \n Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information."
+        allOf:
+        - $ref: '#/definitions/MailAddress'
+      emailAddress:
+        description: Customer Email. This field is mandatory only if AddressType is E_MAIL. See the EmailAddress' datatype for the detail list of the attributes.
+        allOf:
+        - $ref: '#/definitions/EmailAddress'
+      phone:
+        description: Customer Phone details. This field is mandatory only if AddressType is PHONE. See the PhoneNumber's datatype for the detail list of the attributes.
+        allOf:
+        - $ref: '#/definitions/PhoneNumber'
+      addressUsages:
+        type: array
+        description: 'List of the usages linked to the address if any exists. See the AddressUsage''s datatype for the detail list of the attributes (optional)
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/AddressUsage'
+      status:
+        type: string
+        description: Status of the address (ACTIVE or INACTIVE). If value is not provided, by default 'ACTIVE'
+      statusDate:
+        type: string
+        description: 'If the address is INACTIVE, the date corresponds to the inactivation date.
+
+          If the address is ACTIVE, the date corresponds to the last activation date.'
+        format: date-time
+      startDate:
+        type: string
+        description: Date when the address starts to be active
+        format: date-time
+      endDate:
+        type: string
+        description: 'This attribute represents :
+
+          • in case of a permanent address : the last date the address has been active. This information is computed based on the next future address start date if any exists else this attribute is empty.
+
+          • in case of a temporary address : the end date where this address is active. This end date is mandatory when a temporary address is created.'
+        format: date-time
+      invalid:
+        type: boolean
+        description: "Indicates if an address is invalid (by default false).\nThis feature is currently only accurate for the mail address and apply only on the current permanent address.\nIn case a postal address is invalid, this address cannot be used anymore for letters, cards, pin mailers, statement sending. \nThis feature is active only depending on an issuer configuration. "
+        default: false
+      temporary:
+        type: boolean
+        description: 'indicates if the address is a temporary one (by default ''false'').
+
+          In case of a temporary address, the end date is mandatory.'
+        default: false
+    title: Address
+  DeleteAddressUsageResponseAddressUsage:
+    type: object
+    required:
+    - addressUsageName
+    - serviceCode
+    properties:
+      addressUsageName:
+        type: string
+        example: STATEMENT_SENDING
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+      entityReference:
+        type: string
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+      serviceCode:
+        type: string
+        example: ACCOUNT_SERVICE
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
+    title: DeleteAddressUsageResponseAddressUsage
+  ContactIdentifier:
+    type: object
+    properties:
+      contactReference:
+        type: string
+        description: Contact identifier (unique per company)
+    title: ContactIdentifier
+  NotFoundResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 404
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Not found
+        description: Executed REST API status message
+    title: NotFoundResponseMetadata
+  ResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      links:
+        description: Metadata Links
+        allOf:
+        - $ref: '#/definitions/Links'
+      statusMessage:
+        type: string
+        example: Executed successfully
+        description: Executed REST API status message
+      statusCode:
+        type: integer
+        format: int32
+        example: 200
+        description: HTTP status code
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      timeTakenMs:
+        type: integer
+        format: int64
+        example: 12
+        description: Wall clock time required from service to generate the response
+    title: ResponseMetadata
+  ApiResponseEntityActivateAddressResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/ActivateAddressResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityActivateAddressResponse
+  ModifyAddressResponse:
+    type: object
+    properties:
+      addressIdentifier:
+        description: Identification of the customer address either by Issuer address external reference or by address reference
+        allOf:
+        - $ref: '#/definitions/AddressIdentifier'
+    title: ModifyAddressResponse
+  CreateAddressRequest:
+    type: object
+    required:
+    - addressLabel
+    - addressType
+    properties:
+      issuerAddressExternalReference:
+        type: string
+        description: Unique external identifier provided by the issuer
+      addressLabel:
+        type: string
+        example: MAIN_POSTAL_ADDRESS
+        description: Indicate the class of the address amongst a list of possible values such as MAIN_POSTAL_ADDRESS, SECOND_POSTAL_ADDRESS, HOME_PHONE_NUMBER, PRIVATE_MOBILE_PHONE, PERSONAL_EMAIL.This list of values is shared between WL and the issuer during issuer configuration.Every label corresponds to a unique type of address. A customer (person) has at least one MAIN_POSTAL_ADDRESS (mandatory) and a company has at least one HEAD_OFFICE.
+      addressType:
+        type: string
+        example: POSTAL_MAIL
+        description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
+        enum:
+        - PHONE
+        - POSTAL_MAIL
+        - E_MAIL
+      postalAddress:
+        description: Customer Postal Address. This field is mandatory only if AddressType is POSTAL_MAIL.Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information.
+        allOf:
+        - $ref: '#/definitions/CreateAddressRequestMailAddress'
+      emailAddress:
+        description: Customer Email. This field is mandatory only if AddressType is E_MAIL.
+        allOf:
+        - $ref: '#/definitions/EmailAddress'
+      phone:
+        description: Customer Phone details. This field is mandatory only if AddressType is PHONE.
+        allOf:
+        - $ref: '#/definitions/CreateAddressRequestPhoneNumber'
+      addressUsages:
+        type: array
+        description: List of the usages linked to the address if any exists
+        items:
+          $ref: '#/definitions/AddressUsage'
+      startDate:
+        type: string
+        description: "If the date is not provided, the current date and time of the user’s request is used.\nIf the provided date corresponds to the current date, the provided time is ignored and replaced by the current time of the system.\nIf the provided date is in the future (at least current date +1), provided date and time are used only if the LABEL of the address is already existing for the customer. In case the time is not provided, the time is set up to the start of the day (e.g. ‘T00:00:00’)\nIn all cases, if the address is created for the first time for a given LABEL, both date and time of the system are used and the address is immediately active. \nFor generic definition, refer to Address.startDate."
+        format: date-time
+      endDate:
+        type: string
+        description: 'This date is conditional to the kind of address :
+
+          - if the address is a permanent one (temporary flag = false or empty), the field must be empty
+
+          - if the address is a temporary one (temporary flag = true), the field must be filled with the date corresponding to the end date of the active period of the temporary address'
+        format: date-time
+      temporary:
+        type: boolean
+        default: false
+        description: The flag indicates if the address is permanent (by default, false) or temporary (flag = true)
+        format: date-time
+    title: CreateAddressRequest
+  ModifyAddressRequestMailAddress:
+    type: object
+    required:
+    - country
+    properties:
+      typeCode:
+        type: string
+        description: DEPRECATED
+      courtesyTitle:
+        type: string
+        description: Courtesy title of the address. Free text
+      line1:
+        type: string
+        description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line2:
+        type: string
+        description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line3:
+        type: string
+        description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line4:
+        type: string
+        description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line5:
+        type: string
+        description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      buildingNumber:
+        type: string
+        description: Building number of the address (optional)
+      boxNumber:
+        type: string
+        description: Box number of the address (optional)
+      streetName:
+        type: string
+        description: Street name of the address (optional)
+      postCode:
+        type: string
+        description: zip code of the address (optional)
+      townName:
+        type: string
+        description: City corresponding to the address
+      countrySubdivision:
+        type: string
+        description: Subdivision of the country (optional)
+      country:
+        type: string
+        description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+    title: ModifyAddressRequest.MailAddress
+  ActivateAddressResponse:
+    type: object
+    properties:
+      addressIdentifier:
+        description: Identification of the customer address either by Issuer address external reference or by address reference
+        allOf:
+        - $ref: '#/definitions/AddressIdentifier'
+      status:
+        type: string
+        description: Status of the address (ACTIVE)
+    title: ActivateAddressResponse
+  ApiResponseEntityCreateAddressUsageResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/CreateAddressUsageResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityCreateAddressUsageResponse
+  ForbiddenErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/ForbiddenResponseMetadata'
+    title: ForbiddenErrorApiResponse
+  DeactivateAddressResponse:
+    type: object
+    properties:
+      addressIdentifier:
+        description: Identification of the customer address either by Issuer address external reference or by address reference
+        allOf:
+        - $ref: '#/definitions/AddressIdentifier'
+      status:
+        type: string
+        description: Status of the address (INACTIVE)
+    title: DeactivateAddressResponse
+  CreateAddressRequestMailAddress:
+    type: object
+    required:
+    - country
+    properties:
+      typeCode:
+        type: string
+        description: DEPRECATED
+      courtesyTitle:
+        type: string
+        description: Courtesy title of the address. Free text
+      line1:
+        type: string
+        description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line2:
+        type: string
+        description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line3:
+        type: string
+        description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line4:
+        type: string
+        description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      line5:
+        type: string
+        description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+      buildingNumber:
+        type: string
+        description: Building number of the address (optional)
+      boxNumber:
+        type: string
+        description: Box number of the address (optional)
+      streetName:
+        type: string
+        description: Street name of the address (optional)
+      postCode:
+        type: string
+        description: zip code of the address (optional)
+      townName:
+        type: string
+        description: City corresponding to the address
+      countrySubdivision:
+        type: string
+        description: Subdivision of the country (optional)
+      country:
+        type: string
+        description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+    title: CreateAddressRequest.MailAddress
+  CreateAddressUsageResponse:
+    type: object
+    required:
+    - addressUsageName
+    - serviceCode
+    properties:
+      addressUsageName:
+        type: string
+        example: STATEMENT_SENDING
+        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+      entityReference:
+        type: string
+        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+      serviceCode:
+        type: string
+        example: ACCOUNT_SERVICE
+        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
+    title: CreateAddressUsageResponse
+  ApiResponseEntityDeactivateAddressResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/DeactivateAddressResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityDeactivateAddressResponse
+  Contact:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      name:
+        type: string
+        description: Contact name
+      firstName:
+        type: string
+        description: Contact first name
+      departmentName:
+        type: string
+        description: Contact department name. Free text.
+      sex:
+        type: string
+        description: Sex of the contact
+      description:
+        type: string
+        description: Description of the role in the company (e.g. 'sales manager'). Free text
+      courtesyTitle:
+        type: string
+        description: Title of the contact. Free text
+      contactIdentifier:
+        description: Unique contact identifier
+        allOf:
+        - $ref: '#/definitions/ContactIdentifier'
+      type:
+        type: string
+        description: "Represents the type of contact for customer (person). The  possible values are configured per Issuer. \nAn example can be: Power_of_Attorney or Legal_Representative"
+      birthDate:
+        type: string
+        format: date
+        description: Birth date of the contact
+      postalAddress:
+        description: The postal adress of the contact
+        allOf:
+        - $ref: '#/definitions/MailAddress'
+    title: Contact
+  BadRequestResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 400
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad request
+        description: Executed REST API status message
+    title: BadRequestResponseMetadata
+  ApiResponseEntityModifyAddressResponse:
+    x-wl-api-response: true
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        description: Response metadata
+        allOf:
+        - $ref: '#/definitions/ResponseMetadata'
+      data:
+        description: Response data
+        allOf:
+        - $ref: '#/definitions/ModifyAddressResponse'
+    description: Issuer response entity
+    title: ApiResponseEntityModifyAddressResponse
+  EmailAddress:
+    type: object
+    required:
+    - email
+    properties:
+      email:
+        type: string
+        description: 'Email address of the Customer (mandatory). The email address should have the following format: aaa@bbb.ccc
+
+          aaa, bbb, ccc are character string.'
+    title: EmailAddress
+  BadGatewayResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 502
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Bad Gateway
+        description: Executed REST API status message
+    title: BadGatewayResponseMetadata
+  PhoneNumber:
+    type: object
+    required:
+    - localPhoneNumber
+    properties:
+      countryCode:
+        type: string
+        description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
+      localPhoneNumber:
+        type: string
+        description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
+      internationalPhoneNumber:
+        type: string
+        description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
+    title: PhoneNumber
+  BadRequestErrorApiResponse:
+    type: object
+    required:
+    - responseMetadata
+    properties:
+      responseMetadata:
+        allOf:
+        - $ref: '#/definitions/BadRequestResponseMetadata'
+    title: BadRequestErrorApiResponse
+  ForbiddenResponseMetadata:
+    type: object
+    required:
+    - correlationId
+    - responseDateTime
+    - statusCode
+    - statusMessage
+    properties:
+      correlationId:
+        type: string
+        description: Correlation Identifier
+      responseDateTime:
+        type: string
+        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+        description: Timestamp when response date was generated
+      statusCode:
+        type: integer
+        format: int32
+        example: 403
+        description: HTTP status code
+      statusMessage:
+        type: string
+        example: Forbidden
+        description: Executed REST API status message
+    title: ForbiddenResponseMetadata
+  Company:
+    type: object
+    properties:
+      issuerId:
+        type: string
+        description: Issuer identifier (unique per platform)
+      customerIdentifier:
+        description: Unique identifier. Refer to Customer Identifier data type for detail information
+        allOf:
+        - $ref: '#/definitions/CustomerIdentifier'
+      active:
+        type: boolean
+        description: DEPRECATED
+      corporateName:
+        type: string
+        description: Name of the company
+      nationalFiscalIdentifier:
+        type: string
+        description: National fiscal identifier of the company (for information only)
+      vatCode:
+        type: string
+        description: Value added tax code of the company (for information only). Free text.
+      type:
+        type: string
+        description: Type of company (e.g. Governmental, public company, private company). For information only. Free text.
+      size:
+        type: string
+        description: Size of the company. Free text (e.g. small, medium, 100).
+      businessArea:
+        type: string
+        description: Definition of the activity of the company. Free text.
+      activityCode:
+        type: string
+        description: Activity of the company (e.g. 'rent car', 'retailer'). Free text.
+      revenue:
+        type: string
+        description: Annual turnover of the company. Free text
+      legalForm:
+        type: string
+        description: 'Definition of the legal form of the company (e.g. in France : SA, SARL, EURL). Free text.'
+      commercialStatus:
+        type: string
+        description: Commercial status of the company (e.g. 'normal', 'Active in Liquidation', 'Inactive'). List of possible values is determined per issuer. A default value is defined for each issuer.
+      preferredCorrespondenceLanguage:
+        type: string
+        description: Preferred correspondence language of the company (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+      specificFields:
+        type: object
+        description: 'List of external data {"label":"value"} separated by a "," related to a company that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+        additionalProperties:
+          type: string
+      partnerExternalReference:
+        type: string
+        description: External Reference provided by the issuer (optional)
+      addressIdentifiers:
+        type: array
+        description: 'List of address references whatever their type (MAIL, EMAIL, PHONE). The address can be a temporary address.At least, the main postal address reference should be retrieved (mandatory).
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/AddressIdentifier'
+      addresses:
+        type: array
+        description: 'List of addresses whatever their type (MAIL, EMAIL, PHONE). See the Address''s datatype for the detail list of the attributes.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Address'
+      contactIdentifiers:
+        type: array
+        description: 'List of contact references of the company.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/ContactIdentifier'
+      contacts:
+        type: array
+        description: 'List of contacts of the company.
+
+          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        items:
+          $ref: '#/definitions/Contact'
+      lastUpdateDate:
+        type: string
+        format: date-time
+        description: Indicates the date when the update is processed
+    title: Company
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

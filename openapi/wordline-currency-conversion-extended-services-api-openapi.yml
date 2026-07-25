@@ -1,0 +1,285 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Currency Conversion (Extended services) API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Currency Conversion (Extended services)
+paths:
+  /exchangerate:
+    post:
+      security:
+      - Authorization: []
+      tags:
+      - Currency Conversion (Extended services)
+      summary: Exchange rate request
+      description: 'Utilize this API to obtain exchange rate details relative to the payer''s local currency and the merchant''s currency as the base currency (EURO). This will allow you to calculate the total amount payable in the payer''s local currency, including any markup for currency conversion fees.
+
+        '
+      operationId: exchangeRate
+      parameters:
+      - $ref: '#/components/parameters/X-Request-ID'
+      - $ref: '#/components/parameters/MessageCreateDateTime'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateRequest'
+        required: false
+      responses:
+        201:
+          description: 'CREATED
+
+            '
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+            MessageCreateDateTime:
+              $ref: '#/components/headers/MessageCreateDateTime'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRateResponse'
+        400:
+          $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
+        404:
+          $ref: '#/components/responses/404'
+        500:
+          $ref: '#/components/responses/500'
+        503:
+          $ref: '#/components/responses/503'
+components:
+  schemas:
+    ExchangeRateInformation:
+      type: object
+      additionalProperties: false
+      required:
+      - UnitCurrency
+      - ExchangeRate
+      - RateType
+      properties:
+        UnitCurrency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'Currency in which the rate of exchange is expressed in a currency exchange.
+
+            '
+          example: EUR
+        ExchangeRate:
+          type: number
+          description: 'The factor used for conversion of an amount from one currency
+
+            to another. This reflects the price at which one currency was bought with
+
+            another currency. Rate expressed as a decimal, for example, 0.7 is 7/10
+
+            and 70%.
+
+            '
+        RateType:
+          type: string
+          description: 'Specifies the type used to complete the currency exchange.
+
+            * Spot: Exchange rate applied is the spot rate.
+
+            '
+          enum:
+          - Spot
+    ExchangeRateReferences:
+      type: object
+      additionalProperties: false
+      properties:
+        SourceCurrencyReferenceId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'This should be used to refer to this exchange rate details for currency conversion from the new exchange rate table.
+
+            '
+        TargetCurrencyReferenceId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'This should be used to reference the second entry ID in the exchange rate table row when cross-currency conversion is required, and two entries are selected for calculation.
+
+            '
+    ExchangeRateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,5}$
+          type: string
+          description: 'Amount of the payment. Amount to be converted. The decimal separator is a dot.
+
+            '
+          example: '123.45'
+        TargetCurrency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'Currency of the payment. The currency being referenced or converted from. ISO 4217 currency codes should be used.
+
+            '
+          example: CHF
+        UnitCurrency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'The currency against which the target currency is being measured. ISO 4217 currency codes should be used.
+
+            '
+          example: EUR
+      required:
+      - Amount
+      - TargetCurrency
+      - UnitCurrency
+    CurrencyConversionFee:
+      type: object
+      additionalProperties: false
+      required:
+      - Currency
+      - Amount
+      - Rate
+      properties:
+        Currency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
+
+            '
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,2}$
+          type: string
+          description: 'Amount of the fees.
+
+            '
+        Rate:
+          type: number
+      description: 'Currency Conversion Fee
+
+        '
+    ExchangeRateResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        ExchangeRateReferences:
+          $ref: '#/components/schemas/ExchangeRateReferences'
+        ExchangeRateInformation:
+          $ref: '#/components/schemas/ExchangeRateInformation'
+        CurrencyConversionFee:
+          $ref: '#/components/schemas/CurrencyConversionFee'
+        EstimatedTotalAmount:
+          $ref: '#/components/schemas/EstimatedTotalAmount'
+        ValidUntil:
+          type: string
+          description: 'This exchange rate is valid until the next run of the scheduled batch to get new exchange rate details. ISO 8601 DateTime.
+
+            '
+          format: date-time
+      description: 'ExchangeRateResponse
+
+        '
+      required:
+      - ExchangeRateInformation
+      - CurrencyConversionFee
+      - EstimatedTotalAmount
+      - ValidUntil
+    EstimatedTotalAmount:
+      type: object
+      additionalProperties: false
+      required:
+      - Currency
+      - Amount
+      properties:
+        Currency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
+
+            '
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,2}$
+          type: string
+          description: 'Amount
+
+            '
+      description: 'Estimated Total Amount.
+
+        '
+  headers:
+    X-Request-ID:
+      required: true
+      description: 'UUID for unique request identification
+
+        '
+      schema:
+        type: string
+        maxLength: 36
+        minLength: 1
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    MessageCreateDateTime:
+      required: true
+      schema:
+        type: string
+        format: date-time
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      example: '2020-09-25T08:15:00.856Z'
+  parameters:
+    X-Request-ID:
+      name: X-Request-ID
+      in: header
+      description: 'UUID for unique request identification.
+
+        '
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 1
+        type: string
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    MessageCreateDateTime:
+      name: MessageCreateDateTime
+      in: header
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2020-09-25T08:15:00.856Z'
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

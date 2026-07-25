@@ -1,0 +1,64 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Token Resource API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Token Resource
+paths:
+  /oauth2/token:
+    post:
+      servers:
+      - url: https://access.fido.worldline-solutions.com
+      summary: Get access token
+      tags:
+      - Token Resource
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - grant_type
+              - audience
+              type: object
+              properties:
+                grant_type:
+                  minLength: 1
+                  pattern: client_credentials
+                  type: string
+                audience:
+                  minLength: 1
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenDTO'
+        '403':
+          description: Not Allowed
+        '401':
+          description: Not Authorized
+components:
+  schemas:
+    AccessTokenDTO:
+      type: object
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          format: int32
+          type: integer
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

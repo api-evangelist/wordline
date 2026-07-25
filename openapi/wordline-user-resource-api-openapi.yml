@@ -1,0 +1,145 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState User Resource API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: User Resource
+paths:
+  /v1.0/users/{username}/authenticators:
+    get:
+      summary: Get all user's authenticators
+      tags:
+      - User Resource
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuthenticatorDTO'
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Allowed
+  /v1.0/users/{username}/authenticators/{authenticatorId}:
+    delete:
+      summary: Delete user's authenticator
+      tags:
+      - User Resource
+      parameters:
+      - name: authenticatorId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Allowed
+    patch:
+      summary: Update user authenticator's friendlyName
+      tags:
+      - User Resource
+      parameters:
+      - name: authenticatorId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePartialAuthenticatorDTO'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Allowed
+components:
+  schemas:
+    UpdatePartialAuthenticatorDTO:
+      type: object
+      properties:
+        friendlyName:
+          type: string
+    StatusReportDTO:
+      type: object
+      properties:
+        status:
+          type: string
+        effectiveDate:
+          $ref: '#/components/schemas/LocalDate'
+    LocalDate:
+      format: date
+      type: string
+      example: 2022-03-10
+    UUID:
+      format: uuid
+      pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+      type: string
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: 2022-03-10 12:15:50
+    AuthenticatorDTO:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        aaguid:
+          type: string
+        friendlyName:
+          type: string
+        description:
+          type: string
+        statusReports:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusReportDTO'
+        keyProtections:
+          type: array
+          items:
+            type: string
+        createdAt:
+          $ref: '#/components/schemas/LocalDateTime'
+        updatedAt:
+          $ref: '#/components/schemas/LocalDateTime'
+        lastUsedAt:
+          $ref: '#/components/schemas/LocalDateTime'
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

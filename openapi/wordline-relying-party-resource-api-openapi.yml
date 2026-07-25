@@ -1,0 +1,96 @@
+swagger: '2.0'
+info:
+  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+
+    Additional APIs are under construction and planned to be available in 2026.'
+  version: 2.41.1
+  title: Worldline Card Issuing Account - AccountState Relying Party Resource API
+  contact: {}
+host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
+basePath: /api/v2
+schemes:
+- https
+tags:
+- name: Relying Party Resource
+paths:
+  /v1.0/admin/relying-parties:
+    post:
+      summary: Create RP
+      tags:
+      - Relying Party Resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelyingPartyDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Allowed
+      security:
+      - SecurityScheme: []
+  /v1.0/admin/relying-parties/{id}/origins:
+    patch:
+      summary: Declare RP origins
+      tags:
+      - Relying Party Resource
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OriginDTO'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Allowed
+      security:
+      - SecurityScheme: []
+components:
+  schemas:
+    OriginDTO:
+      required:
+      - origin
+      type: object
+      properties:
+        origin:
+          minLength: 1
+          type: string
+    UUID:
+      format: uuid
+      pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+      type: string
+    RelyingPartyDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+securityDefinitions:
+  basic:
+    type: oauth2
+    flow: application
+    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
