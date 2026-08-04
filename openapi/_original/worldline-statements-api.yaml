@@ -1,0 +1,348 @@
+swagger: '2.0'
+info:
+  description: This is the API server supplied by equensWorldline.
+  version: '2.0'
+  title: Merchant payments - Statements API
+  contact:
+    name: equensWorldline API team. See developer portal
+host: developer.equensworldline.com
+basePath: /MerchantApiStatement/api
+schemes:
+  - https
+paths:
+  /acquiring/statement/v2.0/acquirers/{acquirerId}/statements/{statementId}:
+    get:
+      tags:
+      - Statement
+      summary: based on statement id
+      description: |
+        This operation uses the unique statement id to retrieve the statement data
+      operationId: getStatement
+      produces:
+      - application/pdf
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        type: string
+        example: "671234567"
+      - name: statementId
+        in: path
+        description: Unique identification of the statement in which this transaction has been paid out
+        required: true
+        type: string
+        example: "8736-1201748"
+      - name: languageCode
+        in: query
+        description: |
+          The language of the statement.
+          
+          Composed of two parts, separated by an underscore.
+          The ISO 639-1 alpha-2 codes for languages, and the ISO 3166 alpha-2 codes for regions.
+          
+          ISO 639-1 alpha-2 codes 'de', 'en', 'fi', 'fr', 'nl', 'sv'.
+          
+          ISO 3166  alpha-2 codes 'de', 'fi', 'fr', 'gb', 'nl'.
+        required: true
+        type: string
+        example: "nl_nl"
+      - name: statementDate
+        in: query
+        description: Statement creation Date (yyyy-mm-dd)
+        required: true
+        type: string
+        format: date
+        example: "2016-01-31"
+      responses:
+        '200':
+          description: Successful
+        '400':
+          description: Invalid input provided
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: No results found
+        '500':
+          description: Unexpected error
+        '502':
+          description: Backend service problem
+  /acquiring/statement/v2.0/acquirers/{acquirerId}:
+    get:
+      tags:
+      - Statement
+      summary: based on search parameters
+      description: |
+        Retrieve statements for an acquirer and optional search parameters like amount, date-time and period
+      operationId: searchStatements
+      produces:
+      - application/json
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        type: string
+        example: "671234567"
+      - name: statementDateFrom
+        in: query
+        description: Statement search from date (yyyy-mm-dd)
+        required: true
+        type: string
+        format: date
+        example: "2016-01-01"
+      - name: statementDateTo
+        in: query
+        description: Statement search to date (yyyy-mm-dd)
+        required: true
+        type: string
+        format: date
+        example: "2016-01-31"
+      - name: statementAmountFrom
+        in: query
+        description: Statement amount (whole units), amount should be greater than or equal to this value
+        required: false
+        type: integer
+        format: int32
+      - name: statementAmountTo
+        in: query
+        description: Statement amount (whole units), amount should be less than this value
+        required: false
+        type: integer
+        format: int32
+      - name: statementPeriod
+        in: query
+        description: |
+          Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
+          
+          examples
+          2016w04, 2016m01
+        required: false
+        type: string
+      responses:
+        '200':
+          description: Successful
+          schema:
+              $ref: '#/definitions/Statement'
+        '400':
+          description: Invalid input provided
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: No results found
+        '500':
+          description: Unexpected error
+        '502':
+          description: Backend service problem
+  /acquiring/statement/v2.0/acquirers/{acquirerId}/merchants/{merchantId}:
+    get:
+      tags:
+      - Statement
+      summary: based on merchantId and search parameters
+      description: |
+        Retrieve statements for a merchant and optional search parameters like amount, date-time and period
+      operationId: searchStatementsByMerchantId
+      produces:
+      - application/json
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        type: string
+        example: "671234567"
+      - name: merchantId
+        in: path
+        description: Unique identification of the merchant, determined by equensWorldline
+        required: true
+        type: string
+        example: "1280300"
+      - name: statementDateFrom
+        in: query
+        description: Statement search from date (yyyy-mm-dd)
+        required: true
+        type: string
+        format: date
+        example: "2016-01-01"
+      - name: statementDateTo
+        in: query
+        description: Statement search to date (yyyy-mm-dd)
+        required: true
+        type: string
+        format: date
+        example: "2016-01-31"
+      - name: statementAmountFrom
+        in: query
+        description: Statement amount (whole units), amount should be greater than or equal to this value
+        required: false
+        type: integer
+        format: int32
+      - name: statementAmountTo
+        in: query
+        description: Statement amount (whole units), amount should be less than this value
+        required: false
+        type: integer
+        format: int32
+      - name: statementPeriod
+        in: query
+        description: |
+          Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
+          
+          examples
+          2016w04, 2016m01
+        required: false
+        type: string
+      responses:
+        '200':
+          description: Successful
+          schema:
+              $ref: '#/definitions/Statement'
+        '400':
+          description: Invalid input provided
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: No results found
+        '500':
+          description: Unexpected error
+        '502':
+          description: Backend service problem
+  /acquiring/statement/v2.0/acquirers/{acquirerId}/merchants/{merchantId}/contracts/{contractId}:
+    get:
+      tags:
+      - Statement
+      summary: based on contractId and search parameters
+      description: |
+        Retrieve statements for a contract and optional search parameters like amount, date-time and period
+      operationId: searchStatementsByContractId
+      produces:
+      - application/json
+      parameters:
+      - name: acquirerId
+        in: path
+        description: Unique identification of the acquirer, determined by equensWorldline
+        required: true
+        type: string
+        example: "671234567"
+      - name: merchantId
+        in: path
+        description: Unique identification of the merchant, determined by equensWorldline
+        required: true
+        type: string
+        example: "1280300"
+      - name: contractId
+        in: path
+        description: Unique identification of the contract, determined by the acquirer
+        required: true
+        type: string
+        example: "12872"
+      - name: statementDateFrom
+        in: query
+        description: Statement search from date (yyyy-mm-dd)
+        required: true
+        type: string
+        format: date
+        example: "2016-01-01"
+      - name: statementDateTo
+        in: query
+        description: Statement search to date (yyyy-mm-dd)
+        required: true
+        type: string
+        format: date
+        example: "2016-01-31"
+      - name: statementAmountFrom
+        in: query
+        description: Statement amount (whole units), amount should be greater than or equal to this value
+        required: false
+        type: integer
+        format: int32
+      - name: statementAmountTo
+        in: query
+        description: Statement amount (whole units), amount should be less than this value
+        required: false
+        type: integer
+        format: int32
+      - name: statementPeriod
+        in: query
+        description: |
+          Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
+          
+          examples
+          2016w04, 2016m01
+        required: false
+        type: string
+      responses:
+        '200':
+          description: Successful
+          schema:
+              $ref: '#/definitions/Statement'
+        '400':
+          description: Invalid input provided
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: No results found
+        '500':
+          description: Unexpected error
+        '502':
+          description: Backend service problem
+
+################################################################################
+#                                 Definitions                                  #
+################################################################################
+definitions:
+  Statement:
+    type: object
+    properties:
+      statementId:
+        type: string
+        description: A unique identification of this document
+        example: "8621-1201748"
+      statementDate:
+        type: string
+        format: date-time
+        description: The date and time (optionally) that this Document is created (yyyy-mm-dd hh:mm:ss)
+        example: 2016-08-21 09:30:47
+      statementPeriod:
+        type: string
+        description: Statement Period code
+        example: "2017w12"
+      statementAmount:
+        $ref: '#/definitions/Amount'
+      acquirerId:
+        type: integer
+        format: int64
+        description: Unique identification of the acquirer, determined by equensWorldline
+        example: 671234567
+      merchantId:
+        type: string
+        description: Unique identification of the merchant, determined by the acquirer
+        example: "1280300"
+      contractId:
+        type: string
+        description: Unique identification of the contract, determined by the acquirer
+        example: "12872"
+  Amount:
+    type: object
+    properties:
+      amount:
+        type: string
+        format: unlimited size decimal
+        description: |
+          Amount in the minor units of the currency i.e. eurocents for EUR, (amount could still be in decimals) according to ISO 4127.
+          
+          In case of euro, "310" (is 3.10 euro) or "50.32" (is 0.5032 euro). Fee amounts could have decimals.
+        example: "300"
+      currency:
+        type: string
+        description: Currency of the amount
+        example: "EUR"
+                

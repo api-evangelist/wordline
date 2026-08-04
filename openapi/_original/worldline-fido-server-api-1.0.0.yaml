@@ -1,0 +1,834 @@
+---
+openapi: 3.0.3
+info:
+  title: Worldline FIDO server API
+  version: 1.0.0
+  contact:  
+    email: dl-ita-fido-server-sm@worldline.com
+servers:
+- url: https://fido.worldline-solutions.com
+paths:
+  /oauth2/token:
+    post:
+      servers:
+      - url: https://access.fido.worldline-solutions.com
+      summary: Get access token
+      tags:
+      - Token Resource
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - grant_type
+              - audience
+              type: object
+              properties:
+                grant_type:
+                  minLength: 1
+                  pattern: client_credentials
+                  type: string
+                audience:
+                  minLength: 1
+                  type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessTokenDTO"
+        "403":
+          description: Not Allowed
+        "401":
+          description: Not Authorized
+  /v1.0/admin/relying-parties:
+    post:
+      summary: Create RP
+      tags:
+      - Relying Party Resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RelyingPartyDTO"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - SecurityScheme: []
+      
+  /v1.0/admin/relying-parties/{id}/origins:
+    patch:
+      summary: Declare RP origins
+      tags:
+      - Relying Party Resource
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UUID"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OriginDTO"
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - SecurityScheme: []
+
+
+  /v1.0/users/{username}/authenticators:
+    get:
+      summary: Get all user's authenticators
+      tags:
+      - User Resource
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuthenticatorDTO"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+
+  /v1.0/users/{username}/authenticators/{authenticatorId}:
+    delete:
+      summary: Delete user's authenticator
+      tags:
+      - User Resource
+      parameters:
+      - name: authenticatorId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+
+    patch:
+      summary: Update user authenticator's friendlyName
+      tags:
+      - User Resource
+      parameters:
+      - name: authenticatorId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePartialAuthenticatorDTO"
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+
+  /v1.0/webauthn/authn:
+    post:
+      summary: Initiate fido authentication
+      tags:
+      - Authentication Resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthOptionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthOptionResponse"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+
+    patch:
+      summary: Finish fido authentication
+      tags:
+      - Authentication Resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssertionResponse"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerResponse"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+
+  /v1.0/webauthn/register:
+    post:
+      summary: Initiate fido registration
+      tags:
+      - Registration Resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegOptionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegOptionResponse"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+
+    patch:
+      summary: Finish fido registration
+      tags:
+      - Registration Resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AttestationResponse"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerResponse"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+
+components:
+  schemas:
+    AccessTokenDTO:
+      type: object
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          format: int32
+          type: integer
+    AssertionBlob:
+      required:
+      - response
+      type: object
+      properties:
+        id:
+          type: string
+        rawId:
+          type: string
+        response:
+          $ref: "#/components/schemas/AuthenticatorAssertionResponse"
+    AssertionChallengeData:
+      required:
+      - transactionTimestamp
+      - currencyCode
+      - currencyExponent
+      - purchaseAmount
+      - merchantName
+      type: object
+      properties:
+        transactionTimestamp:
+          minLength: 1
+          type: string
+        currencyCode:
+          minLength: 1
+          pattern: "[\\d]{3}"
+          type: string
+        currencyExponent:
+          minLength: 1
+          pattern: "[\\d]{1}"
+          type: string
+        purchaseAmount:
+          minLength: 1
+          type: string
+        merchantName:
+          maxLength: 40
+          minLength: 1
+          type: string
+    AssertionResponse:
+      required:
+      - sessionId
+      type: object
+      properties:
+        sessionId:
+          minLength: 1
+          type: string
+        assertionBlob:
+          $ref: "#/components/schemas/PublicKeyCredentialAssertion"
+    AttestationBlob:
+      required:
+      - response
+      type: object
+      properties:
+        id:
+          type: string
+        rawId:
+          type: string
+        response:
+          $ref: "#/components/schemas/AuthenticatorAttestationResponse"
+    AttestationChallengeData:
+      required:
+      - acsTransID
+      type: object
+      properties:
+        acsTransID:
+          minLength: 1
+          type: string
+    AttestationConveyancePreference:
+      type: object
+      properties:
+        value:
+          type: string
+    AttestationData:
+      type: object
+      properties:
+        createdAt:
+          $ref: "#/components/schemas/LocalDateTime"
+    AttestationResponse:
+      required:
+      - sessionId
+      type: object
+      properties:
+        sessionId:
+          minLength: 1
+          type: string
+        attestationBlob:
+          $ref: "#/components/schemas/PublicKeyCredentialAttestation"
+    AuthOptionRequest:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/PublicKeyCredentialUserEntity"
+        userVerification:
+          type: string
+        extensions:
+          type: object
+          additionalProperties:
+            type: string
+    AuthOptionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        errorMessage:
+          type: string
+        challenge:
+          type: string
+        timeout:
+          format: int64
+          type: integer
+        rpId:
+          type: string
+        allowCredentials:
+          type: array
+          items:
+            $ref: "#/components/schemas/PublicKeyCredentialDescriptor"
+        userVerification:
+          $ref: "#/components/schemas/UserVerificationRequirement"
+        extensions:
+          $ref: "#/components/schemas/AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput"
+        sessionId:
+          type: string
+    AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput:
+      type: object
+      properties:
+        uvm:
+          type: boolean
+          writeOnly: true
+        credProtect:
+          type: string
+          allOf:
+          - $ref: "#/components/schemas/CredentialProtectionPolicy"
+          writeOnly: true
+        hMACSecret: {}
+    AuthenticationExtensionsClientInputsRegistrationExtensionClientInput:
+      type: object
+      properties:
+        appid:
+          type: string
+          writeOnly: true
+        appidExclude:
+          type: string
+          writeOnly: true
+        uvm:
+          type: boolean
+          writeOnly: true
+        credProps:
+          type: boolean
+          writeOnly: true
+        credentialProtectionPolicy:
+          type: string
+          allOf:
+          - $ref: "#/components/schemas/CredentialProtectionPolicy"
+          writeOnly: true
+        enforceCredentialProtectionPolicy:
+          type: boolean
+          writeOnly: true
+        hmacCreateSecret:
+          type: boolean
+        hmacGetSecret:
+          $ref: "#/components/schemas/HMACGetSecretInput"
+    AuthenticatorAssertionResponse:
+      required:
+      - clientDataJSON
+      - authenticatorData
+      - signature
+      type: object
+      properties:
+        clientDataJSON:
+          minLength: 1
+          type: string
+        authenticatorData:
+          minLength: 1
+          type: string
+        signature:
+          minLength: 1
+          type: string
+        userHandle:
+          type: string
+    AuthenticatorAttachment:
+      type: object
+      properties:
+        value:
+          type: string
+    AuthenticatorAttestationResponse:
+      required:
+      - clientDataJSON
+      - attestationObject
+      type: object
+      properties:
+        clientDataJSON:
+          minLength: 1
+          type: string
+        attestationObject:
+          minLength: 1
+          type: string
+    AuthenticatorDTO:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        aaguid:
+          type: string
+        friendlyName:
+          type: string
+        description:
+          type: string
+        statusReports:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatusReportDTO"
+        keyProtections:
+          type: array
+          items:
+            type: string
+        createdAt:
+          $ref: "#/components/schemas/LocalDateTime"
+        updatedAt:
+          $ref: "#/components/schemas/LocalDateTime"
+        lastUsedAt:
+          $ref: "#/components/schemas/LocalDateTime"
+    AuthenticatorSelection:
+      type: object
+      properties:
+        authenticatorAttachment:
+          type: string
+        residentKey:
+          type: string
+        requireResidentKey:
+          type: boolean
+        userVerification:
+          type: string
+    AuthenticatorSelectionCriteria:
+      type: object
+      properties:
+        authenticatorAttachment:
+          $ref: "#/components/schemas/AuthenticatorAttachment"
+        requireResidentKey:
+          type: boolean
+        residentKey:
+          $ref: "#/components/schemas/ResidentKeyRequirement"
+        userVerification:
+          $ref: "#/components/schemas/UserVerificationRequirement"
+    AuthenticatorTransport:
+      type: object
+      properties:
+        value:
+          type: string
+    COSEAlgorithmIdentifier:
+      type: object
+      properties:
+        value:
+          format: int64
+          type: integer
+    CredentialProtectionPolicy:
+      enum:
+      - USER_VERIFICATION_OPTIONAL
+      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
+      - USER_VERIFICATION_REQUIRED
+      type: string
+    EndpointMetadataDTO:
+      required:
+      - endpoint
+      - x5c
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        endpoint:
+          type: string
+        x5c:
+          type: string
+    HMACGetSecretInput:
+      type: object
+      properties:
+        salt1:
+          format: binary
+          type: string
+        salt2:
+          format: binary
+          type: string
+    InfoDTO:
+      type: object
+      properties:
+        revision:
+          type: string
+        branch:
+          type: string
+        tag:
+          type: string
+        version:
+          type: string
+    LocalDate:
+      format: date
+      type: string
+      example: 2022-03-10
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: 2022-03-10T12:15:50
+    MessageExtension:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        criticalityIndicator:
+          type: boolean
+        data: {}
+    OriginDTO:
+      required:
+      - origin
+      type: object
+      properties:
+        origin:
+          minLength: 1
+          type: string
+    PassThroughReqAuthData:
+      required:
+      - rpId
+      - user
+      - assertionBlob
+      - challengeData
+      type: object
+      properties:
+        deviceBindingInfo:
+          type: string
+        rpId:
+          minLength: 1
+          type: string
+        user:
+          $ref: "#/components/schemas/UserEntity"
+        assertionBlob:
+          $ref: "#/components/schemas/AssertionBlob"
+        challengeData:
+          $ref: "#/components/schemas/AssertionChallengeData"
+    PassThroughReqRegData:
+      required:
+      - rpId
+      - user
+      - attestationBlob
+      - challengeData
+      type: object
+      properties:
+        deviceBindingInfo:
+          type: string
+        rpId:
+          minLength: 1
+          type: string
+        user:
+          $ref: "#/components/schemas/UserEntity"
+        attestationBlob:
+          $ref: "#/components/schemas/AttestationBlob"
+        challengeData:
+          $ref: "#/components/schemas/AttestationChallengeData"
+    PassThroughRespData:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/Status"
+        errorMessage:
+          type: string
+        spcUsed:
+          type: boolean
+        messageExtension:
+          type: array
+          items:
+            $ref: "#/components/schemas/MessageExtension"
+        attestationData:
+          $ref: "#/components/schemas/AttestationData"
+    PublicKeyCredentialAssertion:
+      required:
+      - response
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+        rawId:
+          type: string
+        response:
+          $ref: "#/components/schemas/AuthenticatorAssertionResponse"
+        getClientExtensionResults:
+          type: object
+          additionalProperties:
+            type: string
+        type:
+          minLength: 1
+          pattern: public-key
+          type: string
+    PublicKeyCredentialAttestation:
+      required:
+      - response
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+        rawId:
+          type: string
+        response:
+          $ref: "#/components/schemas/AuthenticatorAttestationResponse"
+        type:
+          minLength: 1
+          pattern: public-key
+          type: string
+        getClientExtensionResults:
+          type: object
+          additionalProperties:
+            type: string
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    PublicKeyCredentialDescriptor:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/PublicKeyCredentialType"
+        id:
+          type: string
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/AuthenticatorTransport"
+    PublicKeyCredentialParameters:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/PublicKeyCredentialType"
+        alg:
+          $ref: "#/components/schemas/COSEAlgorithmIdentifier"
+    PublicKeyCredentialRpEntity:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+    PublicKeyCredentialType:
+      type: object
+      properties:
+        value:
+          type: string
+    PublicKeyCredentialUserEntity:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+        id:
+          type: string
+        displayName:
+          type: string
+    RegOptionRequest:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/PublicKeyCredentialUserEntity"
+        friendlyName:
+          type: string
+        authenticatorSelection:
+          $ref: "#/components/schemas/AuthenticatorSelection"
+        attestation:
+          type: string
+        extensions:
+          type: object
+          additionalProperties:
+            type: string
+    RegOptionResponse:
+      type: object
+      properties:
+        rp:
+          $ref: "#/components/schemas/PublicKeyCredentialRpEntity"
+        user:
+          $ref: "#/components/schemas/PublicKeyCredentialUserEntity"
+        challenge:
+          type: string
+        pubKeyCredParams:
+          type: array
+          items:
+            $ref: "#/components/schemas/PublicKeyCredentialParameters"
+        timeout:
+          format: int64
+          type: integer
+        excludeCredentials:
+          type: array
+          items:
+            $ref: "#/components/schemas/PublicKeyCredentialDescriptor"
+        authenticatorSelection:
+          $ref: "#/components/schemas/AuthenticatorSelectionCriteria"
+        attestation:
+          $ref: "#/components/schemas/AttestationConveyancePreference"
+        extensions:
+          $ref: "#/components/schemas/AuthenticationExtensionsClientInputsRegistrationExtensionClientInput"
+        status:
+          type: string
+        errorMessage:
+          type: string
+        sessionId:
+          type: string
+    RelyingPartyDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+        name:
+          minLength: 1
+          type: string
+    ResidentKeyRequirement:
+      type: object
+      properties:
+        value:
+          type: string
+    ServerResponse:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/Status"
+        errorMessage:
+          type: string
+    Status:
+      enum:
+      - OK
+      - FAILED
+      type: string
+    StatusReportDTO:
+      type: object
+      properties:
+        status:
+          type: string
+        effectiveDate:
+          $ref: "#/components/schemas/LocalDate"
+    UUID:
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+      type: string
+    UpdatePartialAuthenticatorDTO:
+      type: object
+      properties:
+        friendlyName:
+          type: string
+    UserEntity:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+    UserVerificationRequirement:
+      type: object
+      properties:
+        value:
+          type: string
