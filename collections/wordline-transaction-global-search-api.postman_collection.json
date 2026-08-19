@@ -1,0 +1,805 @@
+{
+  "item": [
+    {
+      "id": "04e0b724-5e9b-4c47-8f78-9298b5f32fd0",
+      "name": "Transaction - Global Search",
+      "description": {
+        "content": "Transaction Global Search  API Controller",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "993cb98f-e1b2-4dd4-b3b8-9a93c306188c",
+          "name": "Search transactions",
+          "request": {
+            "name": "Search transactions",
+            "description": {
+              "content": "The API provides possibility to retrieve a list of transactions (original first presentments or fee collections received from the card schemes), based on certain criteria. \n\nTo prevent overly broad searches, at least one of the following conditional search criteria must be provided :\n•\tPAN\n•\tPAN token\n•\tTransaction identifier\n•\tAcquirer reference number\n•\tVirtual Service Card Number\n•\tCard Identifier\n•\tAccount Identifier\n•\tRelated Transaction\n\nTo retrieve fee collections, at least one of the following criteria must be also provided :\n- acquirer member Id\n- reason code\n- event date\n\nIf requested, the API allows also to:\n•\tsearch from an issuer and optionally with sub-issuers OR search from a list of issuers (by default, the search is performed on all issuers allowed for the user depending on its rights)\n•\treturn only certain transactions (disputed transactions, fraudulent transactions) \n•\trequest to enrich the response with additional data relative to addendum (to retrieve lodging information, car rental information, air itinerary information) by using embedded fields\n\nThe API response contains all matched transactions sorted by descending transaction date.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search-transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0",
+                  "description": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "100",
+                  "description": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "embed",
+                  "value": "<string>",
+                  "description": "Available values for embed : addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+                },
+                {
+                  "disabled": false,
+                  "key": "embed",
+                  "value": "<string>",
+                  "description": "Available values for embed : addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "WL-Correlation-ID",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Username",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"issuerId\": \"<string>\",\n  \"includeSubIssuers\": false,\n  \"issuerIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pan\": \"<string>\",\n  \"cardScheme\": \"<string>\",\n  \"merchantCategoryCode\": \"<string>\",\n  \"cardAcceptorName\": \"<string>\",\n  \"panToken\": \"<string>\",\n  \"acquirerReferenceDataList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"transactionAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountCurrency\": \"<string>\",\n  \"transactionIdentifiers\": [\n    {\n      \"transactionId\": \"<string>\"\n    },\n    {\n      \"transactionId\": \"<string>\"\n    }\n  ],\n  \"transactionDateFrom\": \"<dateTime>\",\n  \"transactionDateTo\": \"<dateTime>\",\n  \"disputedTransactions\": \"<string>\",\n  \"fraudulentTransactions\": \"<string>\",\n  \"virtualServiceCardNumber\": \"<string>\",\n  \"acquirerMemberId\": \"<string>\",\n  \"reasonCode\": \"<string>\",\n  \"eventDate\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"processingDateFrom\": \"<dateTime>\",\n  \"processingDateTo\": \"<dateTime>\",\n  \"transactionTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardIdentifier\": {\n    \"cardReference\": \"<string>\",\n    \"issuerCardExternalReference\": \"<string>\"\n  },\n  \"accountIdentifier\": {\n    \"accountReference\": \"<string>\",\n    \"issuerAccountExternalReference\": \"<string>\"\n  },\n  \"relatedTransaction\": {\n    \"transactionIdentifier\": {\n      \"transactionId\": \"<string>\"\n    },\n    \"relationshipType\": \"<string>\"\n  },\n  \"transactionAmountFrom\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountTo\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f1181cdb-f115-4b00-813e-3b3b8849340a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search-transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuerId\": \"<string>\",\n  \"includeSubIssuers\": false,\n  \"issuerIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pan\": \"<string>\",\n  \"cardScheme\": \"<string>\",\n  \"merchantCategoryCode\": \"<string>\",\n  \"cardAcceptorName\": \"<string>\",\n  \"panToken\": \"<string>\",\n  \"acquirerReferenceDataList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"transactionAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountCurrency\": \"<string>\",\n  \"transactionIdentifiers\": [\n    {\n      \"transactionId\": \"<string>\"\n    },\n    {\n      \"transactionId\": \"<string>\"\n    }\n  ],\n  \"transactionDateFrom\": \"<dateTime>\",\n  \"transactionDateTo\": \"<dateTime>\",\n  \"disputedTransactions\": \"<string>\",\n  \"fraudulentTransactions\": \"<string>\",\n  \"virtualServiceCardNumber\": \"<string>\",\n  \"acquirerMemberId\": \"<string>\",\n  \"reasonCode\": \"<string>\",\n  \"eventDate\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"processingDateFrom\": \"<dateTime>\",\n  \"processingDateTo\": \"<dateTime>\",\n  \"transactionTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardIdentifier\": {\n    \"cardReference\": \"<string>\",\n    \"issuerCardExternalReference\": \"<string>\"\n  },\n  \"accountIdentifier\": {\n    \"accountReference\": \"<string>\",\n    \"issuerAccountExternalReference\": \"<string>\"\n  },\n  \"relatedTransaction\": {\n    \"transactionIdentifier\": {\n      \"transactionId\": \"<string>\"\n    },\n    \"relationshipType\": \"<string>\"\n  },\n  \"transactionAmountFrom\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountTo\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 200,\n    \"statusMessage\": \"Executed successfully\",\n    \"links\": {\n      \"self\": \"/x/{x}?x=x\",\n      \"next\": \"/x/{x}?page[offset]=2\"\n    },\n    \"timeTakenMs\": 12\n  },\n  \"data\": [\n    {\n      \"issuerId\": \"string\",\n      \"transactionIdentifier\": {\n        \"transactionId\": \"<string>\"\n      },\n      \"acquirerReferenceData\": \"string\",\n      \"acquisitionMaterial\": \"string\",\n      \"cardAcceptorCity\": \"string\",\n      \"cardAcceptorCountry\": \"string\",\n      \"cardAcceptorIdCode\": \"string\",\n      \"cardAcceptorName\": \"string\",\n      \"cardAcceptorZipCode\": \"string\",\n      \"cardScheme\": \"string\",\n      \"debit\": true,\n      \"maskedPan\": \"string\",\n      \"merchantCategoryCode\": \"string\",\n      \"pan\": \"string\",\n      \"reconciliationAmount\": {\n        \"value\": \"<long>\",\n        \"exponent\": \"<integer>\",\n        \"isoCode\": \"<string>\"\n      },\n      \"reversal\": false,\n      \"transactionAmount\": {\n        \"value\": \"<long>\",\n        \"exponent\": \"<integer>\",\n        \"isoCode\": \"<string>\"\n      },\n      \"transactionDate\": \"2020-11-10T12:00:26.534Z\",\n      \"walletId\": \"string\",\n      \"approvalCode\": \"string\",\n      \"pointOfSaleEnvironment\": \"string\",\n      \"mailPhoneEcommerceAndPaymentIndicator\": \"string\",\n      \"pointOfService\": {\n        \"entryModePan\": \"string\",\n        \"entryModePin\": \"string\",\n        \"conditionCode\": \"string\",\n        \"posTerminalCapability\": \"string\",\n        \"cardDataInputCapability\": \"string\",\n        \"cardholderAuthenticationCapability\": \"string\",\n        \"cardCaptureCapability\": \"string\",\n        \"terminalOperatingEnvironment\": \"string\",\n        \"cardholderPresentData\": \"string\",\n        \"cardPresentData\": \"string\",\n        \"cardDataInputMode\": \"string\",\n        \"cardholderAuthenticationMethod\": \"string\",\n        \"cardholderAuthenticationEntity\": \"string\",\n        \"cardDataOutputCapability\": \"string\",\n        \"terminalDataOutputCapability\": \"string\",\n        \"pinCaptureCapability\": \"string\"\n      },\n      \"acquirerId\": \"string\",\n      \"destinationId\": \"string\",\n      \"authorizationBusinessCaseIdentifier\": {\n        \"businessCaseId\": \"string\"\n      },\n      \"cardIdentifier\": {\n        \"cardReference\": \"<string>\",\n        \"issuerCardExternalReference\": \"<string>\"\n      },\n      \"panTokenIdentifier\": {\n        \"panTokenReference\": \"string\"\n      },\n      \"lodgingInformation\": {\n        \"businessFormatCode\": \"string\",\n        \"noShowIndicator\": \"string\",\n        \"extraCharges\": \"string\",\n        \"checkInDate\": \"string\",\n        \"dailyRoomRate\": \"string\",\n        \"totalTax\": \"string\",\n        \"prepaidExpenses\": \"string\",\n        \"foodBeverageCharge\": \"string\",\n        \"folioCashAdvances\": \"string\",\n        \"totalRoomNights\": \"string\",\n        \"totalRoomTax\": \"string\"\n      },\n      \"carRentalInformation\": {\n        \"businessFormatCode\": \"string\",\n        \"days\": \"string\",\n        \"noShowIndicator\": \"string\",\n        \"extraCharges\": \"string\",\n        \"checkOutDate\": \"string\",\n        \"dailyRentRate\": \"string\",\n        \"weeklyRentRate\": \"string\",\n        \"insuranceCharge\": \"string\",\n        \"fuelCharge\": \"string\",\n        \"classCode\": \"string\",\n        \"oneWayDropCharge\": \"string\",\n        \"renterName\": \"string\"\n      },\n      \"airItineraryInformation\": {\n        \"businessFormatCode\": \"string\",\n        \"travelAgent\": \"string\",\n        \"travelAgentCode\": \"string\",\n        \"passengerName\": \"string\",\n        \"departureDate\": \"string\",\n        \"originCityCode\": \"string\",\n        \"restrictedTicketIndicator\": \"string\",\n        \"reservationSystem\": \"string\",\n        \"creditReasonIndicator\": \"string\",\n        \"ticketChangeIndicator\": \"string\",\n        \"ticketNumber\": \"string\",\n        \"IATACode\": \"string\",\n        \"leg1\": {\n          \"flightNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"carrier\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"class\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"stopOver\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"destination\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fareCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"leg2\": {\n          \"flightNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"carrier\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"class\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"stopOver\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"destination\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fareCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"leg3\": {\n          \"flightNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"carrier\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"class\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"stopOver\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"destination\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fareCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"leg4\": {\n          \"flightNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"carrier\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"class\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"stopOver\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"destination\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fareCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"eCommerceSecurityLevelIndicator\": {\n        \"securityProtocol\": \"string\",\n        \"cardHolderAuthentication\": \"string\",\n        \"ucafCollectionIndicator\": \"string\"\n      },\n      \"transactionCategory\": \"string\",\n      \"status\": \"string\",\n      \"transmissionDate\": \"1947-01-12T23:25:39.701Z\",\n      \"billingAmount\": {\n        \"value\": \"<long>\",\n        \"exponent\": \"<integer>\",\n        \"isoCode\": \"<string>\"\n      },\n      \"recalculatedBillingAmount\": {\n        \"value\": \"<long>\",\n        \"exponent\": \"<integer>\",\n        \"isoCode\": \"<string>\"\n      },\n      \"disputeStatus\": \"string\",\n      \"fraudStatus\": \"string\",\n      \"accountIdentifier\": {\n        \"accountReference\": \"<string>\",\n        \"issuerAccountExternalReference\": \"<string>\"\n      },\n      \"action\": \"string\",\n      \"panToken\": \"string\",\n      \"processingDate\": \"1969-09-17T19:52:33.455Z\",\n      \"virtualServiceCardNumber\": \"string\",\n      \"virtualServiceCardReference\": \"string\",\n      \"acquirerMemberId\": \"string\",\n      \"reasonCode\": \"string\",\n      \"eventDate\": \"1959-04-06T06:19:03.317Z\",\n      \"reversed\": false,\n      \"singleMessage\": false,\n      \"authorized\": false,\n      \"authorizationIdentifier\": {\n        \"transactionId\": \"string\",\n        \"issuerExternalAuthorizationReference\": \"string\"\n      },\n      \"creationDate\": \"2022-04-16T04:00:00.352Z\"\n    },\n    {\n      \"issuerId\": \"string\",\n      \"transactionIdentifier\": {\n        \"transactionId\": \"<string>\"\n      },\n      \"acquirerReferenceData\": \"string\",\n      \"acquisitionMaterial\": \"string\",\n      \"cardAcceptorCity\": \"string\",\n      \"cardAcceptorCountry\": \"string\",\n      \"cardAcceptorIdCode\": \"string\",\n      \"cardAcceptorName\": \"string\",\n      \"cardAcceptorZipCode\": \"string\",\n      \"cardScheme\": \"string\",\n      \"debit\": false,\n      \"maskedPan\": \"string\",\n      \"merchantCategoryCode\": \"string\",\n      \"pan\": \"string\",\n      \"reconciliationAmount\": {\n        \"value\": \"<long>\",\n        \"exponent\": \"<integer>\",\n        \"isoCode\": \"<string>\"\n      },\n      \"reversal\": true,\n      \"transactionAmount\": {\n        \"value\": \"<long>\",\n        \"exponent\": \"<integer>\",\n        \"isoCode\": \"<string>\"\n      },\n      \"transactionDate\": \"1956-02-11T04:10:14.809Z\",\n      \"walletId\": \"string\",\n      \"approvalCode\": \"string\",\n      \"pointOfSaleEnvironment\": \"string\",\n      \"mailPhoneEcommerceAndPaymentIndicator\": \"string\",\n      \"pointOfService\": {\n        \"entryModePan\": \"string\",\n        \"entryModePin\": \"string\",\n        \"conditionCode\": \"string\",\n        \"posTerminalCapability\": \"string\",\n        \"cardDataInputCapability\": \"string\",\n        \"cardholderAuthenticationCapability\": \"string\",\n        \"cardCaptureCapability\": \"string\",\n        \"terminalOperatingEnvironment\": \"string\",\n        \"cardholderPresentData\": \"string\",\n        \"cardPresentData\": \"string\",\n        \"cardDataInputMode\": \"string\",\n        \"cardholderAuthenticationMethod\": \"string\",\n        \"cardholderAuthenticationEntity\": \"string\",\n        \"cardDataOutputCapability\": \"string\",\n        \"terminalDataOutputCapability\": \"string\",\n        \"pinCaptureCapability\": \"string\"\n      },\n      \"acquirerId\": \"string\",\n      \"destinationId\": \"string\",\n      \"authorizationBusinessCaseIdentifier\": {\n        \"businessCaseId\": \"string\"\n      },\n      \"cardIdentifier\": {\n        \"cardReference\": \"<string>\",\n        \"issuerCardExternalReference\": \"<string>\"\n      },\n      \"panTokenIdentifier\": {\n        \"panTokenReference\": \"string\"\n      },\n      \"lodgingInformation\": {\n        \"businessFormatCode\": \"string\",\n        \"noShowIndicator\": \"string\",\n        \"extraCharges\": \"string\",\n        \"checkInDate\": \"string\",\n        \"dailyRoomRate\": \"string\",\n        \"totalTax\": \"string\",\n        \"prepaidExpenses\": \"string\",\n        \"foodBeverageCharge\": \"string\",\n        \"folioCashAdvances\": \"string\",\n        \"totalRoomNights\": \"string\",\n        \"totalRoomTax\": \"string\"\n      },\n      \"carRentalInformation\": {\n        \"businessFormatCode\": \"string\",\n        \"days\": \"string\",\n        \"noShowIndicator\": \"string\",\n        \"extraCharges\": \"string\",\n        \"checkOutDate\": \"string\",\n        \"dailyRentRate\": \"string\",\n        \"weeklyRentRate\": \"string\",\n        \"insuranceCharge\": \"string\",\n        \"fuelCharge\": \"string\",\n        \"classCode\": \"string\",\n        \"oneWayDropCharge\": \"string\",\n        \"renterName\": \"string\"\n      },\n      \"airItineraryInformation\": {\n        \"businessFormatCode\": \"string\",\n        \"travelAgent\": \"string\",\n        \"travelAgentCode\": \"string\",\n        \"passengerName\": \"string\",\n        \"departureDate\": \"string\",\n        \"originCityCode\": \"string\",\n        \"restrictedTicketIndicator\": \"string\",\n        \"reservationSystem\": \"string\",\n        \"creditReasonIndicator\": \"string\",\n        \"ticketChangeIndicator\": \"string\",\n        \"ticketNumber\": \"string\",\n        \"IATACode\": \"string\",\n        \"leg1\": {\n          \"flightNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"carrier\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"class\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"stopOver\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"destination\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fareCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"leg2\": {\n          \"flightNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"carrier\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"class\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"stopOver\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"destination\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fareCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"leg3\": {\n          \"flightNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"carrier\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"class\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"stopOver\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"destination\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fareCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"leg4\": {\n          \"flightNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"carrier\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"class\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"stopOver\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"destination\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"fareCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"eCommerceSecurityLevelIndicator\": {\n        \"securityProtocol\": \"string\",\n        \"cardHolderAuthentication\": \"string\",\n        \"ucafCollectionIndicator\": \"string\"\n      },\n      \"transactionCategory\": \"string\",\n      \"status\": \"string\",\n      \"transmissionDate\": \"2009-12-14T13:52:19.382Z\",\n      \"billingAmount\": {\n        \"value\": \"<long>\",\n        \"exponent\": \"<integer>\",\n        \"isoCode\": \"<string>\"\n      },\n      \"recalculatedBillingAmount\": {\n        \"value\": \"<long>\",\n        \"exponent\": \"<integer>\",\n        \"isoCode\": \"<string>\"\n      },\n      \"disputeStatus\": \"string\",\n      \"fraudStatus\": \"string\",\n      \"accountIdentifier\": {\n        \"accountReference\": \"<string>\",\n        \"issuerAccountExternalReference\": \"<string>\"\n      },\n      \"action\": \"string\",\n      \"panToken\": \"string\",\n      \"processingDate\": \"1971-11-10T08:47:04.514Z\",\n      \"virtualServiceCardNumber\": \"string\",\n      \"virtualServiceCardReference\": \"string\",\n      \"acquirerMemberId\": \"string\",\n      \"reasonCode\": \"string\",\n      \"eventDate\": \"1981-09-21T16:09:45.425Z\",\n      \"reversed\": false,\n      \"singleMessage\": true,\n      \"authorized\": true,\n      \"authorizationIdentifier\": {\n        \"transactionId\": \"string\",\n        \"issuerExternalAuthorizationReference\": \"string\"\n      },\n      \"creationDate\": \"1997-09-07T08:39:26.652Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bfee868c-8c3a-46e3-ae23-335a72fbfc73",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search-transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuerId\": \"<string>\",\n  \"includeSubIssuers\": false,\n  \"issuerIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pan\": \"<string>\",\n  \"cardScheme\": \"<string>\",\n  \"merchantCategoryCode\": \"<string>\",\n  \"cardAcceptorName\": \"<string>\",\n  \"panToken\": \"<string>\",\n  \"acquirerReferenceDataList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"transactionAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountCurrency\": \"<string>\",\n  \"transactionIdentifiers\": [\n    {\n      \"transactionId\": \"<string>\"\n    },\n    {\n      \"transactionId\": \"<string>\"\n    }\n  ],\n  \"transactionDateFrom\": \"<dateTime>\",\n  \"transactionDateTo\": \"<dateTime>\",\n  \"disputedTransactions\": \"<string>\",\n  \"fraudulentTransactions\": \"<string>\",\n  \"virtualServiceCardNumber\": \"<string>\",\n  \"acquirerMemberId\": \"<string>\",\n  \"reasonCode\": \"<string>\",\n  \"eventDate\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"processingDateFrom\": \"<dateTime>\",\n  \"processingDateTo\": \"<dateTime>\",\n  \"transactionTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardIdentifier\": {\n    \"cardReference\": \"<string>\",\n    \"issuerCardExternalReference\": \"<string>\"\n  },\n  \"accountIdentifier\": {\n    \"accountReference\": \"<string>\",\n    \"issuerAccountExternalReference\": \"<string>\"\n  },\n  \"relatedTransaction\": {\n    \"transactionIdentifier\": {\n      \"transactionId\": \"<string>\"\n    },\n    \"relationshipType\": \"<string>\"\n  },\n  \"transactionAmountFrom\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountTo\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 400,\n    \"statusMessage\": \"Bad request\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "938cde4d-462d-4065-ad5a-a1a45995885d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search-transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuerId\": \"<string>\",\n  \"includeSubIssuers\": false,\n  \"issuerIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pan\": \"<string>\",\n  \"cardScheme\": \"<string>\",\n  \"merchantCategoryCode\": \"<string>\",\n  \"cardAcceptorName\": \"<string>\",\n  \"panToken\": \"<string>\",\n  \"acquirerReferenceDataList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"transactionAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountCurrency\": \"<string>\",\n  \"transactionIdentifiers\": [\n    {\n      \"transactionId\": \"<string>\"\n    },\n    {\n      \"transactionId\": \"<string>\"\n    }\n  ],\n  \"transactionDateFrom\": \"<dateTime>\",\n  \"transactionDateTo\": \"<dateTime>\",\n  \"disputedTransactions\": \"<string>\",\n  \"fraudulentTransactions\": \"<string>\",\n  \"virtualServiceCardNumber\": \"<string>\",\n  \"acquirerMemberId\": \"<string>\",\n  \"reasonCode\": \"<string>\",\n  \"eventDate\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"processingDateFrom\": \"<dateTime>\",\n  \"processingDateTo\": \"<dateTime>\",\n  \"transactionTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardIdentifier\": {\n    \"cardReference\": \"<string>\",\n    \"issuerCardExternalReference\": \"<string>\"\n  },\n  \"accountIdentifier\": {\n    \"accountReference\": \"<string>\",\n    \"issuerAccountExternalReference\": \"<string>\"\n  },\n  \"relatedTransaction\": {\n    \"transactionIdentifier\": {\n      \"transactionId\": \"<string>\"\n    },\n    \"relationshipType\": \"<string>\"\n  },\n  \"transactionAmountFrom\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountTo\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 401,\n    \"statusMessage\": \"Unauthorized\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f309df3-bc66-43cb-8980-676ce68ddade",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search-transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuerId\": \"<string>\",\n  \"includeSubIssuers\": false,\n  \"issuerIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pan\": \"<string>\",\n  \"cardScheme\": \"<string>\",\n  \"merchantCategoryCode\": \"<string>\",\n  \"cardAcceptorName\": \"<string>\",\n  \"panToken\": \"<string>\",\n  \"acquirerReferenceDataList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"transactionAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountCurrency\": \"<string>\",\n  \"transactionIdentifiers\": [\n    {\n      \"transactionId\": \"<string>\"\n    },\n    {\n      \"transactionId\": \"<string>\"\n    }\n  ],\n  \"transactionDateFrom\": \"<dateTime>\",\n  \"transactionDateTo\": \"<dateTime>\",\n  \"disputedTransactions\": \"<string>\",\n  \"fraudulentTransactions\": \"<string>\",\n  \"virtualServiceCardNumber\": \"<string>\",\n  \"acquirerMemberId\": \"<string>\",\n  \"reasonCode\": \"<string>\",\n  \"eventDate\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"processingDateFrom\": \"<dateTime>\",\n  \"processingDateTo\": \"<dateTime>\",\n  \"transactionTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardIdentifier\": {\n    \"cardReference\": \"<string>\",\n    \"issuerCardExternalReference\": \"<string>\"\n  },\n  \"accountIdentifier\": {\n    \"accountReference\": \"<string>\",\n    \"issuerAccountExternalReference\": \"<string>\"\n  },\n  \"relatedTransaction\": {\n    \"transactionIdentifier\": {\n      \"transactionId\": \"<string>\"\n    },\n    \"relationshipType\": \"<string>\"\n  },\n  \"transactionAmountFrom\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountTo\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 403,\n    \"statusMessage\": \"Forbidden\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b76fe27-f8d0-4953-8000-9646c7f78e1e",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search-transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuerId\": \"<string>\",\n  \"includeSubIssuers\": false,\n  \"issuerIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pan\": \"<string>\",\n  \"cardScheme\": \"<string>\",\n  \"merchantCategoryCode\": \"<string>\",\n  \"cardAcceptorName\": \"<string>\",\n  \"panToken\": \"<string>\",\n  \"acquirerReferenceDataList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"transactionAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountCurrency\": \"<string>\",\n  \"transactionIdentifiers\": [\n    {\n      \"transactionId\": \"<string>\"\n    },\n    {\n      \"transactionId\": \"<string>\"\n    }\n  ],\n  \"transactionDateFrom\": \"<dateTime>\",\n  \"transactionDateTo\": \"<dateTime>\",\n  \"disputedTransactions\": \"<string>\",\n  \"fraudulentTransactions\": \"<string>\",\n  \"virtualServiceCardNumber\": \"<string>\",\n  \"acquirerMemberId\": \"<string>\",\n  \"reasonCode\": \"<string>\",\n  \"eventDate\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"processingDateFrom\": \"<dateTime>\",\n  \"processingDateTo\": \"<dateTime>\",\n  \"transactionTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardIdentifier\": {\n    \"cardReference\": \"<string>\",\n    \"issuerCardExternalReference\": \"<string>\"\n  },\n  \"accountIdentifier\": {\n    \"accountReference\": \"<string>\",\n    \"issuerAccountExternalReference\": \"<string>\"\n  },\n  \"relatedTransaction\": {\n    \"transactionIdentifier\": {\n      \"transactionId\": \"<string>\"\n    },\n    \"relationshipType\": \"<string>\"\n  },\n  \"transactionAmountFrom\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountTo\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 404,\n    \"statusMessage\": \"Not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4acf3c6c-2d77-47fd-b467-5591218fe623",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search-transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuerId\": \"<string>\",\n  \"includeSubIssuers\": false,\n  \"issuerIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pan\": \"<string>\",\n  \"cardScheme\": \"<string>\",\n  \"merchantCategoryCode\": \"<string>\",\n  \"cardAcceptorName\": \"<string>\",\n  \"panToken\": \"<string>\",\n  \"acquirerReferenceDataList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"transactionAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountCurrency\": \"<string>\",\n  \"transactionIdentifiers\": [\n    {\n      \"transactionId\": \"<string>\"\n    },\n    {\n      \"transactionId\": \"<string>\"\n    }\n  ],\n  \"transactionDateFrom\": \"<dateTime>\",\n  \"transactionDateTo\": \"<dateTime>\",\n  \"disputedTransactions\": \"<string>\",\n  \"fraudulentTransactions\": \"<string>\",\n  \"virtualServiceCardNumber\": \"<string>\",\n  \"acquirerMemberId\": \"<string>\",\n  \"reasonCode\": \"<string>\",\n  \"eventDate\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"processingDateFrom\": \"<dateTime>\",\n  \"processingDateTo\": \"<dateTime>\",\n  \"transactionTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardIdentifier\": {\n    \"cardReference\": \"<string>\",\n    \"issuerCardExternalReference\": \"<string>\"\n  },\n  \"accountIdentifier\": {\n    \"accountReference\": \"<string>\",\n    \"issuerAccountExternalReference\": \"<string>\"\n  },\n  \"relatedTransaction\": {\n    \"transactionIdentifier\": {\n      \"transactionId\": \"<string>\"\n    },\n    \"relationshipType\": \"<string>\"\n  },\n  \"transactionAmountFrom\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountTo\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 500,\n    \"statusMessage\": \"Internal server error\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef582cbc-fdff-478c-bc00-e410982a7aa1",
+              "name": "Bad gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search-transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "embed",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuerId\": \"<string>\",\n  \"includeSubIssuers\": false,\n  \"issuerIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pan\": \"<string>\",\n  \"cardScheme\": \"<string>\",\n  \"merchantCategoryCode\": \"<string>\",\n  \"cardAcceptorName\": \"<string>\",\n  \"panToken\": \"<string>\",\n  \"acquirerReferenceDataList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"transactionAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountCurrency\": \"<string>\",\n  \"transactionIdentifiers\": [\n    {\n      \"transactionId\": \"<string>\"\n    },\n    {\n      \"transactionId\": \"<string>\"\n    }\n  ],\n  \"transactionDateFrom\": \"<dateTime>\",\n  \"transactionDateTo\": \"<dateTime>\",\n  \"disputedTransactions\": \"<string>\",\n  \"fraudulentTransactions\": \"<string>\",\n  \"virtualServiceCardNumber\": \"<string>\",\n  \"acquirerMemberId\": \"<string>\",\n  \"reasonCode\": \"<string>\",\n  \"eventDate\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"processingDateFrom\": \"<dateTime>\",\n  \"processingDateTo\": \"<dateTime>\",\n  \"transactionTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardIdentifier\": {\n    \"cardReference\": \"<string>\",\n    \"issuerCardExternalReference\": \"<string>\"\n  },\n  \"accountIdentifier\": {\n    \"accountReference\": \"<string>\",\n    \"issuerAccountExternalReference\": \"<string>\"\n  },\n  \"relatedTransaction\": {\n    \"transactionIdentifier\": {\n      \"transactionId\": \"<string>\"\n    },\n    \"relationshipType\": \"<string>\"\n  },\n  \"transactionAmountFrom\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"transactionAmountTo\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 502,\n    \"statusMessage\": \"Bad Gateway\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4c4678e2-968d-4df1-a581-9218e7c524cf",
+    "name": "Worldline Card Issuing Account - AccountState Transaction - Global Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.\nAdditional APIs are under construction and planned to be available in 2026.",
+      "type": "text/plain"
+    }
+  }
+}

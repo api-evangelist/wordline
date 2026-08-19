@@ -1,0 +1,876 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Transaction API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transaction",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve transaction details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/transactions/:transactionId",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique id of specific transaction"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Available values for embed : addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+              }
+            ]
+          },
+          "docs": "The API allows the transaction details to be retrieved. \nThe main input fields are:\n•\tThe issuer ID\n•\tThe transaction for which the detail is requested: It is provided by using the transaction Id. \n\nIt is also possible to request some additional data relative to addendum (to retrieve lodging information, car rental information, air itinerary information) by using the embedded fields.\n\nIn return, the interface provides the generic information (mainly master data) relevant to the transaction."
+        },
+        {
+          "info": {
+            "name": "Get the dispute information of the transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/transactions/:transactionId/dispute",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction Id"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API returns the dispute folder information if the transaction identified by its transaction Identifier is disputed. If so, it provides access to the full dispute content, including:\n- General dispute folder details such as the dispute reason and status\n- Cardholder information including card status and billing amount\n- The issuer accounting balance\n- Transaction details including the reconciliation amount, transaction type, and merchant information\nThe response may also be enriched (when emb"
+        },
+        {
+          "info": {
+            "name": "Create a dispute from a transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/transactions/:transactionId/dispute",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Transaction Id"
+              }
+            ]
+          },
+          "docs": "The API allows an issuer to create a dispute folder in the system for a given operation. This API enables the issuer to initiate the dispute from its application.\nSeveral actions can be performed :\n- Dispute only \n- Dispute + refund/redebit (full or partial)\n- Dispute + write-off (full or partial)\n- Dispute + fraud declaration\n- Dispute + event creation\n- Dispute + attach documents \n- Dispute + combination of above options\n\nMain data in input are :\n- the external operation reference which can be"
+        },
+        {
+          "info": {
+            "name": "Retrieve a transaction (deprecated, please use v2.1 call)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/transactions/:transactionId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the transaction\n\nexamples TDS16172008721825920, TDS16172008721825921\n"
+              }
+            ]
+          },
+          "docs": "This operation uses the unique transactionId to retrieve the transaction data\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.1/acquirers/:acquirerId/transactions/:transactionId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the transaction\n\nexamples TDS16172008721825920, TDS16172008721825921\n"
+              }
+            ]
+          },
+          "docs": "This operation uses the unique transactionId to retrieve the transaction data. A list will be returned.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve transactions on search criteria",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/transactions",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "acquirerRefNo",
+                "value": "",
+                "type": "query",
+                "description": "Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks.\n(Note: acquirerRefNo = acquirerReferenceNumber)\n"
+              },
+              {
+                "name": "merchantReference",
+                "value": "",
+                "type": "query",
+                "description": "This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.\n"
+              },
+              {
+                "name": "merchantTransactionRefNo",
+                "value": "",
+                "type": "query",
+                "description": "***DEPRECATED*** (please use merchantReference)\n\nThis is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.\n"
+              },
+              {
+                "name": "actionId",
+                "value": "",
+                "type": "query",
+                "description": "Action ID (example 432956ee-6974-42d2-bfdb-878997f21653)\n"
+              },
+              {
+                "name": "pspReference",
+                "value": "",
+                "type": "query",
+                "description": "Additional information provided by the concentrator to return on his statement\n"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)\n\nNote, startDateTime and endDateTime must be present AND at least one of these query parameters: acquirerRefNo, merchantReference, actionId, pspReference\n"
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)\n\nNote, startDateTime and endDateTime must be present AND at least one of these query parameters: acquirerRefNo, merchantReference, actionId, pspReference\n"
+              },
+              {
+                "name": "transactionAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "transactionAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "transactionAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation uses query parameters to retrieve the associated transaction(s) data. \nFor example, with a MC 2nd Chargeback the unique AcquirerRefNo retrieves the unique transactionId’s and associated transaction data of all the different stages in the dispute life cycle.\nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links.\nNote, startDateTime an"
+        },
+        {
+          "info": {
+            "name": "Retrieve transactions for payment id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/payments/:paymentId/transactions",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the payment in which this transaction has been paid out\n\nIf present, the paymentDate must be present too\n"
+              },
+              {
+                "name": "paymentDate",
+                "value": "",
+                "type": "query",
+                "description": "Payment Date (yyyy-mm-dd), known as payment posting date (required for search on paymentId)\n\nIf present, the paymentId must be present too\n"
+              },
+              {
+                "name": "transactionAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "transactionAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "transactionAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation uses the paymentId to retrieve the associated transaction(s) data. \nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve transactions on holding level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/holdings/:holdingId/transactions",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the holding, determined by equensWorldline"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)"
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)"
+              },
+              {
+                "name": "transactionAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "transactionAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "transactionAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "cardNumberLast4",
+                "value": "",
+                "type": "query",
+                "description": "Last 4 digits from the cardnumber"
+              },
+              {
+                "name": "refundOnly",
+                "value": "",
+                "type": "query",
+                "description": "Return refunds only indicator. (0 = return all transactions, 1 = refunds only)"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves all transaction(s) on specific holding level.\nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve transactions on merchant level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/merchants/:merchantId/transactions",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by equensWorldline"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)\nEither the update (start/end) time or the creation (start/end) time is required\n"
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)\nEither the update (start/end) time or the creation (start/end) time is required\n"
+              },
+              {
+                "name": "updateStartDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Update start Datetime of processing (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)\nEither the update (start/end) time or the creation (start/end) time is required\n"
+              },
+              {
+                "name": "updateEndDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Update end Datetime of processing (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)\nEither the update (start/end) time or the creation (start/end) time is required\n"
+              },
+              {
+                "name": "transactionAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "transactionAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "transactionAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "cardNumberLast4",
+                "value": "",
+                "type": "query",
+                "description": "Last 4 digits from the cardnumber"
+              },
+              {
+                "name": "refundOnly",
+                "value": "",
+                "type": "query",
+                "description": "Return refunds only indicator. (0 = return all transactions, 1 = refunds only)"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves all transaction(s) on specific merchant level.\nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve transactions on contract level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/contracts/:contractId/transactions",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)"
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)"
+              },
+              {
+                "name": "transactionAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "transactionAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "transactionAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "cardNumberLast4",
+                "value": "",
+                "type": "query",
+                "description": "Last 4 digits from the cardnumber"
+              },
+              {
+                "name": "refundOnly",
+                "value": "",
+                "type": "query",
+                "description": "Return refunds only indicator. (0 = return all transactions, 1 = refunds only)"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves all transaction(s) on specific contract level.\nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve transactions on site level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/transactions",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)"
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)"
+              },
+              {
+                "name": "transactionAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "transactionAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "transactionAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "cardNumberLast4",
+                "value": "",
+                "type": "query",
+                "description": "Last 4 digits from the cardnumber"
+              },
+              {
+                "name": "refundOnly",
+                "value": "",
+                "type": "query",
+                "description": "Return refunds only indicator. (0 = return all transactions, 1 = refunds only)"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves all transaction(s) on specific site level.\nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve transactions on terminal level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId/transactions",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Unique code identifying the terminal at the Card acceptor location"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)"
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)"
+              },
+              {
+                "name": "transactionAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "transactionAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "transactionAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "cardNumberLast4",
+                "value": "",
+                "type": "query",
+                "description": "Last 4 digits from the cardnumber"
+              },
+              {
+                "name": "refundOnly",
+                "value": "",
+                "type": "query",
+                "description": "Return refunds only indicator. (0 = return all transactions, 1 = refunds only)"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves all transaction(s) on specific terminal level.\nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

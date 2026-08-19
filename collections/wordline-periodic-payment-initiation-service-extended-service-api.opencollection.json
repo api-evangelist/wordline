@@ -1,0 +1,486 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Periodic Payment Initiation Service (Extended service) API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Periodic Payment Initiation Service (Extended service)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Payment initiation request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/periodic-payments",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              },
+              {
+                "name": "InitiatingPartyNotificationUrl",
+                "value": ""
+              },
+              {
+                "name": "NotificationVersion",
+                "value": "v3"
+              },
+              {
+                "name": "InitiatingPartyReturnUrl",
+                "value": ""
+              },
+              {
+                "name": "UseAuthorisationLandingPages",
+                "value": ""
+              },
+              {
+                "name": "Locale",
+                "value": ""
+              },
+              {
+                "name": "AppRedirectPreferred",
+                "value": ""
+              },
+              {
+                "name": "PsuId",
+                "value": ""
+              },
+              {
+                "name": "LastLogin",
+                "value": ""
+              },
+              {
+                "name": "PsuIpAddress",
+                "value": ""
+              },
+              {
+                "name": "PsuIpPort",
+                "value": ""
+              },
+              {
+                "name": "HttpMethod",
+                "value": ""
+              },
+              {
+                "name": "HttpHeaderUserAgent",
+                "value": ""
+              },
+              {
+                "name": "HttpHeaderReferer",
+                "value": ""
+              },
+              {
+                "name": "HttpHeaderAccept",
+                "value": ""
+              },
+              {
+                "name": "HttpHeaderAcceptCharset",
+                "value": ""
+              },
+              {
+                "name": "HttpHeaderAcceptEncoding",
+                "value": ""
+              },
+              {
+                "name": "HttpHeaderAcceptLanguage",
+                "value": ""
+              },
+              {
+                "name": "DeviceId",
+                "value": ""
+              },
+              {
+                "name": "GeoLocation",
+                "value": ""
+              },
+              {
+                "name": "Signature",
+                "value": ""
+              },
+              {
+                "name": "Digest",
+                "value": "SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A="
+              }
+            ],
+            "params": [
+              {
+                "name": "confirm",
+                "value": "",
+                "type": "query",
+                "description": "If set to 'true' the transaction will be immediately confirmed by the Open Banking Service if confirmation of the payment by the Initiating Party is required by the ASPSP.\n<br>**Note:** This field is only applicable when the notification service is used by the Initiating Party to receive the status of the payment. When the notification is not used this flag can be set in the GET status API.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this operation to initiate a payment on behalf of the Payment\nService User. Strong customer authentication might be required by the ASPSP,\nthe response will indicate which step is required to complete the payment.\n"
+        },
+        {
+          "info": {
+            "name": "Status of the payment request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId/status",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              },
+              {
+                "name": "PsuIpAddress",
+                "value": ""
+              },
+              {
+                "name": "Signature",
+                "value": ""
+              },
+              {
+                "name": "Digest",
+                "value": "SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A="
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              },
+              {
+                "name": "confirm",
+                "value": "",
+                "type": "query",
+                "description": "If set to 'true' the transaction will be immediately confirmed\nby the Open Banking Service if confirmation of the payment by the Initiating Party is required by the ASPSP.\n"
+              }
+            ]
+          },
+          "docs": "Use this operation to retrieve the status of a payment.\n"
+        },
+        {
+          "info": {
+            "name": "Confirmation of the payment request by the PISP",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId/confirmation",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This Api is used to confirm a payment. Confirmation is required\nwhen the link 'ConfirmationRequired' is returned. Confirmation of a payment can\nbe required in two cases 1) When its required by the ASPSP standard 2) when\na payment fee is involved.\n"
+        },
+        {
+          "info": {
+            "name": "Payment identification request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId/identification",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this operation to identify a PSU in decoupled approach. The\nresponse of the post payments api will provide a link to this api in the 'PostIdentificationForDecoupled'\nfield if this step is required.\n"
+        },
+        {
+          "info": {
+            "name": "Payment authorisation request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId/authorisations",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this operation to authorise a PSU explicitly. This has to be used if multiple PSU's have to authorise\nthe payment. Background information: If only one PSU has to authorise, this step is started implicitly by\nthe post payments api.\n"
+        },
+        {
+          "info": {
+            "name": "Payment authorisation request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId/authorisations/:authorisationId",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              },
+              {
+                "name": "authorisationId",
+                "value": "aid-4846",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to an authorisation resource.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this operation to change the authorisation resource.\n"
+        },
+        {
+          "info": {
+            "name": "Payment cancellation request",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              },
+              {
+                "name": "InitiatingPartyReturnUrl",
+                "value": ""
+              },
+              {
+                "name": "AspspPsuId",
+                "value": "Psu-12345"
+              },
+              {
+                "name": "AspspPsuIdType",
+                "value": ""
+              },
+              {
+                "name": "AspspPsuCorporateId",
+                "value": ""
+              },
+              {
+                "name": "AspspPsuCorporateIdType",
+                "value": ""
+              },
+              {
+                "name": "UseAuthorisationLandingPages",
+                "value": ""
+              },
+              {
+                "name": "Locale",
+                "value": ""
+              },
+              {
+                "name": "PsuIpAddress",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              }
+            ]
+          },
+          "docs": "Use this operation to cancel a payment on behalf of the\nPayment Service User. Strong Customer Authentication might be required by\nthe ASPSP, the response will indicate which step is required to complete the\ncancellation.\n"
+        },
+        {
+          "info": {
+            "name": "Payment cancellation identification request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId/cancellation-identification",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this operation to identify a PSU in decoupled approach.\n"
+        },
+        {
+          "info": {
+            "name": "Payment cancellation authorisation request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId/cancellation-authorisations",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this operation to authorise a PSU explicitly.\n"
+        },
+        {
+          "info": {
+            "name": "Payment cancellation authorisation request update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/periodic-payments/:paymentId/cancellation-authorisations/:authorisationId",
+            "headers": [
+              {
+                "name": "X-Request-ID",
+                "value": "abcdef2e-3000-4000-88cc-ae40e3b113d7"
+              },
+              {
+                "name": "MessageCreateDateTime",
+                "value": "2020-09-25T08:15:00.856Z"
+              }
+            ],
+            "params": [
+              {
+                "name": "paymentId",
+                "value": "486215",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to a payment.\n\nOptionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.\n"
+              },
+              {
+                "name": "authorisationId",
+                "value": "aid-4846",
+                "type": "path",
+                "description": "The Id used by the Open Banking Service to refer to an authorisation resource.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this operation to update the authorisation resource.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

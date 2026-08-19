@@ -1,0 +1,3287 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Contract API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Contract",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a brand selection advice (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/brand-advice",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              }
+            ]
+          },
+          "docs": "This API allows getting an advice on which brand to select for a card creation (either first card along new contract, additional card or replacement card). This is applicable for products on which brand selection is configured. \nThe API returns the product extension for the advised card brand"
+        },
+        {
+          "info": {
+            "name": "Advice a product extension (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/advise-product-extension",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              }
+            ]
+          },
+          "docs": "This API is used to get the product extension for a card creation depending on the configured algorithm. It can be used for the first card or additional card. \nThe main input fields are:\n- The issuer ID\n- The issuer product external reference for which the advice is requested.\nThe API returns the product extension advised for the card creation."
+        },
+        {
+          "info": {
+            "name": "Retrieve brand advice algorithm configuration by issuer product external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/brand-advice-config/:issuerProductExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerProductExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Product External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the brand advice configuration to be retrieved.\nThe main input fields are:\n- The issuer ID\n- The issuer product external reference for which the configuration details are requested."
+        },
+        {
+          "info": {
+            "name": "Update brand advice algorithm configuration by issuer product external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/brand-advice-config/:issuerProductExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerProductExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Product External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a list of pre-defined parameters (attributes) of a brand advice configuration to be updated.\nThe main input fields are:\n- The issuer ID\n- The issuer product external reference for which configuration updates are required.\n- Parameters to be updated\n\nThe brand advice configuration parameters can be retrieved using the Retrieve brand advice detail API.\nThe updated parameters should be consistent with the initial product configuration defined in the system (e.g., the profiles to be u"
+        },
+        {
+          "info": {
+            "name": "Create consumer contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/create-consumer-contract",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              }
+            ]
+          },
+          "docs": "The Create Consumer Contract API allows the creation of a new consumer contract already signed by the customer or not, and its first card(s), either with physical support (plastic) or not (virtual card).\n\nPre-conditions: \n- The request correlation ID, if provided by the issuer, must be unique. \nIn case of re-use of a request correlation ID from an existing contract, the system will return the data from the existing contract (e.g., if the API call returns a \"time-out“ response, the same request c"
+        },
+        {
+          "info": {
+            "name": "Sign Contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/sign",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to \n- sign a contract, identified by the Issuer Contract external reference or the Contract reference (the contract must be in \"awaiting signature\" status)\n- request to activate all cards within this contract simultaneously\n\nAs a result :\n- the contract is signed\n- the accounts within the contract are activated\n- the cards within the contract are activated if requested\n- the contract can be updated"
+        },
+        {
+          "info": {
+            "name": "Sign Contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/sign",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to \n- sign a contract, identified by the Issuer Contract external reference or the Contract reference (the contract must be in \"awaiting signature\" status)\n- request to activate all cards within this contract simultaneously\n\nAs a result :\n- the contract is signed\n- the accounts within the contract are activated\n- the cards within the contract are activated if requested\n- the contract can be updated"
+        },
+        {
+          "info": {
+            "name": "Retrieve contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "relatedResourceIdentifiersOnly",
+                "value": "",
+                "type": "query",
+                "description": "If relatedResourceIdentifiersOnly is true, the API returns only identifiers related to the embedded resources (for example, if embedded fields cardContracts.cards are requested and relatedResourceIdentifiersOnly is true, only cardContractIdentifier in CardContract and cardIdentifier in Card will be returned). \nIf relatedResourceIdentifiersOnly is false, the API returns all resource information (for example, if embedded fields cardContracts.cards are requested and relatedResourceIdentifiersOnly is false, all information in CardContract and all information in Card will be returned).\nBy default, relatedResourceIdentifiersOnly is false."
+              },
+              {
+                "name": "relatedResourceBaseInfoOnly",
+                "value": "",
+                "type": "query",
+                "description": "relatedResourceBaseInfoOnly (cannot be used with relatedResourceIdentifiersOnly):<br/><br/>If relatedResourceBaseInfoOnly is true, the API returns only main information related to the embedded resources (for example, if embedded fields accounts and cardContracts are requested and relatedResourceBaseInfoOnly is true, only main information of Account and Card Contract will be returned).<br/><br/>The main information is as follows :<br/><br/>- For Account: accountIdentifier, root, status, accountOwnerIdentifier and accountGuarantorIdentifier<br/>- For Card Contract: cardContractIdentifier, cardHolderIdentifier and status<br/>- For Card: cardIdentifier, pan, maskedPan, expiryDate, panSequenceNumber, status, externalStatus, panReference and blockingReason<br/>- For Customer: customerIdentifier, courtesyTitle, firstName and lastName<br/><br/>If relatedResourceBaseInfoOnly is false, the API returns all resource information (for example, if embedded fields accounts and cardContracts are requested and relatedResourceBaseInfoOnly is false, all information in Account and all information in CardContract will be returned).<br/><br/>By default, relatedResourceBaseInfoOnly is false."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "This API allows retrieving a particular contract from its reference or its issuer external reference.\nThe API response contains contract information such as:\n- contract identifier with the contract reference and the issuer external contract reference if previously provided\n- product change information if any, such as its current status (scheduled, done, cancelled), new product, new contract if it exists\n- embedded fields if requested such as list of all customers or identifiers  linked to this c"
+        },
+        {
+          "info": {
+            "name": "Update contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to update certain data of an existing consumer contract, identified by the Issuer Contract external reference or the Contract reference :\n- allowed advertisement channels (flags)\n- allowed data analysis\n- the issuer branch code (e.g. bank agency in charge of this contract)\n- allowed delivery channel for possible letters\n- if the membership fee should be reimbursed when a card contract is closed\n- how many cards should free of membership fee and/or account setup fee\n- if the primar"
+        },
+        {
+          "info": {
+            "name": "List accounts for contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/accounts",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the list of accounts for a contract, identified by the Issuer Contract external reference or the Contract reference, to be retrieved. "
+        },
+        {
+          "info": {
+            "name": "Retrieve the list of add-on services by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/addon-subscriptions",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the list of additional service subscriptions (e.g. new letter, travel insurance) for the contract to be retrieved.\n\nThe main input fields requested by the API are:\n• The issuer ID\n• The contract for which the add-on subscriptions are requested: It can be provided by using the contract reference or the issuer external contract reference\n\nThe API response contains add-on subscription information such as:\n•\tThe reference of the additional service subscription\n•\tThe service type refer"
+        },
+        {
+          "info": {
+            "name": "Subscribe to add-on by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/addon-subscriptions",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a cardholder to subscribe to an additional service (e.g. new letter, travel insurance) for the contract during all contract life cycle.\nThe list of allowed additional services are defined on the product (e.g. PORTAL_ACCESS, ALERT, NOTIFICATION).\n\nThe main input fields requested by the API are:\n• The issuer ID\n• The contract for which the add-on subscription is requested: It can be provided by using the contract reference or the issuer external contract reference\n• The identifier o"
+        },
+        {
+          "info": {
+            "name": "Unsubscribe add-on by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/addon-subscriptions/unsubscribe",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a cardholder to unsubscribe from an additional service (e.g. new letter, travel insurance) for the contract during all contract life cycle.\n\nThe main input fields requested by the API are:\n• The issuer ID\n• The contract for which the add-on unsubscription is requested: It can be provided by using the contract reference or the issuer external contract reference\n• The identifier of the entity for which the add-on subscription is requested: Either the card contract by providing the c"
+        },
+        {
+          "info": {
+            "name": "Add cards and accounts to a contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/add-cards-accounts",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              },
+              {
+                "name": "newResourcesOnly",
+                "value": "",
+                "type": "query",
+                "description": "If newResourcesOnly is true, the API returns only information related to new resources.\nIf newResourcesOnly is false, the API returns all contract information.\nBy default, newResourcesOnly is false."
+              }
+            ]
+          },
+          "docs": "This API allows an issuer to add a new card (debit, credit, prepaid, either physical or virtual), a new account to an existing contract, together or independantly, from a product extension among those allowed by the product used to instantiate the contract. \n\nThis product extension is usually composed of both card and account products, but can be composed of a card or several cards only, or of one or several accounts only or combination of both cards and accounts. It leads to create a new card a"
+        },
+        {
+          "info": {
+            "name": "List card contracts for contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/card-contracts",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the list of card contract linked to a contract, identified by the Issuer Contract external reference or the Contract reference, to be retrieved. "
+        },
+        {
+          "info": {
+            "name": "Close contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/close",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to close a contract identified by the Issuer Contract external reference or the Contract reference. \nThe contract can be closed immediately or in the future at a date provided by the issuer or at the card expiry date. \nThe contract must not be closed or awaiting signature.\n\nAs a result,\nFor immediate closure :\nThe contract is closed, the cards within the contract are deactivated, the closing is triggered for the accounts.\n\nFor scheduled closure :\nThe contract is not changed until "
+        },
+        {
+          "info": {
+            "name": "Update addresses of all customers linked to the contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/update-all-customers-addresses",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "This API is used to update all members of a given contract with same provided addresses (including address usages).\nE.g. for Contract A, contract owner, cardholders 1 and 2 are updated simultaneously with the same Main postal address data.\n\nThis API is used also: \n- to invalidate a particular address of all members of a contract by setting the flag \"invalid\" to True and providing only the address label and the address type (limited to address type as postalAddress). All the other data are ignore"
+        },
+        {
+          "info": {
+            "name": "Suspend contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/suspend",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a contract, identified by the Issuer Contract external reference or the Contract reference, to be suspended.\nIt is possible to indicate whether membership/account setup fees must be partially reimbursed with the contract suspension.\n\nThe contract suspension has the following effects:\n- the contract closure is scheduled according a delay configurable at issuer level\n- Immediate temporary card blocking\n- Renewal and replacement of all cards blocking\n- Account Setup Fee (AS-Fee) and "
+        },
+        {
+          "info": {
+            "name": "Cancel contract Closing by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/cancel-close",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "This API enables to cancel a contract closing with a scheduled date in the future. \nThe main input fields are:\n- The issuer ID\n- The issuer contract external reference or the contract reference\nAs a result, no closing date is planned anymore for the contract."
+        },
+        {
+          "info": {
+            "name": "Cancel contract Suspension by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/cancel-suspend",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "As long as the closure date is not reached, contract suspension can be removed.\nThe contract suspension cancellation has the following effects: \n- The scheduled contract closure date is removed\n- Renewal is unblocked\n- Replacement is unblocked\n- Cards linked to the contract are unblocked\n\nThe API allows a contract suspension process to be cancelled. \nThe contract is identified by the Issuer Contract external reference or the Contract reference,"
+        },
+        {
+          "info": {
+            "name": "List contract fees for a contract (Membership fee and Account setup fee models) by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/contract-fees",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the list of contract fees linked to a contract, identified by the Issuer Contract external reference or the Contract reference, to be retrieved. \n\nIn response, the model references are provided for each account part of the contract."
+        },
+        {
+          "info": {
+            "name": "Update contract fees for an account (Membership fee and Account setup fee models) by contract external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/contract-fees/:accountReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "This API enables the contract fees (Membership fee and account set-up fee) to be updated for a given contract and given card account in the contract.\nThis is done by providing in input the new model reference and the type to be used.\nThis model has to be configured previously for the product."
+        },
+        {
+          "info": {
+            "name": "Update contract fees for an account (Membership fee and Account setup fee models) by contract external reference and account external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/contract-fees/external-accounts/:issuerAccountExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "This API enables the contract fees (Membership fee and account set-up fee) to be updated for a given contract and given card account in the contract.\nThis is done by providing in input the new model reference and the type to be used.\nThis model has to be configured previously for the product."
+        },
+        {
+          "info": {
+            "name": "Retrieve contract owner for a contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/contract-owner",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "This API allows the contract owner for a contract identified by the Issuer Contract external reference or the Contract reference, to be retrieved."
+        },
+        {
+          "info": {
+            "name": "List legitimacy documents for a contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/legitimacy-documents",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "Legitimacy documents correspond to documents that prove the identity of a customer (pass ID, national card ID)\nThe document type, The document ID, the expiry date of the document, its issuing date can be stored in our system.\nThis API is used to get the customers legitimacy documents of a contract.\n\nThe input parameters are: \n- the contract reference for which information is requested: It can be provided by using the contract reference or the issuer external contract reference."
+        },
+        {
+          "info": {
+            "name": "Update legitimacy document of a contract customer by contract external reference and customer external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/legitimacy-documents/external-customers/:issuerCustomerExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              }
+            ]
+          },
+          "docs": "This API is used to update the customers legitimacy documents of a contract.\nThe input parameters are: \n- the contract reference and the customer reference for which information must be updated.\n\nThey can be provided by using the internal references or the issuer external references:\n- contract reference and customer reference\nor\n- issuer contract external reference and issuer customer external reference"
+        },
+        {
+          "info": {
+            "name": "Retrieve contracts by criteria",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/search",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields. \n Intermediate embed properties doesn't need to be provided if sub property already requested (For example :  When requesting 'cards.statusHistory' there is no need to also request 'cardContracts' and 'cardContracts.cards', it will be done automatically."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "0"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "10"
+              }
+            ]
+          },
+          "docs": "This API can be used but it will no longer evolve. It is recommended to use the Global Search for Contracts API (POST /search-contracts), which has the same functionality and also allows searching from an issuer and optionally with sub-issuers or searching from a list of issuers.\n\nThe API provides possibility to retreive a list of consumer contracts for an issuer, based on certain criteria. \n\nOne of the following criteria for searching must be provided:\n- either account's criteria\n- or customer'"
+        },
+        {
+          "info": {
+            "name": "Retrieve contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "relatedResourceIdentifiersOnly",
+                "value": "",
+                "type": "query",
+                "description": "If relatedResourceIdentifiersOnly is true, the API returns only identifiers related to the embedded resources (for example, if embedded fields cardContracts.cards are requested and relatedResourceIdentifiersOnly is true, only cardContractIdentifier in CardContract and cardIdentifier in Card will be returned). \nIf relatedResourceIdentifiersOnly is false, the API returns all resource information (for example, if embedded fields cardContracts.cards are requested and relatedResourceIdentifiersOnly is false, all information in CardContract and all information in Card will be returned).\nBy defalut, relatedResourceIdentifiersOnly is false."
+              },
+              {
+                "name": "relatedResourceBaseInfoOnly",
+                "value": "",
+                "type": "query",
+                "description": "relatedResourceBaseInfoOnly (cannot be used with relatedResourceIdentifiersOnly):<br/><br/>If relatedResourceBaseInfoOnly is true, the API returns only main information related to the embedded resources (for example, if embedded fields accounts and cardContracts are requested and relatedResourceBaseInfoOnly is true, only main information of Account and Card Contract will be returned).<br/><br/>The main information is as follows :<br/><br/>- For Account: accountIdentifier, root, status, accountOwnerIdentifier and accountGuarantorIdentifier<br/>- For Card Contract: cardContractIdentifier, cardHolderIdentifier and status<br/>- For Card: cardIdentifier, pan, maskedPan, expiryDate, panSequenceNumber, status, externalStatus, panReference and blockingReason<br/>- For Customer: customerIdentifier, courtesyTitle, firstName and lastName<br/><br/>If relatedResourceBaseInfoOnly is false, the API returns all resource information (for example, if embedded fields accounts and cardContracts are requested and relatedResourceBaseInfoOnly is false, all information in Account and all information in CardContract will be returned).<br/><br/>By default, relatedResourceBaseInfoOnly is false."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "This API allows retrieving a particular contract from its reference or its issuer external reference.\nThe API response contains contract information such as:\n- contract identifier with the contract reference and the issuer external contract reference if previously provided\n- product change information if any, such as its current status (scheduled, done, cancelled), new product, new contract if it exists\n- embedded fields if requested such as list of all customers or identifiers  linked to this c"
+        },
+        {
+          "info": {
+            "name": "Update contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to update certain data of an existing consumer contract, identified by the Issuer Contract external reference or the Contract reference :\n- allowed advertisement channels (flags)\n- allowed data analysis\n- the issuer branch code (e.g. bank agency in charge of this contract)\n- allowed delivery channel for possible letters\n- if the membership fee should be reimbursed when a card contract is closed\n- how many cards should free of membership fee and/or account setup fee\n- if the primar"
+        },
+        {
+          "info": {
+            "name": "List accounts for contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/accounts",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the list of accounts for a contract, identified by the Issuer Contract external reference or the Contract reference, to be retrieved. "
+        },
+        {
+          "info": {
+            "name": "Add cards and accounts to a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/add-cards-accounts",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              },
+              {
+                "name": "newResourcesOnly",
+                "value": "",
+                "type": "query",
+                "description": "If newResourcesOnly is true, the API returns only information related to new resources.\nIf newResourcesOnly is false, the API returns all contract information.\nBy default, newResourcesOnly is false."
+              }
+            ]
+          },
+          "docs": "This API allows an issuer to add a new card (debit, credit, prepaid, either physical or virtual), a new account to an existing contract, together or independently, from a product extension among those allowed by the product used to instantiate the contract. \n\nThis product extension is usually composed of both card and account products, but can be composed of a card or several cards only, or of one or several accounts only or combination of both cards and accounts. It leads to create a new card a"
+        },
+        {
+          "info": {
+            "name": "Retrieve the list of add-on services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/addon-subscriptions",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the list of additional service subscriptions (e.g. new letter, travel insurance) for the contract to be retrieved.\n\nThe main input fields requested by the API are:\n• The issuer ID\n• The contract for which the add-on subscriptions are requested: It can be provided by using the contract reference or the issuer external contract reference\n\nThe API response contains add-on subscription information such as:\n•\tThe reference of the additional service subscription\n•\tThe service type refer"
+        },
+        {
+          "info": {
+            "name": "Subscribe to add-on",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/addon-subscriptions",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a cardholder to subscribe to an additional service (e.g. new letter, travel insurance) for the contract during all contract life cycle.\nThe list of allowed additional services are defined on the product (e.g. PORTAL_ACCESS, ALERT, NOTIFICATION).\n\nThe main input fields requested by the API are:\n• The issuer ID\n• The contract for which the add-on subscription is requested: It can be provided by using the contract reference or the issuer external contract reference\n• The identifier o"
+        },
+        {
+          "info": {
+            "name": "Unsubscribe add-on",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/addon-subscriptions/unsubscribe",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a cardholder to unsubscribe from an additional service (e.g. new letter, travel insurance) for the contract during all contract life cycle.\n\nThe main input fields requested by the API are:\n• The issuer ID\n• The contract for which the add-on unsubscription is requested: It can be provided by using the contract reference or the issuer external contract reference\n• The identifier of the entity for which the add-on subscription is requested: Either the card contract by providing the c"
+        },
+        {
+          "info": {
+            "name": "List card contracts for contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/card-contracts",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the list of card contract linked to a contract, identified by the Issuer Contract external reference or the Contract reference, to be retrieved. "
+        },
+        {
+          "info": {
+            "name": "Close contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/close",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to close a contract identified by the Issuer Contract external reference or the Contract reference. \nThe contract can be closed immediately or in the future at a date provided by the issuer or at the card expiry date. \nThe contract must not be closed or awaiting signature.\n\nAs a result,\nFor immediate closure :\nThe contract is closed, the cards within the contract are deactivated, the closing is triggered for the accounts.\n\nFor scheduled closure :\nThe contract is not changed until "
+        },
+        {
+          "info": {
+            "name": "Update addresses of all customers linked to the contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/update-all-customers-addresses",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "This API is used to update all members of a given contract with same provided addresses (including address usages).\nE.g. for Contract A, contract owner, cardholders 1 and 2 are updated simultaneously with the same Main postal address data.\n\nThis API is used also: \n- to invalidate a particular address of all members of a contract by setting the flag \"invalid\" to True and providing only the address label and the address type (limited to address type as postalAddress). All the other data are ignore"
+        },
+        {
+          "info": {
+            "name": "Suspend contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/suspend",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a contract, identified by the Issuer Contract external reference or the Contract reference, to be suspended.\nIt is possible to indicate whether membership/account setup fees must be partially reimbursed with the contract suspension.\n\nThe contract suspension has the following effects:\n- the contract closure is scheduled according a delay configurable at issuer level\n- Immediate temporary card blocking\n- Renewal and replacement of all cards blocking\n- Account Setup Fee (AS-Fee) and "
+        },
+        {
+          "info": {
+            "name": "Cancel contract closing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/cancel-close",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "This API enables to cancel a contract closing with a scheduled date in the future. \nThe main input fields are:\n- The issuer ID\n- The issuer contract external reference or the contract reference\nAs a result, no closing date is planned anymore for the contract."
+        },
+        {
+          "info": {
+            "name": "Cancel contract suspension",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/cancel-suspend",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "As long as the closure date is not reached, contract suspension can be removed.\nThe contract suspension cancellation has the following effects: \n- The scheduled contract closure date is removed\n- Renewal is unblocked\n- Replacement is unblocked\n- Cards linked to the contract are unblocked\n\nThe API allows a contract suspension process to be cancelled. \nThe contract is identified by the Issuer Contract external reference or the Contract reference,"
+        },
+        {
+          "info": {
+            "name": "List contract fees for a contract (Membership fee and Account setup fee models)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/contract-fees",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API allows the list of contract fees linked to a contract, identified by the Issuer Contract external reference or the Contract reference, to be retrieved. \n\nIn response, the model references are provided for each account part of the contract."
+        },
+        {
+          "info": {
+            "name": "Update contract fees for an account (Membership fee and Account setup fee models)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/contract-fees/:accountReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "This API enables the contract fees (Membership fee and account set-up fee) to be updated for a given contract and given card account in the contract.\nThis is done by providing in input the new model reference and the type to be used.\nThis model has to be configured previously for the product."
+        },
+        {
+          "info": {
+            "name": "Update contract fees for an account (Membership fee and Account setup fee models) by account external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/contract-fees/external-accounts/:issuerAccountExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "This API enables the contract fees (Membership fee and account set-up fee) to be updated for a given contract and given card account in the contract.\nThis is done by providing in input the new model reference and the type to be used.\nThis model has to be configured previously for the product."
+        },
+        {
+          "info": {
+            "name": "Retrieve contract owner for a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/contract-owner",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "This API allows the contract owner for a contract identified by the Issuer Contract external reference or the Contract reference, to be retrieved."
+        },
+        {
+          "info": {
+            "name": "List legitimacy documents for a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/legitimacy-documents",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "Legitimacy documents correspond to documents that prove the identity of a customer (pass ID, national card ID)\nThe document type, The document ID, the expiry date of the document, its issuing date can be stored in our system.\nThis API is used to get the customers legitimacy documents of a contract.\n\nThe input parameters are: \n- the contract reference for which information is requested: It can be provided by using the contract reference or the issuer external contract reference."
+        },
+        {
+          "info": {
+            "name": "Update legitimacy document of a contract customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/legitimacy-documents/:customerReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              }
+            ]
+          },
+          "docs": "This API is used to update the customers legitimacy documents of a contract.\nThe input parameters are: \n- the contract reference and the customer reference for which information must be updated.\n\nThey can be provided by using the internal references or the issuer external references:\n- contract reference and customer reference\nor\n- issuer contract external reference and issuer customer external reference"
+        },
+        {
+          "info": {
+            "name": "Switch between principal and supplementary cards",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/switch-principal-card",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to change the contract owner of the main card by a cardholder of an additional card belonging to the same contract.\nThe API requires in input:\n- the Issuer ID\n- the contract reference\n- the cardholder reference (future contract owner and future cardholder of the main card)\n- the card contract reference (optional - in case the cardholder has several card contracts in different contracts) \n\nIn return, the list of all changes is provided at contract level and card contracts level (o"
+        },
+        {
+          "info": {
+            "name": "Switch between principal and supplementary cards by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/switch-principal-card",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to change the contract owner of the main card by a cardholder of an additional card belonging to the same contract.\nThe API requires in input:\n- the Issuer ID\n- the contract reference\n- the cardholder reference (future contract owner and future cardholder of the main card)\n- the card contract reference (optional - in case the cardholder has several card contracts in different contracts) \n\nIn return, the list of all changes is provided at contract level and card contracts level (o"
+        },
+        {
+          "info": {
+            "name": "Change the existing product for another one",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/change-product",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API can be used to replace a consumer contract (so called 'product change'), created from a certain product, by another consumer contract, created from a different product (e.g. in case of card product upgrade, downgrade). \nThis replacement or change\n- must be allowed by the configuration (e.g. transition from product A to product B is configured and allowed)\n- is performed either immediately or in the future (next anticipated card renewal date) depending on the configuration \n\nAs a result\n-"
+        },
+        {
+          "info": {
+            "name": "Change the existing product for another one by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/change-product",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API can be used to replace a consumer contract (so called 'product change'), created from a certain product, by another consumer contract, created from a different product (e.g. in case of card product upgrade, downgrade). \nThis replacement or change\n- must be allowed by the configuration (e.g. transition from product A to product B is configured and allowed)\n- is performed either immediately or in the future (next anticipated card renewal date) depending on the configuration \n\nAs a result\n-"
+        },
+        {
+          "info": {
+            "name": "Cancel a pending ProductChange",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/cancel-product-change",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API can be used to cancel a product change for a given consumer contract, identified by either its issuer Contract external reference or its Contract reference:\n- PENDING or already PROCESSED product change\n- The cancellation is possible as long as the original contract is not yet closed (product change already processed).\n- It is possible to request the reimbursement of the fees (membership fee / account setup) already posted on the new contract.\n- It is possible to request cancellation onl"
+        },
+        {
+          "info": {
+            "name": "Cancel a pending ProductChange by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/cancel-product-change",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API can be used to cancel a product change for a given consumer contract, identified by either its issuer Contract external reference or its Contract reference:\n- PENDING or already PROCESSED product change\n- The cancellation is possible as long as the original contract is not yet closed (product change already processed).\n- It is possible to request the reimbursement of the fees (membership fee / account setup) already posted on the new contract.\n- It is possible to request cancellation onl"
+        },
+        {
+          "info": {
+            "name": "Force a pending ProductChange",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/force-product-change",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "When a product change is scheduled for a consumer contract A, card replacement is blocked for each card of this contract A.\nIn this case, instead of requesting a card replacement this API allows to anticipate / force the scheduled product change on a consumer contract, identified by its Issuer Contract external reference or its Contract reference.\n\nAlso, the card to be replaced, previously permanently blocked (e.g. for lost or stolen reason) after the product change request, can be transferred t"
+        },
+        {
+          "info": {
+            "name": "Force a pending ProductChange by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/force-product-change",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "When a product change is scheduled for a consumer contract A, card replacement is blocked for each card of this contract A.\nIn this case, instead of requesting a card replacement this API allows to anticipate / force the scheduled product change on a consumer contract, identified by its Issuer Contract external reference or its Contract reference.\n\nAlso, the card to be replaced, previously permanently blocked (e.g. for lost or stolen reason) after the product change request, can be transferred t"
+        },
+        {
+          "info": {
+            "name": "Refund fee by contract reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/refund-fee-on-demand",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to trigger an on demand pro rata refund of  Account Setup (AS) fee or Membership fee (MS) for the unutilised period. \n\nPre Conditions:\n- In case refund for Account Setup fee is requested then card contract closure date should be less than  card contract creation date + 1 year\n- In case refund for Membership fee is requested, then the Membership fee should already be posted \n- Account setup fee refund on demand can be received only once during contract lifecycle\n- Membership fee r"
+        },
+        {
+          "info": {
+            "name": "Refund fee by issuer contract external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/refund-fee-on-demand",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to trigger an on demand pro rata refund of  Account Setup (AS) fee or Membership fee (MS) for the unutilised period. \n\nPre Conditions:\n- In case refund for Account Setup fee is requested then card contract closure date should be less than  card contract creation date + 1 year\n- In case refund for Membership fee is requested, then the Membership fee should already be posted \n- Account setup fee refund on demand can be received only once during contract lifecycle\n- Membership fee r"
+        },
+        {
+          "info": {
+            "name": "Replace a customer within a consumer contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/:contractReference/replace-customer",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "contractReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract Reference"
+              }
+            ]
+          },
+          "docs": "The API can be used to replace a customer belonging to a consumer contract, by an existing one in our system or by a new one.\nThe customer to be replaced can be the contract owner, the account owner, the cardholder, etc...of the contract.\nThe main input fields are:\n- The issuer ID\n- The issuer contract external reference or the contract reference\n- The issuer customer external reference or the customer reference for which the replacement is requested\n- The target customer (by providing either th"
+        },
+        {
+          "info": {
+            "name": "Replace a customer within a consumer contract by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/contracts/external-contracts/:issuerContractExternalReference/replace-customer",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerContractExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Contract External Reference"
+              }
+            ]
+          },
+          "docs": "The API can be used to replace a customer belonging to a consumer contract, by an existing one in our system or by a new one.\nThe customer to be replaced can be the contract owner, the account owner, the cardholder, etc...of the contract.\nThe main input fields are:\n- The issuer ID\n- The issuer contract external reference or the contract reference\n- The issuer customer external reference or the customer reference for which the replacement is requested\n- The target customer (by providing either th"
+        },
+        {
+          "info": {
+            "name": "Search contracts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "iban",
+                "value": "",
+                "type": "query",
+                "description": "Iban\n"
+              },
+              {
+                "name": "contractName",
+                "value": "",
+                "type": "query",
+                "description": "Optional name for this specific contract\n"
+              },
+              {
+                "name": "postalCode",
+                "value": "",
+                "type": "query",
+                "description": "Postal code of business address.\n"
+              },
+              {
+                "name": "houseNumber",
+                "value": "",
+                "type": "query",
+                "description": "House number of business address. Note, Postal code must be given as well\n"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID\n"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "query",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)\n"
+              },
+              {
+                "name": "merchantName",
+                "value": "",
+                "type": "query",
+                "description": "Name of the merchant\n"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order\n"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (Max page size is 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a list of contracts. Terminated contracts are excluded.\n        \nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+        },
+        {
+          "info": {
+            "name": "Add a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a contract"
+        },
+        {
+          "info": {
+            "name": "Retrieve a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a contract.\n"
+        },
+        {
+          "info": {
+            "name": "Update a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Contract call a PATCH Contract call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Sample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"MyContract\",\r\n           \"path\": \"/basic/contractName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"true\",\r\n           \"path\": \"/basic/highRiskMerchant\",\r\n    "
+        },
+        {
+          "info": {
+            "name": "Delete a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ]
+          },
+          "docs": "Delete a contract"
+        },
+        {
+          "info": {
+            "name": "Add currencies to a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/currencies",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add currencies to a contract"
+        },
+        {
+          "info": {
+            "name": "Retrieve the addresses of a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/addresses",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ]
+          },
+          "docs": "This operation retrieves addresses of a contract.\n"
+        },
+        {
+          "info": {
+            "name": "Add addresses to a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/addresses",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add addresses to a contract"
+        },
+        {
+          "info": {
+            "name": "Update the addresses of a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/addresses",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Contract Addresses call a PATCH Contract Addresses call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Sample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Mainstreet\",\r\n           \"path\": \"/addresses/0/streetName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": 12,\r\n           \"path\": \"/addresses/"
+        },
+        {
+          "info": {
+            "name": "Delete an address from a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/addresses/:addressType",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "addressType",
+                "value": "",
+                "type": "path",
+                "description": "Type of the address. Values [Business, Chargeback, Creditor, Debtor, Invoice, Location, Postal, Private]"
+              }
+            ]
+          },
+          "docs": "This operation deletes a contract address\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the balances of a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/balances",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ]
+          },
+          "docs": "This operation retrieves balances of a contract.\n"
+        },
+        {
+          "info": {
+            "name": "Add balances to a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/balances",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add balances to a contract"
+        },
+        {
+          "info": {
+            "name": "Update the balances of a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/balances",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Contract Balances call a PATCH Contract Balances call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Sample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Fil.100\",\r\n           \"path\": \"/balances/0/merchantReconciliationReference\",\r\n           \"op\": \"replace\"\r\n       }, \r\n       {\r\n           \"value\": \"1\",\r\n           \"path\": \"/balance"
+        },
+        {
+          "info": {
+            "name": "Retrieve the brand parameters of a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/brands",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ]
+          },
+          "docs": "This operation retrieves brands of a contract.\n"
+        },
+        {
+          "info": {
+            "name": "Add brands to a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/brands",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add brands to a contract"
+        },
+        {
+          "info": {
+            "name": "Update the brand parameters of a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/brands",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "applyToAll",
+                "value": "",
+                "type": "query",
+                "description": "If value is true then the changes made to 1 brand (with index 0) will automatically apply to all brands"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Contract Brands call a PATCH Contract Brands call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Sample request: \r\n\r\n    [\r\n       {\r\n           \"value\": 12,\r\n           \"path\": \"/brands/1/brandParameters/offlineMaximumTipPercentage\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"path\": \"/brands/1/brandParamet"
+        },
+        {
+          "info": {
+            "name": "Delete a brand from a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/brands/:label",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "label",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the brand (payment product). Maestro = MAES, American Express = AMEX, Visa = VISA, etc."
+              }
+            ]
+          },
+          "docs": "Delete a brand from a contract"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

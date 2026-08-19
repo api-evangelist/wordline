@@ -1,0 +1,700 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Terminal API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Terminal",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search terminals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/terminals",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "iban",
+                "value": "",
+                "type": "query",
+                "description": "International Bank Account Number for merchant payments\n"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the site within the contract\n"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID\n"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "query",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)\n"
+              },
+              {
+                "name": "merchantName",
+                "value": "",
+                "type": "query",
+                "description": "Name of the merchant\n"
+              },
+              {
+                "name": "contractName",
+                "value": "",
+                "type": "query",
+                "description": "Optional name for this specific contract\n"
+              },
+              {
+                "name": "siteName",
+                "value": "",
+                "type": "query",
+                "description": "Name of the site\n"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order\n"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (Max page size is 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a list of terminals. Terminated terminals are excluded.\n"
+        },
+        {
+          "info": {
+            "name": "Add a terminal (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId/terminals",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a terminal (based on Card Acceptor ID)"
+        },
+        {
+          "info": {
+            "name": "Retrieve a terminal (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId/terminals/:terminalId",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ]
+          },
+          "docs": "Retrieve a terminal (based on Card Acceptor ID)"
+        },
+        {
+          "info": {
+            "name": "Update a terminal (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId/terminals/:terminalId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fields that can be used: **/contractIdentification/siteId, /basic/merchantCategoryCode, /basic/nameOnStatement, /basic/transactionReference**\r\nOperations that can be used: **replace, remove**\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"1010101\",\r\n           \"path\": \"/contractIdentification/siteId\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"true\",\r\n           \"path\": \"/basic/transactionReference\",\r\n           \"op\": \"replace\"             \r\n"
+        },
+        {
+          "info": {
+            "name": "Terminate a terminal (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId/terminals/:terminalId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ]
+          },
+          "docs": "Terminate a terminal (based on Card Acceptor ID)"
+        },
+        {
+          "info": {
+            "name": "Retrieve addresses of a terminal (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId/terminals/:terminalId/addresses",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ]
+          },
+          "docs": "Retrieve addresses of a terminal (based on Card Acceptor ID)"
+        },
+        {
+          "info": {
+            "name": "Add a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a terminal"
+        },
+        {
+          "info": {
+            "name": "Retrieve a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a terminal.\n"
+        },
+        {
+          "info": {
+            "name": "Update a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Terminal call a PATCH Terminal call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"1010101\",\r\n           \"path\": \"/contractIndentification/siteId\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"true\",\r\n           \"path\": \"/basic/transactionRef"
+        },
+        {
+          "info": {
+            "name": "Delete a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ]
+          },
+          "docs": "Delete a terminal"
+        },
+        {
+          "info": {
+            "name": "Retrieve the addresses of a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId/addresses",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ]
+          },
+          "docs": "This operation retrieves addresses of the terminal location. Terminated terminals are excluded.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the balances of a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId/balances",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ]
+          },
+          "docs": "This operation retrieves balances of the terminal\n"
+        },
+        {
+          "info": {
+            "name": "Update the balances of a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId/balances",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Terminal Balances call a PATCH Terminal Balances call can be generated to change one or more fields of one or more balances. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. To reference a specific balance the index of that balances in the GET call needs to be used.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Shop123\",\r\n           \"path\": \"/balances/0/merchantReconciliatio"
+        },
+        {
+          "info": {
+            "name": "Retrieve the brand parameters of a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId/brands",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              }
+            ]
+          },
+          "docs": "This operation retrieves balances of the terminal\n"
+        },
+        {
+          "info": {
+            "name": "Update the brand parameters of a terminal",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/terminals/:terminalId/brands",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+              },
+              {
+                "name": "applyToAll",
+                "value": "",
+                "type": "query",
+                "description": "If value is true then the changes made to 1 brand (with index 0) will automatically apply to all brands"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Terminal Brands call a PATCH Terminal Brands call can be generated to change one or more fields of one or more brands. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. To reference a specific brand the index of that brand in the GET call needs to be used.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"true\",\r\n           \"path\": \"brands/0/brandParameters/allowedServices/refund"
+        },
+        {
+          "info": {
+            "name": "Retrieve a terminal check number",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/terminals/:terminalId/checknumbers/:checkNumber",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "path",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)\n"
+              },
+              {
+                "name": "checkNumber",
+                "value": "",
+                "type": "path",
+                "description": "Check number of the terminal. Only relevant in case the terminal ID is generated up front during the reservation process by processor equensWordline"
+              }
+            ]
+          },
+          "docs": "Retrieve a terminal check number"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

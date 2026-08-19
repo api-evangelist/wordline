@@ -1,0 +1,2001 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Issuing Account - AccountState Card API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Card",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Block all cards with same PAN or same PAN Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/block-all",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              }
+            ]
+          },
+          "docs": "The API is similar to Block a card API but is applied to all cards having the same PAN or same PAN reference.\n\nThe API allows the permanent blocking (immediately or in the future), or temporary blocking, depending on the configured blocking reason, of all cards having the same PAN or same PAN reference.\nCards must be in “CREATED” or “ACTIVE” status. \nThe blocking reason is chosen from the reasons configured beforehand for the issuer.\nIf a card is in \"DEACTIVATED\" status and the blocking reason i"
+        },
+        {
+          "info": {
+            "name": "Retrieve card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              },
+              {
+                "name": "publicKeyIdentifier",
+                "value": "",
+                "type": "query",
+                "description": "Public Key Identifier"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "This API enables card information for a given card identifier to be retrieved.\n\nThe response can also be enriched (if specified as embedded fields in input) with additional data such as the status history of the card, the card Contract information, the card order identifiers linked to the card."
+        },
+        {
+          "info": {
+            "name": "Activate a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/activate",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to activate on demand a card in ''created'' status identified by the Issuer Card External Reference or the Card Reference.\nThe activation reason is chosen among the reasons configured beforehand for the issuer.\nAs a result, the card is active in our system."
+        },
+        {
+          "info": {
+            "name": "Block a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/block",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows blocking a card permanently (immediately or in the future) or temporarily, depending on the configured blocking reason, using the Issuer Card External Reference or the Card Reference.\n\n- The card must be in “Created”, “Active”, or “Deactivated” status (“Deactivated” only if a reason for permanent blocking is requested).\n- The blocking reason is chosen among those configured beforehand for the issuer.\n\nExample Use Cases:\n- Use case 1: Card is blocked permanently (e.g., lost, stolen"
+        },
+        {
+          "info": {
+            "name": "Block and replace a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/block-and-replace",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a card identified by the Issuer Card External Reference or the Card Reference to be blocked and replaced.\nThis API regroups Block a card (for card blocking or blocking information update) and Replace a card APIs in a single request.\nAs result, the card is blocked and the new card is created.\nIf any error occurs while card blocking or card replacing, the card is neither blocked nor replaced.\n\nWith this API, it is also possible to block all cards having the same PAN than the card re"
+        },
+        {
+          "info": {
+            "name": "Retrieve card contract for a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/card-contract",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API enables the card contract information related to a given card to be retrieved.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe card for which the detail is requested: It can be provided by using the card reference or the issuer card external reference. \nIt is also possible to request some additional data by using the embedded fields (such as the list of models linked to the card contract, the account identifiers linked to the card contract, the identifiers and the information of the lin"
+        },
+        {
+          "info": {
+            "name": "Retrieve card event list (e.g. PIN change information) by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/card-events",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "eventType",
+                "value": "",
+                "type": "query",
+                "description": "Type of event to return.\nPossible values are :\nPINChange, TanMailerOrderIssuing, CardOrderIssuing,  PinMailerOrderIssuing, TanMailerOrderExtraction, CardOrderExtraction,  PinMailerOrderExtraction, CancelCardOrderIssuing,  CancelTanMailerOrderIssuing, CancelPinMailerOrderIssuing, CardActivation,  CardIssuing, CardCancellation, CardDeactivation, CardBlocking, CardUnblocking."
+              }
+            ]
+          },
+          "docs": "The API enables the events information related to a given card to be retrieved (e.g. status change such as card blocking/card activation, card issuing for replacement or renewal, PIN change.)."
+        },
+        {
+          "info": {
+            "name": "Deactivate a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/deactivate",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows an active card, or a temporary blocked card, to be deactivated on demand, by using the Issuer Card External Reference or the Card Reference.\nThe deactivation reason is chosen from the reasons configured beforehand for the issuer.\nAs a result, the card is deactivated in our system.\nThis process is not reversible. New card authorizations are declined. If necessary, a request for a card replacement may be made by the issuer.\n\nThis API allows also to cancel a card in “Created” status,"
+        },
+        {
+          "info": {
+            "name": "Create new TAN by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/new-tan",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "For PIN self-selection without a direct bank connection to the card issuing institute - i.e., without online banking access - Worldline offers the variant PIN change with TAN (Trusted Authentication Number). \nThis applies in particular to card programs where the bank is the card issuer for another partner, e.g., TUI or eBay.\nThe API allows to generate a TAN, which is used as a one-time password, printed and sent to cardholder in order to change card pin by e.g. IVR.\n\nIdempotency is managed by th"
+        },
+        {
+          "info": {
+            "name": "List orders for a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/orders",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              },
+              {
+                "name": "orderType",
+                "value": "",
+                "type": "query",
+                "description": "Order type to retrieve (CardOrder, PinMailerOrder or TanMailerOrder)"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API enables the orders information related to a given card to be retrieved.\n\nThe response can also be enriched (if specified as embedded fields in input) with additional data such as the orders status history of the card, the card information."
+        },
+        {
+          "info": {
+            "name": "Remind pin for a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/remind-pin",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a PIN reminder to be requested for a card, identified by the Issuer Card External Reference or the Card Reference when a cardholder forgot its PIN.\nThe card must be in “ACTIVE” status.\nAs a result, a PIN mailer order is generated.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Reorder new PIN for the card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/reorder-pin",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to order a new PIN for the card when a cardholder wants to change its PIN.\nThe card must be in \"CREATED\" or \"ACTIVE\" status.\n\nAs a result, a PIN mailer order with PIN REORDER reason is generated.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Replace a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/replace",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a card, that has not yet been replaced or renewed, to be replaced when the card is lost/stolen or damaged, or when the customer’s information has changed, by using the Issuer Card External Reference or the Card Reference. \nThe card contract must be ACTIVE with no replacement blocking. No check of the card status is performed. \nThe replacement reason is chosen from the reasons configured beforehand for the issuer.\nData that may need to be changed during replacement can be provided,"
+        },
+        {
+          "info": {
+            "name": "Unblock a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/unblock",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to unblock a card identified by the Issuer Card External Reference or the Card Reference.\nThe card must be temporary blocked.\nThe unblocking reason is chosen among the reasons configured beforehand for the issuer.\nAs a result, the card is active again in our system.\nAn issuer cannot request the unblocking of a permanently blocked card."
+        },
+        {
+          "info": {
+            "name": "Retrieve card by cardNumber and sequenceNumber and expiryDate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/search",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "This API enables card information to be retrieved based on PAN or PAN reference, and optionally on PAN sequence number and/or expiry date information as search criteria.\nThe response can be enriched (if specified as embedded fields in input) with additional data such as the status history of the card, the card contract information, the card order identifiers linked to the card, card identifiers of the new card in case of replacement or renewal, the related accounts and the selected models linked"
+        },
+        {
+          "info": {
+            "name": "Unblock all cards with same PAN or same PAN Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/unblock-all",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              }
+            ]
+          },
+          "docs": "The API is similar to Unblock a card API but is applied to all cards having the same PAN or same PAN reference.\n\nThe API allows the unblocking of all cards having the same PAN or same PAN reference.\nCards must be in temporary “Blocked” status.\nThe unblocking reason is chosen from the reasons configured beforehand for the issuer.\nThe Issuer cannot request this API for permanently blocked cards. \nAs a result, cards having the same PAN or same PAN reference are active again in our system."
+        },
+        {
+          "info": {
+            "name": "Retrieve card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              },
+              {
+                "name": "publicKeyIdentifier",
+                "value": "",
+                "type": "query",
+                "description": "Public Key Identifier"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "This API enables card information for a given card identifier to be retrieved.\n\nThe response can also be enriched (if specified as embedded fields in input) with additional data such as the status history of the card, the card Contract information, the card order identifiers linked to the card."
+        },
+        {
+          "info": {
+            "name": "Activate a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/activate",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to activate on demand a card in ''created'' status identified by the Issuer Card External Reference or the Card Reference.\nThe activation reason is chosen among the reasons configured beforehand for the issuer.\nAs a result, the card is active in our system."
+        },
+        {
+          "info": {
+            "name": "Block a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/block",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows blocking a card permanently (immediately or in the future) or temporarily, depending on the configured blocking reason, using the Issuer Card External Reference or the Card Reference.\n\n- The card must be in “Created”, “Active”, or “Deactivated” status (“Deactivated” only if a reason for permanent blocking is requested).\n- The blocking reason is chosen among those configured beforehand for the issuer.\n\nExample Use Cases:\n- Use case 1: Card is blocked permanently (e.g., lost, stolen"
+        },
+        {
+          "info": {
+            "name": "Block and replace a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/block-and-replace",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a card identified by the Issuer Card External Reference or the Card Reference to be blocked and replaced.\nThis API regroups Block a card (for card blocking or blocking information update) and Replace a card APIs in a single request.\nAs result, the card is blocked and the new card is created.\nIf any error occurs while card blocking or card replacing, the card is neither blocked nor replaced.\n\nWith this API, it is also possible to block all cards having the same PAN than the card re"
+        },
+        {
+          "info": {
+            "name": "Retrieve card contract for a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/card-contract",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API enables the card contract information related to a given card to be retrieved.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe card for which the detail is requested: It can be provided by using the card reference or the issuer card external reference. \nIt is also possible to request some additional data by using the embedded fields (such as the list of models linked to the card contract, the account identifiers linked to the card contract, the identifiers and the information of the lin"
+        },
+        {
+          "info": {
+            "name": "Retrieve card event list (e.g. PIN change information)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/card-events",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "eventType",
+                "value": "",
+                "type": "query",
+                "description": "Type of event to return.\nPossible values are :\nPINChange, TanMailerOrderIssuing, CardOrderIssuing,  PinMailerOrderIssuing, TanMailerOrderExtraction, CardOrderExtraction,  PinMailerOrderExtraction, CancelCardOrderIssuing,  CancelTanMailerOrderIssuing, CancelPinMailerOrderIssuing, CardActivation,  CardIssuing, CardCancellation, CardDeactivation, CardBlocking, CardUnblocking."
+              }
+            ]
+          },
+          "docs": "The API enables the events information related to a given card to be retrieved (e.g. status change such as card blocking/card activation, card issuing for replacement or renewal, PIN change.)."
+        },
+        {
+          "info": {
+            "name": "Deactivate a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/deactivate",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows an active card, or a temporary blocked card, to be deactivated on demand, by using the Issuer Card External Reference or the Card Reference.\nThe deactivation reason is chosen from the reasons configured beforehand for the issuer.\nAs a result, the card is deactivated in our system.\nThis process is not reversible. New card authorizations are declined. If necessary, a request for a card replacement may be made by the issuer.\n\nThis API allows also to cancel a card in “Created” status,"
+        },
+        {
+          "info": {
+            "name": "Declare counterfeit card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/declare-counterfeit-card",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              }
+            ]
+          },
+          "docs": "The API allows a counterfeit card to be declared.The PAN of the counterfeit card must be provided.The expiry date and/or the psn can be provided.It is possible to indicate if the card has been compromised in Common Point of Purchase (card is in CPP list).\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "List orders for a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/orders",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              },
+              {
+                "name": "orderType",
+                "value": "",
+                "type": "query",
+                "description": "Order type to retrieve (CardOrder, PinMailerOrder or TanMailerOrder)"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API enables the orders information related to a given card to be retrieved.\n\nThe response can also be enriched (if specified as embedded fields in input) with additional data such as the orders status history of the card, the card information."
+        },
+        {
+          "info": {
+            "name": "Release card orders for a card (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/release-orders",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows orders (card order, PIN mailer order, TAN mailer order) related to a card to be released in case a bank validation is required (before starting the embossing process).\nThe bank validation must be configured in the card creation model corresponding to the order reason (in renewal model for renewal treatment…).\n\nThe main input fields requested by the API are:\no\tThe issuer ID\no\tThe card for which the orders release is requested: It can be provided by using the card reference or the i"
+        },
+        {
+          "info": {
+            "name": "Release card orders for a card by external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/release-orders",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": " issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows orders (card order, PIN mailer order, TAN mailer order) related to a card to be released in case a bank validation is required (before starting the embossing process).\nThe bank validation must be configured in the card creation model corresponding to the order reason (in renewal model for renewal treatment…).\n\nThe main input fields requested by the API are:\no\tThe issuer ID\no\tThe card for which the orders release is requested: It can be provided by using the card reference or the i"
+        },
+        {
+          "info": {
+            "name": "Remind pin for a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/remind-pin",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a PIN reminder to be requested for a card, identified by the Issuer Card External Reference or the Card Reference when a cardholder forgot its PIN.\nThe card must be in “ACTIVE” status.\nAs a result, a PIN mailer order is generated.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Reorder new PIN for the card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/reorder-pin",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to order a new PIN for the card when a cardholder wants to change its PIN.\nThe card must be in \"CREATED\" or \"ACTIVE\" status.\n\nAs a result, a PIN mailer order with PIN REORDER reason is generated.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Replace a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/replace",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a card, that has not yet been replaced or renewed, to be replaced when the card is lost/stolen or damaged, or when the customer’s information has changed, by using the Issuer Card External Reference or the Card Reference. \nThe card contract must be ACTIVE with no replacement blocking. No check of the card status is performed. \nThe replacement reason is chosen from the reasons configured beforehand for the issuer.\nData that may need to be changed during replacement can be provided,"
+        },
+        {
+          "info": {
+            "name": "Unblock a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/unblock",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "The API allows to unblock a card identified by the Issuer Card External Reference or the Card Reference.\nThe card must be temporary blocked.\nThe unblocking reason is chosen among the reasons configured beforehand for the issuer.\nAs a result, the card is active again in our system.\nAn issuer cannot request the unblocking of a permanently blocked card."
+        },
+        {
+          "info": {
+            "name": "Retrieve blocking information for a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/blocking-information",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              }
+            ]
+          },
+          "docs": "The API enables the blocking information related to a given card to be retrieved.\n\nAs a response, a set of information is returned such as :\n- Blocking reason and blocking date time\n- The date when our system receives the blocking instruction\n- If the PIN has been compromised\n- Additional information in case blocking reason is LOST : Lost date, Loss circumstances, the place or the country where the card has been lost\n- if a permanent card blocking is scheduled in the future\n- if the card has bee"
+        },
+        {
+          "info": {
+            "name": "Update blocking information for a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/blocking-information",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              }
+            ]
+          },
+          "docs": "This API can be used but it will no longer evolve. It is recommended to use the Block card API.\n\nThe API enables blocking information related to a given card to be updated such as:\n•\tBlocking reason among those available for the issuer\n•\tBlocking detail\n•\tLost and stolen date if the blocking reason is LOST or STOLEN\n•\tThe fraud process\n•\tThe flag indicating whether the card is in a CPP list\n•\tThe flag indicating whether the PIN is compromised\n•\tScheduled blocking information : delay or blocking "
+        },
+        {
+          "info": {
+            "name": "Retrieve blocking information for a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/blocking-information",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuer Card External Reference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              }
+            ]
+          },
+          "docs": "The API enables the blocking information related to a given card to be retrieved.\n\nAs a response, a set of information is returned such as :\n- Blocking reason and blocking date time\n- The date when our system receives the blocking instruction\n- If the PIN has been compromised\n- Additional information in case blocking reason is LOST : Lost date, Loss circumstances, the place or the country where the card has been lost\n- if a permanent card blocking is scheduled in the future\n- if the card has bee"
+        },
+        {
+          "info": {
+            "name": "Update blocking information for a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/blocking-information",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuer Card External Reference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              }
+            ]
+          },
+          "docs": "This API can be used but it will no longer evolve. It is recommended to use the Block card API.\n\nThe API enables blocking information related to a given card to be updated such as:\n•\tBlocking reason among those available for the issuer\n•\tBlocking detail\n•\tLost and stolen date if the blocking reason is LOST or STOLEN\n•\tThe fraud process\n•\tThe flag indicating whether the card is in a CPP list\n•\tThe flag indicating whether the PIN is compromised\n•\tScheduled blocking information : delay or blocking "
+        },
+        {
+          "info": {
+            "name": "Update blocking information for all cards with same PAN or same PAN Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/update-all-blocking-information",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              }
+            ]
+          },
+          "docs": "This API can be used but it will no longer evolve. It is recommended to use the Block all cards API.\nThe API is similar to “Update blocking information for a card” API but is applied to all cards having the same PAN or same PAN reference.\nBlocking information can be updated such as:\n•\tBlocking reason among those available for the issuer\n•\tBlocking detail\n•\tLost and stolen date if the blocking reason is LOST or STOLEN\n•\tThe fraud process\n•\tThe flag indicating whether the PIN is compromised\n•\tSche"
+        },
+        {
+          "info": {
+            "name": "Advice a product extension for a card (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/advise-product-extension",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "This API is used to get the product extension for a card replacement depending on the configured algorithm.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe card for which the advice is requested: It can be provided by using the card reference or the issuer card external reference. \nThe API returns the product extension advised for the card replacement and also the current product extension of the card."
+        },
+        {
+          "info": {
+            "name": "Advice a product extension for a card by external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/advise-product-extension",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              }
+            ]
+          },
+          "docs": "This API is used to get the product extension for a card replacement depending on the configured algorithm.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe card for which the advice is requested: It can be provided by using the card reference or the issuer card external reference. \nThe API returns the product extension advised for the card replacement and also the current product extension of the card."
+        },
+        {
+          "info": {
+            "name": "List DisputeFolders for a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/disputes",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API returns the list of dispute folders for a given card, identified by his card identifier.\n\nFor each dispute folder provided, the content of the dispute is retrieved:\n•\tGeneral dispute folder information including the dispute reason, the status\n•\tCardholder information including the card status and billing amount\n•\tThe issuer accounting balance\n•\tThe transaction details including the reconciliation amount, the transaction type and merchant information\n\nFor each dispute folder, the response"
+        },
+        {
+          "info": {
+            "name": "Create new TAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/new-tan",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "Card Reference"
+              }
+            ]
+          },
+          "docs": "For PIN self-selection without a direct bank connection to the card issuing institute - i.e., without online banking access - Worldline offers the variant PIN change with TAN (Trusted Authentication Number). \nThis applies in particular to card programs where the bank is the card issuer for another partner, e.g., TUI or eBay.\nThe API allows to generate a TAN, which is used as a one-time password, printed and sent to cardholder in order to change card pin by e.g. IVR.\n\nIdempotency is managed by th"
+        },
+        {
+          "info": {
+            "name": "List DisputeFolders for a card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/disputes",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Card External Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API returns the list of dispute folders for a given card, identified by his card identifier.\n\nFor each dispute folder provided, the content of the dispute is retrieved:\n•\tGeneral dispute folder information including the dispute reason, the status\n•\tCardholder information including the card status and billing amount\n•\tThe issuer accounting balance\n•\tThe transaction details including the reconciliation amount, the transaction type and merchant information\n\nFor each dispute folder, the response"
+        },
+        {
+          "info": {
+            "name": " Create Emergency Card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/:cardReference/create-emergency-card",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "cardReference",
+                "value": "",
+                "type": "path",
+                "description": "cardReference"
+              }
+            ]
+          },
+          "docs": "Emergency Card is a type of card that can be provided to a customer in emergency cases (for example, a  customer has lost his card, while travelling outside his country and urgently needs a new card). The customer will call 24-hour service and request an Emergency Card. \nIn general, those cards will have short validity period and will not be renewed and replaced. Emergency Card is not produced by the issuer but by the scheme. \n\nThe emergency card creation is possible in our system only if an Eme"
+        },
+        {
+          "info": {
+            "name": " Create Emergency Card by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/cards/external-cards/:issuerCardExternalReference/create-emergency-card",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCardExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuerCardExternalReference"
+              }
+            ]
+          },
+          "docs": "Emergency Card is a type of card that can be provided to a customer in emergency cases (for example, a  customer has lost his card, while travelling outside his country and urgently needs a new card). The customer will call 24-hour service and request an Emergency Card. \nIn general, those cards will have short validity period and will not be renewed and replaced. Emergency Card is not produced by the issuer but by the scheme. \n\nThe emergency card creation is possible in our system only if an Eme"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

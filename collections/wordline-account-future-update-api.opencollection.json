@@ -1,0 +1,516 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Account - Future Update API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account - Future Update",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve list of future changes of the account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/account-future-updates",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "all",
+                "value": "",
+                "type": "query",
+                "description": "Retrieve also updates already processed"
+              }
+            ]
+          },
+          "docs": "The API is used to get the account updates that have to be applied at a schedule date.\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\nIn response, a list of updates with the schedule date is provided.\n\nIt is also possible to request the account updates planned in the past and already processed."
+        },
+        {
+          "info": {
+            "name": "Schedule new account parameters update in future by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/account-future-updates",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to enter the account updates that should be applied on a schedule date.\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\n- The plan date\n- The updates\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly fr"
+        },
+        {
+          "info": {
+            "name": "Retrieve future changes for the account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/account-future-updates/:futureChangeReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "futureChangeReference",
+                "value": "",
+                "type": "path",
+                "description": "future change reference"
+              }
+            ]
+          },
+          "docs": "The API allows to get the account updates that have to be applied at a schedule date.\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\n- The future change reference (unique per account)"
+        },
+        {
+          "info": {
+            "name": "Update future changes of the account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/account-future-updates/:futureChangeReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuerAccountExternalReference"
+              },
+              {
+                "name": "futureChangeReference",
+                "value": "",
+                "type": "path",
+                "description": "Future Change Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to modify the account updates that should be applied on a schedule date (not yet reached).\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\n- The future change reference (unique per account)\n- The updates\n- The reason of the future update modification"
+        },
+        {
+          "info": {
+            "name": "Retrieve list of future changes of the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/account-future-updates",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "all",
+                "value": "",
+                "type": "query",
+                "description": "Retrieve also updates already processed"
+              }
+            ]
+          },
+          "docs": "The API is used to get the account updates that have to be applied at a schedule date.\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\nIn response, a list of updates with the schedule date is provided.\n\nIt is also possible to request the account updates planned in the past and already processed."
+        },
+        {
+          "info": {
+            "name": "Schedule new account parameters update in future",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/account-future-updates",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to enter the account updates that should be applied on a schedule date.\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\n- The plan date\n- The updates\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly fr"
+        },
+        {
+          "info": {
+            "name": "Retrieve future changes for the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/account-future-updates/:futureChangeReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "futureChangeReference",
+                "value": "",
+                "type": "path",
+                "description": "future change reference"
+              }
+            ]
+          },
+          "docs": "The API allows to get the account updates that have to be applied at a schedule date.\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\n- The future change reference (unique per account)"
+        },
+        {
+          "info": {
+            "name": "Update future changes of the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/account-future-updates/:futureChangeReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "futureChangeReference",
+                "value": "",
+                "type": "path",
+                "description": "Future Change Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to modify the account updates that should be applied on a schedule date (not yet reached).\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\n- The future change reference (unique per account)\n- The updates\n- The reason of the future update modification"
+        },
+        {
+          "info": {
+            "name": "Cancel future changes of the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/account-future-updates/:futureChangeReference/cancel",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "futureChangeReference",
+                "value": "",
+                "type": "path",
+                "description": "Future Change Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to cancel the account updates that should be applied on a schedule date (not yet reached).\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\n- The future change reference (unique per account)\n- The reason of the future update cancellation"
+        },
+        {
+          "info": {
+            "name": "Cancel future changes of the account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/account-future-updates/:futureChangeReference/cancel",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuerAccountExternalReference"
+              },
+              {
+                "name": "futureChangeReference",
+                "value": "",
+                "type": "path",
+                "description": "Future Change Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to cancel the account updates that should be applied on a schedule date (not yet reached).\nThe main input fields requested by the API are:\n- The issuer ID\n- The account involved by the change: It can be provided by using the account reference or the issuer external account reference\n- The future change reference (unique per account)\n- The reason of the future update cancellation "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

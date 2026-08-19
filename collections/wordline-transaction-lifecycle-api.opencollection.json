@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Transaction Lifecycle API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transaction Lifecycle",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve by AcquirerRefNo",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/transaction/v2.0/acquirers/:acquirerId/transactionlifecycle",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "acquirerRefNo",
+                "value": "",
+                "type": "query",
+                "description": "Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks\n(Note: acquirerRefNo = acquirerReferenceNumber)\n\nexamples ARN29851, 74875009071000046650752\n"
+              },
+              {
+                "name": "transactionAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "transactionAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "transactionAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated \nfirst/second presentment(s) data \\nand the associated transaction data of the different stages in the dispute life cycle.\nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

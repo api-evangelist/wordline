@@ -1,0 +1,218 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Holding API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Holding",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search holdings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/holdings",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              },
+              {
+                "name": "holdingName",
+                "value": "",
+                "type": "query",
+                "description": "Name of the holding\n"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order\n"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a list of holdings. Terminated holdings are excluded.\nThe acquirerId is a mandatory parameter.\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data\n"
+        },
+        {
+          "info": {
+            "name": "Add a holding",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/holdings",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a holding"
+        },
+        {
+          "info": {
+            "name": "Retrieve a holding",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/holdings/:holdingId",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a holding.\n"
+        },
+        {
+          "info": {
+            "name": "Update a holding",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/holdings/:holdingId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fields that can be used: /basic/holdingName**\r\nOperations that can be used: **replace**\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"MyHolding\",\r\n           \"path\": \"/basic/holdingName\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+        },
+        {
+          "info": {
+            "name": "Terminate a holding",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/holdings/:holdingId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              }
+            ]
+          },
+          "docs": "Terminate a holding"
+        },
+        {
+          "info": {
+            "name": "Retrieve the addresses of a holding",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/holdings/:holdingId/addresses",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              }
+            ]
+          },
+          "docs": "This operation retrieves addresses of a holding.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

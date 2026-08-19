@@ -1,0 +1,1806 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Account - Operation API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account - Operation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List operations for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/operations",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "allAccountHierarchy",
+                "value": "",
+                "type": "query",
+                "description": "Retrieve operations for all account hierarchy (default = only account operations are listed )"
+              },
+              {
+                "name": "printOnStatement",
+                "value": "",
+                "type": "query",
+                "description": "Boolean parameter to indicate :\n- If only operations printed on statement should be returned (boolean = true or not provided)\n- Or if manual operations not printed on statement (internal operations such as rejections) should be also returned (boolean = false)"
+              },
+              {
+                "name": "panReference",
+                "value": "",
+                "type": "query",
+                "description": "Reference of the PAN"
+              },
+              {
+                "name": "excludeOperationKinds",
+                "value": "",
+                "type": "query",
+                "description": "Parameter to filter out sub-operations generated during the payment (manual or automatic)/reimbursement apportionment on accounts Available value : SUBPAYOP (apportionment operation)"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "To return the list of operations sorted by posting date / operation id. Available values : asc (for ascending sort) or desc (for descending sort)"
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Format : yyyy-MM-ddTHH:mm:ssZ"
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "Format : yyyy-MM-ddTHH:mm:ssZ"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "0"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "100"
+              },
+              {
+                "name": "includeOriginalAccount",
+                "value": "",
+                "type": "query",
+                "description": "Parameter to indicate if data related to the original account should be returned : case of a product change or a card reallocation (only for corporate cards).Default value is false."
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Available values for embed : authorization, addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+              }
+            ]
+          },
+          "docs": "The API retrieves the list of operations for a given time period and a given account.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe account for which information is requested:  it can be provided by using the account reference or the issuer external account reference,\n•\tA given time period (start date / end date)\nIt is also possible \n- to request the list of operations for all account hierarchy, for a certain PAN only by providing a PAN reference\n- to include internal operations (failed, reje"
+        },
+        {
+          "info": {
+            "name": "Retrieve operation by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/operations/:operationId",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path",
+                "description": "Operation ID"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Available values for embed : parentOperation, authorization, addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+              }
+            ]
+          },
+          "docs": "The API retrieves the detail of an operation for an account.\nIt is also possible to request explicitly the operations linked to the current one by using the embedded field filled with parentOperation.\nA parent operation can be: the original operation when the requested operation is a reversal, relative fee operations linked to the current operation, refund/redebit operations for disputed transaction,..\nIn response, exhaustive information are provided that includes additional amounts if available"
+        },
+        {
+          "info": {
+            "name": "Post a balance adjustment operation for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/post-balance-adjustment-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to generate a balance adjustment operation on an account.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Post a fee operation for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/post-fee-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to post a fee operation to an account. \nThe fee type is mandatory, and the value must be consistent with the list defined during product definition. \nThis list is shared between WL and the issuer during the project phase.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, "
+        },
+        {
+          "info": {
+            "name": "Reset the balance of an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/reset-balance",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API resets the balance of an account by generating : \n a credit operation (for a debit balance) \n a debit operation (for a credit balance) \n\n As an input, the account identifier can be provided by using: \n the account reference generated by WL \n or the issuer external account reference \n This is relevant only for credit cards. \n Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will b"
+        },
+        {
+          "info": {
+            "name": "Post a payment operation for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/post-payment-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a payment operation to an account to be generated and posted.\nA payment operation is used to pay the due amount. \nIf the amount provided is greater than the due amount, the overpayment can be posted to another account if provided.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple"
+        },
+        {
+          "info": {
+            "name": "Post a reimbursement operation by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/post-reimbursement-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a reimbursement operation to an account to be generated and posted depending on following conditions:\nThe account must be in an ACTIVE or BEING_CLOSED status.\nDepending on the reimbursement model attached to the account hierarchy, the API has two behaviors:\n1. If the reimbursement amount is limited by the account liable balance (default behavior)\n- The liable balance of the account must be in credit position\n- The reimbursement amount cannot be high than the liable balance\n2. If t"
+        },
+        {
+          "info": {
+            "name": "Reverse a reimbursement operation by external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/reverse-reimbursement-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to fully reverse a reimbursement operation previously posted on an account.\nAs an input, it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the reimbursement operation was previously posted \n- the reimbursement operation to be reversed\n the information related to the reversal operation (reference, date, service poster). \n\nIdempotency is managed by the API; that is, if the request with th"
+        },
+        {
+          "info": {
+            "name": "Load an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/post-load-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows an account to be loaded.\nA load operation is used for prepaid cards to put money in an account.\nThe operation can have a control on the amount authorized and trigger a load operation fee, if it is configured.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be exe"
+        },
+        {
+          "info": {
+            "name": "Unload an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/post-unload-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows an account to be unloaded. An unload operation is used for prepaid cards  to retrieve money from an account.\nThe operation can have a control on the amount authorized.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be ret"
+        },
+        {
+          "info": {
+            "name": "Reverse a balance adjustment operation for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/reverse-balance-adjustment-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to reverse a balance adjustment operation on an account.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference\n\nThe balance adjustment operation to be reversed must be provided. \nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Reverse a fee operation for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/reverse-fee-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to reverse a fee operation on an account.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference\n\nThe fee type is mandatory. It must be consistent with the product definition. \nThe list of values is shared between WL and the issuer. \nThe fee reference to be reversed must be provided. \nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple "
+        },
+        {
+          "info": {
+            "name": "Reverse a payment operation for an account (full reversal) by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/reverse-payment-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a payment reversal operation on an account.\nA payment reversal can be requested when a direct debit returns unpaid.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference\n\nThe payment reference to be reversed must be provided. \nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be "
+        },
+        {
+          "info": {
+            "name": "Post an interest operation for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/post-interest-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuerAccountExternalReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "The API is used to post manually an interest operation to an account.\n\nAs an input it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the interest operation has to be posted \n- the interest operation itself, uniquely identified by its external reference, date and service poster, its amount in currency (monetary)\nNote: \n- the provided currency must be the same than the posting account\n- it is possible to"
+        },
+        {
+          "info": {
+            "name": "Reverse an interest operation for an account (full reversal) by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/reverse-interest-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuerAccountExternalReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "The API is used to fully reverse an interest operation previously posted on an account.\n\nAs an input, it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the interest operation was previously posted \n- the interest operation to be reversed\n- the information related to the reversal operation (reference, date, service poster) \n\nIdempotency is managed by the API; that is, if the request with the same WL-Cor"
+        },
+        {
+          "info": {
+            "name": "Post a Bonus operation for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/post-bonus-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuerAccountExternalReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "The API is used to post manually a Bonus operation to an account.\nA Bonus operation is used to reward or adjust a given account (in credit or in debit, e.g. in case of too high, too low or missing reward).\nAs an input it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the bonus operation has to be posted \n- the related Bonus program, defined for the issuer and the account\n- the Bonus operation itself, u"
+        },
+        {
+          "info": {
+            "name": "Reverse a Bonus operation for an account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/reverse-bonus-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuerAccountExternalReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "The API is used to fully reverse a Bonus operation previously posted on an account.\n\nAs an input it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the bonus operation was previously posted \n- the Bonus operation to be reversed\n- the information related to the reversal operation (reference, date, service poster) \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID"
+        },
+        {
+          "info": {
+            "name": "Retrieve an operation by external references triplet and account external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/inquire-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "issuerAccountExternalReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Available values for embed : parentOperation, authorization, addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "This API allows retrieving for an account a particular operation from its external references.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe account reference or the issuer external account reference\n•\tThe external references of the operation for which the detail is requested: The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifying the operation in our system must be provided.\nThe API response contains operation information."
+        },
+        {
+          "info": {
+            "name": "List operations for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/operations",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "allAccountHierarchy",
+                "value": "",
+                "type": "query",
+                "description": "Retrieve operations for all account hierarchy (default = only account operations are listed )"
+              },
+              {
+                "name": "excludeOperationKinds",
+                "value": "",
+                "type": "query",
+                "description": "Parameter to filter out sub-operations generated during the payment (manual or automatic)/reimbursement apportionment on accounts Available value : SUBPAYOP (apportionment operation)"
+              },
+              {
+                "name": "printOnStatement",
+                "value": "",
+                "type": "query",
+                "description": "Boolean parameter to indicate :\n- If only operations printed on statement should be returned (boolean = true or not provided)\n- Or if manual operations not printed on statement (internal operations such as rejections) should be also returned (boolean = false)"
+              },
+              {
+                "name": "panReference",
+                "value": "",
+                "type": "query",
+                "description": "Reference of the PAN"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "To return the list of operations sorted by posting date / operation id. Available values : asc (for ascending sort) or desc (for descending sort)"
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Format : yyyy-MM-ddTHH:mm:ssZ"
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "Format : yyyy-MM-ddTHH:mm:ssZ"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "0"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "100"
+              },
+              {
+                "name": "includeOriginalAccount",
+                "value": "",
+                "type": "query",
+                "description": "Parameter to indicate if data related to the original account should be returned : case of a product change or a card reallocation (only for corporate cards).Default value is false."
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Available values for embed : authorization, addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+              }
+            ]
+          },
+          "docs": "The API retrieves the list of operations for a given time period and a given account.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe account for which information is requested:  it can be provided by using the account reference or the issuer external account reference,\n•\tA given time period (start date / end date)\nIt is also possible \n- to request the list of operations for all account hierarchy, for a certain PAN only by providing a PAN reference\n- to include internal operations (failed, reje"
+        },
+        {
+          "info": {
+            "name": "Retrieve operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/operations/:operationId",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path",
+                "description": "Operation ID"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Available values for embed : parentOperation, authorization, addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+              }
+            ]
+          },
+          "docs": "The API retrieves the detail of an operation for an account.\nIt is also possible to request explicitly the operations linked to the current one by using the embedded field filled with parentOperation.\nA parent operation can be: the original operation when the requested operation is a reversal, relative fee operations linked to the current operation, refund/redebit operations for disputed transaction,..\nIn response, exhaustive information are provided that includes additional amounts if available"
+        },
+        {
+          "info": {
+            "name": "Post a balance adjustment operation for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/post-balance-adjustment-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to generate a balance adjustment operation on an account. \nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Post a fee operation for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/post-fee-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to post a fee operation to an account. \nThe fee type is mandatory, and the value must be consistent with the list defined during product definition. \nThis list is shared between WL and the issuer during the project phase.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, "
+        },
+        {
+          "info": {
+            "name": "Reset the balance of an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/reset-balance",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API resets the balance of an account by generating : \n a credit operation (for a debit balance) \n a debit operation (for a credit balance) \n\n As an input, the account identifier can be provided by using: \nthe account reference generated by WL \n or the issuer external account reference \n This is relevant only for credit cards. \n Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be"
+        },
+        {
+          "info": {
+            "name": "Post a payment operation for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/post-payment-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a payment operation to an account to be generated and posted.\nA payment operation is used to pay the due amount. \nIf the amount provided is greater than the due amount, the overpayment can be posted to another account if provided.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple"
+        },
+        {
+          "info": {
+            "name": "Post a reimbursement operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/post-reimbursement-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a reimbursement operation to an account to be generated and posted depending on following conditions:\nThe account must be in an ACTIVE or BEING_CLOSED status.\nDepending on the reimbursement model attached to the account hierarchy, the API has two behaviors:\n1. If the reimbursement amount is limited by the account liable balance (default behavior)\n- The liable balance of the account must be in credit position\n- The reimbursement amount cannot be high than the liable balance\n2. If t"
+        },
+        {
+          "info": {
+            "name": "Reverse a reimbursement operation (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/reverse-reimbursement-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to fully reverse a reimbursement operation previously posted on an account.\nAs an input, it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the reimbursement operation was previously posted \n- the reimbursement operation to be reversed\n the information related to the reversal operation (reference, date, service poster). \n\nIdempotency is managed by the API; that is, if the request with th"
+        },
+        {
+          "info": {
+            "name": "Load an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/post-load-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API allows an account to be loaded.\nA load operation is used for prepaid cards to put money in an account.\nThe operation can have a control on the amount authorized and trigger a load operation fee, if it is configured.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be exe"
+        },
+        {
+          "info": {
+            "name": "Unload an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/post-unload-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API allows an account to be unloaded. An unload operation is used for prepaid cards  to retrieve money from an account.\nThe operation can have a control on the amount authorized.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be ret"
+        },
+        {
+          "info": {
+            "name": "Reverse a balance adjustment operation for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/reverse-balance-adjustment-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to reverse a balance adjustment operation on an account.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference\n\nThe balance adjustment operation to be reversed must be provided. \nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Reverse a fee operation for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/reverse-fee-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to reverse a fee operation on an account.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference\n\nThe fee type is mandatory. It must be consistent with the product definition. \nThe list of values is shared between WL and the issuer. \nThe fee reference to be reversed must be provided.\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple t"
+        },
+        {
+          "info": {
+            "name": "Reverse a payment operation for an account (full reversal)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/reverse-payment-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a payment reversal operation on an account.\nA payment reversal can be requested when a direct debit returns unpaid.\nAs an input, the account identifier can be provided by using:\n- the account reference generated by WL\n- or the issuer external account reference\n\nThe payment reference to be reversed must be provided. \nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be "
+        },
+        {
+          "info": {
+            "name": "Post an interest operation for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/post-interest-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "accountReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "The API is used to post manually an interest operation to an account.\n\nAs an input it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the interest operation has to be posted \n- the interest operation itself, uniquely identified by its external reference, date and service poster, its amount in currency (monetary)\nNote: \n- the provided currency must be the same than the posting account\n- it is possible to"
+        },
+        {
+          "info": {
+            "name": "Reverse an interest operation for an account (full reversal)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/reverse-interest-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "accountReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "The API is used to fully reverse an interest operation previously posted on an account.\n\nAs an input, it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the interest operation was previously posted \n- the interest operation to be reversed\n- the information related to the reversal operation (reference, date, service poster) \n\nIdempotency is managed by the API; that is, if the request with the same WL-Cor"
+        },
+        {
+          "info": {
+            "name": "Post a Bonus operation for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/post-bonus-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "accountReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "The API is used to post manually a Bonus operation to an account.\nA Bonus operation is used to reward or adjust a given account (in credit or in debit, e.g. in case of too high, too low or missing reward).\nAs an input it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the bonus operation has to be posted \n- the related Bonus program, defined for the issuer and the account\n- the Bonus operation itself, u"
+        },
+        {
+          "info": {
+            "name": "Reverse a Bonus operation for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/reverse-bonus-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "accountReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "The API is used to fully reverse a Bonus operation previously posted on an account.\n\nAs an input it must be provided\n- the account, identified either by its account reference generated by WL or its issuer external account reference, on which the bonus operation was previously posted \n- the Bonus operation to be reversed\n- the information related to the reversal operation (reference, date, service poster) \n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID"
+        },
+        {
+          "info": {
+            "name": "Retrieve an operation by external references triplet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/inquire-operation",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "accountReference"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Available values for embed : parentOperation, authorization, addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) "
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "issuerId"
+              }
+            ]
+          },
+          "docs": "This API allows retrieving for an account a particular operation from its external references.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe account reference or the issuer external account reference\n•\tThe external references of the operation for which the detail is requested: The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifying the operation in our system must be provided.\nThe API response contains operation information."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,615 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Dispute API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Dispute",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Dispute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/operations/:externalOperationReference/disputes",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "externalOperationReference",
+                "value": "",
+                "type": "path",
+                "description": "External Operation Reference"
+              }
+            ]
+          },
+          "docs": "This API is deprecated and is replaced by the API Create a dispute from a transaction.\nThe API allows an issuer to create a dispute folder in the system for a given operation. This API enables the issuer to initiate the dispute from its application.\nSeveral actions can be performed :\n- Dispute only \n- Dispute + refund/redebit (full or partial)\n- Dispute + write-off (full or partial)\n- Dispute + fraud declaration\n- Dispute + event creation\n- Dispute + attach documents \n- Dispute + combination of "
+        },
+        {
+          "info": {
+            "name": "Get the dispute information of the folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/:disputeFolderReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "disputeFolderReference",
+                "value": "",
+                "type": "path",
+                "description": "Dispute Folder Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API returns the dispute folder information that matches the dispute folder identifier provided in input.\n\nThis enables to see the content of the dispute information :\n- General dispute folder information including the dispute reason, the status\n- Cardholder information including the card status and billing amount\n- The issuer balance\n- The transaction details including the reconciliation amount, the transaction type and merchant information\n\nThe response can also be enriched (if specified as"
+        },
+        {
+          "info": {
+            "name": "Get the dispute information of the operation identified by external operation reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/operations/:externalOperationReference/dispute",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "externalOperationReference",
+                "value": "",
+                "type": "path",
+                "description": "External Operation Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "This API can be used but will no longer evolve. It is recommended to use the 'Get the dispute information of the transaction' API (GET /issuers/{issuerId}/transactions/{transactionId}/dispute). The API returns the dispute folder information if the transaction identified by an operation Identifier is disputed. If so, it provides access to the dispute content, including:\n- General dispute folder details such as the dispute reason and status\n- Cardholder information including card status and billin"
+        },
+        {
+          "info": {
+            "name": "Get the dispute information of the folder identified by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/external-disputes/:issuerDisputeExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerDisputeExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Dispute External Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API returns the dispute folder information that matches the dispute folder identifier provided in input.\n\nThis enables to see the content of the dispute information :\n- General dispute folder information including the dispute reason, the status\n- Cardholder information including the card status and billing amount\n- The issuer balance\n- The transaction details including the reconciliation amount, the transaction type and merchant information\n\nThe response can also be enriched (if specified as"
+        },
+        {
+          "info": {
+            "name": "Perform a posting (Refund or WriteOff) related to the Dispute Folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/:disputeFolderReference/postings",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "disputeFolderReference",
+                "value": "",
+                "type": "path",
+                "description": "disputeFolderReference"
+              }
+            ]
+          },
+          "docs": "Issuer can provide a posting operation to perform on the created dispute folder.\n\nPosting operation can be for example :\n•\tperform a refund towards the cardholder account\n•\tperform a write-off towards an issuer account (Profit and Loss, Fraud,..)\n\n\"Create a posting\" API allows an issuer to add postings for a given dispute folder.\n\nMain data in input is the dispute folder identifier and the parameters of the posting operation.\n\nIdempotency is managed by the API; that is, if the request with the s"
+        },
+        {
+          "info": {
+            "name": "Perform a posting related to the Dispute Folder by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/external-disputes/:issuerDisputeExternalReference/postings",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerDisputeExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Dispute External Reference"
+              }
+            ]
+          },
+          "docs": "Issuer can provide a posting operation to perform on the created dispute folder.\n\nPosting operation can be for example :\n•\tperform a refund towards the cardholder account\n•\tperform a write-off towards an issuer account (Profit and Loss, Fraud,..)\n\n\"Create a posting\" API allows an issuer to add postings for a given dispute folder.\n\nMain data in input is the dispute folder identifier and the parameters of the posting operation.\n\nIdempotency is managed by the API; that is, if the request with the s"
+        },
+        {
+          "info": {
+            "name": "Create an Event in the Dispute Folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/:disputeFolderReference/events",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "disputeFolderReference",
+                "value": "",
+                "type": "path",
+                "description": "disputeFolderReference"
+              }
+            ]
+          },
+          "docs": "Issuer can provide an event to be added to the created dispute folder.\nThis manual event will be added to events generated internally by our system.\nFor example, the issuer can add an event to indicate that there is a communication from/to cardholder.\nThe API allows an issuer to add an event for a given dispute folder.\nMain data in input is the dispute folder identifier and the parameters of the event add operation.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Cor"
+        },
+        {
+          "info": {
+            "name": "Create an Event in the Dispute Folder by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/external-disputes/:issuerDisputeExternalReference/events",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerDisputeExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Dispute External Reference"
+              }
+            ]
+          },
+          "docs": "Issuer can provide an event to be added to the created dispute folder.\nThis manual event will be added to events generated internally by our system.\nFor example, the issuer can add an event to indicate that there is a communication from/to cardholder.\nThe API allows an issuer to add an event for a given dispute folder.\nMain data in input is the dispute folder identifier and the parameters of the event add operation.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Cor"
+        },
+        {
+          "info": {
+            "name": "Add an External Document to the Dispute Folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/:disputeFolderReference/documents",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "disputeFolderReference",
+                "value": "",
+                "type": "path",
+                "description": "disputeFolderReference"
+              }
+            ]
+          },
+          "docs": "This API allows the issuer to attach a document to a dispute folder identified by his dispute folder identifier.\nSupported documents types are in JPEG, TIFF and PDF format\nThe issuer must provide the data of the document in Base64 encoding format.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Add an External Document to the Dispute Folder by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/external-disputes/:issuerDisputeExternalReference/documents",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerDisputeExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Dispute External Reference"
+              }
+            ]
+          },
+          "docs": "This API allows the issuer to attach a document to a dispute folder identified by his dispute folder identifier.\nSupported documents types are in JPEG, TIFF and PDF format\nThe issuer must provide the data of the document in Base64 encoding format.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Generate a ChargeBack to the scheme by dispute reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/:disputeFolderReference/generate-chargeback",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "disputeFolderReference",
+                "value": "",
+                "type": "path",
+                "description": "disputeFolderReference"
+              }
+            ]
+          },
+          "docs": " \"generate chargeback\"  API allows an issuer to trigger a chargeback message to the scheme (VISA/MCI), the chargeback is done in synchronous mode.\n\nMain information needed in input is :\n- The dispute folder identifier\n- The type of chargeback (partial or total for most of the cases)\n- The chargeback scenario name used for VISA that support automated process (E-commerce fraud, duplicate Processing, Non-Receipt of Cash)  or the chargeback reason code for MasterCard that can be found in MCI MPE fil"
+        },
+        {
+          "info": {
+            "name": "Generate a ChargeBack to the scheme by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/disputes/external-disputes/:issuerDisputeExternalReference/generate-chargeback",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerDisputeExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Dispute External Reference"
+              }
+            ]
+          },
+          "docs": " \"generate chargeback\"  API allows an issuer to trigger a chargeback message to the scheme (VISA/MCI), the chargeback is done in synchronous mode.\n\nMain information needed in input is :\n- The dispute folder identifier\n- The type of chargeback (partial or total for most of the cases)\n- The chargeback scenario name used for VISA that support automated process (E-commerce fraud, duplicate Processing, Non-Receipt of Cash)  or the chargeback reason code for MasterCard that can be found in MCI MPE fil"
+        },
+        {
+          "info": {
+            "name": "create a super folder (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/super-folders",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              }
+            ]
+          },
+          "docs": "This API allows the creation of a super folder from a list of dispute folders.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe list of dispute folder identifiers to be attached to the super folder : The dispute folder references must exist in our system and be associated to the same PAN. \nThe issuer can provide the name of the super folder to be created.\n\nAs a result, the super folder is created with its own reference calculated by our system.\n\nThe API response returns:\n•\tThe super folder refer"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

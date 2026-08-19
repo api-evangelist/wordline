@@ -1,0 +1,343 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Merchant API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Merchant",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search merchants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "iban",
+                "value": "",
+                "type": "query",
+                "description": "International Bank Account Number for merchant payments\n"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              },
+              {
+                "name": "merchantName",
+                "value": "",
+                "type": "query",
+                "description": "Name of the merchant\n"
+              },
+              {
+                "name": "postalCode",
+                "value": "",
+                "type": "query",
+                "description": "Postal code of business address.\n"
+              },
+              {
+                "name": "houseNumber",
+                "value": "",
+                "type": "query",
+                "description": "Housenumber of business address. Note, Postalcode must be given too\n"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "query",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)\n"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID\n"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order\n"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (Max page size is 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a list of merchants. Terminated merchants are excluded.\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data\n"
+        },
+        {
+          "info": {
+            "name": "Add a merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a merchant"
+        },
+        {
+          "info": {
+            "name": "Retrieve a merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants/:merchantId",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a merchant.\n"
+        },
+        {
+          "info": {
+            "name": "Update a merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants/:merchantId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Merchant call a PATCH Merchant call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Sample request:  \r\n\r\n    [\r\n       {\r\n           \"value\": \"MyMerchant\",\r\n           \"path\": \"/basic/merchantName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"NL12121\",\r\n           \"path\": \"/externalIds/vatNumber\",\r\n "
+        },
+        {
+          "info": {
+            "name": "Delete a merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants/:merchantId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              }
+            ]
+          },
+          "docs": "Delete a merchant"
+        },
+        {
+          "info": {
+            "name": "Retrieve the addresses of a merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants/:merchantId/addresses",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              }
+            ]
+          },
+          "docs": "This operation retrieves addresses of a merchant.\n"
+        },
+        {
+          "info": {
+            "name": "Add addresses to a Merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants/:merchantId/addresses",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add addresses to a Merchant"
+        },
+        {
+          "info": {
+            "name": "Update the addresses of a Merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants/:merchantId/addresses",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Merchant Addresses call a PATCH Merchant Addresses call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Sample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Mainstreet\",\r\n           \"path\": \"/addresses/0/streetName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": 12,\r\n           \"path\": \"/addresses/"
+        },
+        {
+          "info": {
+            "name": "Delete an address from a merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/merchants/:merchantId/addresses/:addressType",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              },
+              {
+                "name": "addressType",
+                "value": "",
+                "type": "path",
+                "description": "Type of the address. Values [Business, Chargeback, Creditor, Debtor, Invoice, Location, Postal, Private]"
+              }
+            ]
+          },
+          "docs": "This operation deletes a merchant address\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

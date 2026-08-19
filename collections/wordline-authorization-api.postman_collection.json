@@ -1,0 +1,666 @@
+{
+  "item": [
+    {
+      "id": "0fd8664d-b6b2-42a7-b6f1-d2e85f135c8d",
+      "name": "Authorization",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dbc39bbe-8db9-4036-9224-75a2e8279af9",
+          "name": "Retrieve authorizations",
+          "request": {
+            "name": "Retrieve authorizations",
+            "description": {
+              "content": "This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated authorization(s) data. \nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "acquiring",
+                "transaction",
+                "v2.0",
+                "acquirers",
+                ":acquirerId",
+                "authorizations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "acquirerRefNo",
+                  "value": "<string>",
+                  "description": "(Required) Data supplied by an acquirer to assist in identifying an authorization.\n(Note: acquirerRefNo = acquirerReferenceNumber)\n\nexamples ARN29851, 74875009071000046650752\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "transactionAmountFrom",
+                  "value": "<int32>",
+                  "description": "Transaction amount (whole units), amount should be greater than or equal to this value"
+                },
+                {
+                  "disabled": false,
+                  "key": "transactionAmountTo",
+                  "value": "<int32>",
+                  "description": "Transaction amount (whole units), amount should be less than this value"
+                },
+                {
+                  "disabled": false,
+                  "key": "transactionAmountCurrency",
+                  "value": "<string>",
+                  "description": "Transaction amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortField",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortOrder",
+                  "value": "<string>",
+                  "description": "Sort order"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<string>",
+                  "description": "Page size (max 300)"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "<string>",
+                  "description": "Page number"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "acquirerId",
+                  "description": "(Required) Unique identification of the acquirer, determined by equensWorldline"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "63e0d26e-e56e-452a-80dc-0920b83cfb72",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "acquiring",
+                    "transaction",
+                    "v2.0",
+                    "acquirers",
+                    ":acquirerId",
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "acquirerRefNo",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transactionAmountFrom",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountTo",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountCurrency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "acquirerId",
+                      "description": "(Required) Unique identification of the acquirer, determined by equensWorldline"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Link header for pagination. Only available if there is a next and/or prev page.",
+                  "key": "Link",
+                  "value": "</acquiring/transaction/v2.0/acquirers/abc/authorizations&pageNumber=3>; rel=\"next\", </acquiring/transaction/v2.0/acquirers/abc/authorizations&pageNumber=1>; rel=\"prev\""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"value\": \"reference #/components/schemas/Authorization not found in the OpenAPI spec\"\n  },\n  {\n    \"value\": \"reference #/components/schemas/Authorization not found in the OpenAPI spec\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "59f483bd-415b-4807-9150-3e822b39c363",
+              "name": "Invalid input provided",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "acquiring",
+                    "transaction",
+                    "v2.0",
+                    "acquirers",
+                    ":acquirerId",
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "acquirerRefNo",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transactionAmountFrom",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountTo",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountCurrency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "acquirerId",
+                      "description": "(Required) Unique identification of the acquirer, determined by equensWorldline"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3ae53d57-97c9-4d05-a786-f2b88cb53d2c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "acquiring",
+                    "transaction",
+                    "v2.0",
+                    "acquirers",
+                    ":acquirerId",
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "acquirerRefNo",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transactionAmountFrom",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountTo",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountCurrency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "acquirerId",
+                      "description": "(Required) Unique identification of the acquirer, determined by equensWorldline"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ec137172-4821-4a72-8355-59c67458999d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "acquiring",
+                    "transaction",
+                    "v2.0",
+                    "acquirers",
+                    ":acquirerId",
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "acquirerRefNo",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transactionAmountFrom",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountTo",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountCurrency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "acquirerId",
+                      "description": "(Required) Unique identification of the acquirer, determined by equensWorldline"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f491d325-fe4a-4e35-95e6-356174912b4e",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "acquiring",
+                    "transaction",
+                    "v2.0",
+                    "acquirers",
+                    ":acquirerId",
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "acquirerRefNo",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transactionAmountFrom",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountTo",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountCurrency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "acquirerId",
+                      "description": "(Required) Unique identification of the acquirer, determined by equensWorldline"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "40f5850a-e668-4392-ad85-f2c936049d2e",
+              "name": "Unexpected error or Internal error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "acquiring",
+                    "transaction",
+                    "v2.0",
+                    "acquirers",
+                    ":acquirerId",
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "acquirerRefNo",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transactionAmountFrom",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountTo",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountCurrency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "acquirerId",
+                      "description": "(Required) Unique identification of the acquirer, determined by equensWorldline"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e6000bee-bcc6-42f8-8439-896e62facb30",
+              "name": "Backend service problem",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "acquiring",
+                    "transaction",
+                    "v2.0",
+                    "acquirers",
+                    ":acquirerId",
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "acquirerRefNo",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transactionAmountFrom",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountTo",
+                      "value": "<int32>"
+                    },
+                    {
+                      "key": "transactionAmountCurrency",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "acquirerId",
+                      "description": "(Required) Unique identification of the acquirer, determined by equensWorldline"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "47041702-bb6c-432b-aa6e-ba764cb473c6",
+    "name": "Worldline Card Issuing Account - AccountState Authorization API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.\nAdditional APIs are under construction and planned to be available in 2026.",
+      "type": "text/plain"
+    }
+  }
+}

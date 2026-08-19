@@ -1,0 +1,1050 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Customer API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customer",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve list of customer's information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "lastName",
+                "value": "",
+                "type": "query",
+                "description": "Last name"
+              },
+              {
+                "name": "firstName",
+                "value": "",
+                "type": "query",
+                "description": "First name"
+              },
+              {
+                "name": "phoneticSearch",
+                "value": "",
+                "type": "query",
+                "description": "Indicate if a specific phonetic algorithm must be applied on first name and last name"
+              },
+              {
+                "name": "phoneticAlgorithm",
+                "value": "",
+                "type": "query",
+                "description": "The list of possible phonetic algorithms are determined for each issuer (configuration). If the indicator is set to true but no phonetic algorithm is provided then all configured phonetic algorithms are applied for the research."
+              },
+              {
+                "name": "birthDate",
+                "value": "",
+                "type": "query",
+                "description": "Birthdate"
+              },
+              {
+                "name": "postalAddress.postCode",
+                "value": "",
+                "type": "query",
+                "description": "Post code of the customer's address"
+              },
+              {
+                "name": "postalAddress.townName",
+                "value": "",
+                "type": "query",
+                "description": "Town name of the customer's address"
+              },
+              {
+                "name": "postalAddress.streetName",
+                "value": "",
+                "type": "query",
+                "description": "Street name of the customer's address"
+              },
+              {
+                "name": "postalAddress.buildingNumber",
+                "value": "",
+                "type": "query",
+                "description": "Building number of the customer's address"
+              },
+              {
+                "name": "emailAddress.email",
+                "value": "",
+                "type": "query",
+                "description": "Email the customer"
+              },
+              {
+                "name": "phone.localPhoneNumber",
+                "value": "",
+                "type": "query",
+                "description": "Local phone number of the customer"
+              },
+              {
+                "name": "partialSearch",
+                "value": "",
+                "type": "query",
+                "description": "Allow to search on partial values for the following criteria : lastName, firstName, postalAddress.streetName, postalAddress.buildingNumber, postalAddress.postCode, postalAddress.townName, emailAddress.email, phone.localPhoneNumber"
+              },
+              {
+                "name": "courtesyTitle",
+                "value": "",
+                "type": "query",
+                "description": "Courtesy Title of Person Customer"
+              },
+              {
+                "name": "secondFirstName",
+                "value": "",
+                "type": "query",
+                "description": "Second First Name of Person Customer"
+              },
+              {
+                "name": "partnerExternalReference",
+                "value": "",
+                "type": "query",
+                "description": "External Reference provided by the issuer"
+              },
+              {
+                "name": "employee",
+                "value": "",
+                "type": "query",
+                "description": "Indicating if the Person Customer is an employee of the issuer"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "0"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "100"
+              }
+            ]
+          },
+          "docs": "The \"list customers\" API enables to get a list of customers based on multiple criteria such as First name, Last name, Birth date,.. \n\nFor the search, the API enables exact matches values (partialSearch field set to false) or not (partialSearch set to yes). In the latter case, the search criteria should be a subset of the corresponding value stored in our system ; as an example : if we set \"JOH\" as  criteria search for name, then results JOHNNY or \"LISE-JOHN\" for name would match."
+        },
+        {
+          "info": {
+            "name": "Create a Customer (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API allows a new customer (as person) to be created if all the mandatory fields are provided.\nThe main input fields are:\n•\tThe issuer ID\n•\tThe first name of the customer\n•\tThe last name of the customer\n•\tThe default address of the customer : The Main postal address has to be provided because used as default address by all business processes if no address usage is defined.\nThe API returns the customer reference (as person) generated by our system.\nThe response can also be enriched (if specifi"
+        },
+        {
+          "info": {
+            "name": "Retrieve customer by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/external-customers/:issuerCustomerExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The \"retrieve customer\" API allows the user to get customer information from the input parameters:\n- Issuer ID\n- Customer reference or the issuer customer reference\nIn addition to the person information, it is also possible to request the list of addresses of the customer and the address usages by using the embedded fields."
+        },
+        {
+          "info": {
+            "name": "Update customer by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/external-customers/:issuerCustomerExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              }
+            ]
+          },
+          "docs": "The \"update customer\" API allows the user to update the attributes of a customer.\nTo identify the customer, it is needed to provide:\n- The issuer ID\n- The customer reference (internal or external) for which updates are required\n\nThe customer reference can be retrieved by using the \"list customers\" API.\nAll the attributes must be given in input even if they remain unchanged. For that, It can be needed to use the \"retrieve customer\" API to get all the current attributes."
+        },
+        {
+          "info": {
+            "name": "Update customer partially by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/external-customers/:issuerCustomerExternalReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              }
+            ]
+          },
+          "docs": "The \"update customer partially\" API allows the user to update the attributes of a customer.\n\nTo identify the customer, it is needed to provide:\n•\tThe issuer ID\n•\tThe customer reference (internal or external) for which updates are required\nThe customer reference can be retrieved by using the \"list customers\" API. \nWith this API, only attributes that need to be updated must be given in input.\n\nIn case the property Contact (list) is provided in input then it will replace the existing list."
+        },
+        {
+          "info": {
+            "name": "Retrieve list of historic updates of a customer by customer external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/external-customers/:issuerCustomerExternalReference/customer-history",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              },
+              {
+                "name": "periodStartDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Format : yyyy-MM-ddTHH:mm:ssZ"
+              },
+              {
+                "name": "periodEndDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Format : yyyy-MM-ddTHH:mm:ssZ"
+              }
+            ]
+          },
+          "docs": "The API allows the customer update history of a customer to be retrieved. \nThe main input fields requested by the API are:\n•\tThe issuer ID\n•\tThe customer for which information is requested : It can be provided by using the customer reference or the issuer customer external reference. \nA start date and an end date can be provided in order to limit the search of the history. \nIn response, the interface provides a list of changes with the effective date of the update."
+        },
+        {
+          "info": {
+            "name": "List addresses for a customer by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/external-customers/:issuerCustomerExternalReference/addresses",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              },
+              {
+                "name": "serviceCode",
+                "value": "",
+                "type": "query",
+                "description": "The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE. Conditional (must be used with addressUsageName)"
+              },
+              {
+                "name": "entityReference",
+                "value": "",
+                "type": "query",
+                "description": "This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.\nIt enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B."
+              },
+              {
+                "name": "addressUsageName",
+                "value": "",
+                "type": "query",
+                "description": "The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY."
+              },
+              {
+                "name": "showHistory",
+                "value": "",
+                "type": "query",
+                "description": "If the showHistory indicator is set to 'true' then the full history of the addresses are returned. If this indicator is empty (default behavior) or equals to 'false', then only the last active addresses are returned. "
+              }
+            ]
+          },
+          "docs": "This API enables all the addresses associated with a given customer, identified by his customer reference, to be retrieved. This address could be either a permanent address or a temporary address.\nSeveral address types are managed. Each address can be used for a specific usage (card delivery, statement delivery, contract letter,...). \nAddress usage is associated to a service (card service, account service, dispute service, ..) configured in our system.\nThe API can retrieve only the addresses lin"
+        },
+        {
+          "info": {
+            "name": "Retrieve customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/:customerReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The \"retrieve customer\" API allows the user to get customer information from the input parameters:\n- Issuer ID\n- Customer reference or the issuer customer reference\nIn addition to the person information, it is also possible to request the list of addresses of the customer and the address usages by using the embedded fields."
+        },
+        {
+          "info": {
+            "name": "Update customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/:customerReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              }
+            ]
+          },
+          "docs": "The \"update customer\" API allows the user to update the attributes of a customer.\nTo identify the customer, it is needed to provide:\n- The issuer ID\n- The customer reference (internal or external) for which updates are required\n\nThe customer reference can be retrieved by using the \"list customers\" API.\nAll the attributes must be given in input even if they remain unchanged. For that, It can be needed to use the \"retrieve customer\" API to get all the current attributes."
+        },
+        {
+          "info": {
+            "name": "Update customer partially",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/:customerReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              }
+            ]
+          },
+          "docs": "The \"update customer partially\" API allows the user to update the attributes of a customer.\n\nTo identify the customer, it is needed to provide:\n•\tThe issuer ID\n•\tThe customer reference (internal or external) for which updates are required\nThe customer reference can be retrieved by using the \"list customers\" API. \nWith this API, only attributes that need to be updated must be given in input.\n\nIn case the property Contact (list) is provided in input then it will replace the existing list."
+        },
+        {
+          "info": {
+            "name": "Retrieve list of historic updates of a customer (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/:customerReference/customer-history",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              },
+              {
+                "name": "periodStartDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Format : yyyy-MM-ddTHH:mm:ssZ"
+              },
+              {
+                "name": "periodEndDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Format : yyyy-MM-ddTHH:mm:ssZ"
+              }
+            ]
+          },
+          "docs": "The API allows the customer update history of a customer to be retrieved. \nThe main input fields requested by the API are:\n•\tThe issuer ID\n•\tThe customer for which information is requested : It can be provided by using the customer reference or the issuer customer external reference. \nA start date and an end date can be provided in order to limit the search of the history. \nIn response, the interface provides a list of changes with the effective date of the update."
+        },
+        {
+          "info": {
+            "name": "List addresses for a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/:customerReference/addresses",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              },
+              {
+                "name": "serviceCode",
+                "value": "",
+                "type": "query",
+                "description": "The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE. Conditional (must be used with addressUsageName)"
+              },
+              {
+                "name": "entityReference",
+                "value": "",
+                "type": "query",
+                "description": "This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.\nIt enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B."
+              },
+              {
+                "name": "addressUsageName",
+                "value": "",
+                "type": "query",
+                "description": "The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY. Conditional (must be used serviceCode)"
+              },
+              {
+                "name": "showHistory",
+                "value": "",
+                "type": "query",
+                "description": "If the showHistory indicator is set to 'true' then the full history of the addresses are returned. If this indicator is empty (default behavior) or equals to 'false', then only the last active addresses are returned. "
+              }
+            ]
+          },
+          "docs": "This API enables all the addresses associated with a given customer, identified by his customer reference, to be retrieved. This address could be either a permanent address or a temporary address.\nSeveral address types are managed. Each address can be used for a specific usage (card delivery, statement delivery, contract letter,...). \nAddress usage is associated to a service (card service, account service, dispute service, ..) configured in our system.\nThe API can retrieve only the addresses lin"
+        },
+        {
+          "info": {
+            "name": "Create Contact for a customer (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/:customerReference/contacts",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              }
+            ]
+          },
+          "docs": "The API creates a contact person belonging to the customer (person) by providing information such as first name, name, department to which he is attached..\nTo create a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Create Contact for a customer by external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/external-customers/:issuerCustomerExternalReference/contacts",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              }
+            ]
+          },
+          "docs": "The API creates a contact person belonging to the customer (person) by providing information such as first name, name, department to which he is attached..\nTo create a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
+        },
+        {
+          "info": {
+            "name": "Modify Contact for a customer (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/:customerReference/contacts/:contactReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              },
+              {
+                "name": "contactReference",
+                "value": "",
+                "type": "path",
+                "description": "Contact Reference"
+              }
+            ]
+          },
+          "docs": "The API allows information of a contact of the customer (person) to be modified.\nTo update a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference\n- The contact reference\n\nAll attributes must be provided (even if some of them have not been modified) else the value of missing attributes will be empty."
+        },
+        {
+          "info": {
+            "name": "Remove Contact for a customer (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/:customerReference/contacts/:contactReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "customerReference",
+                "value": "",
+                "type": "path",
+                "description": "Customer Reference"
+              },
+              {
+                "name": "contactReference",
+                "value": "",
+                "type": "path",
+                "description": "Contact Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a contact of the customer (person) to be deleted.\nTo remove a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference\n- The contact reference"
+        },
+        {
+          "info": {
+            "name": "Modify Contact for a customer by external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/external-customers/:issuerCustomerExternalReference/contacts/:contactReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              },
+              {
+                "name": "contactReference",
+                "value": "",
+                "type": "path",
+                "description": "Contact Reference"
+              }
+            ]
+          },
+          "docs": "The API allows information of a contact of the customer (person) to be modified.\nTo update a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference\n- The contact reference\n\nAll attributes must be provided (even if some of them have not been modified) else the value of missing attributes will be empty."
+        },
+        {
+          "info": {
+            "name": "Remove Contact for a customer by external reference (beta)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/issuers/:issuerId/customers/external-customers/:issuerCustomerExternalReference/contacts/:contactReference",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerCustomerExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Customer External Reference"
+              },
+              {
+                "name": "contactReference",
+                "value": "",
+                "type": "path",
+                "description": "Contact Reference"
+              }
+            ]
+          },
+          "docs": "The API allows a contact of the customer (person) to be deleted.\nTo remove a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference\n- The contact reference"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

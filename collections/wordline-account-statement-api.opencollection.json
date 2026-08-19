@@ -1,0 +1,960 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Account - Statement API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account - Statement",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve statements list for the account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "periodStartDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Period start date of cycle closure to include (format : yyyy-MM-ddTHH:mm:ssZ)"
+              },
+              {
+                "name": "periodEndDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Period end date of cycle closure to include (format : yyyy-MM-ddTHH:mm:ssZ)"
+              },
+              {
+                "name": "includeOriginalAccount",
+                "value": "",
+                "type": "query",
+                "description": "Parameter to indicate if data related to the original account should be returned : case of a product change or a card reallocation (only for corporate cards).Default value is false."
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API is used to get the list of statements generated for an account and optionally a requested period.\nIt is also possible to get reprint information of a statement.\nThe input parameters are:\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n- the search period (start date / end date),\n- the embed field \"reprint-history\" if needed.\n\nThe API returns:\n•\tin the consumer cards context, the list of statements of the paying account\n•"
+        },
+        {
+          "info": {
+            "name": "Retrieve last statement for the account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements/last",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API is used to get the financial information of  the last statement generated for an account such as:\nprevious cycle balance (start balance), end cycle balance, due amount, total of payments, ...\nIt is also possible to get reprint information of the statement.\nThe input parameters are:\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n- the embed field \"reprint-history\" if needed.\n\nThe API returns:\n•\tin the consumer cards cont"
+        },
+        {
+          "info": {
+            "name": "List operations for last account statement by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements/last/operations",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to get the list of operations of the last statement generated for an account.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference."
+        },
+        {
+          "info": {
+            "name": "Reprint last statement by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements/last/reprint",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to request the reprint of the last statement for an account.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference.\n\nAs a result, the statement data is extracted again and pushed to the output management module"
+        },
+        {
+          "info": {
+            "name": "Retrieve next statement for the account by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements/next",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API is used to get the financial information based on the last statement generated for an account such as:\ncurrent cycle balance, cycle closure date, payment due date, next cycle closure date (end cycle balance, due amount, total of payments are not yet known).\nThe input parameters are:\n- the issuerId\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n\nThe API returns:\n•\tin the consumer cards context, the statement of the payin"
+        },
+        {
+          "info": {
+            "name": "List operations for next account statement by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements/next/operations",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to get the list of operations generated for an account since the last cycle closure date. \nThose operations will be part of the next statement.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference."
+        },
+        {
+          "info": {
+            "name": "Retrieve one statement from the list by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements/:cycleClosureDate",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "cycleClosureDate",
+                "value": "",
+                "type": "path",
+                "description": "Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)\nHH:mm:ss should be filled with 23:59:59"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API is used to get the financial information  for an account statement such as: previous cycle balance (start balance), end cycle balance, due amount, total of payments, ...\nThe input account can be provided by using:\n•\tthe account reference\n•\tor the issuer external account reference.\nThe statement involved by the request has to be provided by giving the cycle closure date.\n\nThe API returns:\n•\tin the consumer cards context, the statement of the paying account\n•\tin the commercial cards contex"
+        },
+        {
+          "info": {
+            "name": "List operations for an account statement by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements/:cycleClosureDate/operations",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "cycleClosureDate",
+                "value": "",
+                "type": "path",
+                "description": "Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)\nHH:mm:ss should be filled with 23:59:59"
+              },
+              {
+                "name": "excludeOperationKinds",
+                "value": "",
+                "type": "query",
+                "description": "Parameter to filter out sub-operations generated during the payment (manual or automatic)/reimbursement apportionment on accounts Available value : SUBPAYOP (apportionment operation)"
+              }
+            ]
+          },
+          "docs": "The API is used to get the list of operations posted to an account included in a statement.\nThe input account can be provided by using:\n•\tthe account reference\n•\tor the issuer external account reference.\nThe statement involved by the request has to be provided by giving the cycle closure date.\nIt is also possible to exclude sub-operations generated during the payment (manual or automatic) / reimbursement apportionment on accounts."
+        },
+        {
+          "info": {
+            "name": "Reprint a statement by external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/external-accounts/:issuerAccountExternalReference/statements/:cycleClosureDate/reprint",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "issuerAccountExternalReference",
+                "value": "",
+                "type": "path",
+                "description": "Issuer Account External Reference"
+              },
+              {
+                "name": "cycleClosureDate",
+                "value": "",
+                "type": "path",
+                "description": "Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)\nHH:mm:ss should be filled with 23:59:59"
+              }
+            ]
+          },
+          "docs": "The API is used to request the reprint of a statement for an account.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference.\n\nThe statement involved by the request has to be provided by giving the cycle closure date\n\nAs a result, the statement data is extracted again and pushed to the output management module."
+        },
+        {
+          "info": {
+            "name": "Retrieve statements list for the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "periodStartDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Period start date of cycle closure to include (format : yyyy-MM-ddTHH:mm:ssZ)"
+              },
+              {
+                "name": "periodEndDateTime",
+                "value": "",
+                "type": "query",
+                "description": "Period end date of cycle closure to include (format : yyyy-MM-ddTHH:mm:ssZ)"
+              },
+              {
+                "name": "includeOriginalAccount",
+                "value": "",
+                "type": "query",
+                "description": "Parameter to indicate if data related to the original account should be returned : case of a product change or a card reallocation (only for corporate cards).Default value is false."
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API is used to get the list of statements generated for an account and optionally a requested period.\nIt is also possible to get reprint information of a statement.\nThe input parameters are:\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n- the search period (start date / end date),\n- the embed field \"reprint-history\" if needed.\n\nThe API returns:\n•\tin the consumer cards context, the list of statements of the paying account\n•"
+        },
+        {
+          "info": {
+            "name": "Retrieve last statement for the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements/last",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API is used to get the financial information of  the last statement generated for an account such as:\nprevious cycle balance (start balance), end cycle balance, due amount, total of payments, ...\nIt is also possible to get reprint information of the statement.\nThe input parameters are:\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n- the embed field \"reprint-history\" if needed.\n\nThe API returns:\n•\tin the consumer cards cont"
+        },
+        {
+          "info": {
+            "name": "List operations for last account statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements/last/operations",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to get the list of operations of the last statement generated for an account.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference."
+        },
+        {
+          "info": {
+            "name": "Reprint last statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements/last/reprint",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to request the reprint of the last statement for an account.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference.\n\nAs a result, the statement data is extracted again and pushed to the output management module"
+        },
+        {
+          "info": {
+            "name": "Retrieve next statement for the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements/next",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API is used to get the financial information based on the last statement generated for an account such as:\ncurrent cycle balance, cycle closure date, payment due date, next cycle closure date (end cycle balance, due amount, total of payments are not yet known).\nThe input parameters are:\n- the issuerId\n- the involved account: it can be provided by using the account reference or the issuer external account reference,\n\nThe API returns:\n•\tin the consumer cards context, the statement of the payin"
+        },
+        {
+          "info": {
+            "name": "List operations for next account statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements/next/operations",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              }
+            ]
+          },
+          "docs": "The API is used to get the list of operations generated for an account since the last cycle closure date. \nThose operations will be part of the next statement.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference."
+        },
+        {
+          "info": {
+            "name": "Retrieve one statement from the list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements/:cycleClosureDate",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "cycleClosureDate",
+                "value": "",
+                "type": "path",
+                "description": "Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)\nHH:mm:ss should be filled with 23:59:59"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Embedded Fields"
+              }
+            ]
+          },
+          "docs": "The API is used to get the financial information  for an account statement such as: previous cycle balance (start balance), end cycle balance, due amount, total of payments, ...\nThe input account can be provided by using:\n•\tthe account reference\n•\tor the issuer external account reference.\nThe statement involved by the request has to be provided by giving the cycle closure date.\n\nThe API returns:\n•\tin the consumer cards context, the statement of the paying account\n•\tin the commercial cards contex"
+        },
+        {
+          "info": {
+            "name": "List operations for an account statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements/:cycleClosureDate/operations",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "cycleClosureDate",
+                "value": "",
+                "type": "path",
+                "description": "Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)\nHH:mm:ss should be filled with 23:59:59"
+              },
+              {
+                "name": "excludeOperationKinds",
+                "value": "",
+                "type": "query",
+                "description": "Parameter to filter out sub-operations generated during the payment (manual or automatic)/reimbursement apportionment on accounts Available value : SUBPAYOP (apportionment operation)"
+              }
+            ]
+          },
+          "docs": "The API is used to get the list of operations posted to an account included in a statement.\nThe input account can be provided by using:\n•\tthe account reference\n•\tor the issuer external account reference.\nThe statement involved by the request has to be provided by giving the cycle closure date.\nIt is also possible to exclude sub-operations generated during the payment (manual or automatic) / reimbursement apportionment on accounts."
+        },
+        {
+          "info": {
+            "name": "Reprint a statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/issuers/:issuerId/accounts/:accountReference/statements/:cycleClosureDate/reprint",
+            "headers": [
+              {
+                "name": "WL-Correlation-ID",
+                "value": ""
+              },
+              {
+                "name": "WL-Origin",
+                "value": ""
+              },
+              {
+                "name": "WL-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filtered Fields"
+              },
+              {
+                "name": "issuerId",
+                "value": "",
+                "type": "path",
+                "description": "Issuer ID"
+              },
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "Account Reference"
+              },
+              {
+                "name": "cycleClosureDate",
+                "value": "",
+                "type": "path",
+                "description": "Cycle Closure Date (format : yyyy-MM-ddTHH:mm:ssZ)\nHH:mm:ss should be filled with 23:59:59"
+              }
+            ]
+          },
+          "docs": "The API is used to request the reprint of a statement for an account.\nThe input account can be provided by using:\n- the account reference\n- or the issuer external account reference.\n\nThe statement involved by the request has to be provided by giving the cycle closure date\n\nAs a result, the statement data is extracted again and pushed to the output management module."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

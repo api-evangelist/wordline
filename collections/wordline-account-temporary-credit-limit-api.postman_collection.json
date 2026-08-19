@@ -1,0 +1,3082 @@
+{
+  "item": [
+    {
+      "id": "a587b149-967d-48b4-8ac8-978ee852d911",
+      "name": "Account - Temporary Credit Limit",
+      "description": {
+        "content": "Account Temporary Credit Limit Api Controller",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bde214a8-af04-4a61-8119-3aac74a58156",
+          "name": "Create a temporary credit limit by external reference",
+          "request": {
+            "name": "Create a temporary credit limit by external reference",
+            "description": {
+              "content": "Our solution offers to Issuers a temporary credit limit management for credit card account\nThe temporary credit limit can be added to an existing credit card account\n- for a given period\n- the temporary credit limit value can be higher or lower than the permanent one but is limited by an exceptional amount, which is allowed by the Issuer per product\nThe API allows temporary credit limits for a given account to be created.\nIn response, a temporary credit limit reference is provided.\nOnce added, the temporary credit limit is immediately available for next authorizations.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "issuers",
+                ":issuerId",
+                "accounts",
+                "external-accounts",
+                ":issuerAccountExternalReference",
+                "temporary-credit-limits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issuerId",
+                  "description": "(Required) Issuer ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issuerAccountExternalReference",
+                  "description": "(Required) Issuer Account External Reference"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "WL-Correlation-ID",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Username",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activationEndTime\": \"<dateTime>\",\n  \"temporaryCreditLimitAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"activationStartTime\": \"<dateTime>\",\n  \"manageOverlap\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e107d595-9d59-4020-b39e-535cc21d4b5c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 200,\n    \"statusMessage\": \"Executed successfully\",\n    \"links\": {\n      \"self\": \"/x/{x}?x=x\",\n      \"next\": \"/x/{x}?page[offset]=2\"\n    },\n    \"timeTakenMs\": 12\n  },\n  \"data\": {\n    \"accountIdentifier\": {\n      \"accountReference\": \"string\",\n      \"issuerAccountExternalReference\": \"string\"\n    },\n    \"root\": true,\n    \"temporaryCreditLimitIdentifier\": {\n      \"temporaryCreditLimitReference\": \"string\"\n    },\n    \"temporaryCreditLimitAmount\": {\n      \"value\": \"<long>\",\n      \"exponent\": \"<integer>\",\n      \"isoCode\": \"<string>\"\n    },\n    \"activationStartTime\": \"1988-06-13T18:03:23.161Z\",\n    \"activationEndTime\": \"1965-03-31T03:47:01.067Z\",\n    \"relatedTemporaryCreditLimits\": [\n      {\n        \"accountIdentifier\": {\n          \"accountReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuerAccountExternalReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"root\": false,\n        \"temporaryCreditLimitIdentifier\": {\n          \"temporaryCreditLimitReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      {\n        \"accountIdentifier\": {\n          \"accountReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuerAccountExternalReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"root\": true,\n        \"temporaryCreditLimitIdentifier\": {\n          \"temporaryCreditLimitReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c190e421-d534-4149-9d3e-89814133b29f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 400,\n    \"statusMessage\": \"Bad request\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ffcf633b-bab1-4f98-ad9d-87bcd95f8e4a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 401,\n    \"statusMessage\": \"Unauthorized\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f98fb44-f721-4008-94ad-6cdce6e1db1f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 403,\n    \"statusMessage\": \"Forbidden\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "969deea0-7900-4788-b7a6-81cb096f29bc",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 404,\n    \"statusMessage\": \"Not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f321a05-b4a7-4130-87fa-2793a6694e52",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 500,\n    \"statusMessage\": \"Internal server error\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95b2a910-bc43-40c7-a866-3c3ecaef2f1a",
+              "name": "Bad gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 502,\n    \"statusMessage\": \"Bad Gateway\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c0e9f608-c240-4263-b505-9ce60ea40f4d",
+          "name": "Delete a temporary credit limit by external reference",
+          "request": {
+            "name": "Delete a temporary credit limit by external reference",
+            "description": {
+              "content": "An existing temporary credit limit (active or scheduled) can be disabled at any moment\nThe API allows a temporary credit limit for a given account to be deleted by providing the temporary credit limit reference.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "issuers",
+                ":issuerId",
+                "accounts",
+                "external-accounts",
+                ":issuerAccountExternalReference",
+                "temporary-credit-limits",
+                ":temporaryCreditLimitReference"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issuerId",
+                  "description": "(Required) Issuer ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issuerAccountExternalReference",
+                  "description": "(Required) Issuer Account External Reference"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "temporaryCreditLimitReference",
+                  "description": "(Required) Temporary credit limit reference"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "WL-Correlation-ID",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Username",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "886768f3-61a5-479c-812a-88f35a679d7a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 200,\n    \"statusMessage\": \"Executed successfully\",\n    \"links\": {\n      \"self\": \"/x/{x}?x=x\",\n      \"next\": \"/x/{x}?page[offset]=2\"\n    },\n    \"timeTakenMs\": 12\n  },\n  \"data\": {\n    \"accountIdentifier\": {\n      \"accountReference\": \"string\",\n      \"issuerAccountExternalReference\": \"string\"\n    },\n    \"root\": true,\n    \"temporaryCreditLimitIdentifier\": {\n      \"temporaryCreditLimitReference\": \"string\"\n    },\n    \"relatedTemporaryCreditLimits\": [\n      {\n        \"accountIdentifier\": {\n          \"accountReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuerAccountExternalReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"root\": true,\n        \"temporaryCreditLimitIdentifier\": {\n          \"temporaryCreditLimitReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      {\n        \"accountIdentifier\": {\n          \"accountReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuerAccountExternalReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"root\": true,\n        \"temporaryCreditLimitIdentifier\": {\n          \"temporaryCreditLimitReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f247992-c17f-4eaf-9778-65fbf3ebcc83",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 400,\n    \"statusMessage\": \"Bad request\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0a1f151e-93b8-4fb2-baa0-a1890ccfeb96",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 401,\n    \"statusMessage\": \"Unauthorized\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "98287002-c7ed-4e90-9656-0239d1af8898",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 403,\n    \"statusMessage\": \"Forbidden\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5edc2667-24f8-4c50-915a-af7e643881f7",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 404,\n    \"statusMessage\": \"Not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3c85a3e7-8d0c-49d5-bcfa-9606d89ff85f",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 500,\n    \"statusMessage\": \"Internal server error\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f7311f1-4eff-43e9-aae6-0519656825c7",
+              "name": "Bad gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    "external-accounts",
+                    ":issuerAccountExternalReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerAccountExternalReference",
+                      "description": "(Required) Issuer Account External Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 502,\n    \"statusMessage\": \"Bad Gateway\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ec493c8d-2165-434f-8e9e-49c53636bf38",
+          "name": "Create a temporary credit limit",
+          "request": {
+            "name": "Create a temporary credit limit",
+            "description": {
+              "content": "Our solution offers to Issuers a temporary credit limit management for credit card account\nThe temporary credit limit can be added to an existing credit card account\n- for a given period\n- the temporary credit limit value can be higher or lower than the permanent one but is limited by an exceptional amount, which is allowed by the Issuer per product\nThe API allows temporary credit limits for a given account to be created.\nIn response, a temporary credit limit reference is provided.\nOnce added, the temporary credit limit is immediately available for next authorizations.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "issuers",
+                ":issuerId",
+                "accounts",
+                ":accountReference",
+                "temporary-credit-limits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issuerId",
+                  "description": "(Required) Issuer ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountReference",
+                  "description": "(Required) Account Reference"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "WL-Correlation-ID",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Username",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activationEndTime\": \"<dateTime>\",\n  \"temporaryCreditLimitAmount\": {\n    \"value\": \"<long>\",\n    \"exponent\": \"<integer>\",\n    \"isoCode\": \"<string>\"\n  },\n  \"activationStartTime\": \"<dateTime>\",\n  \"manageOverlap\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6d9f509f-55f1-4853-b0c3-7c415311a50d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 200,\n    \"statusMessage\": \"Executed successfully\",\n    \"links\": {\n      \"self\": \"/x/{x}?x=x\",\n      \"next\": \"/x/{x}?page[offset]=2\"\n    },\n    \"timeTakenMs\": 12\n  },\n  \"data\": {\n    \"accountIdentifier\": {\n      \"accountReference\": \"string\",\n      \"issuerAccountExternalReference\": \"string\"\n    },\n    \"root\": true,\n    \"temporaryCreditLimitIdentifier\": {\n      \"temporaryCreditLimitReference\": \"string\"\n    },\n    \"temporaryCreditLimitAmount\": {\n      \"value\": \"<long>\",\n      \"exponent\": \"<integer>\",\n      \"isoCode\": \"<string>\"\n    },\n    \"activationStartTime\": \"1988-04-29T18:43:11.239Z\",\n    \"activationEndTime\": \"2010-09-26T07:42:15.688Z\",\n    \"relatedTemporaryCreditLimits\": [\n      {\n        \"accountIdentifier\": {\n          \"accountReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuerAccountExternalReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"root\": true,\n        \"temporaryCreditLimitIdentifier\": {\n          \"temporaryCreditLimitReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      {\n        \"accountIdentifier\": {\n          \"accountReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuerAccountExternalReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"root\": true,\n        \"temporaryCreditLimitIdentifier\": {\n          \"temporaryCreditLimitReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e6d8907-2e6d-4be2-a7ef-c220bf636a56",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 400,\n    \"statusMessage\": \"Bad request\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31962d51-e07f-450b-a017-cfeea7c9c503",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 401,\n    \"statusMessage\": \"Unauthorized\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75627415-9092-47e4-aeab-df3d285b3401",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 403,\n    \"statusMessage\": \"Forbidden\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b602895e-64a8-494b-ad7a-090406af031d",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 404,\n    \"statusMessage\": \"Not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "144f80f4-0da7-4cfb-bd8b-76effe71163e",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 500,\n    \"statusMessage\": \"Internal server error\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "556e58bd-9f31-4b51-8b58-c1c097d7fd97",
+              "name": "Bad gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 502,\n    \"statusMessage\": \"Bad Gateway\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a04fa7e0-7d3b-4763-a76b-68bf23ea7f4b",
+          "name": "Delete a temporary credit limit",
+          "request": {
+            "name": "Delete a temporary credit limit",
+            "description": {
+              "content": "An existing temporary credit limit (active or scheduled) can be disabled at any moment\nThe API allows a temporary credit limit for a given account to be deleted by providing the temporary credit limit reference.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "issuers",
+                ":issuerId",
+                "accounts",
+                ":accountReference",
+                "temporary-credit-limits",
+                ":temporaryCreditLimitReference"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Filtered Fields"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issuerId",
+                  "description": "(Required) Issuer ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "accountReference",
+                  "description": "(Required) Account Reference"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "temporaryCreditLimitReference",
+                  "description": "(Required) Temporary credit limit reference"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "WL-Correlation-ID",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Origin",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "disabled": false,
+                "key": "WL-Username",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cf1d1520-5e43-4110-b527-98296a2dc272",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 200,\n    \"statusMessage\": \"Executed successfully\",\n    \"links\": {\n      \"self\": \"/x/{x}?x=x\",\n      \"next\": \"/x/{x}?page[offset]=2\"\n    },\n    \"timeTakenMs\": 12\n  },\n  \"data\": {\n    \"accountIdentifier\": {\n      \"accountReference\": \"string\",\n      \"issuerAccountExternalReference\": \"string\"\n    },\n    \"root\": false,\n    \"temporaryCreditLimitIdentifier\": {\n      \"temporaryCreditLimitReference\": \"string\"\n    },\n    \"relatedTemporaryCreditLimits\": [\n      {\n        \"accountIdentifier\": {\n          \"accountReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuerAccountExternalReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"root\": false,\n        \"temporaryCreditLimitIdentifier\": {\n          \"temporaryCreditLimitReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      {\n        \"accountIdentifier\": {\n          \"accountReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"issuerAccountExternalReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"root\": true,\n        \"temporaryCreditLimitIdentifier\": {\n          \"temporaryCreditLimitReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b1ab7529-ce58-44cf-8857-c6ecec277171",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 400,\n    \"statusMessage\": \"Bad request\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dd7dfa77-b464-4498-9c4a-1755ede29665",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 401,\n    \"statusMessage\": \"Unauthorized\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9842660-b4f7-4d57-8c1a-9847257bed0f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 403,\n    \"statusMessage\": \"Forbidden\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30844309-1732-41cf-a6af-94912252d13b",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 404,\n    \"statusMessage\": \"Not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3594bd74-9890-4d44-ad91-8efba848327b",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 500,\n    \"statusMessage\": \"Internal server error\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbd6fccf-5f6d-4662-a400-323141941471",
+              "name": "Bad gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "issuers",
+                    ":issuerId",
+                    "accounts",
+                    ":accountReference",
+                    "temporary-credit-limits",
+                    ":temporaryCreditLimitReference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issuerId",
+                      "description": "(Required) Issuer ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "accountReference",
+                      "description": "(Required) Account Reference"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "temporaryCreditLimitReference",
+                      "description": "(Required) Temporary credit limit reference"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Correlation-ID",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Origin",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "WL-Username",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responseMetadata\": {\n    \"correlationId\": \"string\",\n    \"responseDateTime\": \"format:yyyy-MM-dd'T'HH:mm:ss.SSSZ\",\n    \"statusCode\": 502,\n    \"statusMessage\": \"Bad Gateway\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "19566c80-f9e6-4ea9-be3d-77986d60a40c",
+    "name": "Worldline Card Issuing Account - AccountState Account - Temporary Credit Limit API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.\nAdditional APIs are under construction and planned to be available in 2026.",
+      "type": "text/plain"
+    }
+  }
+}

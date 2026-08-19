@@ -1,0 +1,661 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Site API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Site",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search sites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "iban",
+                "value": "",
+                "type": "query",
+                "description": "International Bank Account Number for merchant payments\n"
+              },
+              {
+                "name": "holdingId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the holding, determined by equensWorldline\n"
+              },
+              {
+                "name": "merchantId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the merchant, determined by the acquirer\n"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "postalCode",
+                "value": "",
+                "type": "query",
+                "description": "Postal code of site address\n"
+              },
+              {
+                "name": "houseNumber",
+                "value": "",
+                "type": "query",
+                "description": "House number of site address. Note, Postal code must be given as well\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the site within the contract\n"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID\n"
+              },
+              {
+                "name": "terminalId",
+                "value": "",
+                "type": "query",
+                "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)\n"
+              },
+              {
+                "name": "merchantName",
+                "value": "",
+                "type": "query",
+                "description": "Name of the merchant\n"
+              },
+              {
+                "name": "contractName",
+                "value": "",
+                "type": "query",
+                "description": "Optional name for this specific contract\n"
+              },
+              {
+                "name": "siteName",
+                "value": "",
+                "type": "query",
+                "description": "Name of the site\n"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field\n"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order\n"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (Max page size is 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a list of sites. Terminated sites are excluded.\n"
+        },
+        {
+          "info": {
+            "name": "Add a site (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a site (based on Card Acceptor ID)"
+        },
+        {
+          "info": {
+            "name": "Retrieve a site (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              }
+            ]
+          },
+          "docs": "Retrieve a site (based on Card Acceptor ID)"
+        },
+        {
+          "info": {
+            "name": "Update a site (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fields that can be used: **/basic/siteName, /basic/subMerchantId**\r\nOperations that can be used: **replace, remove**\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"MySite\",\r\n           \"path\": \"/basic/siteName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"123456\",\r\n           \"path\": \"/basic/subMerchantId\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+        },
+        {
+          "info": {
+            "name": "Terminate a site (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              }
+            ]
+          },
+          "docs": "Terminate a site (based on Card Acceptor ID)"
+        },
+        {
+          "info": {
+            "name": "Retrieve addresses of a site (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId/addresses",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              }
+            ]
+          },
+          "docs": "Retrieve addresses of a site (based on Card Acceptor ID)"
+        },
+        {
+          "info": {
+            "name": "Update addresses of a site (based on Card Acceptor ID)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/sites/:cardAcceptorId/addresses",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "cardAcceptorId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the card acceptor, determined by equensWorldline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fields that can be used: **/addresses/0/streetName, /addresses/0/houseNumber**\r\nOperations that can be used: **replace, remove**\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Mainstreet\",\r\n           \"path\": \"/addresses/0/streetName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": 12,\r\n           \"path\": \"/addresses/0/houseNumber\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+        },
+        {
+          "info": {
+            "name": "Add a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a site"
+        },
+        {
+          "info": {
+            "name": "Retrieve a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ]
+          },
+          "docs": "This operation retrieves a site.\n"
+        },
+        {
+          "info": {
+            "name": "Update a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Site call a PATCH Site call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"MySite\",\r\n           \"path\": \"/basic/siteName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n           \"value\": \"123456\",\r\n           \"path\": \"/basic/subMerchantId\",\r\n           \"op\": \"re"
+        },
+        {
+          "info": {
+            "name": "Delete a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ]
+          },
+          "docs": "Delete a site"
+        },
+        {
+          "info": {
+            "name": "Retrieve the addresses of a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/addresses",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ]
+          },
+          "docs": "This operation retrieves addresses of a site.\n"
+        },
+        {
+          "info": {
+            "name": "Updates the adresses of a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/addresses",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Site Addresses call a PATCH Site Addresses call can be generated to change one or more fields. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. Since a site only has one address the index is always 0\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Mainstreet\",\r\n           \"path\": \"/addresses/0/streetName\",\r\n           \"op\": \"replace\"             \r\n       }, \r\n       {\r\n       "
+        },
+        {
+          "info": {
+            "name": "Retrieve the balances of a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/balances",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ]
+          },
+          "docs": "This operation retrieves balances of a site.\n"
+        },
+        {
+          "info": {
+            "name": "Update the balances of a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/balances",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Site Balances call a PATCH Site Balances call can be generated to change one or more fields of one or more balances. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. To reference a specific balance the index of that balance in the GET call needs to be used.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"Shop123\",\r\n           \"path\": \"/balances/0/merchantReconciliationReferenc"
+        },
+        {
+          "info": {
+            "name": "Retrieve the brand parameters of a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/brands",
+            "headers": [
+              {
+                "name": "includeTerminated",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              }
+            ]
+          },
+          "docs": "This operation retrieves brands of a site.\n"
+        },
+        {
+          "info": {
+            "name": "Update the brand parameters of a site",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/acquiring/contract/v2.0/acquirers/:acquirerId/contracts/:contractId/sites/:siteId/brands",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer\n"
+              },
+              {
+                "name": "siteId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identification of the site within the contract"
+              },
+              {
+                "name": "applyToAll",
+                "value": "",
+                "type": "query",
+                "description": "If value is true then the changes made to 1 brand (with index 0) will automatically apply to all brands"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a GET Site Brands call a PATCH Site Brands call can be generated to change one or more fields of one or more brands. Whether it is allowed to change a field (and which values are allowed) is determined by the business logic of the contract management solution. To reference a specific brand the index of that brand in the GET call needs to be used.\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"true\",\r\n           \"path\": \"brands/0/brandParameters/allowedServices/refundService\""
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

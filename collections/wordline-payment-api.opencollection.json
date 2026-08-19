@@ -1,0 +1,371 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Worldline Card Issuing Account - AccountState Payment API",
+    "version": "2.41.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get payment based on payment id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/payment/v2.0/acquirers/:acquirerId/payments/:paymentId",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "671234567",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "paymentId",
+                "value": "SO-000000000004665998",
+                "type": "path",
+                "description": "Unique identification of the payment in which this transac   tion has been paid out"
+              },
+              {
+                "name": "paymentDate",
+                "value": "2019-03-14",
+                "type": "query",
+                "description": "Payment Date (yyyy-mm-dd), known as payment posting date"
+              }
+            ]
+          },
+          "docs": "This operation uses the unique acquirerId and payment id to retrieve the payment data\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve payments on search criteria",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/payment/v2.0/acquirers/:acquirerId/payments",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "671234567",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "iban",
+                "value": "NL52RABO0133334252",
+                "type": "query",
+                "description": "Iban\n\npaymentReference or Iban must be present\n"
+              },
+              {
+                "name": "paymentReference",
+                "value": "4665998",
+                "type": "query",
+                "description": "Merchant payment identification information; a static number frequently used to indicate store location associated with a payment\n\npaymentReference or Iban must be present\n"
+              },
+              {
+                "name": "startDate",
+                "value": "2019-03-01",
+                "type": "query",
+                "description": "Payment start Date (yyyy-mm-dd)"
+              },
+              {
+                "name": "endDate",
+                "value": "2019-12-31",
+                "type": "query",
+                "description": "Payment end Date (yyyy-mm-dd)"
+              },
+              {
+                "name": "merchantPaymentAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Payment amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "merchantPaymentAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Payment amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "merchantPaymentAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Merchant payment amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation uses the unique acquirerId and IBAN or paymentReference to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+        },
+        {
+          "info": {
+            "name": "Retrieve payments on holding level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/payment/v2.0/acquirers/:acquirerId/holdings/:holdingId/payments",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "671234567",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "holdingId",
+                "value": "1",
+                "type": "path",
+                "description": "Unique identification of the holding, determined by equensWorldline"
+              },
+              {
+                "name": "startDate",
+                "value": "2019-03-01",
+                "type": "query",
+                "description": "Payment start Date (yyyy-mm-dd)"
+              },
+              {
+                "name": "endDate",
+                "value": "2019-12-31",
+                "type": "query",
+                "description": "Payment end Date (yyyy-mm-dd)"
+              },
+              {
+                "name": "merchantPaymentAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Payment amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "merchantPaymentAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Payment amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "merchantPaymentAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Merchant payment amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation uses the unique acquirerId and holdingId to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+        },
+        {
+          "info": {
+            "name": "Retrieve payments on merchant level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/payment/v2.0/acquirers/:acquirerId/merchants/:merchantId/payments",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "671234567",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "merchantId",
+                "value": "1100001",
+                "type": "path",
+                "description": "Unique identification of the merchant, determined by equensWorldline"
+              },
+              {
+                "name": "startDate",
+                "value": "2019-03-01",
+                "type": "query",
+                "description": "Payment start Date (yyyy-mm-dd)"
+              },
+              {
+                "name": "endDate",
+                "value": "2019-12-31",
+                "type": "query",
+                "description": "Payment end Date (yyyy-mm-dd)"
+              },
+              {
+                "name": "merchantPaymentAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Payment amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "merchantPaymentAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Payment amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "merchantPaymentAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Merchant payment amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation uses the unique acquirerId and merchant id to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+        },
+        {
+          "info": {
+            "name": "Retrieve payments on contract level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/acquiring/payment/v2.0/acquirers/:acquirerId/contracts/:contractId/payments",
+            "params": [
+              {
+                "name": "acquirerId",
+                "value": "671234567",
+                "type": "path",
+                "description": "Unique identification of the acquirer, determined by equensWorldline"
+              },
+              {
+                "name": "contractId",
+                "value": "1000016",
+                "type": "path",
+                "description": "Unique identification of the contract, determined by the acquirer"
+              },
+              {
+                "name": "startDate",
+                "value": "2019-03-01",
+                "type": "query",
+                "description": "Payment start Date (yyyy-mm-dd)"
+              },
+              {
+                "name": "endDate",
+                "value": "2019-12-31",
+                "type": "query",
+                "description": "Payment end Date (yyyy-mm-dd)"
+              },
+              {
+                "name": "merchantPaymentAmountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Payment amount (whole units), amount should be greater than or equal to this value"
+              },
+              {
+                "name": "merchantPaymentAmountTo",
+                "value": "",
+                "type": "query",
+                "description": "Payment amount (whole units), amount should be less than this value"
+              },
+              {
+                "name": "merchantPaymentAmountCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Merchant payment amount currency, according to ISO 4217. Required if search amount is available. Example EUR"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size (max 300)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number"
+              }
+            ]
+          },
+          "docs": "This operation uses the unique acquirerId and contractId to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
