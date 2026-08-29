@@ -1,15 +1,16 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
-  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
-
-    Additional APIs are under construction and planned to be available in 2026.'
-  version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Holding API
-  contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+  title: Merchant - Contract Holding API
+  description: This is the API server supplied by equensWorldline.
+  contact:
+    name: Worldline FS Acquiring Processing API team.
+    url: https://financial-services.developer.worldline.com/
+    email: dl-fr-dp2si-acquiring@worldline.com
+  license:
+    name: proprietary Worldline Financial Services
+  version: 2.0.4
+servers:
+- url: /MerchantApiContract/api
 tags:
 - name: Holding
 paths:
@@ -314,7 +315,7 @@ paths:
       tags:
       - Holding
       summary: Update a holding
-      description: "Fields that can be used: /basic/holdingName**\r\nOperations that can be used: **replace**\r\nSample request: \r\n\r\n    [\r\n       {\r\n           \"value\": \"MyHolding\",\r\n           \"path\": \"/basic/holdingName\",\r\n           \"op\": \"replace\"             \r\n       }\r\n    ]"
+      description: "Fields that can be used: /basic/holdingName**\nOperations that can be used: **replace**\nSample request: \n\n    [\n       {\n           \"value\": \"MyHolding\",\n           \"path\": \"/basic/holdingName\",\n           \"op\": \"replace\"             \n       }\n    ]"
       operationId: patchHolding
       parameters:
       - name: acquirerId
@@ -455,11 +456,59 @@ paths:
           content: {}
 components:
   schemas:
-    PostHolding:
+    Address:
       type: object
       properties:
-        basic:
-          $ref: '#/components/schemas/PostHoldingBasic'
+        streetName:
+          type: string
+          description: Street name and house number of the address. In case of a Dutch address only Street name
+          example: Stootblok
+        houseNumber:
+          type: integer
+          description: House number. Only used for Dutch addresses
+          format: int32
+          example: 14
+        houseAddition:
+          type: string
+          description: House number addition. Only used for Dutch addresses
+          example: bis
+        postalCode:
+          type: string
+          description: Postal code of the address
+          example: 3071AP
+        city:
+          type: string
+          description: City of the address
+          example: Rotterdam
+        region:
+          type: string
+          description: Region of the address. Only applicable for specific countries
+          example: Zuid-Holland
+        countryCode:
+          type: string
+          description: Country of the address according to ISO 3166-1 (numeric-3)
+          example: '528'
+        contactPersonName:
+          type: string
+          description: Name of the contact person registered with the address
+          example: M. Scott
+        telephoneNumber:
+          type: string
+          description: Telephone number of contact person registered with the address
+          example: 0883855111
+        email:
+          type: string
+          description: E-mail address of the contact person registered with the address
+          example: M.Scott@eventpaymentsolutions.com
+    HoldingBasic:
+      type: object
+      properties:
+        acquirerName:
+          type: string
+          description: Name of the acquirer
+        holdingName:
+          type: string
+          description: Name of the holding
     ErrorResponse:
       type: object
       properties:
@@ -467,6 +516,53 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorData'
+    PostHoldingResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          format: uuid
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantIdentificationResponse'
+    MerchantIdentificationResponse:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        holdingId:
+          type: string
+          description: Unique identification of the holding, determined by equensWorldline
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '10011'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int64
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+        terminalId:
+          type: string
+          description: Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
+    HoldingData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/HoldingContractIdentification'
+        basic:
+          $ref: '#/components/schemas/HoldingBasic'
+        status:
+          $ref: '#/components/schemas/HoldingStatus'
+        addressDetailsURI:
+          type: string
+          description: URI to get the holding address details
+          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX/addresses
     AddressDetails:
       required:
       - addressType
@@ -540,6 +636,69 @@ components:
           description: Preferred communication type of the contact person registered with the address. Values [1 = Post, 2 = Fax, 3 = E-mail]
           format: int32
           example: 3
+    HoldingContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        holdingId:
+          type: string
+          description: Unique identification of the holding, determined by equensWorldline
+    HoldingAddressData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/HoldingContractIdentification'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
+    CorrelationResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Unique ID that was generated for the specific change
+          format: uuid
+    ErrorData:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Unique code of the error as returned by the system handling the request
+        keyword:
+          type: string
+          description: JSON keyword from the request message that triggered the error
+        errorMessage:
+          type: string
+          description: Message explaining the error
+    Operation:
+      type: object
+      properties:
+        value:
+          type: object
+          properties: {}
+        path:
+          type: string
+          description: 'A pointer to a specific value (field) that needs to be changed
+
+
+            examples /basic/merchantCategoryCode, brands/0/brandParameters/allowedServices/refundService
+
+            '
+        op:
+          type: string
+          description: 'The following operations are implemented
+
+            - replace - change the value of a specific field
+
+            - remove -  remove the value of a specific field (only allowed for optional fields)
+
+            '
+        from:
+          type: string
+          description: Not elevant for currently supported operations
     HoldingStatus:
       type: object
       properties:
@@ -549,47 +708,11 @@ components:
         commencementDate:
           type: string
           description: Date at which the holding was registered
-    PostHoldingResponse:
+    PostHolding:
       type: object
       properties:
-        correlationId:
-          type: string
-          format: uuid
-        contractIdentification:
-          $ref: '#/components/schemas/MerchantIdentificationResponse'
-    MerchantIdentificationResponse:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-        holdingId:
-          type: string
-          description: Unique identification of the holding, determined by equensWorldline
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-        contractId:
-          type: string
-          description: Unique identification of the contract, determined by the acquirer
-          example: '10011'
-        siteId:
-          type: integer
-          description: Unique identification of the site within the contract
-          format: int64
-        cardAcceptorId:
-          type: string
-          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
-        terminalId:
-          type: string
-          description: Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
-    PostHoldingBasic:
-      type: object
-      properties:
-        holdingName:
-          type: string
-          description: Name of the holding
-          example: Event Payment Solutions
+        basic:
+          $ref: '#/components/schemas/PostHoldingBasic'
     HoldingListData:
       type: object
       properties:
@@ -619,137 +742,10 @@ components:
           type: string
           description: URI to get the holding details
           example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX
-    CorrelationResponse:
+    PostHoldingBasic:
       type: object
       properties:
-        correlationId:
-          type: string
-          description: Unique ID that was generated for the specific change
-          format: uuid
-    HoldingContractIdentification:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-        holdingId:
-          type: string
-          description: Unique identification of the holding, determined by equensWorldline
-    HoldingData:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/HoldingContractIdentification'
-        basic:
-          $ref: '#/components/schemas/HoldingBasic'
-        status:
-          $ref: '#/components/schemas/HoldingStatus'
-        addressDetailsURI:
-          type: string
-          description: URI to get the holding address details
-          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX/addresses
-    HoldingAddressData:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/HoldingContractIdentification'
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AddressDetails'
-    ErrorData:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Unique code of the error as returned by the system handling the request
-        keyword:
-          type: string
-          description: JSON keyword from the request message that triggered the error
-        errorMessage:
-          type: string
-          description: Message explaining the error
-    Address:
-      type: object
-      properties:
-        streetName:
-          type: string
-          description: Street name and house number of the address. In case of a Dutch address only Street name
-          example: Stootblok
-        houseNumber:
-          type: integer
-          description: House number. Only used for Dutch addresses
-          format: int32
-          example: 14
-        houseAddition:
-          type: string
-          description: House number addition. Only used for Dutch addresses
-          example: bis
-        postalCode:
-          type: string
-          description: Postal code of the address
-          example: 3071AP
-        city:
-          type: string
-          description: City of the address
-          example: Rotterdam
-        region:
-          type: string
-          description: Region of the address. Only applicable for specific countries
-          example: Zuid-Holland
-        countryCode:
-          type: string
-          description: Country of the address according to ISO 3166-1 (numeric-3)
-          example: '528'
-        contactPersonName:
-          type: string
-          description: Name of the contact person registered with the address
-          example: M. Scott
-        telephoneNumber:
-          type: string
-          description: Telephone number of contact person registered with the address
-          example: 0883855111
-        email:
-          type: string
-          description: E-mail address of the contact person registered with the address
-          example: M.Scott@eventpaymentsolutions.com
-    Operation:
-      type: object
-      properties:
-        value:
-          type: object
-          properties: {}
-        path:
-          type: string
-          description: 'A pointer to a specific value (field) that needs to be changed
-
-
-            examples /basic/merchantCategoryCode, brands/0/brandParameters/allowedServices/refundService
-
-            '
-        op:
-          type: string
-          description: 'The following operations are implemented
-
-            - replace - change the value of a specific field
-
-            - remove -  remove the value of a specific field (only allowed for optional fields)
-
-            '
-        from:
-          type: string
-          description: Not elevant for currently supported operations
-    HoldingBasic:
-      type: object
-      properties:
-        acquirerName:
-          type: string
-          description: Name of the acquirer
         holdingName:
           type: string
           description: Name of the holding
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+          example: Event Payment Solutions

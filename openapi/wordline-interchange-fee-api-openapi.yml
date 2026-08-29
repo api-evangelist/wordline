@@ -1,15 +1,12 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
-  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
-
-    Additional APIs are under construction and planned to be available in 2026.'
-  version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Interchange fee API
-  contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+  description: This is the API server supplied by Equens.
+  version: '2.0'
+  title: Merchant payments - InterchangeFee Interchange fee API
+  contact:
+    name: equensWorldline API team. See developer portal
+servers:
+- url: https://developer.equensworldline.com/MerchantApiInterchangeFee/api
 tags:
 - name: Interchange fee
 paths:
@@ -20,36 +17,36 @@ paths:
       summary: Based on TransactionID
       description: "This API call will retrieve the interchange fee for a single transaction. \n"
       operationId: getInterchangeFee
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: transactionId
         in: path
         description: The Transaction ID identifies a presentment
         required: true
-        type: string
         example: TDS17133017774902264
+        schema:
+          type: string
       - name: transactionDate
         in: query
         description: Transaction Date (yyyy-mm-dd), known as transaction posting date
         required: true
-        type: string
-        format: date
         example: '2017-05-01'
+        schema:
+          type: string
+          format: date
       responses:
         '200':
           description: Successful
-          schema:
-            $ref: '#/definitions/InterchangeFee'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InterchangeFee'
         '400':
           description: Invalid input provided
         '401':
@@ -69,68 +66,72 @@ paths:
       summary: Based on a Payment Id
       description: "Use this operation to retrieve the interchange fees for a Payment\n\n- The result of this operation is a list of interchange fees that belongs to a payment\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeListForPayment
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: paymentId
         in: query
         description: Unique identification of the payment in which this transaction has been paid out
         required: true
-        type: string
         example: SO-000000017036619028
+        schema:
+          type: string
       - name: paymentDate
         in: query
         description: Payment Date (yyyy-mm-dd)
         required: true
-        type: string
-        format: date
         example: '2017-05-01'
+        schema:
+          type: string
+          format: date
       - name: sortField
         in: query
         description: Sort field
         required: false
-        type: string
-        enum:
-        - InterchangeFeeId
-        - TransactionId
-        - TransactionDateTime
-        - InterchangeFeeType
-        - InterchangeRateDesignator
-        - Amount
+        schema:
+          type: string
+          enum:
+          - InterchangeFeeId
+          - TransactionId
+          - TransactionDateTime
+          - InterchangeFeeType
+          - InterchangeRateDesignator
+          - Amount
       - name: sortOrder
         in: query
         description: Sort order
         required: false
-        type: string
-        enum:
-        - Ascending
-        - Descending
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
       - name: pageSize
         in: query
         description: Page size
         required: false
-        type: string
+        schema:
+          type: string
       - name: pageNumber
         in: query
         description: Page number
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/InterchangeFee'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InterchangeFee'
         '400':
           description: Invalid input provided
         '401':
@@ -150,76 +151,81 @@ paths:
       summary: holding level
       description: "This operation retrieves all interchange fees on merchant hierarchy (for example holding) level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnMerchantHierarchyLevel
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: holdingId
         in: path
         description: Unique identification of the holdingId, determined by equensWorldline
         required: true
-        type: integer
-        format: int32
         example: 200
+        schema:
+          type: integer
+          format: int32
       - name: startDateTime
         in: query
         description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 12:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 13:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: sortField
         in: query
         description: Sort field
         required: false
-        type: string
-        enum:
-        - InterchangeFeeId
-        - TransactionId
-        - TransactionDateTime
-        - InterchangeFeeType
-        - InterchangeRateDesignator
-        - Amount
+        schema:
+          type: string
+          enum:
+          - InterchangeFeeId
+          - TransactionId
+          - TransactionDateTime
+          - InterchangeFeeType
+          - InterchangeRateDesignator
+          - Amount
       - name: sortOrder
         in: query
         description: Sort order
         required: false
-        type: string
-        enum:
-        - Ascending
-        - Descending
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
       - name: pageSize
         in: query
         description: Page size
         required: false
-        type: string
+        schema:
+          type: string
       - name: pageNumber
         in: query
         description: Page number
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/InterchangeFee'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InterchangeFee'
         '400':
           description: Invalid input provided
         '401':
@@ -239,75 +245,80 @@ paths:
       summary: Merchant level
       description: "This operation retrieves all interchange fees on merchant level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnMerchantLevel
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: merchantId
         in: path
         description: Unique identification of the merchant, determined by equensWorldline
         required: true
-        type: string
         example: '1280300'
+        schema:
+          type: string
       - name: startDateTime
         in: query
         description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 12:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 13:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: sortField
         in: query
         description: Sort field
         required: false
-        type: string
-        enum:
-        - InterchangeFeeId
-        - TransactionId
-        - TransactionDateTime
-        - InterchangeFeeType
-        - InterchangeRateDesignator
-        - Amount
+        schema:
+          type: string
+          enum:
+          - InterchangeFeeId
+          - TransactionId
+          - TransactionDateTime
+          - InterchangeFeeType
+          - InterchangeRateDesignator
+          - Amount
       - name: sortOrder
         in: query
         description: Sort order
         required: false
-        type: string
-        enum:
-        - Ascending
-        - Descending
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
       - name: pageSize
         in: query
         description: Page size
         required: false
-        type: string
+        schema:
+          type: string
       - name: pageNumber
         in: query
         description: Page number
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/InterchangeFee'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InterchangeFee'
         '400':
           description: Invalid input provided
         '401':
@@ -327,75 +338,80 @@ paths:
       summary: Contract level
       description: "This operation retrieves all interchange fees on contract level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnContractLevel
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
-        type: string
         example: '12872'
+        schema:
+          type: string
       - name: startDateTime
         in: query
         description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 12:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 13:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: sortField
         in: query
         description: Sort field
         required: false
-        type: string
-        enum:
-        - InterchangeFeeId
-        - TransactionId
-        - TransactionDateTime
-        - InterchangeFeeType
-        - InterchangeRateDesignator
-        - Amount
+        schema:
+          type: string
+          enum:
+          - InterchangeFeeId
+          - TransactionId
+          - TransactionDateTime
+          - InterchangeFeeType
+          - InterchangeRateDesignator
+          - Amount
       - name: sortOrder
         in: query
         description: Sort order
         required: false
-        type: string
-        enum:
-        - Ascending
-        - Descending
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
       - name: pageSize
         in: query
         description: Page size
         required: false
-        type: string
+        schema:
+          type: string
       - name: pageNumber
         in: query
         description: Page number
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/InterchangeFee'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InterchangeFee'
         '400':
           description: Invalid input provided
         '401':
@@ -415,82 +431,88 @@ paths:
       summary: Site level
       description: "This operation retrieves all interchange fees on site level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnSiteLevel
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
-        type: string
         example: '12872'
+        schema:
+          type: string
       - name: siteId
         in: path
         description: Unique identification of the site within the contract
         required: true
-        type: integer
-        format: int32
         example: 30010
+        schema:
+          type: integer
+          format: int32
       - name: startDateTime
         in: query
         description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 12:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 13:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: sortField
         in: query
         description: Sort field
         required: false
-        type: string
-        enum:
-        - InterchangeFeeId
-        - TransactionId
-        - TransactionDateTime
-        - InterchangeFeeType
-        - InterchangeRateDesignator
-        - Amount
+        schema:
+          type: string
+          enum:
+          - InterchangeFeeId
+          - TransactionId
+          - TransactionDateTime
+          - InterchangeFeeType
+          - InterchangeRateDesignator
+          - Amount
       - name: sortOrder
         in: query
         description: Sort order
         required: false
-        type: string
-        enum:
-        - Ascending
-        - Descending
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
       - name: pageSize
         in: query
         description: Page size
         required: false
-        type: string
+        schema:
+          type: string
       - name: pageNumber
         in: query
         description: Page number
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/InterchangeFee'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InterchangeFee'
         '400':
           description: Invalid input provided
         '401':
@@ -510,88 +532,95 @@ paths:
       summary: Terminal level
       description: "This operation retrieves all interchange fees on terminal level\n\n- The result of this operation is a list of interchange fees that belongs to a contract level.\n- If there is a previous and/or next page the http response header will have a link (url) to this data \n"
       operationId: getInterchangeFeeOnTerminalLevel
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
-        type: string
         example: '12872'
+        schema:
+          type: string
       - name: siteId
         in: path
         description: Unique identification of the site within the contract
         required: true
-        type: integer
-        format: int32
         example: 30010
+        schema:
+          type: integer
+          format: int32
       - name: terminalId
         in: path
         description: Unique code identifying the terminal at the Card acceptor location
         required: true
-        type: string
         example: 20YT45
+        schema:
+          type: string
       - name: startDateTime
         in: query
         description: Start DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (greater or equals to this value)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 12:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: endDateTime
         in: query
         description: End DateTime the transaction was created (yyyy-mm-dd hh:mm:ss) (until this value, so not incuded)
         required: true
-        type: string
-        format: date-time
         example: '2019-03-01 13:30:00'
+        schema:
+          type: string
+          format: date-time
       - name: sortField
         in: query
         description: Sort field
         required: false
-        type: string
-        enum:
-        - InterchangeFeeId
-        - TransactionId
-        - TransactionDateTime
-        - InterchangeFeeType
-        - InterchangeRateDesignator
-        - Amount
+        schema:
+          type: string
+          enum:
+          - InterchangeFeeId
+          - TransactionId
+          - TransactionDateTime
+          - InterchangeFeeType
+          - InterchangeRateDesignator
+          - Amount
       - name: sortOrder
         in: query
         description: Sort order
         required: false
-        type: string
-        enum:
-        - Ascending
-        - Descending
+        schema:
+          type: string
+          enum:
+          - Ascending
+          - Descending
       - name: pageSize
         in: query
         description: Page size
         required: false
-        type: string
+        schema:
+          type: string
       - name: pageNumber
         in: query
         description: Page number
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/InterchangeFee'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InterchangeFee'
         '400':
           description: Invalid input provided
         '401':
@@ -604,133 +633,129 @@ paths:
           description: Unexpected error
         '502':
           description: Backend service problem
-definitions:
-  ContractIdentification:
-    type: object
-    properties:
-      acquirerId:
-        type: string
-        description: Unique identification of the acquirer, determined by equensWorldline
-        example: '671234567'
-      holdingId:
-        type: integer
-        format: int32
-        description: Unique identification of the holding, determined by equensWorldline
-        example: 200
-      merchantId:
-        type: string
-        description: Unique identification of the merchant, determined by the acquirer
-        example: '1280300'
-      contractId:
-        type: string
-        description: Unique identification of the contract, determined by the acquirer
-        example: '12872'
-      cardAcceptorId:
-        type: string
-        description: Unique identification of the cardAcceptor within the contract
-        example: '30010'
-      siteId:
-        type: integer
-        format: int32
-        description: Unique identification of the site within the contract
-        example: 30010
-      terminalId:
-        type: string
-        description: Unique code identifying the terminal at the Card acceptor location
-        example: 20YT45
-  TransactionIdentification:
-    type: object
-    properties:
-      transactionId:
-        type: string
-        description: Unique identification for a Cardholder Initiated Transaction
-        example: TDS16172008721825920
-  Amount:
-    type: object
-    properties:
-      amount:
-        type: string
-        format: unlimited size decimal
-        description: 'Amount in the major units of the currency according to ISO 4217.
+components:
+  schemas:
+    InterchangeFee:
+      type: object
+      properties:
+        transactionIdentification:
+          $ref: '#/components/schemas/TransactionIdentification'
+        contractIdentification:
+          $ref: '#/components/schemas/ContractIdentification'
+        postingDate:
+          type: string
+          format: date
+          description: Date when this transaction is posted on the merchant balance (yyyy-mm-dd)
+          example: 2016-08-21
+        transactionFeeType:
+          type: string
+          description: Type of transaction fee.
+          example: '02'
+        transactionDateTime:
+          type: string
+          format: date-time
+          description: transaction posting datetime (yyyy-mm-dd hh:mm:ss)
+          example: 2016-08-21 09:30:47
+        interchangeFeeAmount:
+          $ref: '#/components/schemas/Amount'
+        interchangeRateDesignatorCode:
+          type: string
+          description: Interchange Rate Designator Code
+          example: '85'
+        issuerRegion:
+          type: string
+          description: Region of the issuer
+          example: Europe
+        issuerRegionCode:
+          type: string
+          description: Region of the issuer code
+          example: EU
+        paymentProductCode:
+          type: string
+          description: Payment product code
+          example: Maes
+        creditDebitIndicator:
+          type: string
+          description: Credit or Debit indicator. i.e. C = Credit. D = Debit
+          example: D
+        paymentProductTypeCode:
+          type: string
+          description: Card product type code
+          example: '2'
+        region:
+          type: string
+          description: Region of the payment scheme. Regional classification used by the schemes which indicates the location of the acquirer compared to the issuer. i.e. VPAY Netherland, Intra-European, VISA Germany
+          example: VISA Netherland
+        regionCode:
+          type: string
+          description: Region of the payment scheme code
+          example: A
+        channel:
+          type: string
+          description: Processing channel for transactions
+          example: Point of Sail
+        transactionConditionCode:
+          type: string
+          description: Code for Condition in which the transaction took place
+          example: '23'
+        brand:
+          type: string
+          description: Brand
+          example: MAES
+    Amount:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: unlimited size decimal
+          description: 'Amount in the major units of the currency according to ISO 4217.
 
 
-          In case of euro, "3.10" (is 3.10 euro)
+            In case of euro, "3.10" (is 3.10 euro)
 
-          '
-        example: '3.00'
-      currency:
-        type: string
-        description: Currency of the amount
-        example: EUR
-  InterchangeFee:
-    type: object
-    properties:
-      transactionIdentification:
-        $ref: '#/definitions/TransactionIdentification'
-      contractIdentification:
-        $ref: '#/definitions/ContractIdentification'
-      postingDate:
-        type: string
-        format: date
-        description: Date when this transaction is posted on the merchant balance (yyyy-mm-dd)
-        example: 2016-08-21
-      transactionFeeType:
-        type: string
-        description: Type of transaction fee.
-        example: '02'
-      transactionDateTime:
-        type: string
-        format: date-time
-        description: transaction posting datetime (yyyy-mm-dd hh:mm:ss)
-        example: 2016-08-21 09:30:47
-      interchangeFeeAmount:
-        $ref: '#/definitions/Amount'
-      interchangeRateDesignatorCode:
-        type: string
-        description: Interchange Rate Designator Code
-        example: '85'
-      issuerRegion:
-        type: string
-        description: Region of the issuer
-        example: Europe
-      issuerRegionCode:
-        type: string
-        description: Region of the issuer code
-        example: EU
-      paymentProductCode:
-        type: string
-        description: Payment product code
-        example: Maes
-      creditDebitIndicator:
-        type: string
-        description: Credit or Debit indicator. i.e. C = Credit. D = Debit
-        example: D
-      paymentProductTypeCode:
-        type: string
-        description: Card product type code
-        example: '2'
-      region:
-        type: string
-        description: Region of the payment scheme. Regional classification used by the schemes which indicates the location of the acquirer compared to the issuer. i.e. VPAY Netherland, Intra-European, VISA Germany
-        example: VISA Netherland
-      regionCode:
-        type: string
-        description: Region of the payment scheme code
-        example: A
-      channel:
-        type: string
-        description: Processing channel for transactions
-        example: Point of Sail
-      transactionConditionCode:
-        type: string
-        description: Code for Condition in which the transaction took place
-        example: '23'
-      brand:
-        type: string
-        description: Brand
-        example: MAES
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+            '
+          example: '3.00'
+        currency:
+          type: string
+          description: Currency of the amount
+          example: EUR
+    ContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+          example: '671234567'
+        holdingId:
+          type: integer
+          format: int32
+          description: Unique identification of the holding, determined by equensWorldline
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1280300'
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '12872'
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the cardAcceptor within the contract
+          example: '30010'
+        siteId:
+          type: integer
+          format: int32
+          description: Unique identification of the site within the contract
+          example: 30010
+        terminalId:
+          type: string
+          description: Unique code identifying the terminal at the Card acceptor location
+          example: 20YT45
+    TransactionIdentification:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique identification for a Cardholder Initiated Transaction
+          example: TDS16172008721825920

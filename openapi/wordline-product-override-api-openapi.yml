@@ -1,15 +1,13 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
 
     Additional APIs are under construction and planned to be available in 2026.'
   version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Product Override API
+  title: Worldline Card Issuing Product Override API
   contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+servers:
+- url: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2
 tags:
 - name: Product Override
   description: Product Override API Controller
@@ -27,60 +25,77 @@ paths:
         - The issuer ID
 
         - The issuer product external reference for which the detail of the product extensions'' load balancing is requested.'
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerProductExternalReference
         in: path
         description: Issuer Product External Reference
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityProductExtensionBalancing'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityProductExtensionBalancing'
       security:
       - basic: []
       deprecated: false
@@ -103,70 +118,85 @@ paths:
         The parameters of the load balancing can be retrieved using the Retrieve the product extensions'' load balancing API.
 
         The overridden parameters should be consistent with the initial product configuration defined in the system (e.g., the profiles to be updated must exist in the system to be found).'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerProductExternalReference
         in: path
         description: Issuer Product External Reference
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/OverrideProductExtensionBalancingRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityOverrideProductExtensionBalancingResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityOverrideProductExtensionBalancingResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OverrideProductExtensionBalancingRequest'
   /issuers/{issuerId}/card-products/{cardTemplateReference}/card-producer-balancing:
     get:
       tags:
@@ -180,60 +210,77 @@ paths:
         - The issuer ID
 
         - The card template reference for which the detail of the card producers'' load balancing is requested.'
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: cardTemplateReference
         in: path
         description: Card Template Reference
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCardProducerBalancing'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCardProducerBalancing'
       security:
       - basic: []
       deprecated: false
@@ -254,554 +301,572 @@ paths:
 
 
         The overridden parameters of the card producers'' load balancing can be retrieved using the Retrieve the card producers'' load balancing API.'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: cardTemplateReference
         in: path
         description: Card Template Reference
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/OverrideCardProducerBalancingRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityOverrideCardProducerBalancingResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityOverrideCardProducerBalancingResponse'
       security:
       - basic: []
       deprecated: false
-definitions:
-  OverrideProductExtensionBalancingProfile:
-    type: object
-    properties:
-      name:
-        type: string
-        description: Name of the profile to override.
-      percentages:
-        type: array
-        description: List of percentages to be applied to select the product extension
-        items:
-          $ref: '#/definitions/ProductExtensionBalancingPercentage'
-    title: OverrideProductExtensionBalancingProfile
-  CardProductIdentifier:
-    type: object
-    properties:
-      cardTemplateReference:
-        type: string
-        description: Reference of the card template used to instantiate a card
-    title: CardProductIdentifier
-  NotFoundErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/NotFoundResponseMetadata'
-    title: NotFoundErrorApiResponse
-  BadGatewayErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadGatewayResponseMetadata'
-    title: BadGatewayErrorApiResponse
-  InternalServerErrorErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
-    title: InternalServerErrorErrorApiResponse
-  InternalServerErrorResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 500
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Internal server error
-        description: Executed REST API status message
-    title: InternalServerErrorResponseMetadata
-  ProductExtensionBalancing:
-    type: object
-    properties:
-      issuerId:
-        type: string
-        description: Issuer identifier (unique per platform)
-      deviceTokensThreshold:
-        type: integer
-        description: Threshold on the device tokens number
-      merchantTokensThreshold:
-        type: integer
-        description: Threshold on the merchant tokens number
-      productIdentifier:
-        description: Unique identifier of the product used for the product extensions' load balancing
-        allOf:
-        - $ref: '#/definitions/ProductIdentifier'
-      profiles:
-        type: array
-        description: List of profiles configured for the product extension choice
-        items:
-          $ref: '#/definitions/ProductExtensionBalancingProfile'
-    title: ProductExtensionBalancing
-  ProductExtensionIdentifier:
-    properties:
-      issuerProductExtensionExternalReference:
-        description: External reference of the product extension provided by the issuer and defined for a product (e.g. it can be used when adding cards and accounts to a contract )
-        type: string
-    title: ProductExtensionIdentifier
-    type: object
-  OverrideCardProducerBalancingRequest:
-    type: object
-    properties:
-      percentages:
-        type: array
-        description: List of parameters to be applied for card creation and card replacement
-        items:
-          $ref: '#/definitions/CardProducerBalancingPercentage'
-      renewalPercentages:
-        type: array
-        description: List of parameters to be applied for card renewal
-        items:
-          $ref: '#/definitions/CardProducerBalancingPercentage'
-    title: OverrideCardProducerBalancingRequest
-  UnauthorizedErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/UnauthorizedResponseMetadata'
-    title: UnauthorizedResponseMetadata
-  OverrideProductExtensionBalancingRequest:
-    type: object
-    x-wl-patch-request: true
-    properties:
-      deviceTokensThreshold:
-        type: integer
-        description: Threshold on the device tokens number
-      merchantTokensThreshold:
-        type: integer
-        description: Threshold on the merchant tokens number
-      profiles:
-        type: array
-        description: The issuer can override the percentages of one or several profiles
-        items:
-          $ref: '#/definitions/OverrideProductExtensionBalancingProfile'
-    title: OverrideProductExtensionBalancingRequest
-  ProductIdentifier:
-    type: object
-    properties:
-      issuerProductExternalReference:
-        type: string
-        description: Product External Reference provided by the issuer
-      productReference:
-        type: string
-        description: Reference of the product in our system, unique per platform
-    title: ProductIdentifier
-  Links:
-    type: object
-    required:
-    - self
-    properties:
-      self:
-        type: string
-        example: /x/{x}?x=x
-        description: Service method URL
-      next:
-        type: string
-        example: /x/{x}?page[offset]=2
-        description: URL pagination query parameter next page
-    title: Links
-  CardProducerBalancing:
-    type: object
-    properties:
-      cardProductIdentifier:
-        description: Unique identifier of the card product
-        allOf:
-        - $ref: '#/definitions/CardProductIdentifier'
-      percentages:
-        type: array
-        description: List of parameters to be applied for card creation and card replacement
-        items:
-          $ref: '#/definitions/CardProducerBalancingPercentage'
-      renewalPercentages:
-        type: array
-        description: List of parameters to be applied for card renewal
-        items:
-          $ref: '#/definitions/CardProducerBalancingPercentage'
-    title: CardProducerBalancing
-  UnauthorizedResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 401
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Unauthorized
-        description: Executed REST API status message
-    title: UnauthorizedResponseMetadata
-  NotFoundResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 404
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Not found
-        description: Executed REST API status message
-    title: NotFoundResponseMetadata
-  ResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      links:
-        description: Metadata Links
-        allOf:
-        - $ref: '#/definitions/Links'
-      statusMessage:
-        type: string
-        example: Executed successfully
-        description: Executed REST API status message
-      statusCode:
-        type: integer
-        format: int32
-        example: 200
-        description: HTTP status code
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      timeTakenMs:
-        type: integer
-        format: int64
-        example: 12
-        description: Wall clock time required from service to generate the response
-    title: ResponseMetadata
-  ApiResponseEntityProductExtensionBalancing:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/ProductExtensionBalancing'
-    description: Issuer response entity
-    title: ApiResponseEntityProductExtensionBalancing
-  ApiResponseEntityOverrideCardProducerBalancingResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/OverrideCardProducerBalancingResponse'
-    description: Issuer response entity
-    title: ApiResponseEntityOverrideCardProducerBalancingResponse
-  ApiResponseEntityCardProducerBalancing:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/CardProducerBalancing'
-    description: Issuer response entity
-    title: ApiResponseEntityCardProducerBalancing
-  ForbiddenErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/ForbiddenResponseMetadata'
-    title: ForbiddenErrorApiResponse
-  ProductExtensionBalancingProfile:
-    type: object
-    properties:
-      name:
-        type: string
-        description: Name of the profile
-      cardProductIdentifier:
-        description: Unique identifier of the card product
-        allOf:
-        - $ref: '#/definitions/CardProductIdentifier'
-      deviceTokensOperator:
-        type: string
-        description: Operator used by the algorithm to compare the device tokens counter to the threshold for this profile
-      merchantTokensOperator:
-        type: string
-        description: Operator used by the algorithm to compare the merchant tokens counter to the threshold for this profile
-      percentages:
-        type: array
-        description: List of percentages applied to select the product extension
-        items:
-          $ref: '#/definitions/ProductExtensionBalancingPercentage'
-    title: ProductExtensionBalancingProfile
-  OverrideProductExtensionBalancingResponse:
-    type: object
-    properties:
-      productIdentifier:
-        description: Identifier of the product used to overide the parameters of the load balancing.
-        allOf:
-        - $ref: '#/definitions/ProductIdentifier'
-    title: OverrideProductExtensionBalancingResponse
-  BadRequestResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 400
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad request
-        description: Executed REST API status message
-    title: BadRequestResponseMetadata
-  ApiResponseEntityOverrideProductExtensionBalancingResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/OverrideProductExtensionBalancingResponse'
-    description: Issuer response entity
-    title: ApiResponseEntityOverrideProductExtensionBalancingResponse
-  CardProducerBalancingPercentage:
-    type: object
-    properties:
-      value:
-        type: integer
-        description: Value of percentage allocated to the card producer (e.g. 60 means 60%)
-      cardProducer:
-        type: string
-        description: Card producer for the percentage.
-    title: CardProducerBalancingPercentage
-  BadGatewayResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 502
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad Gateway
-        description: Executed REST API status message
-    title: BadGatewayResponseMetadata
-  ProductExtensionBalancingPercentage:
-    type: object
-    properties:
-      value:
-        type: integer
-        description: Value of this percentage for the product extension (e.g. 60 means 60%)
-      productExtensionIdentifier:
-        description: 'Identifier of the product extension for the percentage '
-        allOf:
-        - $ref: '#/definitions/ProductExtensionIdentifier'
-    title: ProductExtensionBalancingPercentage
-  OverrideCardProducerBalancingResponse:
-    type: object
-    properties:
-      cardProductIdentifier:
-        description: Card template reference used to overide the parameters of the load balancing.
-        allOf:
-        - $ref: '#/definitions/CardProductIdentifier'
-    title: OverrideCardProducerBalancingResponse
-  BadRequestErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadRequestResponseMetadata'
-    title: BadRequestErrorApiResponse
-  ForbiddenResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 403
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Forbidden
-        description: Executed REST API status message
-    title: ForbiddenResponseMetadata
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OverrideCardProducerBalancingRequest'
+components:
+  schemas:
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    ProductExtensionIdentifier:
+      properties:
+        issuerProductExtensionExternalReference:
+          description: External reference of the product extension provided by the issuer and defined for a product (e.g. it can be used when adding cards and accounts to a contract )
+          type: string
+      title: ProductExtensionIdentifier
+      type: object
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    ProductExtensionBalancingPercentage:
+      type: object
+      properties:
+        value:
+          type: integer
+          description: Value of this percentage for the product extension (e.g. 60 means 60%)
+        productExtensionIdentifier:
+          description: 'Identifier of the product extension for the percentage '
+          allOf:
+          - $ref: '#/components/schemas/ProductExtensionIdentifier'
+      title: ProductExtensionBalancingPercentage
+    OverrideCardProducerBalancingResponse:
+      type: object
+      properties:
+        cardProductIdentifier:
+          description: Card template reference used to overide the parameters of the load balancing.
+          allOf:
+          - $ref: '#/components/schemas/CardProductIdentifier'
+      title: OverrideCardProducerBalancingResponse
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    ApiResponseEntityProductExtensionBalancing:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ProductExtensionBalancing'
+      description: Issuer response entity
+      title: ApiResponseEntityProductExtensionBalancing
+    ProductIdentifier:
+      type: object
+      properties:
+        issuerProductExternalReference:
+          type: string
+          description: Product External Reference provided by the issuer
+        productReference:
+          type: string
+          description: Reference of the product in our system, unique per platform
+      title: ProductIdentifier
+    OverrideProductExtensionBalancingProfile:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the profile to override.
+        percentages:
+          type: array
+          description: List of percentages to be applied to select the product extension
+          items:
+            $ref: '#/components/schemas/ProductExtensionBalancingPercentage'
+      title: OverrideProductExtensionBalancingProfile
+    OverrideProductExtensionBalancingRequest:
+      type: object
+      x-wl-patch-request: true
+      properties:
+        deviceTokensThreshold:
+          type: integer
+          description: Threshold on the device tokens number
+        merchantTokensThreshold:
+          type: integer
+          description: Threshold on the merchant tokens number
+        profiles:
+          type: array
+          description: The issuer can override the percentages of one or several profiles
+          items:
+            $ref: '#/components/schemas/OverrideProductExtensionBalancingProfile'
+      title: OverrideProductExtensionBalancingRequest
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    ApiResponseEntityCardProducerBalancing:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CardProducerBalancing'
+      description: Issuer response entity
+      title: ApiResponseEntityCardProducerBalancing
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    CardProductIdentifier:
+      type: object
+      properties:
+        cardTemplateReference:
+          type: string
+          description: Reference of the card template used to instantiate a card
+      title: CardProductIdentifier
+    OverrideCardProducerBalancingRequest:
+      type: object
+      properties:
+        percentages:
+          type: array
+          description: List of parameters to be applied for card creation and card replacement
+          items:
+            $ref: '#/components/schemas/CardProducerBalancingPercentage'
+        renewalPercentages:
+          type: array
+          description: List of parameters to be applied for card renewal
+          items:
+            $ref: '#/components/schemas/CardProducerBalancingPercentage'
+      title: OverrideCardProducerBalancingRequest
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    CardProducerBalancing:
+      type: object
+      properties:
+        cardProductIdentifier:
+          description: Unique identifier of the card product
+          allOf:
+          - $ref: '#/components/schemas/CardProductIdentifier'
+        percentages:
+          type: array
+          description: List of parameters to be applied for card creation and card replacement
+          items:
+            $ref: '#/components/schemas/CardProducerBalancingPercentage'
+        renewalPercentages:
+          type: array
+          description: List of parameters to be applied for card renewal
+          items:
+            $ref: '#/components/schemas/CardProducerBalancingPercentage'
+      title: CardProducerBalancing
+    ProductExtensionBalancing:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        deviceTokensThreshold:
+          type: integer
+          description: Threshold on the device tokens number
+        merchantTokensThreshold:
+          type: integer
+          description: Threshold on the merchant tokens number
+        productIdentifier:
+          description: Unique identifier of the product used for the product extensions' load balancing
+          allOf:
+          - $ref: '#/components/schemas/ProductIdentifier'
+        profiles:
+          type: array
+          description: List of profiles configured for the product extension choice
+          items:
+            $ref: '#/components/schemas/ProductExtensionBalancingProfile'
+      title: ProductExtensionBalancing
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    CardProducerBalancingPercentage:
+      type: object
+      properties:
+        value:
+          type: integer
+          description: Value of percentage allocated to the card producer (e.g. 60 means 60%)
+        cardProducer:
+          type: string
+          description: Card producer for the percentage.
+      title: CardProducerBalancingPercentage
+    OverrideProductExtensionBalancingResponse:
+      type: object
+      properties:
+        productIdentifier:
+          description: Identifier of the product used to overide the parameters of the load balancing.
+          allOf:
+          - $ref: '#/components/schemas/ProductIdentifier'
+      title: OverrideProductExtensionBalancingResponse
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ProductExtensionBalancingProfile:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the profile
+        cardProductIdentifier:
+          description: Unique identifier of the card product
+          allOf:
+          - $ref: '#/components/schemas/CardProductIdentifier'
+        deviceTokensOperator:
+          type: string
+          description: Operator used by the algorithm to compare the device tokens counter to the threshold for this profile
+        merchantTokensOperator:
+          type: string
+          description: Operator used by the algorithm to compare the merchant tokens counter to the threshold for this profile
+        percentages:
+          type: array
+          description: List of percentages applied to select the product extension
+          items:
+            $ref: '#/components/schemas/ProductExtensionBalancingPercentage'
+      title: ProductExtensionBalancingProfile
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    ApiResponseEntityOverrideCardProducerBalancingResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/OverrideCardProducerBalancingResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityOverrideCardProducerBalancingResponse
+    ApiResponseEntityOverrideProductExtensionBalancingResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/OverrideProductExtensionBalancingResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityOverrideProductExtensionBalancingResponse
+  securitySchemes:
+    basic:
+      type: oauth2
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

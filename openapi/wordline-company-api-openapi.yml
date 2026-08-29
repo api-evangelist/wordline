@@ -1,15 +1,13 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
 
     Additional APIs are under construction and planned to be available in 2026.'
   version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Company API
+  title: Worldline Card Issuing Company API
   contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+servers:
+- url: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2
 tags:
 - name: Company
   description: Company Api Controller
@@ -29,81 +27,102 @@ paths:
         - The customer reference or the issuer customer reference (as company)
 
         In addition to the company information, it is also possible to request the list of addresses and contacts of the company.'
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: issuerId
         required: true
-        type: string
+        schema:
+          type: string
       - name: customerReference
         in: path
         description: customerReference
         required: true
-        type: string
+        schema:
+          type: string
       - name: embed
         in: query
         description: Embedded Fields
         required: false
-        type: array
-        items:
-          type: string
-          enum:
-          - addressIdentifiers
-          - addresses
-          - contactIdentifiers
-          - contacts
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - addressIdentifiers
+            - addresses
+            - contactIdentifiers
+            - contacts
       responses:
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCompany'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCompany'
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
       security:
       - basic: []
       deprecated: false
@@ -123,78 +142,95 @@ paths:
         The customer reference can be retrieved by using the "Retrieve list of company''s information" API.
 
         All the attributes must be given in input even if they remain unchanged. For that, It can be needed to use the "retrieve company''s information" API to get all the current attributes.'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: customerReference
         in: path
         description: Customer Reference
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/ModifyCompanyRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityModifyCompanyResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityModifyCompanyResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyCompanyRequest'
     patch:
       tags:
       - Company
@@ -211,78 +247,95 @@ paths:
         The customer reference can be retrieved by using the "Retrieve list of company''s information" API.
 
         With this API, only attributes that need to be updated must be given in input.'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: customerReference
         in: path
         description: Customer Reference
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/ModifyCompanyRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityModifyCompanyResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityModifyCompanyResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyCompanyRequest'
   /issuers/{issuerId}/companies/{customerReference}/company-history:
     get:
       tags:
@@ -290,78 +343,99 @@ paths:
       summary: Retrieve list of historic updates of a company (beta)
       operationId: listCompanyHistory
       description: "The API allows the company update history of a company to be retrieved. \nThe main input fields requested by the API are:\n•\tThe issuer ID\n•\tThe customer for which information is requested : It can be provided by using the customer reference or the issuer customer external reference (as company). \nA start date and an end date can be provided in order to limit the search of the history. \nIn response, the interface provides a list of changes with the effective date of the update."
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: issuerId
         required: true
-        type: string
+        schema:
+          type: string
       - name: customerReference
         in: path
         description: customerReference
         required: true
-        type: string
+        schema:
+          type: string
       - name: periodStartDateTime
         in: query
         required: false
-        type: string
         description: 'Format : yyyy-MM-ddTHH:mm:ssZ'
+        schema:
+          type: string
       - name: periodEndDateTime
         in: query
         required: false
-        type: string
         description: 'Format : yyyy-MM-ddTHH:mm:ssZ'
+        schema:
+          type: string
       responses:
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCompanyHistory'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCompanyHistory'
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
       security:
       - basic: []
       deprecated: false
@@ -380,81 +454,102 @@ paths:
         - The customer reference or the issuer customer reference (as company)
 
         In addition to the company information, it is also possible to request the list of addresses and contacts of the company.'
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: issuerId
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerCustomerExternalReference
         in: path
         description: issuerCustomerExternalReference
         required: true
-        type: string
+        schema:
+          type: string
       - name: embed
         in: query
         description: Embedded Fields
         required: false
-        type: array
-        items:
-          type: string
-          enum:
-          - addressIdentifiers
-          - addresses
-          - contactIdentifiers
-          - contacts
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - addressIdentifiers
+            - addresses
+            - contactIdentifiers
+            - contacts
       responses:
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCompany'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCompany'
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
       security:
       - basic: []
       deprecated: false
@@ -474,78 +569,95 @@ paths:
         The customer reference can be retrieved by using the "Retrieve list of company''s information" API.
 
         All the attributes must be given in input even if they remain unchanged. For that, It can be needed to use the "retrieve company''s information" API to get all the current attributes.'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerCustomerExternalReference
         in: path
         description: Issuer Customer External Reference
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/ModifyCompanyRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityModifyCompanyResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityModifyCompanyResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyCompanyRequest'
     patch:
       tags:
       - Company
@@ -562,78 +674,95 @@ paths:
         The customer reference can be retrieved by using the "Retrieve list of company''s information" API.
 
         With this API, only attributes that need to be updated must be given in input.'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerCustomerExternalReference
         in: path
         description: Issuer Customer External Reference
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/ModifyCompanyRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityModifyCompanyResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityModifyCompanyResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyCompanyRequest'
   /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/company-history:
     get:
       tags:
@@ -641,78 +770,99 @@ paths:
       summary: Retrieve list of historic updates of a company by customer external reference (beta)
       operationId: listCompanyHistoryByIssuerExtRef
       description: "The API allows the company update history of a company to be retrieved. \nThe main input fields requested by the API are:\n•\tThe issuer ID\n•\tThe customer for which information is requested : It can be provided by using the customer reference or the issuer customer external reference (as company). \nA start date and an end date can be provided in order to limit the search of the history. \nIn response, the interface provides a list of changes with the effective date of the update."
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: issuerId
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerCustomerExternalReference
         in: path
         description: issuerCustomerExternalReference
         required: true
-        type: string
+        schema:
+          type: string
       - name: periodStartDateTime
         in: query
         required: false
-        type: string
         description: 'Format : yyyy-MM-ddTHH:mm:ssZ'
+        schema:
+          type: string
       - name: periodEndDateTime
         in: query
         required: false
-        type: string
         description: 'Format : yyyy-MM-ddTHH:mm:ssZ'
+        schema:
+          type: string
       responses:
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCompanyHistory'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCompanyHistory'
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
       security:
       - basic: []
       deprecated: false
@@ -725,107 +875,133 @@ paths:
       description: 'The "Retrieve list of company''s information" API enables to get a list of customers based on multiple criteria such as corporateName, nationalFiscalNumber, address town name, address postal code.
 
         All companies whose corporate name includes the ''corporate name'' parameter are returned (e.g. ''zon'' => ''amazon'' + ''zon craft'', ...)'
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: issuerId
         required: true
-        type: string
+        schema:
+          type: string
       - name: corporateName
         in: query
         description: Name of the company
         required: true
-        type: string
+        schema:
+          type: string
       - name: nationalFiscalIdentifier
         in: query
         description: national fiscal identifier of the company
         required: false
-        type: string
+        schema:
+          type: string
       - name: postalAddress.postCode
         in: query
         description: Post code of the company's address
         required: false
-        type: string
+        schema:
+          type: string
       - name: postalAddress.townName
         in: query
         description: Town name of the company's address
         required: false
-        type: string
+        schema:
+          type: string
       - name: buildingNumber
         in: query
         description: Building number of the company
         required: false
-        type: string
+        schema:
+          type: string
       - name: streetName
         in: query
         description: Street name of the company
         required: false
-        type: string
+        schema:
+          type: string
       - name: page
         in: query
         description: '0'
         required: false
-        type: integer
-        default: 0
-        format: int32
+        schema:
+          type: integer
+          format: int32
+          default: 0
       - name: offset
         in: query
         description: '100'
         required: false
-        type: integer
-        default: 100
-        format: int32
+        schema:
+          type: integer
+          format: int32
+          default: 100
       responses:
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityListCompany'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityListCompany'
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
       security:
       - basic: []
       deprecated: false
@@ -849,79 +1025,96 @@ paths:
 
 
         Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system.'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: embed
         in: query
         description: Embedded Fields
         required: false
-        type: array
-        items:
-          type: string
-          enum:
-          - company
-          - company.addressIdentifiers
-          - company.addresses
-          - company.contacts
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - company
+            - company.addressIdentifiers
+            - company.addresses
+            - company.contacts
       - name: issuerId
         in: path
         description: issuerId
         required: true
-        type: string
-      - in: body
-        name: requestBody
-        description: requestBody
-        required: true
         schema:
-          $ref: '#/definitions/CreateCompanyRequest'
+          type: string
       responses:
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCreateCompanyResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCreateCompanyResponse'
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompanyRequest'
+        description: requestBody
+        required: true
   /issuers/{issuerId}/companies/{customerReference}/addresses:
     get:
       tags:
@@ -929,101 +1122,126 @@ paths:
       summary: Retrieve company's Address information list
       operationId: retrieveCompanyAddressByCustomerRef
       description: "This API enables all the addresses associated with a given customer (as company), identified by customer reference or issuer customer reference to be retrieved. \nTo identify the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)\nThe address could be either a permanent address or a temporary address.\nSeveral address types are managed. Each address can be used for a specific usage (card delivery, statement delivery, contract letter,...).\nAddress usage is associated to a service (card service, account service, dispute service, ..) configured in our system.\nThe API can retrieve only the addresses linked to a specific usage: in this case, all the mandatory 'AddressUsage' attributes must be provided (e.g. serviceCode, AddressUsage).\nIf the showHistory indicator is set to Y then the full history of the addresses and the future addresses are returned. If this indicator is empty (default behavior) or equals to N, then only the last active addresses are returned.\nAddress identifiers, Address attributes and Address usages are displayed in the response."
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: issuerId
         in: path
         description: issuerId
         required: true
-        type: string
+        schema:
+          type: string
       - name: customerReference
         in: path
         description: customerReference
         required: true
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: serviceCode
         in: query
         description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE. Conditional (must be used with addressUsageName)'
         required: false
-        type: string
+        schema:
+          type: string
       - name: entityReference
         in: query
         description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
 
           It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
         required: false
-        type: string
+        schema:
+          type: string
       - name: addressUsageName
         in: query
         description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
         required: false
-        type: string
+        schema:
+          type: string
       - name: showHistory
         in: query
         description: 'If the showHistory indicator is set to ''true'' then the full history of the addresses are returned. If this indicator is empty (default behavior) or equals to ''false'', then only the last active addresses are returned. '
         required: false
-        default: false
-        type: boolean
+        schema:
+          type: boolean
+          default: false
       - name: embed
         in: query
         description: Embedded Fields
         required: false
-        type: array
-        items:
-          type: string
-          enum:
-          - addressUsages
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - addressUsages
       responses:
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityListAddress'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityListAddress'
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
       security:
       - basic: []
       deprecated: false
@@ -1034,101 +1252,126 @@ paths:
       summary: Retrieve company's Address information list by external reference
       description: "This API enables all the addresses associated with a given customer (as company), identified by customer reference or issuer customer reference to be retrieved. \nTo identify the company, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)\nThe address could be either a permanent address or a temporary address.\nSeveral address types are managed. Each address can be used for a specific usage (card delivery, statement delivery, contract letter,...).\nAddress usage is associated to a service (card service, account service, dispute service, ..) configured in our system.\nThe API can retrieve only the addresses linked to a specific usage: in this case, all the mandatory 'AddressUsage' attributes must be provided (e.g. serviceCode, AddressUsage).\nIf the showHistory indicator is set to Y then the full history of the addresses and the future addresses are returned. If this indicator is empty (default behavior) or equals to N, then only the last active addresses are returned.\nAddress identifiers, Address attributes and Address usages are displayed in the response."
       operationId: retrieveCompanyAddressByIssuerExtRef
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: issuerId
         in: path
         description: issuerId
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerCustomerExternalReference
         in: path
         description: issuerCustomerExternalReference
         required: true
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: serviceCode
         in: query
         description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE. Conditional (must be used with addressUsageName)'
         required: false
-        type: string
+        schema:
+          type: string
       - name: entityReference
         in: query
         description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
 
           It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
         required: false
-        type: string
+        schema:
+          type: string
       - name: addressUsageName
         in: query
         description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
         required: false
-        type: string
+        schema:
+          type: string
       - name: showHistory
         in: query
         description: 'If the showHistory indicator is set to ''true'' then the full history of the addresses are returned. If this indicator is empty (default behavior) or equals to ''false'', then only the last active addresses are returned. '
         required: false
-        default: false
-        type: boolean
+        schema:
+          type: boolean
+          default: false
       - name: embed
         in: query
         description: Embedded Fields
         required: false
-        type: array
-        items:
-          type: string
-          enum:
-          - addressUsages
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - addressUsages
       responses:
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityListAddress'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityListAddress'
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
       security:
       - basic: []
       deprecated: false
@@ -1149,77 +1392,95 @@ paths:
 
 
         Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system.'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: customerReference
         in: path
         description: Customer Reference
         required: true
-        type: string
-      - in: body
-        name: body
         schema:
-          $ref: '#/definitions/CreateContactRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCreateContactResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCreateContactResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactRequest'
   /issuers/{issuerId}/companies/external-customers/{issuerCustomerExternalReference}/contacts:
     post:
       x-wl-idempotent: true
@@ -1237,77 +1498,95 @@ paths:
 
 
         Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system.'
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerCustomerExternalReference
         in: path
         description: Issuer Customer External Reference
         required: true
-        type: string
-      - in: body
-        name: body
         schema:
-          $ref: '#/definitions/CreateContactRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCreateContactResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCreateContactResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContactRequest'
   /issuers/{issuerId}/companies/{customerReference}/contacts/{contactReference}:
     put:
       tags:
@@ -1315,157 +1594,194 @@ paths:
       summary: Modify Contact
       operationId: modifyContactByCustomerReferenceAndContactReference
       description: "The API allows information of a contact of the company to be modified. \nTo update a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)  \n- The contact reference\nAll attributes must be provided (even if some of them have not been modified) else the value of missing attributes will be empty."
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: customerReference
         in: path
         description: Customer Reference
         required: true
-        type: string
+        schema:
+          type: string
       - name: contactReference
         in: path
         description: Contact Reference
         required: true
-        type: string
-      - in: body
-        name: body
         schema:
-          $ref: '#/definitions/ModifyContactRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityModifyContactResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityModifyContactResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyContactRequest'
     delete:
       tags:
       - Company
       summary: Remove Contact by customer reference and contact reference
       description: "The API allows a contact of the company to be deleted.\nTo remove a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)  \n- The contact reference"
       operationId: removeContactByCustomerReferenceAndContactReference
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: customerReference
         in: path
         description: Customer Reference
         required: true
-        type: string
+        schema:
+          type: string
       - name: contactReference
         in: path
         description: Contact Reference
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityRemoveContactResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityRemoveContactResponse'
       security:
       - basic: []
       deprecated: false
@@ -1476,1398 +1792,1438 @@ paths:
       summary: Modify Contact by external reference
       description: "The API allows information of a contact of the company to be modified. \nTo update a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)  \n- The contact reference\nAll attributes must be provided (even if some of them have not been modified) else the value of missing attributes will be empty."
       operationId: modifyContactByIssuerCustomerExternalReferenceAndContactReference
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerCustomerExternalReference
         in: path
         description: Issuer Customer External Reference
         required: true
-        type: string
+        schema:
+          type: string
       - name: contactReference
         in: path
         description: Contact Reference
         required: true
-        type: string
-      - in: body
-        name: body
         schema:
-          $ref: '#/definitions/ModifyContactRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityModifyContactResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityModifyContactResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyContactRequest'
     delete:
       tags:
       - Company
       summary: Remove Contact by external reference
       description: "The API allows a contact of the company to be deleted.\nTo remove a contact, it is needed to provide:\n- The issuer ID\n- The customer reference or the issuer customer reference (as company)  \n- The contact reference"
       operationId: removeContactByIssuerCustomerExternalReferenceAndContactReference
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerCustomerExternalReference
         in: path
         description: Issuer Customer External Reference
         required: true
-        type: string
+        schema:
+          type: string
       - name: contactReference
         in: path
         description: Contact Reference
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityRemoveContactResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityRemoveContactResponse'
       security:
       - basic: []
       deprecated: false
-definitions:
-  ModifyCompanyRequestContact:
-    x-wl-patch-request: true
-    type: object
-    properties:
-      name:
-        type: string
-        description: Refer to Contact.lastName
-      firstName:
-        type: string
-        description: 'Refer to Contact.firstName '
-      description:
-        type: string
-        description: 'Refer to Contact.description '
-      courtesyTitle:
-        type: string
-        description: 'Refer to Customer.courtesyTitle '
-      sex:
-        type: string
-        description: Refer to Contact.sex
-      departmentName:
-        type: string
-        description: Refer to Contact.departmentName
-      birthDate:
-        type: string
-        format: date-time
-        description: 'Refer to Contact.birthDate '
-      postalAddress:
-        description: The postal adress of the contact
-        allOf:
-        - $ref: '#/definitions/ModifyAddressRequestMailAddress'
-    title: ModifyCompanyRequestContact
-  CustomerIdentifier:
-    type: object
-    description: Identification of the updated customer either by Issuer customer external reference or by customer reference
-    properties:
-      customerReference:
-        type: string
-        description: Reference computed internally by our system
-      issuerCustomerExternalReference:
-        type: string
-        description: Reference provided by the Issuer
-    title: CustomerIdentifier
-  MailAddress:
-    type: object
-    required:
-    - country
-    properties:
-      typeCode:
-        type: string
-        description: Deprecated field
-      line1:
-        type: string
-        description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line2:
-        type: string
-        description: Address line 2 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line3:
-        type: string
-        description: Address line 3 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line4:
-        type: string
-        description: Address line 4 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line5:
-        type: string
-        description: Address line 5 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      buildingNumber:
-        type: string
-        description: Building number of the address (optional)
-      boxNumber:
-        type: string
-        description: Box number of the address (optional)
-      streetName:
-        type: string
-        description: Street name of the address (optional)
-      postCode:
-        type: string
-        description: Zip Code of the address (optional)
-      townName:
-        type: string
-        description: 'City corresponding to the address '
-      countrySubdivision:
-        type: string
-        description: Subdivision of the country (optional)
-      country:
-        type: string
-        description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
-      countryName:
-        type: string
-        description: Country Name of the address. Free text
-      courtesyTitle:
-        type: string
-        description: Courtesy title of the address. Free text
-    title: MailAddress
-  DeleteContactResponse:
-    type: object
-    properties:
-      contactIdentifier:
-        description: Contact Identifier of Contact
-        allOf:
-        - $ref: '#/definitions/ContactIdentifier'
-    title: DeleteContactResponse
-  ApiResponseEntityCreateContactResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/CreateContactResponse'
-    description: Create contact response entity
-    title: ApiResponseEntityCreateContactResponse
-  CreateAddressRequestPhoneNumber:
-    type: object
-    required:
-    - localPhoneNumber
-    properties:
-      countryCode:
-        type: string
-        description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
-      localPhoneNumber:
-        type: string
-        description: 'Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level.'
-    title: CreateAddressRequest.PhoneNumber
-  AddressVersionIdentifier:
-    type: object
-    properties:
-      addressVersionReference:
-        type: string
-        description: 'Identifies the version of the address
-
-          A new version of the address is created when a change is done on the address.'
-    title: AddressVersionIdentifier
-  ModifyContactResponse:
-    type: object
-    properties:
-      contactIdentifier:
-        description: Contact Identifier of Contact
-        allOf:
-        - $ref: '#/definitions/ContactIdentifier'
-    title: ModifyContactResponse
-  CreateCompanyResponse:
-    type: object
-    required:
-    - customerIdentifier
-    properties:
-      customerIdentifier:
-        description: Identification of the company either by Issuer customer external reference or by customer reference
-        allOf:
-        - $ref: '#/definitions/CustomerIdentifier'
-      company:
-        $ref: '#/definitions/Company'
-    title: CreateCompanyResponse
-  BadGatewayErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadGatewayResponseMetadata'
-    title: BadGatewayErrorApiResponse
-  InternalServerErrorErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
-    title: InternalServerErrorErrorApiResponse
-  InternalServerErrorResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 500
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Internal server error
-        description: Executed REST API status message
-    title: InternalServerErrorResponseMetadata
-  NotFoundErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/NotFoundResponseMetadata'
-    title: NotFoundErrorApiResponse
-  ApiResponseEntityModifyCompanyResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/ModifyCompanyResponse'
-    description: Issuer response entity
-    title: ApiResponseEntityModifyCompanyResponse
-  UnauthorizedErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/UnauthorizedResponseMetadata'
-    title: UnauthorizedResponseMetadata
-  ApiResponseEntityCompanyHistory:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        type: array
-        description: Response data
-        items:
-          $ref: '#/definitions/CompanyHistory'
-    description: Issuer response entity
-    title: ApiResponseEntityCompanyHistory
-  AddressIdentifier:
-    type: object
-    properties:
-      addressReference:
-        type: string
-        description: Unique internal identifier computed with a specific algorithm (mandatory)
-      issuerAddressExternalReference:
-        type: string
-        description: Unique external identifier provided by the issuer (optional)
-    title: AddressIdentifier
-  AddressUsage:
-    type: object
-    required:
-    - addressUsageName
-    - serviceCode
-    properties:
-      addressUsageName:
-        type: string
-        example: STATEMENT_SENDING
-        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
-      entityReference:
-        type: string
-        description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
-
-          It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
-      serviceCode:
-        type: string
-        example: ACCOUNT_SERVICE
-        description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
-    title: AddressUsage
-  Links:
-    type: object
-    required:
-    - self
-    properties:
-      self:
-        type: string
-        example: /x/{x}?x=x
-        description: Service method URL
-      next:
-        type: string
-        example: /x/{x}?page[offset]=2
-        description: URL pagination query parameter next page
-    title: Links
-  ApiResponseEntityListCompany:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        type: array
-        description: Response data
-        items:
-          $ref: '#/definitions/Company'
-    description: Issuer response entity
-    title: ApiResponseEntityListCompany
-  ApiResponseEntityListAddress:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        type: array
-        description: Response data
-        items:
-          $ref: '#/definitions/Address'
-    description: Issuer response entity
-    title: ApiResponseEntityListAddress
-  CompanyHistory:
-    type: object
-    properties:
-      issuerId:
-        type: string
-        description: Issuer identifier (unique per platform)
-      customerIdentifier:
-        description: Unique identifier. Refer to Customer Identifier data type for detail information
-        allOf:
-        - $ref: '#/definitions/CustomerIdentifier'
-      effectiveDate:
-        type: string
-        format: date-time
-        description: Indicates the date when the update is processed
-      corporateName:
-        type: string
-        description: Name of the company
-      nationalFiscalIdentifier:
-        type: string
-        description: National fiscal identifier of the company (for information only)
-      vatCode:
-        type: string
-        description: Value added tax code of the company (for information only). Free text.
-      type:
-        type: string
-        description: Type of company (e.g. Governmental, public company, private company). For information only. Free text.
-      size:
-        type: string
-        description: Size of the company. Free text (e.g. small, medium, 100).
-      businessArea:
-        type: string
-        description: Definition of the activity of the company. Free text.
-      activityCode:
-        type: string
-        description: Activity of the company (e.g. 'rent car', 'retailer'). Free text.
-      revenue:
-        type: string
-        description: Annual turnover of the company. Free text
-      legalForm:
-        type: string
-        description: 'Definition of the legal form of the company (e.g. in France : SA, SARL, EURL). Free text.'
-      commercialStatus:
-        type: string
-        description: Commercial status of the company (e.g. 'normal', 'Active in Liquidation', 'Inactive'). List of possible values is determined per issuer. A default value is defined for each issuer.
-      preferredCorrespondenceLanguage:
-        type: string
-        description: Preferred correspondence language of the company (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
-      specificFields:
-        type: object
-        description: 'List of external data {"label":"value"} separated by a "," related to a company that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
-        additionalProperties:
+components:
+  schemas:
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
           type: string
-      partnerExternalReference:
-        type: string
-        description: External Reference provided by the issuer (optional)
-    title: CompanyHistory
-  UnauthorizedResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 401
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Unauthorized
-        description: Executed REST API status message
-    title: UnauthorizedResponseMetadata
-  ApiResponseEntityCompany:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/Company'
-    description: Issuer response entity
-    title: ApiResponseEntityCompany
-  Address:
-    type: object
-    required:
-    - addressLabel
-    - addressType
-    properties:
-      issuerId:
-        type: string
-        description: Issuer identifier (unique per platform)
-      addressIdentifier:
-        description: Unique identifier of the address. See the AddressIdentifier's datatype for a detail description
-        allOf:
-        - $ref: '#/definitions/AddressIdentifier'
-      addressVersionIdentifier:
-        allOf:
-        - $ref: '#/definitions/AddressVersionIdentifier'
-      addressLabel:
-        type: string
-        example: MAIN_POSTAL_ADDRESS
-        description: "example: MAIN_POSTAL_ADDRESS Indicate the class of the address amongst a list of possible values such as MAIN_POSTAL_ADDRESS, SECOND_POSTAL_ADDRESS, HOME_PHONE_NUMBER, PRIVATE_MOBILE_PHONE, PERSONAL_EMAIL. This list of values is shared between WL and the issuer during issuer configuration. \n Every label corresponds to a unique type of address. A customer (person) has at least one MAIN_POSTAL_ADDRESS (mandatory) and a company has at least one HEAD_OFFICE."
-      addressType:
-        type: string
-        example: POSTAL_MAIL
-        description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
-        enum:
-        - PHONE
-        - POSTAL_MAIL
-        - E_MAIL
-      postalAddress:
-        description: "Customer Postal Address. This field is mandatory only if AddressType is POSTAL_MAIL. \n Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information."
-        allOf:
-        - $ref: '#/definitions/MailAddress'
-      emailAddress:
-        description: Customer Email. This field is mandatory only if AddressType is E_MAIL. See the EmailAddress' datatype for the detail list of the attributes.
-        allOf:
-        - $ref: '#/definitions/EmailAddress'
-      phone:
-        description: Customer Phone details. This field is mandatory only if AddressType is PHONE. See the PhoneNumber's datatype for the detail list of the attributes.
-        allOf:
-        - $ref: '#/definitions/PhoneNumber'
-      addressUsages:
-        type: array
-        description: 'List of the usages linked to the address if any exists. See the AddressUsage''s datatype for the detail list of the attributes (optional)
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        items:
-          $ref: '#/definitions/AddressUsage'
-      status:
-        type: string
-        description: Status of the address (ACTIVE or INACTIVE). If value is not provided, by default 'ACTIVE'
-      statusDate:
-        type: string
-        description: 'If the address is INACTIVE, the date corresponds to the inactivation date.
-
-          If the address is ACTIVE, the date corresponds to the last activation date.'
-        format: date-time
-      startDate:
-        type: string
-        description: Date when the address starts to be active
-        format: date-time
-      endDate:
-        type: string
-        description: 'This attribute represents :
-
-          • in case of a permanent address : the last date the address has been active. This information is computed based on the next future address start date if any exists else this attribute is empty.
-
-          • in case of a temporary address : the end date where this address is active. This end date is mandatory when a temporary address is created.'
-        format: date-time
-      invalid:
-        type: boolean
-        description: "Indicates if an address is invalid (by default false).\nThis feature is currently only accurate for the mail address and apply only on the current permanent address.\nIn case a postal address is invalid, this address cannot be used anymore for letters, cards, pin mailers, statement sending. \nThis feature is active only depending on an issuer configuration. "
-        default: false
-      temporary:
-        type: boolean
-        description: 'indicates if the address is a temporary one (by default ''false'').
-
-          In case of a temporary address, the end date is mandatory.'
-        default: false
-    title: Address
-  ContactIdentifier:
-    type: object
-    properties:
-      contactReference:
-        type: string
-        description: Contact identifier (unique per company)
-    title: ContactIdentifier
-  ApiResponseEntityRemoveContactResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/DeleteContactResponse'
-    description: Remove contact response entity
-    title: ApiResponseEntityRemoveContactResponse
-  ModifyCompanyRequest:
-    x-wl-patch-request: true
-    type: object
-    properties:
-      active:
-        type: boolean
-        description: DEPRECATED
-        default: true
-      commercialStatus:
-        type: string
-        example: Normal
-        description: Refer to Customer.commercialStatus
-      corporateName:
-        type: string
-        description: Refer to Customer.corporateName
-      nationalFiscalIdentifier:
-        type: string
-        description: Refer to Customer.nationalFiscalIdentifier
-      preferredCorrespondenceLanguage:
-        type: string
-        description: Refer to Customer.preferredCorrespondenceLanguage
-      type:
-        type: string
-        description: Refer to Customer.type
-      size:
-        type: string
-        description: Refer to Customer.size
-      businessArea:
-        type: string
-        description: Refer to Customer.businessArea
-      activityCode:
-        type: string
-        description: Refer to Customer.activityCode
-      revenue:
-        type: string
-        description: Refer to Customer.revenue
-      legalForm:
-        type: string
-        description: Refer to Customer.legalForm
-      vatCode:
-        type: string
-        description: Refer to Customer.vatCode
-      partnerExternalReference:
-        type: string
-        description: External Reference provided by the issuer
-      specificFields:
-        type: object
-        description: "The issuer can update Specific Fields for the company. \nIt is a list of external data {\"label\":\"value\"} separated by a \",\" related to the company (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems.\nA new data can be added or an existing data can be updated {\"label1\":\"newValue\"} or removed {\"label2\":\"null\"}.\nAny existing data that is not present in this list is not updated in the company.\nThose provided data have no impact on our system business processes."
-        additionalProperties:
+          description: Correlation Identifier
+        responseDateTime:
           type: string
-      contacts:
-        type: array
-        description: The list of Contacts for the Company
-        items:
-          $ref: '#/definitions/ModifyCompanyRequestContact'
-    title: ModifyCompanyRequest
-  NotFoundResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 404
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Not found
-        description: Executed REST API status message
-    title: NotFoundResponseMetadata
-  ResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      links:
-        description: Metadata Links
-        allOf:
-        - $ref: '#/definitions/Links'
-      statusMessage:
-        type: string
-        example: Executed successfully
-        description: Executed REST API status message
-      statusCode:
-        type: integer
-        format: int32
-        example: 200
-        description: HTTP status code
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      timeTakenMs:
-        type: integer
-        format: int64
-        example: 12
-        description: Wall clock time required from service to generate the response
-    title: ResponseMetadata
-  CreateConsumerContractRequestAddress:
-    type: object
-    required:
-    - addressLabel
-    - addressType
-    properties:
-      addressLabel:
-        type: string
-        example: MAIN_POSTAL_ADDRESS
-        description: Refer to Address.addressLabel
-      addressType:
-        type: string
-        example: POSTAL_MAIL
-        description: Refer to Address.addressType
-      postalAddress:
-        $ref: '#/definitions/CreateAddressRequestMailAddress'
-      emailAddress:
-        $ref: '#/definitions/EmailAddress'
-      phone:
-        $ref: '#/definitions/CreateAddressRequestPhoneNumber'
-      addressUsages:
-        type: array
-        items:
-          $ref: '#/definitions/CreateConsumerContractRequestAddressUsage'
-      issuerAddressExternalReference:
-        type: string
-        description: Refer to AddressIdentifier.issuerAddressExternalReference
-    title: CreateConsumerContractRequest.Address
-  ModifyCompanyResponse:
-    type: object
-    required:
-    - customerIdentifier
-    properties:
-      customerIdentifier:
-        description: Identification of the company either by Issuer customer external reference or by customer reference
-        allOf:
-        - $ref: '#/definitions/CustomerIdentifier'
-    title: ModifyCompanyResponse
-  CreateConsumerContractRequestAddressUsage:
-    type: object
-    required:
-    - addressUsageName
-    - serviceCode
-    properties:
-      addressUsageName:
-        type: string
-        example: STATEMENT_SENDING
-        description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
-      entityReference:
-        type: string
-        description: This field is filled by the User while adding the usage to a particular Address of the Customer. It can be eg a card contract reference, card account reference. It is an optional field.
-      serviceCode:
-        type: string
-        example: ACCOUNT_SERVICE
-        description: 'The Service for which the address usage is defined : CARD_SERVICE (IBO CMS), ACCOUNT_SERVICE (IBO CAS), …'
-      entityRequestCorrelationId:
-        type: string
-        description: 'The issuer can provide the correlation id of the new entity (card contract or account) which linked to the address usage (account defined in the data block CreateConsumerContractRequest.Account and card contract defined in the data block CreateConsumerContractRequest.CardContract -  field : requestCorrelationId).'
-      entityType:
-        type: string
-        description: 'If a correlation id is filled for an entity reference, the entity type must be provided to indicate if the entity is related to a card contract or to an account.
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    Address:
+      type: object
+      required:
+      - addressLabel
+      - addressType
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        addressIdentifier:
+          description: Unique identifier of the address. See the AddressIdentifier's datatype for a detail description
+          allOf:
+          - $ref: '#/components/schemas/AddressIdentifier'
+        addressVersionIdentifier:
+          allOf:
+          - $ref: '#/components/schemas/AddressVersionIdentifier'
+        addressLabel:
+          type: string
+          example: MAIN_POSTAL_ADDRESS
+          description: "example: MAIN_POSTAL_ADDRESS Indicate the class of the address amongst a list of possible values such as MAIN_POSTAL_ADDRESS, SECOND_POSTAL_ADDRESS, HOME_PHONE_NUMBER, PRIVATE_MOBILE_PHONE, PERSONAL_EMAIL. This list of values is shared between WL and the issuer during issuer configuration. \n Every label corresponds to a unique type of address. A customer (person) has at least one MAIN_POSTAL_ADDRESS (mandatory) and a company has at least one HEAD_OFFICE."
+        addressType:
+          type: string
+          example: POSTAL_MAIL
+          description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
+          enum:
+          - PHONE
+          - POSTAL_MAIL
+          - E_MAIL
+        postalAddress:
+          description: "Customer Postal Address. This field is mandatory only if AddressType is POSTAL_MAIL. \n Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information."
+          allOf:
+          - $ref: '#/components/schemas/MailAddress'
+        emailAddress:
+          description: Customer Email. This field is mandatory only if AddressType is E_MAIL. See the EmailAddress' datatype for the detail list of the attributes.
+          allOf:
+          - $ref: '#/components/schemas/EmailAddress'
+        phone:
+          description: Customer Phone details. This field is mandatory only if AddressType is PHONE. See the PhoneNumber's datatype for the detail list of the attributes.
+          allOf:
+          - $ref: '#/components/schemas/PhoneNumber'
+        addressUsages:
+          type: array
+          description: 'List of the usages linked to the address if any exists. See the AddressUsage''s datatype for the detail list of the attributes (optional)
 
-          Possible values:
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/AddressUsage'
+        status:
+          type: string
+          description: Status of the address (ACTIVE or INACTIVE). If value is not provided, by default 'ACTIVE'
+        statusDate:
+          type: string
+          description: 'If the address is INACTIVE, the date corresponds to the inactivation date.
 
+            If the address is ACTIVE, the date corresponds to the last activation date.'
+          format: date-time
+        startDate:
+          type: string
+          description: Date when the address starts to be active
+          format: date-time
+        endDate:
+          type: string
+          description: 'This attribute represents :
+
+            • in case of a permanent address : the last date the address has been active. This information is computed based on the next future address start date if any exists else this attribute is empty.
+
+            • in case of a temporary address : the end date where this address is active. This end date is mandatory when a temporary address is created.'
+          format: date-time
+        invalid:
+          type: boolean
+          description: "Indicates if an address is invalid (by default false).\nThis feature is currently only accurate for the mail address and apply only on the current permanent address.\nIn case a postal address is invalid, this address cannot be used anymore for letters, cards, pin mailers, statement sending. \nThis feature is active only depending on an issuer configuration. "
+          default: false
+        temporary:
+          type: boolean
+          description: 'indicates if the address is a temporary one (by default ''false'').
+
+            In case of a temporary address, the end date is mandatory.'
+          default: false
+      title: Address
+    ApiResponseEntityModifyCompanyResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ModifyCompanyResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityModifyCompanyResponse
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    AddressIdentifier:
+      type: object
+      properties:
+        addressReference:
+          type: string
+          description: Unique internal identifier computed with a specific algorithm (mandatory)
+        issuerAddressExternalReference:
+          type: string
+          description: Unique external identifier provided by the issuer (optional)
+      title: AddressIdentifier
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    EmailAddress:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          description: 'Email address of the Customer (mandatory). The email address should have the following format: aaa@bbb.ccc
+
+            aaa, bbb, ccc are character string.'
+      title: EmailAddress
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    ApiResponseEntityCreateCompanyResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateCompanyResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateCompanyResponse
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    CompanyHistory:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        customerIdentifier:
+          description: Unique identifier. Refer to Customer Identifier data type for detail information
+          allOf:
+          - $ref: '#/components/schemas/CustomerIdentifier'
+        effectiveDate:
+          type: string
+          format: date-time
+          description: Indicates the date when the update is processed
+        corporateName:
+          type: string
+          description: Name of the company
+        nationalFiscalIdentifier:
+          type: string
+          description: National fiscal identifier of the company (for information only)
+        vatCode:
+          type: string
+          description: Value added tax code of the company (for information only). Free text.
+        type:
+          type: string
+          description: Type of company (e.g. Governmental, public company, private company). For information only. Free text.
+        size:
+          type: string
+          description: Size of the company. Free text (e.g. small, medium, 100).
+        businessArea:
+          type: string
+          description: Definition of the activity of the company. Free text.
+        activityCode:
+          type: string
+          description: Activity of the company (e.g. 'rent car', 'retailer'). Free text.
+        revenue:
+          type: string
+          description: Annual turnover of the company. Free text
+        legalForm:
+          type: string
+          description: 'Definition of the legal form of the company (e.g. in France : SA, SARL, EURL). Free text.'
+        commercialStatus:
+          type: string
+          description: Commercial status of the company (e.g. 'normal', 'Active in Liquidation', 'Inactive'). List of possible values is determined per issuer. A default value is defined for each issuer.
+        preferredCorrespondenceLanguage:
+          type: string
+          description: Preferred correspondence language of the company (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+        specificFields:
+          type: object
+          description: 'List of external data {"label":"value"} separated by a "," related to a company that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+          additionalProperties:
+            type: string
+        partnerExternalReference:
+          type: string
+          description: External Reference provided by the issuer (optional)
+      title: CompanyHistory
+    DeleteContactResponse:
+      type: object
+      properties:
+        contactIdentifier:
+          description: Contact Identifier of Contact
+          allOf:
+          - $ref: '#/components/schemas/ContactIdentifier'
+      title: DeleteContactResponse
+    ApiResponseEntityModifyContactResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ModifyContactResponse'
+      description: Modify contact response entity
+      title: ApiResponseEntityModifyContactResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    ApiResponseEntityListCompany:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          type: array
+          description: Response data
+          items:
+            $ref: '#/components/schemas/Company'
+      description: Issuer response entity
+      title: ApiResponseEntityListCompany
+    AddressUsage:
+      type: object
+      required:
+      - addressUsageName
+      - serviceCode
+      properties:
+        addressUsageName:
+          type: string
+          example: STATEMENT_SENDING
+          description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+        entityReference:
+          type: string
+          description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+            It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+        serviceCode:
+          type: string
+          example: ACCOUNT_SERVICE
+          description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
+      title: AddressUsage
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    ModifyAddressRequestMailAddress:
+      type: object
+      required:
+      - country
+      properties:
+        typeCode:
+          type: string
+          description: DEPRECATED
+        courtesyTitle:
+          type: string
+          description: Courtesy title of the address. Free text
+        line1:
+          type: string
+          description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line2:
+          type: string
+          description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line3:
+          type: string
+          description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line4:
+          type: string
+          description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line5:
+          type: string
+          description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        buildingNumber:
+          type: string
+          description: Building number of the address (optional)
+        boxNumber:
+          type: string
+          description: Box number of the address (optional)
+        streetName:
+          type: string
+          description: Street name of the address (optional)
+        postCode:
+          type: string
+          description: zip code of the address (optional)
+        townName:
+          type: string
+          description: City corresponding to the address
+        countrySubdivision:
+          type: string
+          description: Subdivision of the country (optional)
+        country:
+          type: string
+          description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+      title: ModifyAddressRequest.MailAddress
+    MailAddress:
+      type: object
+      required:
+      - country
+      properties:
+        typeCode:
+          type: string
+          description: Deprecated field
+        line1:
+          type: string
+          description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line2:
+          type: string
+          description: Address line 2 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line3:
+          type: string
+          description: Address line 3 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line4:
+          type: string
+          description: Address line 4 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line5:
+          type: string
+          description: Address line 5 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        buildingNumber:
+          type: string
+          description: Building number of the address (optional)
+        boxNumber:
+          type: string
+          description: Box number of the address (optional)
+        streetName:
+          type: string
+          description: Street name of the address (optional)
+        postCode:
+          type: string
+          description: Zip Code of the address (optional)
+        townName:
+          type: string
+          description: 'City corresponding to the address '
+        countrySubdivision:
+          type: string
+          description: Subdivision of the country (optional)
+        country:
+          type: string
+          description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+        countryName:
+          type: string
+          description: Country Name of the address. Free text
+        courtesyTitle:
+          type: string
+          description: Courtesy title of the address. Free text
+      title: MailAddress
+    ModifyCompanyResponse:
+      type: object
+      required:
+      - customerIdentifier
+      properties:
+        customerIdentifier:
+          description: Identification of the company either by Issuer customer external reference or by customer reference
+          allOf:
+          - $ref: '#/components/schemas/CustomerIdentifier'
+      title: ModifyCompanyResponse
+    ApiResponseEntityRemoveContactResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/DeleteContactResponse'
+      description: Remove contact response entity
+      title: ApiResponseEntityRemoveContactResponse
+    ApiResponseEntityCreateContactResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateContactResponse'
+      description: Create contact response entity
+      title: ApiResponseEntityCreateContactResponse
+    CreateConsumerContractRequestAddress:
+      type: object
+      required:
+      - addressLabel
+      - addressType
+      properties:
+        addressLabel:
+          type: string
+          example: MAIN_POSTAL_ADDRESS
+          description: Refer to Address.addressLabel
+        addressType:
+          type: string
+          example: POSTAL_MAIL
+          description: Refer to Address.addressType
+        postalAddress:
+          $ref: '#/components/schemas/CreateAddressRequestMailAddress'
+        emailAddress:
+          $ref: '#/components/schemas/EmailAddress'
+        phone:
+          $ref: '#/components/schemas/CreateAddressRequestPhoneNumber'
+        addressUsages:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateConsumerContractRequestAddressUsage'
+        issuerAddressExternalReference:
+          type: string
+          description: Refer to AddressIdentifier.issuerAddressExternalReference
+      title: CreateConsumerContractRequest.Address
+    ApiResponseEntityCompanyHistory:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          type: array
+          description: Response data
+          items:
+            $ref: '#/components/schemas/CompanyHistory'
+      description: Issuer response entity
+      title: ApiResponseEntityCompanyHistory
+    ContactIdentifier:
+      type: object
+      properties:
+        contactReference:
+          type: string
+          description: Contact identifier (unique per company)
+      title: ContactIdentifier
+    CreateContactRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the contact. Mandatory if the departmentName attribute is not provided.
+        firstName:
+          type: string
+          description: First name of the contact
+        departmentName:
+          type: string
+          description: Department name to which the contact is attached. Free text. Mandatory if the contact name is not provided
+        sex:
+          type: string
+          description: Gender of the contact
+        description:
+          type: string
+          description: Description of the role of the contact within the company (e.g. 'sales manager'). Free text
+        courtesyTitle:
+          type: string
+          description: Title of the contact. Free text
+        type:
+          type: string
+          description: The contact type (e.g. Power of Attorney, Legal Representative)
+        birthDate:
+          type: string
+          format: date-time
+          description: The contact's date of birth
+        postalAddress:
+          description: The postal adress of the contact
+          allOf:
+          - $ref: '#/components/schemas/CreateAddressRequestMailAddress'
+      title: CreateContactRequest
+    Contact:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        name:
+          type: string
+          description: Contact name
+        firstName:
+          type: string
+          description: Contact first name
+        departmentName:
+          type: string
+          description: Contact department name. Free text.
+        sex:
+          type: string
+          description: Sex of the contact
+        description:
+          type: string
+          description: Description of the role in the company (e.g. 'sales manager'). Free text
+        courtesyTitle:
+          type: string
+          description: Title of the contact. Free text
+        contactIdentifier:
+          description: Unique contact identifier
+          allOf:
+          - $ref: '#/components/schemas/ContactIdentifier'
+        type:
+          type: string
+          description: "Represents the type of contact for customer (person). The  possible values are configured per Issuer. \nAn example can be: Power_of_Attorney or Legal_Representative"
+        birthDate:
+          type: string
+          format: date
+          description: Birth date of the contact
+        postalAddress:
+          description: The postal adress of the contact
+          allOf:
+          - $ref: '#/components/schemas/MailAddress'
+      title: Contact
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    AddressVersionIdentifier:
+      type: object
+      properties:
+        addressVersionReference:
+          type: string
+          description: 'Identifies the version of the address
+
+            A new version of the address is created when a change is done on the address.'
+      title: AddressVersionIdentifier
+    ApiResponseEntityListAddress:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          type: array
+          description: Response data
+          items:
+            $ref: '#/components/schemas/Address'
+      description: Issuer response entity
+      title: ApiResponseEntityListAddress
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    ModifyContactRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the contact. Mandatory if the departmentName attribute is not provided.
+        firstName:
+          type: string
+          description: First name of the contact
+        departmentName:
+          type: string
+          description: Department name to which the contact is attached. Free text. Mandatory if the contact name is not provided
+        sex:
+          type: string
+          description: Gender of the contact
+        description:
+          type: string
+          description: Description of the role of the contact in the company (e.g. 'sales manager'). Free text
+        courtesyTitle:
+          type: string
+          description: Title of the contact. Free text
+        type:
+          type: string
+          description: The contact type (e.g. Power of Attorney, Legal Representative)
+        birthDate:
+          type: string
+          format: date-time
+          description: The contact's date of birth
+        postalAddress:
+          description: The postal adress of the contact
+          allOf:
+          - $ref: '#/components/schemas/ModifyAddressRequestMailAddress'
+      title: ModifyContactRequest
+    ModifyCompanyRequestContact:
+      x-wl-patch-request: true
+      type: object
+      properties:
+        name:
+          type: string
+          description: Refer to Contact.lastName
+        firstName:
+          type: string
+          description: 'Refer to Contact.firstName '
+        description:
+          type: string
+          description: 'Refer to Contact.description '
+        courtesyTitle:
+          type: string
+          description: 'Refer to Customer.courtesyTitle '
+        sex:
+          type: string
+          description: Refer to Contact.sex
+        departmentName:
+          type: string
+          description: Refer to Contact.departmentName
+        birthDate:
+          type: string
+          format: date-time
+          description: 'Refer to Contact.birthDate '
+        postalAddress:
+          description: The postal adress of the contact
+          allOf:
+          - $ref: '#/components/schemas/ModifyAddressRequestMailAddress'
+      title: ModifyCompanyRequestContact
+    CreateAddressRequestPhoneNumber:
+      type: object
+      required:
+      - localPhoneNumber
+      properties:
+        countryCode:
+          type: string
+          description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
+        localPhoneNumber:
+          type: string
+          description: 'Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level.'
+      title: CreateAddressRequest.PhoneNumber
+    PhoneNumber:
+      type: object
+      required:
+      - localPhoneNumber
+      properties:
+        countryCode:
+          type: string
+          description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
+        localPhoneNumber:
+          type: string
+          description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
+        internationalPhoneNumber:
+          type: string
+          description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
+      title: PhoneNumber
+    ApiResponseEntityCompany:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/Company'
+      description: Issuer response entity
+      title: ApiResponseEntityCompany
+    ModifyContactResponse:
+      type: object
+      properties:
+        contactIdentifier:
+          description: Contact Identifier of Contact
+          allOf:
+          - $ref: '#/components/schemas/ContactIdentifier'
+      title: ModifyContactResponse
+    CreateCompanyResponse:
+      type: object
+      required:
+      - customerIdentifier
+      properties:
+        customerIdentifier:
+          description: Identification of the company either by Issuer customer external reference or by customer reference
+          allOf:
+          - $ref: '#/components/schemas/CustomerIdentifier'
+        company:
+          $ref: '#/components/schemas/Company'
+      title: CreateCompanyResponse
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    CustomerIdentifier:
+      type: object
+      description: Identification of the updated customer either by Issuer customer external reference or by customer reference
+      properties:
+        customerReference:
+          type: string
+          description: Reference computed internally by our system
+        issuerCustomerExternalReference:
+          type: string
+          description: Reference provided by the Issuer
+      title: CustomerIdentifier
+    CreateCompanyRequest:
+      type: object
+      required:
+      - active
+      - corporateName
+      - commercialStatus
+      - addresses
+      properties:
+        issuerCustomerExternalReference:
+          type: string
+          description: Customer (as company) identifier provided by the Issuer
+        active:
+          type: boolean
+          description: DEPRECATED
+        corporateName:
+          type: string
+          description: Name of the company
+        nationalFiscalIdentifier:
+          type: string
+          description: National fiscal identifier of the company (for information only)
+        vatCode:
+          type: string
+          description: Value added tax code of the company (for information only). Free text.
+        type:
+          type: string
+          description: Type of company (e.g. Governmental, public company, private company). For information only. Free text
+        size:
+          type: string
+          description: Size of the company. Free text (e.g. small, medium, 100).
+        businessArea:
+          type: string
+          description: Definition of the activity of the company. Free text.
+        activityCode:
+          type: string
+          description: Activity of the company (e.g. 'rent car', 'retailer'). Free text.
+        revenue:
+          type: string
+          description: Annual turnover of the company. Free text
+        legalForm:
+          type: string
+          description: 'Definition of the legal form of the company (e.g. in France : SA, SARL, EURL). Free text.'
+        commercialStatus:
+          type: string
+          description: Commercial status of the company (e.g. 'normal', 'Active in Liquidation', 'Inactive'). List of possible values is determined per issuer. A default value is defined for each issuer.
+        preferredCorrespondenceLanguage:
+          type: string
+          description: Preferred correspondence language of the company (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+        partnerExternalReference:
+          type: string
+          description: External Reference provided by the issuer
+        specificFields:
+          type: object
+          description: 'The issuer can provide Specific Fields for the company.
+
+            It is a list of external data {"label":"value"} separated by a "," related to the company (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems.
+
+            Example : {"label1":"value1","label2":"value2"}
+
+            Those provided data have no impact on our system business processes.'
+          additionalProperties:
+            type: string
+        addresses:
+          type: array
+          description: Addresses (MAIL, PHONE, EMAIL) created during the company's creation.The HEAD_OFFICE address is mandatory
+          items:
+            $ref: '#/components/schemas/CreateConsumerContractRequestAddress'
+        contacts:
+          type: array
+          description: Contacts are persons who are accountable for the company
+          items:
+            $ref: '#/components/schemas/CreateContactRequest'
+      title: CreateCompanyRequest
+    CreateAddressRequestMailAddress:
+      type: object
+      required:
+      - country
+      properties:
+        typeCode:
+          type: string
+          description: DEPRECATED
+        courtesyTitle:
+          type: string
+          description: Courtesy title of the address. Free text
+        line1:
+          type: string
+          description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line2:
+          type: string
+          description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line3:
+          type: string
+          description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line4:
+          type: string
+          description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line5:
+          type: string
+          description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        buildingNumber:
+          type: string
+          description: Building number of the address (optional)
+        boxNumber:
+          type: string
+          description: Box number of the address (optional)
+        streetName:
+          type: string
+          description: Street name of the address (optional)
+        postCode:
+          type: string
+          description: zip code of the address (optional)
+        townName:
+          type: string
+          description: City corresponding to the address
+        countrySubdivision:
+          type: string
+          description: Subdivision of the country (optional)
+        country:
+          type: string
+          description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+      title: CreateAddressRequest.MailAddress
+    ModifyCompanyRequest:
+      x-wl-patch-request: true
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: DEPRECATED
+          default: true
+        commercialStatus:
+          type: string
+          example: Normal
+          description: Refer to Customer.commercialStatus
+        corporateName:
+          type: string
+          description: Refer to Customer.corporateName
+        nationalFiscalIdentifier:
+          type: string
+          description: Refer to Customer.nationalFiscalIdentifier
+        preferredCorrespondenceLanguage:
+          type: string
+          description: Refer to Customer.preferredCorrespondenceLanguage
+        type:
+          type: string
+          description: Refer to Customer.type
+        size:
+          type: string
+          description: Refer to Customer.size
+        businessArea:
+          type: string
+          description: Refer to Customer.businessArea
+        activityCode:
+          type: string
+          description: Refer to Customer.activityCode
+        revenue:
+          type: string
+          description: Refer to Customer.revenue
+        legalForm:
+          type: string
+          description: Refer to Customer.legalForm
+        vatCode:
+          type: string
+          description: Refer to Customer.vatCode
+        partnerExternalReference:
+          type: string
+          description: External Reference provided by the issuer
+        specificFields:
+          type: object
+          description: "The issuer can update Specific Fields for the company. \nIt is a list of external data {\"label\":\"value\"} separated by a \",\" related to the company (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems.\nA new data can be added or an existing data can be updated {\"label1\":\"newValue\"} or removed {\"label2\":\"null\"}.\nAny existing data that is not present in this list is not updated in the company.\nThose provided data have no impact on our system business processes."
+          additionalProperties:
+            type: string
+        contacts:
+          type: array
+          description: The list of Contacts for the Company
+          items:
+            $ref: '#/components/schemas/ModifyCompanyRequestContact'
+      title: ModifyCompanyRequest
+    CreateContactResponse:
+      type: object
+      properties:
+        contactIdentifier:
+          description: Contact Identifier of Contact
+          allOf:
+          - $ref: '#/components/schemas/ContactIdentifier'
+      title: CreateContactResponse
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    Company:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        customerIdentifier:
+          description: Unique identifier. Refer to Customer Identifier data type for detail information
+          allOf:
+          - $ref: '#/components/schemas/CustomerIdentifier'
+        active:
+          type: boolean
+          description: DEPRECATED
+        corporateName:
+          type: string
+          description: Name of the company
+        nationalFiscalIdentifier:
+          type: string
+          description: National fiscal identifier of the company (for information only)
+        vatCode:
+          type: string
+          description: Value added tax code of the company (for information only). Free text.
+        type:
+          type: string
+          description: Type of company (e.g. Governmental, public company, private company). For information only. Free text.
+        size:
+          type: string
+          description: Size of the company. Free text (e.g. small, medium, 100).
+        businessArea:
+          type: string
+          description: Definition of the activity of the company. Free text.
+        activityCode:
+          type: string
+          description: Activity of the company (e.g. 'rent car', 'retailer'). Free text.
+        revenue:
+          type: string
+          description: Annual turnover of the company. Free text
+        legalForm:
+          type: string
+          description: 'Definition of the legal form of the company (e.g. in France : SA, SARL, EURL). Free text.'
+        commercialStatus:
+          type: string
+          description: Commercial status of the company (e.g. 'normal', 'Active in Liquidation', 'Inactive'). List of possible values is determined per issuer. A default value is defined for each issuer.
+        preferredCorrespondenceLanguage:
+          type: string
+          description: Preferred correspondence language of the company (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
+        specificFields:
+          type: object
+          description: 'List of external data {"label":"value"} separated by a "," related to a company that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
+          additionalProperties:
+            type: string
+        partnerExternalReference:
+          type: string
+          description: External Reference provided by the issuer (optional)
+        addressIdentifiers:
+          type: array
+          description: 'List of address references whatever their type (MAIL, EMAIL, PHONE). The address can be a temporary address.At least, the main postal address reference should be retrieved (mandatory).
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/AddressIdentifier'
+        addresses:
+          type: array
+          description: 'List of addresses whatever their type (MAIL, EMAIL, PHONE). See the Address''s datatype for the detail list of the attributes.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/Address'
+        contactIdentifiers:
+          type: array
+          description: 'List of contact references of the company.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/ContactIdentifier'
+        contacts:
+          type: array
+          description: 'List of contacts of the company.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/Contact'
+        lastUpdateDate:
+          type: string
+          format: date-time
+          description: Indicates the date when the update is processed
+      title: Company
+    CreateConsumerContractRequestAddressUsage:
+      type: object
+      required:
+      - addressUsageName
+      - serviceCode
+      properties:
+        addressUsageName:
+          type: string
+          example: STATEMENT_SENDING
+          description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+        entityReference:
+          type: string
+          description: This field is filled by the User while adding the usage to a particular Address of the Customer. It can be eg a card contract reference, card account reference. It is an optional field.
+        serviceCode:
+          type: string
+          example: ACCOUNT_SERVICE
+          description: 'The Service for which the address usage is defined : CARD_SERVICE (IBO CMS), ACCOUNT_SERVICE (IBO CAS), …'
+        entityRequestCorrelationId:
+          type: string
+          description: 'The issuer can provide the correlation id of the new entity (card contract or account) which linked to the address usage (account defined in the data block CreateConsumerContractRequest.Account and card contract defined in the data block CreateConsumerContractRequest.CardContract -  field : requestCorrelationId).'
+        entityType:
+          type: string
+          description: 'If a correlation id is filled for an entity reference, the entity type must be provided to indicate if the entity is related to a card contract or to an account.
+
+            Possible values:
+
+            - CARD_CONTRACT
+
+            - ACCOUNT'
+          enum:
+          - ACCOUNT
           - CARD_CONTRACT
-
-          - ACCOUNT'
-        enum:
-        - ACCOUNT
-        - CARD_CONTRACT
-    title: CreateConsumerContractRequest.AddressUsage
-  ModifyAddressRequestMailAddress:
-    type: object
-    required:
-    - country
-    properties:
-      typeCode:
-        type: string
-        description: DEPRECATED
-      courtesyTitle:
-        type: string
-        description: Courtesy title of the address. Free text
-      line1:
-        type: string
-        description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line2:
-        type: string
-        description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line3:
-        type: string
-        description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line4:
-        type: string
-        description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line5:
-        type: string
-        description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      buildingNumber:
-        type: string
-        description: Building number of the address (optional)
-      boxNumber:
-        type: string
-        description: Box number of the address (optional)
-      streetName:
-        type: string
-        description: Street name of the address (optional)
-      postCode:
-        type: string
-        description: zip code of the address (optional)
-      townName:
-        type: string
-        description: City corresponding to the address
-      countrySubdivision:
-        type: string
-        description: Subdivision of the country (optional)
-      country:
-        type: string
-        description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
-    title: ModifyAddressRequest.MailAddress
-  CreateCompanyRequest:
-    type: object
-    required:
-    - active
-    - corporateName
-    - commercialStatus
-    - addresses
-    properties:
-      issuerCustomerExternalReference:
-        type: string
-        description: Customer (as company) identifier provided by the Issuer
-      active:
-        type: boolean
-        description: DEPRECATED
-      corporateName:
-        type: string
-        description: Name of the company
-      nationalFiscalIdentifier:
-        type: string
-        description: National fiscal identifier of the company (for information only)
-      vatCode:
-        type: string
-        description: Value added tax code of the company (for information only). Free text.
-      type:
-        type: string
-        description: Type of company (e.g. Governmental, public company, private company). For information only. Free text
-      size:
-        type: string
-        description: Size of the company. Free text (e.g. small, medium, 100).
-      businessArea:
-        type: string
-        description: Definition of the activity of the company. Free text.
-      activityCode:
-        type: string
-        description: Activity of the company (e.g. 'rent car', 'retailer'). Free text.
-      revenue:
-        type: string
-        description: Annual turnover of the company. Free text
-      legalForm:
-        type: string
-        description: 'Definition of the legal form of the company (e.g. in France : SA, SARL, EURL). Free text.'
-      commercialStatus:
-        type: string
-        description: Commercial status of the company (e.g. 'normal', 'Active in Liquidation', 'Inactive'). List of possible values is determined per issuer. A default value is defined for each issuer.
-      preferredCorrespondenceLanguage:
-        type: string
-        description: Preferred correspondence language of the company (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
-      partnerExternalReference:
-        type: string
-        description: External Reference provided by the issuer
-      specificFields:
-        type: object
-        description: 'The issuer can provide Specific Fields for the company.
-
-          It is a list of external data {"label":"value"} separated by a "," related to the company (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems.
-
-          Example : {"label1":"value1","label2":"value2"}
-
-          Those provided data have no impact on our system business processes.'
-        additionalProperties:
-          type: string
-      addresses:
-        type: array
-        description: Addresses (MAIL, PHONE, EMAIL) created during the company's creation.The HEAD_OFFICE address is mandatory
-        items:
-          $ref: '#/definitions/CreateConsumerContractRequestAddress'
-      contacts:
-        type: array
-        description: Contacts are persons who are accountable for the company
-        items:
-          $ref: '#/definitions/CreateContactRequest'
-    title: CreateCompanyRequest
-  ForbiddenErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/ForbiddenResponseMetadata'
-    title: ForbiddenErrorApiResponse
-  ModifyContactRequest:
-    type: object
-    properties:
-      name:
-        type: string
-        description: Name of the contact. Mandatory if the departmentName attribute is not provided.
-      firstName:
-        type: string
-        description: First name of the contact
-      departmentName:
-        type: string
-        description: Department name to which the contact is attached. Free text. Mandatory if the contact name is not provided
-      sex:
-        type: string
-        description: Gender of the contact
-      description:
-        type: string
-        description: Description of the role of the contact in the company (e.g. 'sales manager'). Free text
-      courtesyTitle:
-        type: string
-        description: Title of the contact. Free text
-      type:
-        type: string
-        description: The contact type (e.g. Power of Attorney, Legal Representative)
-      birthDate:
-        type: string
-        format: date-time
-        description: The contact's date of birth
-      postalAddress:
-        description: The postal adress of the contact
-        allOf:
-        - $ref: '#/definitions/ModifyAddressRequestMailAddress'
-    title: ModifyContactRequest
-  CreateContactRequest:
-    type: object
-    properties:
-      name:
-        type: string
-        description: Name of the contact. Mandatory if the departmentName attribute is not provided.
-      firstName:
-        type: string
-        description: First name of the contact
-      departmentName:
-        type: string
-        description: Department name to which the contact is attached. Free text. Mandatory if the contact name is not provided
-      sex:
-        type: string
-        description: Gender of the contact
-      description:
-        type: string
-        description: Description of the role of the contact within the company (e.g. 'sales manager'). Free text
-      courtesyTitle:
-        type: string
-        description: Title of the contact. Free text
-      type:
-        type: string
-        description: The contact type (e.g. Power of Attorney, Legal Representative)
-      birthDate:
-        type: string
-        format: date-time
-        description: The contact's date of birth
-      postalAddress:
-        description: The postal adress of the contact
-        allOf:
-        - $ref: '#/definitions/CreateAddressRequestMailAddress'
-    title: CreateContactRequest
-  CreateAddressRequestMailAddress:
-    type: object
-    required:
-    - country
-    properties:
-      typeCode:
-        type: string
-        description: DEPRECATED
-      courtesyTitle:
-        type: string
-        description: Courtesy title of the address. Free text
-      line1:
-        type: string
-        description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line2:
-        type: string
-        description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line3:
-        type: string
-        description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line4:
-        type: string
-        description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      line5:
-        type: string
-        description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-      buildingNumber:
-        type: string
-        description: Building number of the address (optional)
-      boxNumber:
-        type: string
-        description: Box number of the address (optional)
-      streetName:
-        type: string
-        description: Street name of the address (optional)
-      postCode:
-        type: string
-        description: zip code of the address (optional)
-      townName:
-        type: string
-        description: City corresponding to the address
-      countrySubdivision:
-        type: string
-        description: Subdivision of the country (optional)
-      country:
-        type: string
-        description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
-    title: CreateAddressRequest.MailAddress
-  Contact:
-    type: object
-    properties:
-      issuerId:
-        type: string
-        description: Issuer identifier (unique per platform)
-      name:
-        type: string
-        description: Contact name
-      firstName:
-        type: string
-        description: Contact first name
-      departmentName:
-        type: string
-        description: Contact department name. Free text.
-      sex:
-        type: string
-        description: Sex of the contact
-      description:
-        type: string
-        description: Description of the role in the company (e.g. 'sales manager'). Free text
-      courtesyTitle:
-        type: string
-        description: Title of the contact. Free text
-      contactIdentifier:
-        description: Unique contact identifier
-        allOf:
-        - $ref: '#/definitions/ContactIdentifier'
-      type:
-        type: string
-        description: "Represents the type of contact for customer (person). The  possible values are configured per Issuer. \nAn example can be: Power_of_Attorney or Legal_Representative"
-      birthDate:
-        type: string
-        format: date
-        description: Birth date of the contact
-      postalAddress:
-        description: The postal adress of the contact
-        allOf:
-        - $ref: '#/definitions/MailAddress'
-    title: Contact
-  BadRequestResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 400
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad request
-        description: Executed REST API status message
-    title: BadRequestResponseMetadata
-  EmailAddress:
-    type: object
-    required:
-    - email
-    properties:
-      email:
-        type: string
-        description: 'Email address of the Customer (mandatory). The email address should have the following format: aaa@bbb.ccc
-
-          aaa, bbb, ccc are character string.'
-    title: EmailAddress
-  PhoneNumber:
-    type: object
-    required:
-    - localPhoneNumber
-    properties:
-      countryCode:
-        type: string
-        description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
-      localPhoneNumber:
-        type: string
-        description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
-      internationalPhoneNumber:
-        type: string
-        description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
-    title: PhoneNumber
-  BadGatewayResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 502
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad Gateway
-        description: Executed REST API status message
-    title: BadGatewayResponseMetadata
-  CreateContactResponse:
-    type: object
-    properties:
-      contactIdentifier:
-        description: Contact Identifier of Contact
-        allOf:
-        - $ref: '#/definitions/ContactIdentifier'
-    title: CreateContactResponse
-  ApiResponseEntityCreateCompanyResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/CreateCompanyResponse'
-    description: Issuer response entity
-    title: ApiResponseEntityCreateCompanyResponse
-  ApiResponseEntityModifyContactResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/ModifyContactResponse'
-    description: Modify contact response entity
-    title: ApiResponseEntityModifyContactResponse
-  BadRequestErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadRequestResponseMetadata'
-    title: BadRequestErrorApiResponse
-  ForbiddenResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 403
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Forbidden
-        description: Executed REST API status message
-    title: ForbiddenResponseMetadata
-  Company:
-    type: object
-    properties:
-      issuerId:
-        type: string
-        description: Issuer identifier (unique per platform)
-      customerIdentifier:
-        description: Unique identifier. Refer to Customer Identifier data type for detail information
-        allOf:
-        - $ref: '#/definitions/CustomerIdentifier'
-      active:
-        type: boolean
-        description: DEPRECATED
-      corporateName:
-        type: string
-        description: Name of the company
-      nationalFiscalIdentifier:
-        type: string
-        description: National fiscal identifier of the company (for information only)
-      vatCode:
-        type: string
-        description: Value added tax code of the company (for information only). Free text.
-      type:
-        type: string
-        description: Type of company (e.g. Governmental, public company, private company). For information only. Free text.
-      size:
-        type: string
-        description: Size of the company. Free text (e.g. small, medium, 100).
-      businessArea:
-        type: string
-        description: Definition of the activity of the company. Free text.
-      activityCode:
-        type: string
-        description: Activity of the company (e.g. 'rent car', 'retailer'). Free text.
-      revenue:
-        type: string
-        description: Annual turnover of the company. Free text
-      legalForm:
-        type: string
-        description: 'Definition of the legal form of the company (e.g. in France : SA, SARL, EURL). Free text.'
-      commercialStatus:
-        type: string
-        description: Commercial status of the company (e.g. 'normal', 'Active in Liquidation', 'Inactive'). List of possible values is determined per issuer. A default value is defined for each issuer.
-      preferredCorrespondenceLanguage:
-        type: string
-        description: Preferred correspondence language of the company (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level.
-      specificFields:
-        type: object
-        description: 'List of external data {"label":"value"} separated by a "," related to a company that can be provided by e.g. the issuer for information or for usage by other systems. Example : {"label1":"value1","label2":"value2"} Those provided data have no impact on our system business processes.'
-        additionalProperties:
-          type: string
-      partnerExternalReference:
-        type: string
-        description: External Reference provided by the issuer (optional)
-      addressIdentifiers:
-        type: array
-        description: 'List of address references whatever their type (MAIL, EMAIL, PHONE). The address can be a temporary address.At least, the main postal address reference should be retrieved (mandatory).
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        items:
-          $ref: '#/definitions/AddressIdentifier'
-      addresses:
-        type: array
-        description: 'List of addresses whatever their type (MAIL, EMAIL, PHONE). See the Address''s datatype for the detail list of the attributes.
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        items:
-          $ref: '#/definitions/Address'
-      contactIdentifiers:
-        type: array
-        description: 'List of contact references of the company.
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        items:
-          $ref: '#/definitions/ContactIdentifier'
-      contacts:
-        type: array
-        description: 'List of contacts of the company.
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        items:
-          $ref: '#/definitions/Contact'
-      lastUpdateDate:
-        type: string
-        format: date-time
-        description: Indicates the date when the update is processed
-    title: Company
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+      title: CreateConsumerContractRequest.AddressUsage
+  securitySchemes:
+    basic:
+      type: oauth2
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

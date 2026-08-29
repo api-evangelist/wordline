@@ -1,15 +1,13 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
 
     Additional APIs are under construction and planned to be available in 2026.'
   version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Account - Temporary Credit Limit API
+  title: Worldline Card Issuing Account - Temporary Credit Limit API
   contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+servers:
+- url: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2
 tags:
 - name: Account - Temporary Credit Limit
   description: Account Temporary Credit Limit Api Controller
@@ -37,78 +35,95 @@ paths:
 
         Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system.'
       operationId: createTemporaryCreditLimitByIssuerExtRef
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerAccountExternalReference
         in: path
         description: Issuer Account External Reference
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/CreateTemporaryCreditLimitRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCreateTemporaryCreditLimitResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCreateTemporaryCreditLimitResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemporaryCreditLimitRequest'
   ? /issuers/{issuerId}/accounts/external-accounts/{issuerAccountExternalReference}/temporary-credit-limits/{temporaryCreditLimitReference}
   : delete:
       tags:
@@ -118,73 +133,93 @@ paths:
 
         The API allows a temporary credit limit for a given account to be deleted by providing the temporary credit limit reference.'
       operationId: deleteTemporaryCreditLimitByIssuerExtRef
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: issuerAccountExternalReference
         in: path
         description: Issuer Account External Reference
         required: true
-        type: string
+        schema:
+          type: string
       - name: temporaryCreditLimitReference
         in: path
         description: Temporary credit limit reference
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityDeleteTemporaryCreditLimitResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityDeleteTemporaryCreditLimitResponse'
       security:
       - basic: []
       deprecated: false
@@ -211,78 +246,95 @@ paths:
 
         Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system.'
       operationId: createTemporaryCreditLimit
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: accountReference
         in: path
         description: Account Reference
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/CreateTemporaryCreditLimitRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCreateTemporaryCreditLimitResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCreateTemporaryCreditLimitResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemporaryCreditLimitRequest'
   /issuers/{issuerId}/accounts/{accountReference}/temporary-credit-limits/{temporaryCreditLimitReference}:
     delete:
       tags:
@@ -292,508 +344,531 @@ paths:
 
         The API allows a temporary credit limit for a given account to be deleted by providing the temporary credit limit reference.'
       operationId: deleteTemporaryCreditLimit
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: accountReference
         in: path
         description: Account Reference
         required: true
-        type: string
+        schema:
+          type: string
       - name: temporaryCreditLimitReference
         in: path
         description: Temporary credit limit reference
         required: true
-        type: string
+        schema:
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityDeleteTemporaryCreditLimitResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityDeleteTemporaryCreditLimitResponse'
       security:
       - basic: []
       deprecated: false
-definitions:
-  ApiResponseEntityDeleteTemporaryCreditLimitResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/DeleteTemporaryCreditLimitResponse'
-    description: Issuer response entity
-    title: ApiResponseEntityDeleteTemporaryCreditLimitResponse
-  NotFoundErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/NotFoundResponseMetadata'
-    title: NotFoundErrorApiResponse
-  InternalServerErrorResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 500
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Internal server error
-        description: Executed REST API status message
-    title: InternalServerErrorResponseMetadata
-  BadGatewayErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadGatewayResponseMetadata'
-    title: BadGatewayErrorApiResponse
-  InternalServerErrorErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
-    title: InternalServerErrorErrorApiResponse
-  UnauthorizedErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/UnauthorizedResponseMetadata'
-    title: UnauthorizedResponseMetadata
-  DeleteTemporaryCreditLimitResponse:
-    type: object
-    required:
-    - accountIdentifier
-    - root
-    - temporaryCreditLimitIdentifier
-    properties:
-      accountIdentifier:
-        description: Account references provided in the request
-        allOf:
-        - $ref: '#/definitions/AccountIdentifier'
-      root:
-        type: boolean
-        description: Indicates if the account is a root account (true) or not (false).
-      temporaryCreditLimitIdentifier:
-        description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
-        allOf:
-        - $ref: '#/definitions/TemporaryCreditLimitIdentifier'
-      relatedTemporaryCreditLimits:
-        type: array
-        description: List of other accounts involved by the temporary credit limit
-        items:
-          $ref: '#/definitions/RelatedTemporaryCreditLimit'
-    title: DeleteTemporaryCreditLimitResponse
-  Links:
-    type: object
-    required:
-    - self
-    properties:
-      self:
-        type: string
-        example: /x/{x}?x=x
-        description: Service method URL
-      next:
-        type: string
-        example: /x/{x}?page[offset]=2
-        description: URL pagination query parameter next page
-    title: Links
-  ApiResponseEntityCreateTemporaryCreditLimitResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/CreateTemporaryCreditLimitResponse'
-    description: Issuer response entity
-    title: ApiResponseEntityCreateTemporaryCreditLimitResponse
-  UnauthorizedResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 401
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Unauthorized
-        description: Executed REST API status message
-    title: UnauthorizedResponseMetadata
-  CreateTemporaryCreditLimitResponse:
-    type: object
-    required:
-    - accountIdentifier
-    - root
-    - temporaryCreditLimitIdentifier
-    - temporaryCreditLimitAmount
-    - activationStartTime
-    - activationEndTime
-    properties:
-      accountIdentifier:
-        description: Account references provided in the request
-        allOf:
-        - $ref: '#/definitions/AccountIdentifier'
-      root:
-        type: boolean
-        description: Indicates if the account is a root account (true) or not (false).
-      temporaryCreditLimitIdentifier:
-        description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
-        allOf:
-        - $ref: '#/definitions/TemporaryCreditLimitIdentifier'
-      temporaryCreditLimitAmount:
-        description: Refer to TemporaryCreditLimit.temporaryCreditLimitAmount
-        allOf:
-        - $ref: '#/definitions/Amount'
-      activationStartTime:
-        type: string
-        format: date-time
-        description: Refer to TemporaryCreditLimit.activationStartTime
-      activationEndTime:
-        type: string
-        format: date-time
-        description: Refer to TemporaryCreditLimit.activationEndTime
-      relatedTemporaryCreditLimits:
-        type: array
-        description: List of other accounts involved by the temporary credit limit
-        items:
-          $ref: '#/definitions/RelatedTemporaryCreditLimit'
-    title: CreateTemporaryCreditLimitResponse
-  RelatedTemporaryCreditLimit:
-    type: object
-    required:
-    - accountIdentifier
-    - root
-    - temporaryCreditLimitIdentifier
-    properties:
-      accountIdentifier:
-        description: Reference of the account involved by the temporary credit limit
-        allOf:
-        - $ref: '#/definitions/AccountIdentifier'
-      root:
-        type: boolean
-        description: Indicates if the account is a root account (true) or not (false).
-      temporaryCreditLimitIdentifier:
-        description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
-        allOf:
-        - $ref: '#/definitions/TemporaryCreditLimitIdentifier'
-    title: RelatedTemporaryCreditLimit
-  NotFoundResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 404
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Not found
-        description: Executed REST API status message
-    title: NotFoundResponseMetadata
-  ResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      links:
-        description: Metadata Links
-        allOf:
-        - $ref: '#/definitions/Links'
-      statusMessage:
-        type: string
-        example: Executed successfully
-        description: Executed REST API status message
-      statusCode:
-        type: integer
-        format: int32
-        example: 200
-        description: HTTP status code
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      timeTakenMs:
-        type: integer
-        format: int64
-        example: 12
-        description: Wall clock time required from service to generate the response
-    title: ResponseMetadata
-  AccountIdentifier:
-    type: object
-    properties:
-      accountReference:
-        type: string
-        description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-      issuerAccountExternalReference:
-        type: string
-        description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-    title: AccountIdentifier
-  Amount:
-    type: object
-    required:
-    - value
-    - exponent
-    - isoCode
-    properties:
-      value:
-        type: integer
-        format: int64
-        description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-      exponent:
-        type: integer
-        format: int32
-        description: Exponent of Amount. Number of decimal digits.
-      isoCode:
-        type: string
-        description: 'Currency code of amount
+components:
+  schemas:
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    RelatedTemporaryCreditLimit:
+      type: object
+      required:
+      - accountIdentifier
+      - root
+      - temporaryCreditLimitIdentifier
+      properties:
+        accountIdentifier:
+          description: Reference of the account involved by the temporary credit limit
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        root:
+          type: boolean
+          description: Indicates if the account is a root account (true) or not (false).
+        temporaryCreditLimitIdentifier:
+          description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
+          allOf:
+          - $ref: '#/components/schemas/TemporaryCreditLimitIdentifier'
+      title: RelatedTemporaryCreditLimit
+    DeleteTemporaryCreditLimitResponse:
+      type: object
+      required:
+      - accountIdentifier
+      - root
+      - temporaryCreditLimitIdentifier
+      properties:
+        accountIdentifier:
+          description: Account references provided in the request
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        root:
+          type: boolean
+          description: Indicates if the account is a root account (true) or not (false).
+        temporaryCreditLimitIdentifier:
+          description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
+          allOf:
+          - $ref: '#/components/schemas/TemporaryCreditLimitIdentifier'
+        relatedTemporaryCreditLimits:
+          type: array
+          description: List of other accounts involved by the temporary credit limit
+          items:
+            $ref: '#/components/schemas/RelatedTemporaryCreditLimit'
+      title: DeleteTemporaryCreditLimitResponse
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    CreateTemporaryCreditLimitResponse:
+      type: object
+      required:
+      - accountIdentifier
+      - root
+      - temporaryCreditLimitIdentifier
+      - temporaryCreditLimitAmount
+      - activationStartTime
+      - activationEndTime
+      properties:
+        accountIdentifier:
+          description: Account references provided in the request
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        root:
+          type: boolean
+          description: Indicates if the account is a root account (true) or not (false).
+        temporaryCreditLimitIdentifier:
+          description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
+          allOf:
+          - $ref: '#/components/schemas/TemporaryCreditLimitIdentifier'
+        temporaryCreditLimitAmount:
+          description: Refer to TemporaryCreditLimit.temporaryCreditLimitAmount
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        activationStartTime:
+          type: string
+          format: date-time
+          description: Refer to TemporaryCreditLimit.activationStartTime
+        activationEndTime:
+          type: string
+          format: date-time
+          description: Refer to TemporaryCreditLimit.activationEndTime
+        relatedTemporaryCreditLimits:
+          type: array
+          description: List of other accounts involved by the temporary credit limit
+          items:
+            $ref: '#/components/schemas/RelatedTemporaryCreditLimit'
+      title: CreateTemporaryCreditLimitResponse
+    CreateTemporaryCreditLimitRequest:
+      type: object
+      required:
+      - activationEndTime
+      - temporaryCreditLimitAmount
+      properties:
+        temporaryCreditLimitAmount:
+          description: Refer to TemporaryCreditLimit.temporaryCreditLimitAmount
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        activationStartTime:
+          type: string
+          format: date-time
+          description: Refer to TemporaryCreditLimit.activationStartTime
+        activationEndTime:
+          type: string
+          format: date-time
+          description: Refer to TemporaryCreditLimit.activationEndTime
+        manageOverlap:
+          type: boolean
+          default: false
+          description: 'The parameter has the following possible values: TRUE/FALSE. In case it is set to ''TRUE'', and there is overlap of future dates between two and more temporary credit limits, then the most recent one will be prioritized and the previous ones'' dates will be adjusted accordingly. In case it is set to ''FALSE'' and a creation of new temporary credit limit is requested, the dates of which overlap with an existing one, then the new request will be rejected. The default value of the parameter is set to ''FALSE'''
+      title: CreateTemporaryCreditLimitRequest
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    TemporaryCreditLimitIdentifier:
+      type: object
+      properties:
+        temporaryCreditLimitReference:
+          type: string
+          description: Reference of the temporary credit limitt.
+      title: TemporaryCreditLimitIdentifier
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ApiResponseEntityDeleteTemporaryCreditLimitResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/DeleteTemporaryCreditLimitResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityDeleteTemporaryCreditLimitResponse
+    ApiResponseEntityCreateTemporaryCreditLimitResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateTemporaryCreditLimitResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateTemporaryCreditLimitResponse
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
+          type: string
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
+          type: string
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
 
-          The currency in ISO4217 alphabetic format.
+            The currency in ISO4217 alphabetic format.
 
-          Example: EUR for Euro'
-    title: Amount
-  CreateTemporaryCreditLimitRequest:
-    type: object
-    required:
-    - activationEndTime
-    - temporaryCreditLimitAmount
-    properties:
-      temporaryCreditLimitAmount:
-        description: Refer to TemporaryCreditLimit.temporaryCreditLimitAmount
-        allOf:
-        - $ref: '#/definitions/Amount'
-      activationStartTime:
-        type: string
-        format: date-time
-        description: Refer to TemporaryCreditLimit.activationStartTime
-      activationEndTime:
-        type: string
-        format: date-time
-        description: Refer to TemporaryCreditLimit.activationEndTime
-      manageOverlap:
-        type: boolean
-        default: false
-        description: 'The parameter has the following possible values: TRUE/FALSE. In case it is set to ''TRUE'', and there is overlap of future dates between two and more temporary credit limits, then the most recent one will be prioritized and the previous ones'' dates will be adjusted accordingly. In case it is set to ''FALSE'' and a creation of new temporary credit limit is requested, the dates of which overlap with an existing one, then the new request will be rejected. The default value of the parameter is set to ''FALSE'''
-    title: CreateTemporaryCreditLimitRequest
-  ForbiddenErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/ForbiddenResponseMetadata'
-    title: ForbiddenErrorApiResponse
-  TemporaryCreditLimitIdentifier:
-    type: object
-    properties:
-      temporaryCreditLimitReference:
-        type: string
-        description: Reference of the temporary credit limitt.
-    title: TemporaryCreditLimitIdentifier
-  BadRequestResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 400
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad request
-        description: Executed REST API status message
-    title: BadRequestResponseMetadata
-  BadGatewayResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 502
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad Gateway
-        description: Executed REST API status message
-    title: BadGatewayResponseMetadata
-  BadRequestErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadRequestResponseMetadata'
-    title: BadRequestErrorApiResponse
-  ForbiddenResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 403
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Forbidden
-        description: Executed REST API status message
-    title: ForbiddenResponseMetadata
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+            Example: EUR for Euro'
+      title: Amount
+  securitySchemes:
+    basic:
+      type: oauth2
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

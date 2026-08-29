@@ -1,15 +1,11 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
-  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
-
-    Additional APIs are under construction and planned to be available in 2026.'
-  version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Authentication Resource API
-  contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+  title: Worldline FIDO server Authentication Resource API
+  version: 1.0.0
+  contact:
+    email: dl-ita-fido-server-sm@worldline.com
+servers:
+- url: https://fido.worldline-solutions.com
 tags:
 - name: Authentication Resource
 paths:
@@ -56,17 +52,21 @@ paths:
           description: Not Allowed
 components:
   schemas:
-    AuthOptionRequest:
+    UserVerificationRequirement:
       type: object
       properties:
-        user:
-          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
-        userVerification:
+        value:
           type: string
-        extensions:
-          type: object
-          additionalProperties:
-            type: string
+    PublicKeyCredentialType:
+      type: object
+      properties:
+        value:
+          type: string
+    AuthenticatorTransport:
+      type: object
+      properties:
+        value:
+          type: string
     PublicKeyCredentialUserEntity:
       required:
       - name
@@ -79,11 +79,43 @@ components:
           type: string
         displayName:
           type: string
-    PublicKeyCredentialType:
+    ServerResponse:
       type: object
       properties:
-        value:
+        status:
+          $ref: '#/components/schemas/Status'
+        errorMessage:
           type: string
+    AuthenticatorAssertionResponse:
+      required:
+      - clientDataJSON
+      - authenticatorData
+      - signature
+      type: object
+      properties:
+        clientDataJSON:
+          minLength: 1
+          type: string
+        authenticatorData:
+          minLength: 1
+          type: string
+        signature:
+          minLength: 1
+          type: string
+        userHandle:
+          type: string
+    AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput:
+      type: object
+      properties:
+        uvm:
+          type: boolean
+          writeOnly: true
+        credProtect:
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/CredentialProtectionPolicy'
+          writeOnly: true
+        hMACSecret: {}
     PublicKeyCredentialAssertion:
       required:
       - response
@@ -104,86 +136,28 @@ components:
           minLength: 1
           pattern: public-key
           type: string
-    AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput:
-      type: object
-      properties:
-        uvm:
-          type: boolean
-          writeOnly: true
-        credProtect:
-          type: string
-          allOf:
-          - $ref: '#/components/schemas/CredentialProtectionPolicy'
-          writeOnly: true
-        hMACSecret: {}
     CredentialProtectionPolicy:
       enum:
       - USER_VERIFICATION_OPTIONAL
       - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
       - USER_VERIFICATION_REQUIRED
       type: string
-    ServerResponse:
+    AuthOptionRequest:
       type: object
       properties:
-        status:
-          $ref: '#/components/schemas/Status'
-        errorMessage:
+        user:
+          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
+        userVerification:
           type: string
-    PublicKeyCredentialDescriptor:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PublicKeyCredentialType'
-        id:
-          type: string
-        transports:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/AuthenticatorTransport'
+        extensions:
+          type: object
+          additionalProperties:
+            type: string
     Status:
       enum:
       - OK
       - FAILED
       type: string
-    AuthenticatorTransport:
-      type: object
-      properties:
-        value:
-          type: string
-    AuthenticatorAssertionResponse:
-      required:
-      - clientDataJSON
-      - authenticatorData
-      - signature
-      type: object
-      properties:
-        clientDataJSON:
-          minLength: 1
-          type: string
-        authenticatorData:
-          minLength: 1
-          type: string
-        signature:
-          minLength: 1
-          type: string
-        userHandle:
-          type: string
-    UserVerificationRequirement:
-      type: object
-      properties:
-        value:
-          type: string
-    AssertionResponse:
-      required:
-      - sessionId
-      type: object
-      properties:
-        sessionId:
-          minLength: 1
-          type: string
-        assertionBlob:
-          $ref: '#/components/schemas/PublicKeyCredentialAssertion'
     AuthOptionResponse:
       type: object
       properties:
@@ -208,8 +182,25 @@ components:
           $ref: '#/components/schemas/AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput'
         sessionId:
           type: string
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+    AssertionResponse:
+      required:
+      - sessionId
+      type: object
+      properties:
+        sessionId:
+          minLength: 1
+          type: string
+        assertionBlob:
+          $ref: '#/components/schemas/PublicKeyCredentialAssertion'
+    PublicKeyCredentialDescriptor:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PublicKeyCredentialType'
+        id:
+          type: string
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticatorTransport'

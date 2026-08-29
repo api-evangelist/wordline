@@ -1,15 +1,13 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
   description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
 
     Additional APIs are under construction and planned to be available in 2026.'
   version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Api Meta Info API
+  title: Worldline Card Issuing Api Meta Info API
   contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+servers:
+- url: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2
 tags:
 - name: Api Meta Info
   description: Api Meta Info Api Controller
@@ -20,366 +18,384 @@ paths:
       - Api Meta Info
       summary: Retrieve API Metadata Information
       operationId: info
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityInfo'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityInfo'
       security:
       - basic: []
       deprecated: false
-definitions:
-  SupportContact:
-    type: object
-    properties:
-      name:
-        type: string
-      url:
-        type: string
-      email:
-        type: string
-    title: SupportContact
-  Links:
-    type: object
-    required:
-    - self
-    properties:
-      self:
-        type: string
-        example: /x/{x}?x=x
-        description: Service method URL
-      next:
-        type: string
-        example: /x/{x}?page[offset]=2
-        description: URL pagination query parameter next page
-    title: Links
-  NotFoundResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 404
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Not found
-        description: Executed REST API status message
-    title: NotFoundResponseMetadata
-  BadRequestResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 400
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad request
-        description: Executed REST API status message
-    title: BadRequestResponseMetadata
-  ResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      links:
-        description: Metadata Links
-        allOf:
-        - $ref: '#/definitions/Links'
-      statusMessage:
-        type: string
-        example: Executed successfully
-        description: Executed REST API status message
-      statusCode:
-        type: integer
-        format: int32
-        example: 200
-        description: HTTP status code
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      timeTakenMs:
-        type: integer
-        format: int64
-        example: 12
-        description: Wall clock time required from service to generate the response
-    title: ResponseMetadata
-  Info:
-    type: object
-    properties:
-      description:
-        type: string
-        description: Rest API Description
-      version:
-        type: string
-        description: Rest API Version
-      title:
-        type: string
-        description: Rest API Title
-      termsOfService:
-        type: string
-        description: Rest API Terms of Service
-      contact:
-        description: Rest API Support Contact
-        allOf:
-        - $ref: '#/definitions/SupportContact'
-      license:
-        description: Rest API License
-        allOf:
-        - $ref: '#/definitions/License'
-    title: Info
-  BadGatewayResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 502
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad Gateway
-        description: Executed REST API status message
-    title: BadGatewayResponseMetadata
-  License:
-    type: object
-    properties:
-      name:
-        type: string
-      url:
-        type: string
-    title: License
-  NotFoundErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/NotFoundResponseMetadata'
-    title: NotFoundErrorApiResponse
-  BadGatewayErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadGatewayResponseMetadata'
-    title: BadGatewayErrorApiResponse
-  ApiResponseEntityInfo:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/Info'
-    description: Issuer response entity
-    title: ApiResponseEntityInfo
-  InternalServerErrorErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
-    title: InternalServerErrorErrorApiResponse
-  ForbiddenErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/ForbiddenResponseMetadata'
-    title: ForbiddenErrorApiResponse
-  InternalServerErrorResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 500
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Internal server error
-        description: Executed REST API status message
-    title: InternalServerErrorResponseMetadata
-  BadRequestErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadRequestResponseMetadata'
-    title: BadRequestErrorApiResponse
-  UnauthorizedResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 401
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Unauthorized
-        description: Executed REST API status message
-    title: UnauthorizedResponseMetadata
-  UnauthorizedErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/UnauthorizedResponseMetadata'
-    title: UnauthorizedResponseMetadata
-  ForbiddenResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 403
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Forbidden
-        description: Executed REST API status message
-    title: ForbiddenResponseMetadata
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+components:
+  schemas:
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ApiResponseEntityInfo:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/Info'
+      description: Issuer response entity
+      title: ApiResponseEntityInfo
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    SupportContact:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+        email:
+          type: string
+      title: SupportContact
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    Info:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Rest API Description
+        version:
+          type: string
+          description: Rest API Version
+        title:
+          type: string
+          description: Rest API Title
+        termsOfService:
+          type: string
+          description: Rest API Terms of Service
+        contact:
+          description: Rest API Support Contact
+          allOf:
+          - $ref: '#/components/schemas/SupportContact'
+        license:
+          description: Rest API License
+          allOf:
+          - $ref: '#/components/schemas/License'
+      title: Info
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    License:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+      title: License
+  securitySchemes:
+    basic:
+      type: oauth2
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token

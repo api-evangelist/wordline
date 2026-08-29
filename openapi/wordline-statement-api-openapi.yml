@@ -1,15 +1,12 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
-  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
-
-    Additional APIs are under construction and planned to be available in 2026.'
-  version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Statement API
-  contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+  description: This is the API server supplied by equensWorldline.
+  version: '2.0'
+  title: Merchant payments - Statements Statement API
+  contact:
+    name: equensWorldline API team. See developer portal
+servers:
+- url: https://developer.equensworldline.com/MerchantApiStatement/api
 tags:
 - name: Statement
 paths:
@@ -22,21 +19,21 @@ paths:
 
         '
       operationId: getStatement
-      produces:
-      - application/pdf
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: statementId
         in: path
         description: Unique identification of the statement in which this transaction has been paid out
         required: true
-        type: string
         example: 8736-1201748
+        schema:
+          type: string
       - name: languageCode
         in: query
         description: 'The language of the statement.
@@ -54,15 +51,17 @@ paths:
 
           '
         required: true
-        type: string
         example: nl_nl
+        schema:
+          type: string
       - name: statementDate
         in: query
         description: Statement creation Date (yyyy-mm-dd)
         required: true
-        type: string
-        format: date
         example: '2016-01-31'
+        schema:
+          type: string
+          format: date
       responses:
         '200':
           description: Successful
@@ -87,41 +86,44 @@ paths:
 
         '
       operationId: searchStatements
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: statementDateFrom
         in: query
         description: Statement search from date (yyyy-mm-dd)
         required: true
-        type: string
-        format: date
         example: '2016-01-01'
+        schema:
+          type: string
+          format: date
       - name: statementDateTo
         in: query
         description: Statement search to date (yyyy-mm-dd)
         required: true
-        type: string
-        format: date
         example: '2016-01-31'
+        schema:
+          type: string
+          format: date
       - name: statementAmountFrom
         in: query
         description: Statement amount (whole units), amount should be greater than or equal to this value
         required: false
-        type: integer
-        format: int32
+        schema:
+          type: integer
+          format: int32
       - name: statementAmountTo
         in: query
         description: Statement amount (whole units), amount should be less than this value
         required: false
-        type: integer
-        format: int32
+        schema:
+          type: integer
+          format: int32
       - name: statementPeriod
         in: query
         description: 'Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
@@ -133,12 +135,15 @@ paths:
 
           '
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            $ref: '#/definitions/Statement'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statement'
         '400':
           description: Invalid input provided
         '401':
@@ -160,47 +165,51 @@ paths:
 
         '
       operationId: searchStatementsByMerchantId
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: merchantId
         in: path
         description: Unique identification of the merchant, determined by equensWorldline
         required: true
-        type: string
         example: '1280300'
+        schema:
+          type: string
       - name: statementDateFrom
         in: query
         description: Statement search from date (yyyy-mm-dd)
         required: true
-        type: string
-        format: date
         example: '2016-01-01'
+        schema:
+          type: string
+          format: date
       - name: statementDateTo
         in: query
         description: Statement search to date (yyyy-mm-dd)
         required: true
-        type: string
-        format: date
         example: '2016-01-31'
+        schema:
+          type: string
+          format: date
       - name: statementAmountFrom
         in: query
         description: Statement amount (whole units), amount should be greater than or equal to this value
         required: false
-        type: integer
-        format: int32
+        schema:
+          type: integer
+          format: int32
       - name: statementAmountTo
         in: query
         description: Statement amount (whole units), amount should be less than this value
         required: false
-        type: integer
-        format: int32
+        schema:
+          type: integer
+          format: int32
       - name: statementPeriod
         in: query
         description: 'Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
@@ -212,12 +221,15 @@ paths:
 
           '
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            $ref: '#/definitions/Statement'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statement'
         '400':
           description: Invalid input provided
         '401':
@@ -239,53 +251,58 @@ paths:
 
         '
       operationId: searchStatementsByContractId
-      produces:
-      - application/json
       parameters:
       - name: acquirerId
         in: path
         description: Unique identification of the acquirer, determined by equensWorldline
         required: true
-        type: string
         example: '671234567'
+        schema:
+          type: string
       - name: merchantId
         in: path
         description: Unique identification of the merchant, determined by equensWorldline
         required: true
-        type: string
         example: '1280300'
+        schema:
+          type: string
       - name: contractId
         in: path
         description: Unique identification of the contract, determined by the acquirer
         required: true
-        type: string
         example: '12872'
+        schema:
+          type: string
       - name: statementDateFrom
         in: query
         description: Statement search from date (yyyy-mm-dd)
         required: true
-        type: string
-        format: date
         example: '2016-01-01'
+        schema:
+          type: string
+          format: date
       - name: statementDateTo
         in: query
         description: Statement search to date (yyyy-mm-dd)
         required: true
-        type: string
-        format: date
         example: '2016-01-31'
+        schema:
+          type: string
+          format: date
       - name: statementAmountFrom
         in: query
         description: Statement amount (whole units), amount should be greater than or equal to this value
         required: false
-        type: integer
-        format: int32
+        schema:
+          type: integer
+          format: int32
       - name: statementAmountTo
         in: query
         description: Statement amount (whole units), amount should be less than this value
         required: false
-        type: integer
-        format: int32
+        schema:
+          type: integer
+          format: int32
       - name: statementPeriod
         in: query
         description: 'Statement period code. Format <yyyy><w><weeknumber> or <yyyy><m><monthnumber>
@@ -297,12 +314,15 @@ paths:
 
           '
         required: false
-        type: string
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            $ref: '#/definitions/Statement'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statement'
         '400':
           description: Invalid input provided
         '401':
@@ -315,57 +335,53 @@ paths:
           description: Unexpected error
         '502':
           description: Backend service problem
-definitions:
-  Statement:
-    type: object
-    properties:
-      statementId:
-        type: string
-        description: A unique identification of this document
-        example: 8621-1201748
-      statementDate:
-        type: string
-        format: date-time
-        description: The date and time (optionally) that this Document is created (yyyy-mm-dd hh:mm:ss)
-        example: 2016-08-21 09:30:47
-      statementPeriod:
-        type: string
-        description: Statement Period code
-        example: 2017w12
-      statementAmount:
-        $ref: '#/definitions/Amount'
-      acquirerId:
-        type: integer
-        format: int64
-        description: Unique identification of the acquirer, determined by equensWorldline
-        example: 671234567
-      merchantId:
-        type: string
-        description: Unique identification of the merchant, determined by the acquirer
-        example: '1280300'
-      contractId:
-        type: string
-        description: Unique identification of the contract, determined by the acquirer
-        example: '12872'
-  Amount:
-    type: object
-    properties:
-      amount:
-        type: string
-        format: unlimited size decimal
-        description: 'Amount in the minor units of the currency i.e. eurocents for EUR, (amount could still be in decimals) according to ISO 4127.
+components:
+  schemas:
+    Statement:
+      type: object
+      properties:
+        statementId:
+          type: string
+          description: A unique identification of this document
+          example: 8621-1201748
+        statementDate:
+          type: string
+          format: date-time
+          description: The date and time (optionally) that this Document is created (yyyy-mm-dd hh:mm:ss)
+          example: 2016-08-21 09:30:47
+        statementPeriod:
+          type: string
+          description: Statement Period code
+          example: 2017w12
+        statementAmount:
+          $ref: '#/components/schemas/Amount'
+        acquirerId:
+          type: integer
+          format: int64
+          description: Unique identification of the acquirer, determined by equensWorldline
+          example: 671234567
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1280300'
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '12872'
+    Amount:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: unlimited size decimal
+          description: 'Amount in the minor units of the currency i.e. eurocents for EUR, (amount could still be in decimals) according to ISO 4127.
 
 
-          In case of euro, "310" (is 3.10 euro) or "50.32" (is 0.5032 euro). Fee amounts could have decimals.
+            In case of euro, "310" (is 3.10 euro) or "50.32" (is 0.5032 euro). Fee amounts could have decimals.
 
-          '
-        example: '300'
-      currency:
-        type: string
-        description: Currency of the amount
-        example: EUR
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+            '
+          example: '300'
+        currency:
+          type: string
+          description: Currency of the amount
+          example: EUR

@@ -1,15 +1,18 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
-  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
-
-    Additional APIs are under construction and planned to be available in 2026.'
-  version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Retrieve transaction totals per brand API
-  contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+  description: This is the API server supplied by Equens.
+  version: '1.0'
+  title: Equens API store Retrieve transaction totals per brand API
+  termsOfService: termsOfLicenseURL:API License
+  contact:
+    name: Equens API team
+    url: www.equens.com
+    email: apiteam@equens.com
+  license:
+    name: License
+    url: license-url
+servers:
+- url: https://developer.equensworldline.com/MerchantApiAnalysis/api
 tags:
 - name: Retrieve transaction totals per brand
 paths:
@@ -20,24 +23,20 @@ paths:
       summary: Retrieve daily totals
       description: "This operation of the Analysis API will help you to retrieve aggregated data from different levels \nof the equensWorldline Acquiring Contract hierarchy, divided by brand. \nYou can do this using by providing an entity from the equensWorldline contract hierarchy, such as a contractId. \nThe results are aggregated transaction numbers and revenue, split by brand, on a daily basis, \ndivided by type Purchases, refunds and chargebacks. \n"
       operationId: getBrandTotalsPerDayUsingGET
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: levelId
         in: path
         description: Any ID of a level of the Equens contract administration
         required: true
-        type: string
-        enum:
-        - cluster_id
-        - merchant_id
-        - contract_id
-        - location_id
-        - terminal_id
         example: terminal_id
+        schema:
+          type: string
+          enum:
+          - cluster_id
+          - merchant_id
+          - contract_id
+          - location_id
+          - terminal_id
       - name: levelIdValue
         in: path
         description: 'ID value at this level.
@@ -56,40 +55,46 @@ paths:
 
           '
         required: true
-        type: string
         example: '5000'
+        schema:
+          type: string
       - name: type
         in: query
         description: "Transaction type Filter. \nValues (optional):\npurchase, refund or chargeback\n"
         required: false
-        type: string
-        enum:
-        - purchase
-        - refund
-        - chargeback
+        schema:
+          type: string
+          enum:
+          - purchase
+          - refund
+          - chargeback
       - name: begin
         in: query
         description: 'Start day (yyyymmdd)
 
           '
         required: true
-        type: string
         example: '20160901'
+        schema:
+          type: string
       - name: end
         in: query
         description: 'End day (yyyymmdd)
 
           '
         required: true
-        type: string
         example: '20160920'
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/RestPeriodTotalBrand'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RestPeriodTotalBrand'
         '400':
           description: Invalid input provided
         '401':
@@ -107,24 +112,20 @@ paths:
       summary: Retrieve monthly totals
       description: "This operation of the Analysis API will help you to retrieve aggregated data from different levels of \nthe equensWorldline Acquiring Contract hierarchy, divided by brand. You can do this using by providing \nan entity from the equensWorldline contract hierarchy, such as a contractId. \nThe results are aggregated transaction numbers and revenue, split by brand, on a monthly basis, \ndivided by type Purchases, refunds and chargebacks.\n"
       operationId: getBrandTotalsPerMonthUsingGET
-      consumes:
-      - application/json
-      - '*/*'
-      produces:
-      - application/json
       parameters:
       - name: levelId
         in: path
         description: Any ID of a level of the Equens contract administration
         required: true
-        type: string
-        enum:
-        - cluster_id
-        - merchant_id
-        - contract_id
-        - location_id
-        - terminal_id
         example: merchant_id
+        schema:
+          type: string
+          enum:
+          - cluster_id
+          - merchant_id
+          - contract_id
+          - location_id
+          - terminal_id
       - name: levelIdValue
         in: path
         description: 'ID value at this level.
@@ -143,40 +144,46 @@ paths:
 
           '
         required: true
-        type: string
         example: '2000'
+        schema:
+          type: string
       - name: type
         in: query
         description: "Transaction type Filter. \nValues (optional):\npurchase, refund or chargeback\n"
         required: false
-        type: string
-        enum:
-        - purchase
-        - refund
-        - chargeback
+        schema:
+          type: string
+          enum:
+          - purchase
+          - refund
+          - chargeback
       - name: begin
         in: query
         description: 'Start month (yyyymm)
 
           '
         required: true
-        type: string
         example: '201609'
+        schema:
+          type: string
       - name: end
         in: query
         description: 'End month (yyyymm)
 
           '
         required: true
-        type: string
         example: '201610'
+        schema:
+          type: string
       responses:
         '200':
           description: Successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/RestPeriodTotalBrand'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RestPeriodTotalBrand'
         '400':
           description: Invalid input provided
         '401':
@@ -187,53 +194,49 @@ paths:
           description: Unexpected error
         '502':
           description: Backend service not available
-definitions:
-  RestTotal:
-    type: object
-    properties:
-      amountPurchases:
-        type: number
-        description: Total amount purchases
-      amountRefunds:
-        type: number
-        description: Total amount refunds
-      amountChargebacks:
-        type: number
-        description: Total amount chargebacks
-      numberPurchases:
-        type: integer
-        format: int64
-        description: Total number of purchases
-      numberRefunds:
-        type: integer
-        format: int64
-        description: Total number of refunds
-      numberChargebacks:
-        type: integer
-        format: int64
-        description: Total number of chargebacks
-  RestPeriodTotalBrand:
-    type: object
-    properties:
-      period:
-        type: string
-        description: YYYYMMDD for day-period. YYYYMM for month-period
-        example: 20161231 for day-period or 201612 for month-period
-      totalbrandList:
-        type: array
-        description: List of totals per brand
-        items:
-          $ref: '#/definitions/RestTotalBrand'
-  RestTotalBrand:
-    type: object
-    properties:
-      brand:
-        type: string
-        example: VISA, MAST, MAES, etc
-      total:
-        $ref: '#/definitions/RestTotal'
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+components:
+  schemas:
+    RestTotalBrand:
+      type: object
+      properties:
+        brand:
+          type: string
+          example: VISA, MAST, MAES, etc
+        total:
+          $ref: '#/components/schemas/RestTotal'
+    RestPeriodTotalBrand:
+      type: object
+      properties:
+        period:
+          type: string
+          description: YYYYMMDD for day-period. YYYYMM for month-period
+          example: 20161231 for day-period or 201612 for month-period
+        totalbrandList:
+          type: array
+          description: List of totals per brand
+          items:
+            $ref: '#/components/schemas/RestTotalBrand'
+    RestTotal:
+      type: object
+      properties:
+        amountPurchases:
+          type: number
+          description: Total amount purchases
+        amountRefunds:
+          type: number
+          description: Total amount refunds
+        amountChargebacks:
+          type: number
+          description: Total amount chargebacks
+        numberPurchases:
+          type: integer
+          format: int64
+          description: Total number of purchases
+        numberRefunds:
+          type: integer
+          format: int64
+          description: Total number of refunds
+        numberChargebacks:
+          type: integer
+          format: int64
+          description: Total number of chargebacks

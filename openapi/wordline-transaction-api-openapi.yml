@@ -1,15 +1,11 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
-  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
-
-    Additional APIs are under construction and planned to be available in 2026.'
-  version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Transaction API
-  contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+  title: Wordline Transaction API
+  version: '1.0'
+  description: 'Operations tagged Transaction across 2 of this provider''s published API definitions: worldline-card-issuing-api-2.41.1.json, worldline-transactions-api-2.0.2.yaml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2
+- url: /MerchantApiTransaction/api
 tags:
 - name: Transaction
   description: Transaction API Controller
@@ -21,81 +17,104 @@ paths:
       summary: Retrieve transaction details
       operationId: retrieveTransactionDetailsByTransactionId
       description: "The API allows the transaction details to be retrieved. \nThe main input fields are:\n•\tThe issuer ID\n•\tThe transaction for which the detail is requested: It is provided by using the transaction Id. \n\nIt is also possible to request some additional data relative to addendum (to retrieve lodging information, car rental information, air itinerary information) by using the embedded fields.\n\nIn return, the interface provides the generic information (mainly master data) relevant to the transaction."
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: transactionId
         in: path
         description: Unique id of specific transaction
         required: true
-        type: string
+        schema:
+          type: string
       - name: embed
         in: query
         description: 'Available values for embed : addendum (to retrieve lodgingInformation, carRentalInformation, airItineraryInformation) '
         required: false
-        type: array
-        items:
-          type: string
-          enum:
-          - addendum
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - addendum
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityTransactionDetails'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityTransactionDetails'
       security:
       - basic: []
       deprecated: false
+    servers:
+    - url: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2
   /issuers/{issuerId}/transactions/{transactionId}/dispute:
     post:
       x-wl-idempotent: true
@@ -104,78 +123,95 @@ paths:
       summary: Create a dispute from a transaction
       operationId: createDisputeFromTransaction
       description: "The API allows an issuer to create a dispute folder in the system for a given operation. This API enables the issuer to initiate the dispute from its application.\nSeveral actions can be performed :\n- Dispute only \n- Dispute + refund/redebit (full or partial)\n- Dispute + write-off (full or partial)\n- Dispute + fraud declaration\n- Dispute + event creation\n- Dispute + attach documents \n- Dispute + combination of above options\n\nMain data in input are :\n- the external operation reference which can be retrieved using a search operation in the system, for example using the API retrieves list of operations for an account.\n- in option, several fields in the case additional actions have to be done besides the dispute folder creation (e.g operation(s) posting, event(s) creation, add document(s)).\n\nIn response, the created dispute folder identifier is provided back systematically; then depending on the additional requests, the response includes also the posting, event creation and documents add response.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once.The response will be retrieved directly from our system."
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: transactionId
         in: path
         description: Transaction Id
         required: true
-        type: string
-      - in: body
-        name: body
-        required: false
         schema:
-          $ref: '#/definitions/CreateDisputeRequest'
+          type: string
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityCreateDisputeResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityCreateDisputeResponse'
       security:
       - basic: []
       deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDisputeRequest'
     get:
       tags:
       - Transaction
@@ -194,84 +230,107 @@ paths:
         The response may also be enriched (when embed fields are specified in the input) with additional data related to added events, performed postings, attached documents, and messages exchanged with the scheme, representing the dispute cycle history.
 
         If the transaction is not disputed, a 404 response code is returned along with a status message indicating that no Dispute Folder has been found.'
-      produces:
-      - application/json
       parameters:
       - name: WL-Correlation-ID
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Origin
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: WL-Username
         in: header
         required: false
-        type: string
+        schema:
+          type: string
       - name: filter
         in: query
         description: Filtered Fields
         required: false
-        type: array
-        items:
-          type: string
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       - name: issuerId
         in: path
         description: Issuer ID
         required: true
-        type: string
+        schema:
+          type: string
       - name: transactionId
         in: path
         description: Transaction Id
         required: true
-        type: string
+        schema:
+          type: string
       - name: embed
         in: query
         description: Embedded Fields
         required: false
-        type: array
-        items:
-          type: string
-          enum:
-          - events
-          - postings
-          - documents
-          - messages
-        collectionFormat: multi
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - events
+            - postings
+            - documents
+            - messages
       responses:
         '400':
           description: Bad request
-          schema:
-            $ref: '#/definitions/BadRequestErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorApiResponse'
         '401':
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/UnauthorizedErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorApiResponse'
         '403':
           description: Forbidden
-          schema:
-            $ref: '#/definitions/ForbiddenErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorApiResponse'
         '404':
           description: Not found
-          schema:
-            $ref: '#/definitions/NotFoundErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorApiResponse'
         '500':
           description: Internal server error
-          schema:
-            $ref: '#/definitions/InternalServerErrorErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorErrorApiResponse'
         '502':
           description: Bad gateway
-          schema:
-            $ref: '#/definitions/BadGatewayErrorApiResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadGatewayErrorApiResponse'
         '200':
           description: OK
-          schema:
-            $ref: '#/definitions/ApiResponseEntityDispute'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseEntityDispute'
       security:
       - basic: []
       deprecated: false
+    servers:
+    - url: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2
   /acquiring/transaction/v2.0/acquirers/{acquirerId}/transactions/{transactionId}:
     get:
       tags:
@@ -305,7 +364,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/Transaction_2'
               example:
                 transactionIdentification:
                   transactionId: TDS16172008721825920
@@ -419,6 +478,8 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
   /acquiring/transaction/v2.1/acquirers/{acquirerId}/transactions/{transactionId}:
     get:
       tags:
@@ -454,7 +515,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Transaction_2'
               examples:
                 POS:
                   value:
@@ -663,6 +724,8 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
   /acquiring/transaction/v2.0/acquirers/{acquirerId}/transactions:
     get:
       tags:
@@ -801,7 +864,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Transaction_2'
               example:
               - transactionIdentification:
                   transactionId: TDS16172008721825920
@@ -915,6 +978,8 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
   /acquiring/transaction/v2.0/acquirers/{acquirerId}/payments/{paymentId}/transactions:
     get:
       tags:
@@ -1012,7 +1077,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Transaction_2'
               example:
               - transactionIdentification:
                   transactionId: TDS16172008721825920
@@ -1126,6 +1191,8 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
   /acquiring/transaction/v2.0/acquirers/{acquirerId}/holdings/{holdingId}/transactions:
     get:
       tags:
@@ -1237,7 +1304,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Transaction_2'
               example:
               - transactionIdentification:
                   transactionId: TDS16172008721825920
@@ -1351,6 +1418,8 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
   /acquiring/transaction/v2.0/acquirers/{acquirerId}/merchants/{merchantId}/transactions:
     get:
       tags:
@@ -1487,7 +1556,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Transaction_2'
               example:
               - transactionIdentification:
                   transactionId: TDS16172008721825920
@@ -1601,6 +1670,8 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
   /acquiring/transaction/v2.0/acquirers/{acquirerId}/contracts/{contractId}/transactions:
     get:
       tags:
@@ -1711,7 +1782,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Transaction_2'
               example:
               - transactionIdentification:
                   transactionId: TDS16172008721825920
@@ -1825,6 +1896,8 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
   /acquiring/transaction/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites/{siteId}/transactions:
     get:
       tags:
@@ -1942,7 +2015,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Transaction_2'
               example:
               - transactionIdentification:
                   transactionId: TDS16172008721825920
@@ -2056,6 +2129,8 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
   ? /acquiring/transaction/v2.0/acquirers/{acquirerId}/contracts/{contractId}/sites/{siteId}/terminals/{terminalId}/transactions
   : get:
       tags:
@@ -2179,7 +2254,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Transaction_2'
               example:
               - transactionIdentification:
                   transactionId: TDS16172008721825920
@@ -2293,25 +2368,1794 @@ paths:
         502:
           description: Backend service problem
           content: {}
+    servers:
+    - url: /MerchantApiTransaction/api
 components:
   schemas:
-    Amount:
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    DisputeFolderIdentifier:
+      type: object
+      required:
+      - disputeFolderReference
+      properties:
+        disputeFolderReference:
+          type: string
+          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
+        issuerDisputeExternalReference:
+          type: string
+          description: The issuer Dispute External Reference, Present if provided in the request.
+      title: DisputeFolderIdentifier
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    ECommerceSecurityLevelIndicator:
       type: object
       properties:
-        amount:
+        securityProtocol:
           type: string
-          description: 'Amount in the major units of the currency according to ISO 4217.
+          description: 'MCI : PDS 0052 s1 - Security Protocol indicates the presence and type of security protocol present in the authorization process.'
+        cardHolderAuthentication:
+          type: string
+          description: 'MCI : PDS 0052 s2 - Cardholder Authentication indicates the type of cardholder authentication used in the authorization process'
+        ucafCollectionIndicator:
+          type: string
+          description: 'MCI : PDS 0052 s3 - UCAF Collection Indicator identifies the level of UCAF supported in the authorization process'
+      title: ECommerceSecurityLevelIndicator
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    ApiResponseEntityTransactionDetails:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/TransactionDetails'
+      description: Transaction Details entity
+      title: ApiResponseEntityTransactionDetails
+    CreateDocumentRequest:
+      type: object
+      required:
+      - data
+      - type
+      - fileName
+      properties:
+        data:
+          type: string
+          description: 'The issuer must provide the data of the document in Base64 encoding format that has to be attached to the Dispute Folder.
+
+            The maximum size per document is:
+
+            - 10 Mo for PDF, TIFF or JPEG format (for Visa or Mastercard)
+
+            - 15 Mo for ZIP format (only for Mastercard)'
+        type:
+          type: string
+          description: 'The issuer must provide the document type,  Possible values:
+
+            - ''image/jpeg'':  data of attached document in JPEG format
+
+            - ''image/tiff'':  data of attached document in TIFF format
+
+            - ''application/pdf'':  data of attached document in PDF format
+
+            - ''application/zip'': data of attached document in ZIP format for Mastercard only'
+        label:
+          type: string
+          description: Contains optional label to be displayed on the event generated in the Dispute Folder
+        fileName:
+          type: string
+          description: 'Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder
+
+            Only for a Mastercard operation, the file name must have a maximum lenght of 16 with only alpha and numeric values (no constraint for a VISA operation)'
+        documentTypeId:
+          type: string
+          description: Contains optional document type Id
+      title: CreateDocumentRequest
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    InterchangeFee:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Indicates the type of the interchange fee Possible value : EXTERNAL (interchange fee coming from the scheme).'
+        code:
+          type: string
+          description: Interchange fee code.
+        amount:
+          description: Interchange fee amount
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+      title: InterchangeFee
+    Dispute:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer Identifier (unique per platform)
+        disputeFolderIdentifier:
+          description: Dispute Folder Identifier
+          allOf:
+          - $ref: '#/components/schemas/DisputeFolderIdentifier'
+        events:
+          type: array
+          description: 'Events attached to the dispute folder.Event can be triggered by our system or  added by the issuer (purpose can to indicate a communication from/to cardholder)
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/DisputeEvent'
+        postings:
+          type: array
+          description: "Posted operation on the dispute folder, example : Do a refund towards the cardholder account, \nDo a write-off towards an issuer account (Profit and Loss, Fraud,..), \ndo a Foreign exchange fee, Financial Advice Exchange Rate Difference\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._"
+          items:
+            $ref: '#/components/schemas/DisputePosting'
+        documents:
+          type: array
+          description: 'Documents added to the dispute folder.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/DisputeDocument'
+        messages:
+          type: array
+          description: 'Messages exchanged with the scheme linked to the dispute folder.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/DisputeMessage'
+        acquirerReferenceData:
+          type: string
+          description: Acquiring Reference Number (ARN) related to the disputed transaction
+        transactionType:
+          type: string
+          description: DEPRECATED
+        transactionTime:
+          type: string
+          format: date-time
+          description: Transaction Date and Time on the Merchant site related to the disputed transaction
+        transactionAmount:
+          description: Transaction Amount (Value/Currency/Currency Exponent) related to the disputed transaction
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        reconciliationAmount:
+          description: Scheme Reconciliation Amount (Value/Currency/Currency Exponent) related to the disputed transaction
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        billingAmount:
+          description: Cardholder Billing Amount (Value/Currency/Currency Exponent) related to the disputed transaction on Cardholder point of view
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        billingFees:
+          description: Cardholder Billing Fees Amount (Value/Currency/Currency Exponent)  associated to the disputed transaction on Cardholder point of view
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        outstandingBalance:
+          description: Cardholder Outstanding balance (Value/Currency/Currency Exponent) associated to the disputed transaction
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        issuerAccountingBalance:
+          description: Issuer Accounting Balance (Value/Currency/Currency Exponent) related to the dispute on issuer point of view
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        statusCode:
+          type: string
+          description: Dispute status (open, closed) associated to the Dispute Folder
+        reason:
+          type: string
+          description: Dispute Reason associated to the Dispute Folder
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of the Dispute Folder creation
+        cardAcceptorName:
+          type: string
+          description: Merchant Address Name related to the disputed transaction
+        cardAcceptorCity:
+          type: string
+          description: Merchant Address City related to the disputed transaction
+        cardAcceptorCountry:
+          type: string
+          description: Merchant Address Country Code (num-3) related to the disputed transaction
+        cardAcceptorIdCode:
+          type: string
+          description: Merchant Identifier related to the disputed transaction
+        cardAcceptorZipCode:
+          type: string
+          description: Merchant Address Zip Code related to the disputed transaction
+        userInCharge:
+          type: string
+          description: User in charge of the Dispute Folder
+        cardIdentifier:
+          description: Card Identifier related to the disputed transaction
+          allOf:
+          - $ref: '#/components/schemas/CardIdentifier'
+        lastMessageType:
+          type: string
+          description: Type of the last Message of the Dispute Folder
+        lastMessageDate:
+          type: string
+          format: date-time
+          description: Date of the last Message of the Dispute Folder
+        lastMessageStatus:
+          type: string
+          description: Status of the last Message of the Dispute Folder
+        superFolderReference:
+          type: string
+          description: Super folder reference if super folder exists
+        transactionCategory:
+          type: string
+          description: Internal Transaction category (SALES, CASH_WITHDRAWAL,  etc ..) related to the disputed transaction
+        transmissionDate:
+          type: string
+          format: date-time
+          description: 'Transmission date from the scheme
+
+            MCI : PDS 0158 - s5 Central Site Business Date
+
+            VISA : TCR0 164-167 Central Processing Date (YDDD)'
+        clientOpenDate:
+          type: string
+          format: date-time
+          description: Date when the cardholder has raised the Dispute, used to track the receipt of the cardholder dispute
+        originalValueDate:
+          type: string
+          format: date-time
+          description: Optional parameter external Value Date
+      title: Dispute
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    CardIdentifier:
+      type: object
+      description: Identification of the card either by Issuer card external reference or by card reference
+      properties:
+        cardReference:
+          type: string
+          description: 'Reference of the card generated by our system, unique per platform.
+
+            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
+        issuerCardExternalReference:
+          type: string
+          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+
+            This reference is unique per issuer and may be used to carry out research and find information.'
+      title: CardIdentifier
+    AuthorizationBusinessCaseIdentifier:
+      type: object
+      required:
+      - businessCaseId
+      properties:
+        businessCaseId:
+          type: string
+          description: 'Business case to which the transaction belongs.
+
+            The provided information reflects its status after transaction completion.
+
+            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
+      title: AuthorizationBusinessCaseIdentifier
+    Transaction:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        transactionIdentifier:
+          description: Internal identifier associated to the transaction
+          allOf:
+          - $ref: '#/components/schemas/TransactionIdentifier'
+        acquirerReferenceData:
+          type: string
+          description: 'Acquirer Reference Number (ARN) associated to the transaction
 
 
-            In case of euro, "3.10" (is 3.10 euro)
+            MCI : DE 031 - Acquirer Reference Data
+
+            VISA : TCR0 Acquirer Reference Number pos. 27-49'
+        acquisitionMaterial:
+          type: string
+          description: 'Type of material used to realize the transaction.
+
+            Possible values:
+
+            ATM, POS, INTERNET, MANUAL, VOICE_PHONE, UNATTENDED_TERMINAL, MOBILE, UNKNOWN'
+        cardAcceptorCity:
+          type: string
+          description: 'Card Acceptor Location (City) associated to the transaction
+
+
+            MCI : DE 43 - Card Acceptor Name/Location s3 - Card Acceptor City
+
+            VISA : TCR0 - Merchant City'
+        cardAcceptorCountry:
+          type: string
+          description: 'Card Acceptor Country Code associated to the transaction
+
+
+            MCI : DE 43 - Card Acceptor Name/Location s6 - Card Acceptor Country Code
+
+            VISA : TCR0 - Merchant Country'
+        cardAcceptorIdCode:
+          type: string
+          description: 'Identifies the card acceptor ID assigned by the acquirer. This ID must represent a unique identifier for each merchant name/location within the acquiring BIN.
+
+            Card Acceptor (Merchant) Identifier associated to the transaction
+
+
+            MCI : DE 042 - Card Acceptor ID Code
+
+            VISA : TCR5 - Acquirer''s Business ID'
+        cardAcceptorName:
+          type: string
+          description: 'Complete Card Acceptor Name / Location (Merchant) associated to the transaction
+
+
+            MCI : DE 43 - Card Acceptor Name/Location s1 to s6 - Card Acceptor Name/Location
+
+            VISA : TCR0'
+        cardAcceptorZipCode:
+          type: string
+          description: 'Card Acceptor ZIP Code associated to the transaction
+
+
+            MCI : DE 43 - Card Acceptor Name/Location s4 - Card Acceptor Postal (ZIP) Code
+
+            VISA : TCR0 - Merchant zip code'
+        cardScheme:
+          type: string
+          description: Short name of national or international network, if implicated.
+        debit:
+          type: boolean
+          description: 'Sign associated to the transaction according to the Cardholder side
+
+            * true = Cardholder debited
+
+            * false = Cardholder credited'
+        maskedPan:
+          type: string
+          description: Masked Primary Account Number (PAN) of card present in the transaction
+        merchantCategoryCode:
+          type: string
+          description: Classifies the type of business applicable to the card acceptor
+        pan:
+          type: string
+          description: 'Primary Account Number (PAN) present in the transaction
+
+
+            MCI : DE 02  PrimaryAccountNumber
+
+            VISA : TCR0 pos. 5-20 AccountNumber'
+        reconciliationAmount:
+          description: 'Transaction amount provided by the scheme in the currency agreed between the scheme and the issuer/WL.
+
+            Mandatory for 1st presentment.
+
+            Scheme Reconciliation Amount / Currency / Exponent
+
+
+            MCI: DE 005 / DE 050 / associated PDS 0148
+
+            VISA: Destination Amount / Destination Currency'
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        reversal:
+          type: boolean
+          description: This flag indicates if this operation is a reversal (true) or not (false)
+        transactionAmount:
+          description: 'DE 4 (Amount, Transaction) is the amount of funds the cardholder requested in the currency appearing on the transaction information document (TID), which may be the acquirer’s local currency or a currency acceptable to the cardholder and card acceptor that the acquirer supports, exclusive of PDS 0146 (Amounts, Transaction Fee). If no currency is identified on the TID, the transaction is deemed to have taken place in the currency that is legal tender at the point of interaction.
+
+            Amount of the transaction. This field contains numerics. Two decimal positions are implied. If the Original Source Currency code is 392 (Japanese Yen), any value other than zero after the decimal produces an Invalid Amount error.
+
+            MCI DE 004
+
+            VISA TCR0
 
             '
-          format: unlimited size decimal
-          example: '3.00'
-        currency:
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        transactionDate:
           type: string
-          description: Currency of the amount
-          example: EUR
+          format: date-time
+          description: 'Transaction Date in Merchant site when transaction has been performed
+
+            E.g. : 2023-02-04T00:00:00+01:00
+
+            - MCI: DE 012 (Date and Time, Local Transaction)
+
+            - VISA : TCR0 pos. 58-61'
+        walletId:
+          type: string
+          description: 'Indicates the identifier of the wallet (Apple Pay or other token requestor) used for the transaction
+
+            '
+        approvalCode:
+          type: string
+          description: 'Authorization Approval Code associated to the transaction
+
+
+            MCI : DE 038 - Approval Code
+
+            VISA : TCR0 Authorization Code pos. 152-157'
+        pointOfSaleEnvironment:
+          type: string
+          description: 'Recurring transaction indicator, indicating that the cardholder
+
+            and merchant have agreed to periodic billing for goods and services, such as
+
+            utility bills, internet connection, and magazine subscriptions.
+
+            Values:
+
+            Space = default
+
+            R = Recurring Payment Transaction
+
+            I = Installment Payment
+
+            C = Credential on File'
+        mailPhoneEcommerceAndPaymentIndicator:
+          type: string
+          description: "Mail Phone Ecommerce and Payment Indicator indicates if transaction was initiated as mail order, telephone order or electronic commerce. \nUsed in Visa interchange validation and determination.  \nRequired in input for Visa transactions. \nBase II mapped from Draft data TCR1 position 116. \nDomain: \nSpace - Field not applicable or acquirer did not specify.  \n1 - Mail/Phone Order (MO/TO). \n2 - Recurring transaction (valid only for U.S. acquired transactions). \n3 - Instalment payment.  \n4 - Unknown classification/other mail order.  \n5 - Secure Electronic Commerce Transaction. \n6 - Non-Authenticated Security Transaction at a 3-D Secure-capable merchant, and merchant attempted to authenticate the cardholder using 3-D secure. \n7 - Non-Authenticated Security Transaction \n8 - Non-secure transaction. \n9 - For optional regional use only."
+        pointOfService:
+          description: 'Represent the card entry mode information
+
+
+            MCI DE22 Point of Service (POS) Entry Mode
+
+            VISA TCR0 160 CardholderIDMethod, 162-163 PosEntryMode '
+          allOf:
+          - $ref: '#/components/schemas/PointOfService'
+        acquirerId:
+          type: string
+          description: 'VISA mapping is the following: TC05, TCR0 Field: Acquirer Reference Number POS 27-49. Should be taken positions 2-7 of this field (Acquirer BIN)
+
+            MCI mapping is the following: DE 31 Acquirer Reference Data, Positions 2-7 of the field'
+        destinationId:
+          description: 'VISA mapping is the following: Determined based on transaction data.
+
+            MCI mapping is the following: DE 93 transaction Destination Institution ID code.'
+          type: string
+        authorizationBusinessCaseIdentifier:
+          description: Internal identifier provided by the WLP Front Office in each Authorisation Message received. Only present if transaction (first presentment) matched with an authorization.
+          allOf:
+          - $ref: '#/components/schemas/AuthorizationBusinessCaseIdentifier'
+        cardIdentifier:
+          description: Refer to Card.cardIdentifier
+          allOf:
+          - $ref: '#/components/schemas/CardIdentifier'
+        panTokenIdentifier:
+          description: 'Token Requestor Identifier value associated to the transaction
+
+
+            MCI : PDS 0059 - Token Requestor ID
+
+            VISA : TCR5 Token Requestor ID pos. 149-159'
+          allOf:
+          - $ref: '#/components/schemas/PanTokenIdentifier'
+        lodgingInformation:
+          description: 'The list of lodging information parameters from the clearing file.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          allOf:
+          - $ref: '#/components/schemas/LodgingInformation'
+        carRentalInformation:
+          description: 'The list of car rental information parameters from the clearing file.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          allOf:
+          - $ref: '#/components/schemas/CarRentalInformation'
+        airItineraryInformation:
+          description: 'The list of air itinerary parameters from the clearing file.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          allOf:
+          - $ref: '#/components/schemas/AirItineraryInformation'
+        eCommerceSecurityLevelIndicator:
+          description: 'Information about security protocol for internet transactions
+
+            MCI only : PDS 0052 - Electronic Commerce Security Level Indicator'
+          allOf:
+          - $ref: '#/components/schemas/ECommerceSecurityLevelIndicator'
+        transactionCategory:
+          type: string
+          description: 'Internal transaction category. Possible values : BILL_PAYMENT, CASH, CASH_WITHDRAWAL, CREDIT, CREDIT_ADJUSTMENT, CREDIT_FEE, CREDIT_PAYMENT, DEBIT_ADJUSTMENT, DEBIT_FEE, DEBIT_PAYMENT, FUND_TRANSFER, LOAD, PAYMENT, REFUND_PURCHASE, SALES, SALES_CASHBACK'
+        status:
+          type: string
+          description: "Transaction status in the system \n\nPossible values : \n- CREATED\n- ABANDON\n- IN_ERROR\n- DELETED\n- REPROCESS\n- PROCESSED\n- EMBARGO_WAIT"
+        transmissionDate:
+          type: string
+          format: date-time
+          description: 'Transmission date from the scheme
+
+
+            MCI : PDS 0158 - s5 Central Site Business Date
+
+            VISA : TCR0 164-167 Central Processing Date (YDDD)'
+        billingAmount:
+          description: 'Transaction amount converted to the cardholder billing currency
+
+            MCI only - DE6 Amount, Cardholder Billing'
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        recalculatedBillingAmount:
+          description: Refer to Operation.referenceAmount if transaction has been posted on an account
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        disputeStatus:
+          type: string
+          description: "Indicate status of dispute folder in case transaction has been disputed\nPossible values : \n- OPEN\n- CLOSED"
+        fraudStatus:
+          type: string
+          description: " Indicate if transaction is fraudulent\n\nPossible values : \n- FRAUDULENT"
+        accountIdentifier:
+          description: "Identifier of the entry account configured for the card number provided in the transaction. \n\nRefer to Account.accountIdentifier"
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        action:
+          type: string
+          description: "Action done by the system on the transaction\n\nPossible values : \n•\tPOST_TO_ACCOUNT_SERVICE\n•\tOPEN_FRAUD_CASE\n•\tOPEN_DISPUTE_CASE_AND_POST_TO_ACCOUNT_SERVICE\n•\tOPEN_DISPUTE_CASE\n•\tOPEN_FRAUD_CASE_AND_POST_TO_ACCOUNT_SERVICE\n•\tOPEN_DISPUTE_CASE_AND_OPEN_FRAUD_CASE\n•\tPOST_TO_ACCOUNT_SERVICE_AND_FRAUD_SERVICE\n•\tSUSPEND_TRANSACTION_BY_ACTION_CODE\n•\tNO_POST"
+        panToken:
+          type: string
+          description: 'MCI : PDS 0001 Mastercard Mapping Service Account Number
+
+            VISA : TCR5  pos.150-165 panToken'
+        processingDate:
+          type: string
+          format: date-time
+          description: Date the transaction has been processed by the system
+        virtualServiceCardNumber:
+          type: string
+          description: Virtual Service Card Number of the transaction (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
+        virtualServiceCardReference:
+          type: string
+          description: Virtual service card reference of the transaction generated by our system
+        acquirerMemberId:
+          type: string
+          description: Acquirer Member Id of the transaction
+        reasonCode:
+          type: string
+          description: 'Reason code of the transaction.
+
+            MCI : DE25 - Message Reason Code
+
+            VISA : N/A for first presentment, TC10/TC20 TCR0 pos17-20'
+        eventDate:
+          type: string
+          format: date-time
+          description: 'Relevant for collection fee
+
+            Reference date related to the reason code
+
+            MCI : DE73 - Action date
+
+            VISA : TC10/TC20 TCR0 pos24-27 - Event date'
+        reversed:
+          type: boolean
+          description: Indicates if the transaction is reversed
+        singleMessage:
+          type: boolean
+        authorized:
+          type: boolean
+          description: "Authorized flag Calculated by IBO\n*\ttrue : when matched with an authorization\n*\tfalse : default value"
+        authorizationIdentifier:
+          description: Identifier of authorization matched with this transaction
+          allOf:
+          - $ref: '#/components/schemas/AuthorizationIdentifier'
+        creationDate:
+          type: string
+          format: date-time
+          description: Date the transaction has been created in the system
+      title: Transaction
+    CreateDisputeResponse:
+      type: object
+      required:
+      - disputeFolderIdentifier
+      properties:
+        disputeFolderIdentifier:
+          description: Dispute Folder Identifier
+          allOf:
+          - $ref: '#/components/schemas/DisputeFolderIdentifier'
+        disputePostings:
+          type: array
+          description: 'Posting operation to perform on the created dispute folder, example:
+
+            - Do a refund towards the cardholder account
+
+            - Do a write-off towards an issuer account (Profit and Loss, Fraud,..)
+
+            - do a Foreign exchange fee, Financial Advice Exchange Rate Difference'
+          items:
+            $ref: '#/components/schemas/CreatePostingResponse'
+        disputeEvents:
+          type: array
+          description: Event to add to the created dispute folder.
+          items:
+            $ref: '#/components/schemas/CreateEventResponse'
+        disputeDocuments:
+          type: array
+          description: List of Documents to add to the created dispute folder
+          items:
+            $ref: '#/components/schemas/CreateDocumentResponse'
+        disputeFolderInternalId:
+          type: string
+          description: 'Dispute Folder ID '
+      title: CreateDisputeResponse
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    LodgingInformation:
+      type: object
+      properties:
+        businessFormatCode:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Business Format Code (Value: CA); POS: 17-18.'
+        noShowIndicator:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging No-Show Indicator; POS 27.
+
+            MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
+        extraCharges:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Extra Charges; POS 28–33.'
+        checkInDate:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Check-in Date (YYMMDD); POS 38-43.
+
+            MCI mapping is the following: PDS 0574. PDS 0574 (Arrival Date) contains the cardholder check-in date (YYMMDD).'
+        dailyRoomRate:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Daily Room Rate; POS 44-55.
+
+            MCI mapping is the following: PDS 0580. PDS 0580 (Room Rate) contains the daily room charges exclusive of taxes and fees. This PDS consists of two subfields:
+
+            1. Room Rate Amount; POS: 1-12
+
+            2. Room Rate Exponent; POS: 13'
+        totalTax:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Tax; POS 56-67.
+
+            MCI mapping is the following: PDS 0597. PDS 0597 (Total Tax Amount) contains the total amount of sales tax or value added tax (VAT) on the total purchase amount.'
+        prepaidExpenses:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Prepaid Expenses; POS 68-79.
+
+            MCI mapping is the following: PDS 0704. PDS 0704 (Prepaid Expenses) provides the amount of deposit or other prepaid amounts for the lodging stay.'
+        foodBeverageCharge:
+          type: string
+          description: 'The field represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Food/Beverage Charges; POS 80-91.'
+        folioCashAdvances:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Folio Cash Advances; POS 92-103.
+
+            MCI mapping is the following: PDS 0706. PDS 0706 (Cash Advances) provides the amount of cash received during the lodging stay.'
+        totalRoomNights:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Room Nights; POS 104-105.
+
+            MCI mapping is the following: PDS 0703. PDS 0703 (Total Room Nights) provides the total number of nights for which a room was contracted during a lodging stay.'
+        totalRoomTax:
+          type: string
+          description: "The field represents additional data from VISA and MCI clearing file addendum.\nVISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Room Tax; POS 106-117.\nMCI mapping is the following: PDS 0581. PDS 0581 (Total Room Tax) contains tax amount information such as the daily room tax, occupancy tax, energy tax, and tourist tax amounts. This PDS consists of three subfields:\n1. Total Room Tax Amount; POS: 1-12\n2. Total Room Tax Exponent; POS: 13\n 3. Total Room Tax Sign; POS: 14"
+      title: LodgingInformation
+    CreatePostingRequest:
+      type: object
+      required:
+      - postingAmount
+      - postingTypeReference
+      properties:
+        postingAmount:
+          description: Mandatory parameter specifying the posting amount. The posting amount can be negative amount (- sign in the beginning of the amount digits)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        message:
+          type: string
+          description: Description message that will associated to the posted operation in the statement
+        immediateReimbursement:
+          type: boolean
+          description: Optional parameter for impacting card holder account immediately
+        postingTypeReference:
+          type: string
+          description: 'The issuer must provide the identifier of the external reference of the posting. The list of values are configured by issuer:
+
+            Three family of postings type:
+
+            - Cardholder: For impacting the cardholder account, possible values can be: ''Cardholder Account'', ''POST TO OTHER ACCOUNT''
+
+            - Issuer: Write off: possible values can be ''ISSUER_ACCOUNT'', ''PROFIT AND LOSS'', ''FRAUD''
+
+            - Foreign exchange fee (''FOREIGN_EXCHANGE_FEE''), Financial Advice Exchange Rate Difference (''ADVANCE_EXCHANGE_RATE_DIFFERENCE''):  the dispute officer can manually create a dispute posting amount to this account'
+      title: CreatePostingRequest
+    CarRentalInformation:
+      type: object
+      properties:
+        businessFormatCode:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Business Format Code (Value: CA); POS 17-18.'
+        days:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Days Rented; POS 19-20.
+
+            MCI mapping is the following: PDS 0691. PDS 0691 (Days Rented) provides the number of days that the vehicle was rented.'
+        noShowIndicator:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental No-Show Indicator; POS 27.
+
+            MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
+        extraCharges:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental Extra Charges; POS 28-33.
+
+            MCI mapping is the following: PDS 0701. PDS 0701 (Extra Charges) provides the extra charges associated with the vehicle rental.'
+        checkOutDate:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental Check-out Date (YYMMDD); POS 38-43.
+
+            MCI mapping is the following: PDS 0551. PDS 0551 (Rental Check-Out Date) is the date when the vehicle was originally rented (YYMMDD).'
+        dailyRentRate:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Daily Rental Rate; POS 44-55.
+
+            MCI mapping is the following: PDS 0553. PDS 0553 (Rental Rate) contains the rental rate charged for the vehicle and indicates whether it is a daily, weekly, or monthly rate. This PDS consists of two subfields:
+
+            1. Rental Rate Indicator; POS: 1
+
+            - D: Daily rate
+
+            - W: Weekly rate
+
+            - M: Monthly rate
+
+            - space: Unknown or unreported
+
+            2. Rental Rate; POS: 2-13'
+        weeklyRentRate:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Weekly Rental Rate; POS 56-67.
+
+            MCI mapping is the following: PDS 0692. PDS 0692 (Weekly Rental Amount) provides the amount charged for a seven-day rental period.'
+        insuranceCharge:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Insurance Charges; POS 68-79.
+
+            MCI mapping is the following: PDS 0559. PDS 0559 (Vehicle Insurance) contains an indicator of whether the customer purchased insurance and of the insurance amount. This PDS consists of two subfields:
+
+            1. Insurance Indicator; POS: 1
+
+            - Y: Yes (insurance was purchased)
+
+            - N: No (insurance was not purchased)
+
+            - spaces: Unknown or unreported
+
+            2. Insurance Charges; POS: 2-13'
+        fuelCharge:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Fuel Charges; POS 80-91.
+
+            MCI mapping is the following: PDS 0698. PDS 0698 (Fuel Charge) provides the amount charged for fuel used during vehicle rental.'
+        classCode:
+          type: string
+          description: "The field represents additional data from VISA and MCI clearing file addendum.\n VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Class Code; POS 92-93.\nMCI mapping is the following: PDS 0568. PDS 0568 (Rental Class ID) contains the classification, such as midsize or luxury, of the vehicle rented."
+        oneWayDropCharge:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: One-Way Drop-off Charges; POS 94-105.
+
+            MCI mapping is the following: PDS 0694. PDS 0694 (One Way Drop Off Charge) provides a charge associated with not returning a vehicle to the original rental location.'
+        renterName:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Renter Name; POS 106-145.
+
+            MCI mapping is the following: PDS 0545. PDS 0545 (Renter Name) is the name of the individual making the vehicle rental agreement.'
+      title: CarRentalInformation
+    CreateEventRequest:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: 'Contains the dispute Event Type label of the Event to post to the Dispute Folder.
+
+            The allowed event type list is configured per issuer in the platform. Type value generally used by issuers: ''Comment'''
+        message:
+          type: string
+          description: Contains a free defined input that will be displayed in the eventMessage in the Dispute Folder
+      title: CreateEventRequest
+    CreateDisputeRequest:
+      type: object
+      properties:
+        disputeReason:
+          type: string
+          description: 'Indicates the dispute reason. Example of values are : UNKNOWN_CARD, HIGH_AMOUNT, DUPLICATE_TRANSACTION, LATE_PRESENTMENT , INVALID_PAYMENT, INACTIVE_CARD, CREATED_CARD, COUNTERFEIT_CARD, BLOCKED_CARD, ACTIVE_CARD_TED.'
+        refundRedebitIndicator:
+          type: string
+          description: 'Indicator to perform or not a Refund (for Debit transaction) / Redebit (for Credit transaction) on ''Cardholder Account'' on the disputed transaction. Possible values:
+
+            - FULL: Refund Redebit the full amount of the transaction.
+
+            - PARTIAL : Refund Redebit a partial amount, the partial amount should be provided in the field Refund Redebit Amount
+
+            - NONE : no refund redebit is requested, this is the default value'
+        refundRedebitAmount:
+          description: The issuer should provide the Amount to Refund or Redebit when Refund Redebit Indicator is PARTIAL. Otherwise it is not checked
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        declareFraudIndicator:
+          type: boolean
+          description: 'Indicator to perform a fraud declaration. Possible values:
+
+            true: fraud declaration will be sent to the scheme.
+
+            false: No fraud declaration, this is the default value.'
+        issuerDisputeExternalReference:
+          type: string
+          description: 'The issuer Dispute External Reference : should be unique by issuer, there is no constraint regarding the format, only  maximum length is 50 CHAR.'
+        originalValueDate:
+          type: string
+          format: date-time
+          description: Optional parameter external Value Date
+        disputePostings:
+          type: array
+          description: 'Issuer can provide a posting operation to perform on the created dispute folder, example:
+
+            - Do a refund towards the cardholder account
+
+            - Do a write-off towards an issuer account (Profit and Loss, Fraud,..)
+
+            - do a Foreign exchange fee, Financial Advice Exchange Rate Difference'
+          items:
+            $ref: '#/components/schemas/CreatePostingRequest'
+        disputeEvents:
+          type: array
+          description: 'Issuer can provide an event to add to the created dispute folder.
+
+            This manual event will be added to events generated internally by our system.
+
+            For example, the issuer can add an event to indicate that there is a communication from/to cardholder.'
+          items:
+            $ref: '#/components/schemas/CreateEventRequest'
+        disputeDocuments:
+          type: array
+          description: Issuer can provide a list of Documents to add to the created dispute folder.
+          items:
+            $ref: '#/components/schemas/CreateDocumentRequest'
+        autoAssignmentRule:
+          type: string
+          description: 'List of possible values: DISPUTE_REASON, automatically assigns the dispute to the user in charge based on the dispute reason.'
+      title: CreateDisputeRequest
+    TravelDetailLeg:
+      type: object
+      properties:
+        flightNumber:
+          type: string
+          description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
+        carrier:
+          type: string
+          description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
+        class:
+          type: string
+          description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
+        stopOver:
+          type: string
+          description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
+        destination:
+          type: string
+          description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
+        fareCode:
+          type: string
+          description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
+      title: TravelDetailLeg
+    PanTokenIdentifier:
+      type: object
+      required:
+      - panTokenReference
+      properties:
+        panTokenReference:
+          type: string
+          description: Pan Token Reference
+      title: PanTokenIdentifier
+    AirItineraryInformation:
+      type: object
+      properties:
+        businessFormatCode:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Business Format Code; POS 17-18.'
+        travelAgent:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Name; POS 92-116.
+
+            MCI mapping is the following: PDS 0511. PDS 0511 (Travel Agency Name) is the name of the travel agency that issued the ticket.'
+        travelAgentCode:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Code; POS 84-91.
+
+            MCI mapping is the following: PDS 0510. PDS 0510 (Travel Agency Code) is a code assigned to the travel agency.'
+        passengerName:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Passenger Name; POS 27-46.
+
+            MCI mapping is the following: PDS 0505. PDS 0505 (Passenger Name) contains the name of the passenger to whom the ticket was issued.'
+        departureDate:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Departure Date (MMDDYY); POS 47-52.
+
+            MCI mapping is the following: PDS 0520. PDS 0520 (Travel Date) is the effective ticket date, also referred as departure date (YYMMDD).'
+        originCityCode:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Origination City/Airport Code; POS 53-55.
+
+            MCI mapping is the following: PDS 0523. PDS 0523 (City of Origin/Airport Code) is the originating airport or railway name standard abbreviation.'
+        restrictedTicketIndicator:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Restricted Ticket Indicator; POS 117.
+
+            MCI mapping is the following: PDS 0713. PDS 0713 (Restricted Ticket Indicator) provides the identifier noting that the ticket purchased has some restriction associated with its use.'
+        reservationSystem:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Computerized Reservation System; POS 142-145.'
+        creditReasonIndicator:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Credit Reason Indicator; POS 166.'
+        ticketChangeIndicator:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Ticket Change Indicator; POS 167.'
+        ticketNumber:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR0; Field: Merchant Name POS 92-116; POS 13-25 of this field should be taken as input.
+
+            MCI mapping is the following: PDS 0506. PDS 0506 (Ticket Number) contains the number on the ticket.'
+        IATACode:
+          type: string
+          description: 'The field represents additional data from MCI clearing file addendum.
+
+            MCI mapping is the following: PDS 0717. PDS 0717 (IATA Client Code) provides the International Air Transport Association (IATA) code identifying the company that purchased the ticket.'
+        leg1:
+          allOf:
+          - $ref: '#/components/schemas/TravelDetailLeg'
+          description: Description of first leg of trip
+        leg2:
+          allOf:
+          - $ref: '#/components/schemas/TravelDetailLeg'
+          description: Description of second leg of trip
+        leg3:
+          allOf:
+          - $ref: '#/components/schemas/TravelDetailLeg'
+          description: Description of third leg of trip
+        leg4:
+          allOf:
+          - $ref: '#/components/schemas/TravelDetailLeg'
+          description: Description of fourth leg of trip
+      title: AirItineraryInformation
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    ProcessingCode:
+      type: object
+      required:
+      - fromAccountType
+      - toAccountType
+      - transactionType
+      properties:
+        fromAccountType:
+          type: string
+          description: 'MCI : DE3 Subfield 2 - CardHolder "From" Account Type Code'
+        toAccountType:
+          type: string
+          description: 'MCI : DE3 Subfield 3 - CardHolder "To" Account Type Code'
+        transactionType:
+          type: string
+          description: 'MCI : DE3 Subfield 1 - Cardholder Transaction Type'
+      title: ProcessingCode
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    TransactionDetails:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Transaction'
+      - properties:
+          alternativeIban:
+            type: string
+            description: 'Corresponds to PAN token received from the scheme MCI : pds0001 - Mastercard Mapping Service Account Number'
+          brand:
+            type: string
+            description: Brand associated to the Issuer Account Range (BIN) such as "MCC" (MasterCard) , "DMC" (Debit MasterCard), "MSI" (Maestro), "CIR" (Cirrus), "VIS" (VISA).
+          cardTypeCode:
+            type: string
+            description: Scheme Product associated in the Issuing Back Office system to the Issuer Account Range
+          cashAmount:
+            description: 'Additional Amount / Currency / Exponent for Cash Back transaction amount
+
+              * MCI : DE 054 s2 = 40 - Amount, Cash Back
+
+              * VISA : TCR1 pos. 158-166 Cashback'
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          dccIndicator:
+            type: string
+            description: 'This field must contain one of these values (optional):
+
+              1 = DCC performed
+
+              space = default, no DCC has been performed'
+          gratuityAmount:
+            description: Additional Amount / Currency / Exponent for Gratuity transaction amount in the transaction currency Only for MC
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          panExpiryDate:
+            type: string
+            description: 'Card expiry date present in the transaction Format is "MMYY" (month and year)
+
+
+              MCI : DE 14 - Date Expiration'
+          panSequenceNumber:
+            type: string
+            description: 'PAN sequence number from the transaction
+
+
+              MCI : DE 23 - Card Sequence Number
+
+              VISA : TCR7 pos. 7-9 Card Sequence Number'
+          poiAmount:
+            description: Additional Amount / Currency / Exponent for DCC (Dynamic Currency Conversion) transaction amount - Only for MC
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          surchargeAmount:
+            description: Additional Amount / Currency / Exponent for surcharge transaction amount in Transaction Currency
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          terminalId:
+            type: string
+            description: Code that identifies the card acceptor terminal or ATM.
+          acquiringBankCode:
+            type: string
+            description: Determined using the originator member id. Bank code stored in the system for the member.
+          originatorMemberId:
+            type: string
+            description: 'Transaction Originator Member ID. Identifies the transaction originator institution.
+
+              MCI  : DE94 - Transaction Originator Institution ID Code
+
+              VISA: TCR0 27-49 acquiring reference number position 2-7'
+          schemeTransactionIdentifier:
+            type: string
+            description: 'Scheme Transaction Identifier allows to identify uniquely a transaction through its full life cycle.
+
+              MCI : DE63 - Transaction Life Cycle ID S2 - Trace ID
+
+              VISA : TCR5 Transaction Identifier'
+          destinationRegionCode:
+            type: string
+            description: Region code stored in the system for the member linked to the card prefix.
+          schemeExchangeRateDate:
+            type: string
+            format: date-time
+            description: 'Indicates the date of used exchange rates when performing currency conversions.
+
+              Presence of the date does not imply that a currency conversion took place. Having the exchange rate date stored allows retrieving a rate for a given day.
+
+              E.g. used when recalculating the interchange amount or in dispute scenarios where an amount also need to be calculated using the exchange rate of a specific day.
+
+              MCI : PDS158 - Business Activity Subfield 5 - Business Date. VISA : Central Processing Date  TCR0 164-167.'
+          feeProgramIndicator:
+            type: string
+            description: 'Visa field containing an interchange reimbursement fee program indicator (FPI), which is used in assessing the fee amount applied to.
+
+              Set in First Presentments and required in subsequent lifecycle messages.VISA : TCR1 pos 76-78'
+          functionCode:
+            type: integer
+            description: 'The IPM message uses a combination of two elements to define the message type : Message Type Identifier (MTI) + Data Element (DE) 24 (Function Code)
+
+              The MTI identifies the general ISO message type and the Function Code more specifically defines the message’s purpose.MCI : DE24 Function Code'
+          inputInterfaceCode:
+            type: string
+            description: Identifies the service forwarding transactions into the transaction processing service
+          messageTypeIdentifier:
+            type: integer
+            description: Message Type Identifier (MTI) is a four-digit numeric field identifying the general classification of a message being processed. MCI only
+          originatorCountryCode:
+            type: string
+            description: Determined using the originator member id. Country code stored in the system for the member.
+          originatorRegionCode:
+            type: string
+            description: Determined using the originator member id. Region code stored in the system for the member.
+          outputInterfaceCodes:
+            type: array
+            description: Identifies the output services to which the transaction processing service has forwarded the transaction
+            items:
+              type: string
+          processingCode:
+            description: 'Processing Code is a series of digits that describe the effect of a transaction on a customer account and the type of accounts affected.Used for MasterCard Interchange validation and determination.Further, required for MasterCard Fee collection messages created in the Transaction processing service MCI : DE03 - Processing Code'
+            allOf:
+            - $ref: '#/components/schemas/ProcessingCode'
+          receivingMemberId:
+            type: string
+            description: "Receiving Member ID identifies the receiving institution. \nMCI : DE100 - Receiving Institution ID Code. If not present – it is found as the processor member of the destinationMemberId"
+          retrievalReferenceNumber:
+            type: string
+            description: 'Retrieval Reference Number is a transaction information document reference number.
+
+              MCI : DE37 - Retrieval Reference Number'
+          routingMode:
+            type: string
+            description: 'Internal determined routing mode.Possible values : ACQUIRER, ISSUER, DISPUTE, UNDECIDED, PROCESSOR, ONUS, EXTERNAL'
+          suspendDescription:
+            type: string
+            description: Text field in which a more detailed description of the exact suspends conditions can be recorded.Used informatively to resolve suspend cases easier.
+          suspendReasonCode:
+            type: string
+            description: Reason code for transaction suspension. List of possible values is configurable in our system.
+          terminalTypeCode:
+            type: string
+            description: 'Terminal Type code for terminal devices.Used for interchange validation and determination. Also, used in dispute context for establishing transactions conditions and rule set.
+
+              MCI : PDS 023 - Terminal Type
+
+              VIS : TCR1 pos.124 UnattendedAcceptanceTerminalIndicator'
+          cardValidationIndicator:
+            type: string
+            description: 'CVC 2 Validation Program Indicator.
+
+              MCI : PDS 44 - Program Participation Indicator Subfield 1 - CVC 2 Validation Program Indicator'
+          contactlessChargebackEligibilityIndicator:
+            type: string
+            description: 'QPS/PayPass Chargeback Eligibility Indicator.
+
+              MCI : PDS 44 - Program Participation Indicator Subfield 2 - QPS/PayPass Chargeback Eligibility Indicator'
+          floorLimitIndicator:
+            type: string
+            description: 'Mandatory for Visa presentments. Not applicable to other card schemes.Indicates if the transaction was above or below the merchant’s floor limit for the date of the purchase.
+
+              VIS :TCR0 - Floor Limit Indicator'
+          multipleClearingSequenceNumber:
+            type: integer
+            description: 'Can be used when acquirers submit multiple clearing transactions for a single card-not-present authorization message.The multiple clearing sequence number distinguishes a specific clearing transaction from all other clearing transactions submitted for the same authorization
+
+              VIS : TCR05 - Multiple Clearing Sequence Number'
+          multipleClearingSequenceCount:
+            type: integer
+            description: 'Can be used when acquirers submit multiple clearing transactions for a single card-not-present authorization message.The multiple clearing sequence count qualifies the total of multi clearing transactions VIS : TCR05 - Multiple Clearing Sequence Count'
+          offline:
+            type: boolean
+            description: If true it indicates that the first presentment was done without authorization.
+          onUs:
+            type: boolean
+            description: This field is received in VISA and MCI file header to identify if the received file is onus or offus
+          bookingDate:
+            type: string
+            format: date-time
+            description: 'This date is received in VISA and MCI file header
+
+
+              MCI : PDS105 - File ID Subfield 2  - File Reference Date
+
+              VIS : TC90 Processing Date'
+          cardAcceptorStreet:
+            type: string
+            description: 'Card Acceptor Street associated to the transaction
+
+              MCI : DE43 - Card Acceptor Name/Location Subfield 2 - Card Acceptor Street Address'
+          processorId:
+            type: string
+            description: 'VISA : TC90 File Header Processing BIN ,MCI : n/a'
+          rejected:
+            type: boolean
+            description: 'Rejected Flag Always false for FP: not rejected by cardscheme'
+          approvalResponseCode:
+            type: string
+            description: "Approval response code calculated from card Scheme data.\nProvided only accordingly rules bellow\n*\tAPPROVED\n*\tPARTIALLY_APPROVED\n*\tDECLINED\n-VISA: rules\nAPPROVED\nif TCR 5 Authorization Response Code Pos. 35-36 = Y3\nor for Offline approved transaction\nif TCR5 Authorization Response Code Pos. 35-36=Y1 (Offline Approval)\nelse\nDECLINED\n-MCI: rules\nAPPROVED\nMCI: DE 038 Approval Code present\nor for offline transaction\nif DE 038 Approval code not present and DE 22 (Point of Service Data Code) is present and DE\n22, subfield 7 = F, indicating an offline chip transaction\nelse\nDECLINED"
+          settlementDate:
+            type: string
+            format: date-time
+            description: 'Settlement date
+
+              - VISA : TCR0 pos 164-167 (Central processing date YDDD) converted in DateTime
+
+              - MCI: PDS 0159 s8 Settlement Date YYMMDD'
+          embargoCheckCode:
+            type: string
+            description: "This code indicates if the transaction can be posted or not on the cardholder account after an Embargo check performed by an external system (Smaragd).\nPossible values :\n- SENT : a request for Embargo is sent to the external system to check the transaction \n- WAIT : the external system responds the requestor has to wait for the final answer \n- HIT : the feeddback from the external system is not sucessfull and the credit cannot be posted on cardholder account \n- NO_HIT : the feeddback from the external system is sucessful and the credit can be posted on cardholder account"
+          interchangeFees:
+            type: array
+            items:
+              $ref: '#/components/schemas/InterchangeFee'
+          disputeReason:
+            type: string
+            description: disputeReason. Relevant if the failure of the check implies a dispute folder opening only if success = false
+      title: TransactionDetails
+    AuthorizationIdentifier:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: 'minLength: 18
+
+            maxLength: 18
+
+            Unique identifier of notified transaction in WLP FO. '
+        issuerExternalAuthorizationReference:
+          type: string
+          description: Issuer external authorization reference
+      title: AuthorizationIdentifier
+    DisputeMessage:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Identifies the type de the message FIRST_PRESENTMENT, CHARGEBACK etc ... associated to the Dispute Folder
+        status:
+          type: string
+          description: Status of the message  associated to the Dispute Folder
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of the message creation associated to the Dispute Folder
+        amount:
+          description: Amount in Scheme Reconciliation Currency of the message creation associated to the Dispute Folder
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        reasonCode:
+          type: string
+          description: Reason Code of the message associated to the Dispute Folder
+        reasonCodeDescription:
+          type: string
+          description: Description of the Reason Code of the message associated to the Dispute Folder
+        reverseFlag:
+          type: boolean
+          description: Identifies if the message is reversed or not
+        schemeCaseId:
+          type: string
+          description: The Scheme Case Id received from the Scheme VROL or MasterCom related to a chargeback message
+      title: DisputeMessage
+    TransactionIdentifier:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Internal transaction identifier generated by our system. 17-digit incremental number (10000000000000001)
+      title: TransactionIdentifier
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    PointOfService:
+      type: object
+      properties:
+        entryModePan:
+          type: string
+          description: VISA TCR0 PosEntryMode.
+        entryModePin:
+          type: string
+          description: VISA TCR0 CardholderIDMethod.
+        conditionCode:
+          type: string
+          description: VISA. Field equals to "02" if PosEntryMode is populated, "00" if not populated.
+        posTerminalCapability:
+          type: string
+          description: VISA TCR0 PosTerminalCapability
+        cardDataInputCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 1 indicates the set of methods supported by the terminal for the input of account number, card, or mobile device data.
+        cardholderAuthenticationCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 2 describes the capability of the terminal device to support/accept authentication data.
+        cardCaptureCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 3 indicates whether the terminal has card capture capabilities.
+        terminalOperatingEnvironment:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 4 indicates whether the card acceptor is attending the terminal and the location of the terminal.
+        cardholderPresentData:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 5 indicates whether the cardholder is present at the point of service and explains the condition if the cardholder is not present.
+        cardPresentData:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 6 indicates if the card is present at the point of service.
+        cardDataInputMode:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 7 indicates the method used for PAN entry to initiate a transaction.
+        cardholderAuthenticationMethod:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 8 indicates the method by which the cardholder’s identity was verified at the point of service.
+        cardholderAuthenticationEntity:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 9 indicates the entity through which the cardholder’s identity was verified at the point of service.
+        cardDataOutputCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 10 indicates the ability of the terminal to write or output data to a card.
+        terminalDataOutputCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 11 indicates the print and display capabilities of the terminal.
+        pinCaptureCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 12 indicates the maximum number of PIN characters that the POS terminal can capture.
+      title: PointOfService
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    CreateEventResponse:
+      type: object
+      required:
+      - type
+      - creationDate
+      properties:
+        type:
+          type: string
+          description: Contains the dispute Event Type label of the Event to post to the Dispute Folder.
+        creationDate:
+          type: string
+          format: date-time
+          description: The effective date of creation of the event
+      title: CreateEventResponse
+    CreateDocumentResponse:
+      type: object
+      required:
+      - fileName
+      - creationDate
+      properties:
+        fileName:
+          type: string
+          description: Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder
+        creationDate:
+          type: string
+          format: date-time
+          description: The effective date of creation of the document
+        documentTypeId:
+          type: string
+          description: Contains Mandatory document Type Id of the document to be displayed on the event generated in the Dispute Folder
+      title: CreateDocumentResponse
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
+          type: string
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
+          type: string
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
+    CreatePostingResponse:
+      type: object
+      required:
+      - postingAmount
+      - postingTypeReference
+      - creationDate
+      properties:
+        postingAmount:
+          description: Mandatory parameter specifying the posting amount
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        postingTypeReference:
+          type: string
+          description: Contains the identifier of the external reference of the posting
+        creationDate:
+          type: string
+          format: date-time
+          description: The effective date of creation of the posting
+      title: CreatePostingResponse
+    DisputePosting:
+      type: object
+      properties:
+        postingAmount:
+          description: Amount in Scheme Reconciliation Currency associated to the posting (message, write off, cardholder refund ...)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        message:
+          type: string
+          description: Message information for the posting
+        immediateReimbursement:
+          type: boolean
+          description: Optional parameter for impacting cardholder account immediatly
+        postingTypeReference:
+          type: string
+          description: 'Identifier of the external reference of the posting. The list of values are configured by issuer:
+
+            Three family of postings type:
+
+            - Cardholder: For impacting the cardholder account, possible values can be: ''Cardholder Account'', ''POST TO OTHER ACCOUNT''
+
+            - Issuer: Write off: possible values can be ''ISSUER_ACCOUNT'', ''PROFIT AND LOSS'', ''FRAUD''
+
+            - Foreign exchange fee (''FOREIGN_EXCHANGE_FEE''), Financial Advice Exchange Rate Difference (''ADVANCE_EXCHANGE_RATE_DIFFERENCE''):  the dispute officer can manually create a dispute posting amount to this account'
+        operationReference:
+          type: string
+          description: Internal reference of a transaction in external service, is needed for posting to cardholder account.
+        disputeAdjustmentType:
+          type: string
+          description: Dispute adjustment type
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of posting creation
+      title: DisputePosting
+    ApiResponseEntityCreateDisputeResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateDisputeResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateDisputeResponse
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
+
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
+    ApiResponseEntityDispute:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/Dispute'
+      description: Issuer response entity
+      title: ApiResponseEntityDispute
+    DisputeEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Dispute Event Type  (values shared between WL and the issuer)
+        message:
+          type: string
+          description: Description of the event
+        external:
+          type: boolean
+          description: Indicates if the event is external (value true) or internal (value false)
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of the event creation
+      title: DisputeEvent
+    DisputeDocument:
+      type: object
+      properties:
+        data:
+          type: string
+          description: Contains the document (letter) attached to the Dispute Folder encoded in Base64
+        type:
+          type: string
+          description: Type of the document attached to the Dispute Folder
+        label:
+          type: string
+          description: Label of the external document attached to the Dispute Folder
+        fileName:
+          type: string
+          description: File name of the external document attached to the Dispute Folder
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of the external document creation attached to the Dispute Folder
+      title: DisputeDocument
     ContractIdentification:
       type: object
       properties:
@@ -2348,30 +4192,11 @@ components:
           type: string
           description: Unique code identifying the terminal at the Card acceptor location
           example: 20YT45
-    PaymentData:
-      type: object
-      properties:
-        merchantPaymentId:
-          type: string
-          description: Unique identification of the payment in which this transaction has been paid out
-          example: SO-000000017036619028
-        merchantPaymentAggregationLevelCode:
-          type: string
-          description: Code for the merchant payment aggregation level.
-          example: '02'
-        paymentType:
-          type: string
-          description: Type for which payment created. Transaction Fee, Transaction
-          example: '03'
-        paymentDate:
-          type: string
-          description: payment date (yyyy-mm-ddT00:00:00+01:00) (Note, including 00:00:00+hh:00)
-          format: date
-        paymentCrossReferenceURI:
-          type: string
-          description: URI to the MerchantApiPayment to get the payment that belongs to this transaction. Only available if there is a payment date.
-          example: acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD
-    Transaction:
+    PaymentInfo:
+      type: array
+      items:
+        $ref: '#/components/schemas/PaymentData'
+    Transaction_2:
       type: object
       properties:
         transactionIdentification:
@@ -2544,29 +4369,25 @@ components:
           description: Used to provide information about the form factor of the token that was used to initiate a payment
           example: 0
         transactionAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         transactionVatAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         merchantTransactionFeeAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         merchantTransactionFeeVatAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         netAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         schemeMarkupAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         interchangeFeeAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         cashBackAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         acquirerMarkupAmount:
-          $ref: '#/components/schemas/Amount'
+          $ref: '#/components/schemas/Amount_2'
         merchantTransactionAmount:
-          $ref: '#/components/schemas/Amount'
-    PaymentInfo:
-      type: array
-      items:
-        $ref: '#/components/schemas/PaymentData'
+          $ref: '#/components/schemas/Amount_2'
     TransactionIdentification:
       type: object
       properties:
@@ -2609,1793 +4430,53 @@ components:
           description: Systems Trace Audit Number
           format: int32
           example: 12752
-definitions:
-  CardIdentifier:
-    type: object
-    description: Identification of the card either by Issuer card external reference or by card reference
-    properties:
-      cardReference:
-        type: string
-        description: 'Reference of the card generated by our system, unique per platform.
-
-          This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
-      issuerCardExternalReference:
-        type: string
-        description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
-
-          This reference is unique per issuer and may be used to carry out research and find information.'
-    title: CardIdentifier
-  CreatePostingResponse:
-    type: object
-    required:
-    - postingAmount
-    - postingTypeReference
-    - creationDate
-    properties:
-      postingAmount:
-        description: Mandatory parameter specifying the posting amount
-        allOf:
-        - $ref: '#/definitions/Amount'
-      postingTypeReference:
-        type: string
-        description: Contains the identifier of the external reference of the posting
-      creationDate:
-        type: string
-        format: date-time
-        description: The effective date of creation of the posting
-    title: CreatePostingResponse
-  Transaction:
-    type: object
-    properties:
-      issuerId:
-        type: string
-        description: Issuer identifier (unique per platform)
-      transactionIdentifier:
-        description: Internal identifier associated to the transaction
-        allOf:
-        - $ref: '#/definitions/TransactionIdentifier'
-      acquirerReferenceData:
-        type: string
-        description: 'Acquirer Reference Number (ARN) associated to the transaction
-
-
-          MCI : DE 031 - Acquirer Reference Data
-
-          VISA : TCR0 Acquirer Reference Number pos. 27-49'
-      acquisitionMaterial:
-        type: string
-        description: 'Type of material used to realize the transaction.
-
-          Possible values:
-
-          ATM, POS, INTERNET, MANUAL, VOICE_PHONE, UNATTENDED_TERMINAL, MOBILE, UNKNOWN'
-      cardAcceptorCity:
-        type: string
-        description: 'Card Acceptor Location (City) associated to the transaction
-
-
-          MCI : DE 43 - Card Acceptor Name/Location s3 - Card Acceptor City
-
-          VISA : TCR0 - Merchant City'
-      cardAcceptorCountry:
-        type: string
-        description: 'Card Acceptor Country Code associated to the transaction
-
-
-          MCI : DE 43 - Card Acceptor Name/Location s6 - Card Acceptor Country Code
-
-          VISA : TCR0 - Merchant Country'
-      cardAcceptorIdCode:
-        type: string
-        description: 'Identifies the card acceptor ID assigned by the acquirer. This ID must represent a unique identifier for each merchant name/location within the acquiring BIN.
-
-          Card Acceptor (Merchant) Identifier associated to the transaction
-
-
-          MCI : DE 042 - Card Acceptor ID Code
-
-          VISA : TCR5 - Acquirer''s Business ID'
-      cardAcceptorName:
-        type: string
-        description: 'Complete Card Acceptor Name / Location (Merchant) associated to the transaction
-
-
-          MCI : DE 43 - Card Acceptor Name/Location s1 to s6 - Card Acceptor Name/Location
-
-          VISA : TCR0'
-      cardAcceptorZipCode:
-        type: string
-        description: 'Card Acceptor ZIP Code associated to the transaction
-
-
-          MCI : DE 43 - Card Acceptor Name/Location s4 - Card Acceptor Postal (ZIP) Code
-
-          VISA : TCR0 - Merchant zip code'
-      cardScheme:
-        type: string
-        description: Short name of national or international network, if implicated.
-      debit:
-        type: boolean
-        description: 'Sign associated to the transaction according to the Cardholder side
-
-          * true = Cardholder debited
-
-          * false = Cardholder credited'
-      maskedPan:
-        type: string
-        description: Masked Primary Account Number (PAN) of card present in the transaction
-      merchantCategoryCode:
-        type: string
-        description: Classifies the type of business applicable to the card acceptor
-      pan:
-        type: string
-        description: 'Primary Account Number (PAN) present in the transaction
-
-
-          MCI : DE 02  PrimaryAccountNumber
-
-          VISA : TCR0 pos. 5-20 AccountNumber'
-      reconciliationAmount:
-        description: 'Transaction amount provided by the scheme in the currency agreed between the scheme and the issuer/WL.
-
-          Mandatory for 1st presentment.
-
-          Scheme Reconciliation Amount / Currency / Exponent
-
-
-          MCI: DE 005 / DE 050 / associated PDS 0148
-
-          VISA: Destination Amount / Destination Currency'
-        allOf:
-        - $ref: '#/definitions/Amount'
-      reversal:
-        type: boolean
-        description: This flag indicates if this operation is a reversal (true) or not (false)
-      transactionAmount:
-        description: 'DE 4 (Amount, Transaction) is the amount of funds the cardholder requested in the currency appearing on the transaction information document (TID), which may be the acquirer’s local currency or a currency acceptable to the cardholder and card acceptor that the acquirer supports, exclusive of PDS 0146 (Amounts, Transaction Fee). If no currency is identified on the TID, the transaction is deemed to have taken place in the currency that is legal tender at the point of interaction.
-
-          Amount of the transaction. This field contains numerics. Two decimal positions are implied. If the Original Source Currency code is 392 (Japanese Yen), any value other than zero after the decimal produces an Invalid Amount error.
-
-          MCI DE 004
-
-          VISA TCR0
-
-          '
-        allOf:
-        - $ref: '#/definitions/Amount'
-      transactionDate:
-        type: string
-        format: date-time
-        description: 'Transaction Date in Merchant site when transaction has been performed
-
-          E.g. : 2023-02-04T00:00:00+01:00
-
-          - MCI: DE 012 (Date and Time, Local Transaction)
-
-          - VISA : TCR0 pos. 58-61'
-      walletId:
-        type: string
-        description: 'Indicates the identifier of the wallet (Apple Pay or other token requestor) used for the transaction
-
-          '
-      approvalCode:
-        type: string
-        description: 'Authorization Approval Code associated to the transaction
-
-
-          MCI : DE 038 - Approval Code
-
-          VISA : TCR0 Authorization Code pos. 152-157'
-      pointOfSaleEnvironment:
-        type: string
-        description: 'Recurring transaction indicator, indicating that the cardholder
-
-          and merchant have agreed to periodic billing for goods and services, such as
-
-          utility bills, internet connection, and magazine subscriptions.
-
-          Values:
-
-          Space = default
-
-          R = Recurring Payment Transaction
-
-          I = Installment Payment
-
-          C = Credential on File'
-      mailPhoneEcommerceAndPaymentIndicator:
-        type: string
-        description: "Mail Phone Ecommerce and Payment Indicator indicates if transaction was initiated as mail order, telephone order or electronic commerce. \nUsed in Visa interchange validation and determination.  \nRequired in input for Visa transactions. \nBase II mapped from Draft data TCR1 position 116. \nDomain: \nSpace - Field not applicable or acquirer did not specify.  \n1 - Mail/Phone Order (MO/TO). \n2 - Recurring transaction (valid only for U.S. acquired transactions). \n3 - Instalment payment.  \n4 - Unknown classification/other mail order.  \n5 - Secure Electronic Commerce Transaction. \n6 - Non-Authenticated Security Transaction at a 3-D Secure-capable merchant, and merchant attempted to authenticate the cardholder using 3-D secure. \n7 - Non-Authenticated Security Transaction \n8 - Non-secure transaction. \n9 - For optional regional use only."
-      pointOfService:
-        description: 'Represent the card entry mode information
-
-
-          MCI DE22 Point of Service (POS) Entry Mode
-
-          VISA TCR0 160 CardholderIDMethod, 162-163 PosEntryMode '
-        allOf:
-        - $ref: '#/definitions/PointOfService'
-      acquirerId:
-        type: string
-        description: 'VISA mapping is the following: TC05, TCR0 Field: Acquirer Reference Number POS 27-49. Should be taken positions 2-7 of this field (Acquirer BIN)
-
-          MCI mapping is the following: DE 31 Acquirer Reference Data, Positions 2-7 of the field'
-      destinationId:
-        description: 'VISA mapping is the following: Determined based on transaction data.
-
-          MCI mapping is the following: DE 93 transaction Destination Institution ID code.'
-        type: string
-      authorizationBusinessCaseIdentifier:
-        description: Internal identifier provided by the WLP Front Office in each Authorisation Message received. Only present if transaction (first presentment) matched with an authorization.
-        allOf:
-        - $ref: '#/definitions/AuthorizationBusinessCaseIdentifier'
-      cardIdentifier:
-        description: Refer to Card.cardIdentifier
-        allOf:
-        - $ref: '#/definitions/CardIdentifier'
-      panTokenIdentifier:
-        description: 'Token Requestor Identifier value associated to the transaction
-
-
-          MCI : PDS 0059 - Token Requestor ID
-
-          VISA : TCR5 Token Requestor ID pos. 149-159'
-        allOf:
-        - $ref: '#/definitions/PanTokenIdentifier'
-      lodgingInformation:
-        description: 'The list of lodging information parameters from the clearing file.
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        allOf:
-        - $ref: '#/definitions/LodgingInformation'
-      carRentalInformation:
-        description: 'The list of car rental information parameters from the clearing file.
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        allOf:
-        - $ref: '#/definitions/CarRentalInformation'
-      airItineraryInformation:
-        description: 'The list of air itinerary parameters from the clearing file.
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        allOf:
-        - $ref: '#/definitions/AirItineraryInformation'
-      eCommerceSecurityLevelIndicator:
-        description: 'Information about security protocol for internet transactions
-
-          MCI only : PDS 0052 - Electronic Commerce Security Level Indicator'
-        allOf:
-        - $ref: '#/definitions/ECommerceSecurityLevelIndicator'
-      transactionCategory:
-        type: string
-        description: 'Internal transaction category. Possible values : BILL_PAYMENT, CASH, CASH_WITHDRAWAL, CREDIT, CREDIT_ADJUSTMENT, CREDIT_FEE, CREDIT_PAYMENT, DEBIT_ADJUSTMENT, DEBIT_FEE, DEBIT_PAYMENT, FUND_TRANSFER, LOAD, PAYMENT, REFUND_PURCHASE, SALES, SALES_CASHBACK'
-      status:
-        type: string
-        description: "Transaction status in the system \n\nPossible values : \n- CREATED\n- ABANDON\n- IN_ERROR\n- DELETED\n- REPROCESS\n- PROCESSED\n- EMBARGO_WAIT"
-      transmissionDate:
-        type: string
-        format: date-time
-        description: 'Transmission date from the scheme
-
-
-          MCI : PDS 0158 - s5 Central Site Business Date
-
-          VISA : TCR0 164-167 Central Processing Date (YDDD)'
-      billingAmount:
-        description: 'Transaction amount converted to the cardholder billing currency
-
-          MCI only - DE6 Amount, Cardholder Billing'
-        allOf:
-        - $ref: '#/definitions/Amount'
-      recalculatedBillingAmount:
-        description: Refer to Operation.referenceAmount if transaction has been posted on an account
-        allOf:
-        - $ref: '#/definitions/Amount'
-      disputeStatus:
-        type: string
-        description: "Indicate status of dispute folder in case transaction has been disputed\nPossible values : \n- OPEN\n- CLOSED"
-      fraudStatus:
-        type: string
-        description: " Indicate if transaction is fraudulent\n\nPossible values : \n- FRAUDULENT"
-      accountIdentifier:
-        description: "Identifier of the entry account configured for the card number provided in the transaction. \n\nRefer to Account.accountIdentifier"
-        allOf:
-        - $ref: '#/definitions/AccountIdentifier'
-      action:
-        type: string
-        description: "Action done by the system on the transaction\n\nPossible values : \n•\tPOST_TO_ACCOUNT_SERVICE\n•\tOPEN_FRAUD_CASE\n•\tOPEN_DISPUTE_CASE_AND_POST_TO_ACCOUNT_SERVICE\n•\tOPEN_DISPUTE_CASE\n•\tOPEN_FRAUD_CASE_AND_POST_TO_ACCOUNT_SERVICE\n•\tOPEN_DISPUTE_CASE_AND_OPEN_FRAUD_CASE\n•\tPOST_TO_ACCOUNT_SERVICE_AND_FRAUD_SERVICE\n•\tSUSPEND_TRANSACTION_BY_ACTION_CODE\n•\tNO_POST"
-      panToken:
-        type: string
-        description: 'MCI : PDS 0001 Mastercard Mapping Service Account Number
-
-          VISA : TCR5  pos.150-165 panToken'
-      processingDate:
-        type: string
-        format: date-time
-        description: Date the transaction has been processed by the system
-      virtualServiceCardNumber:
-        type: string
-        description: Virtual Service Card Number of the transaction (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
-      virtualServiceCardReference:
-        type: string
-        description: Virtual service card reference of the transaction generated by our system
-      acquirerMemberId:
-        type: string
-        description: Acquirer Member Id of the transaction
-      reasonCode:
-        type: string
-        description: 'Reason code of the transaction.
-
-          MCI : DE25 - Message Reason Code
-
-          VISA : N/A for first presentment, TC10/TC20 TCR0 pos17-20'
-      eventDate:
-        type: string
-        format: date-time
-        description: 'Relevant for collection fee
-
-          Reference date related to the reason code
-
-          MCI : DE73 - Action date
-
-          VISA : TC10/TC20 TCR0 pos24-27 - Event date'
-      reversed:
-        type: boolean
-        description: Indicates if the transaction is reversed
-      singleMessage:
-        type: boolean
-      authorized:
-        type: boolean
-        description: "Authorized flag Calculated by IBO\n*\ttrue : when matched with an authorization\n*\tfalse : default value"
-      authorizationIdentifier:
-        description: Identifier of authorization matched with this transaction
-        allOf:
-        - $ref: '#/definitions/AuthorizationIdentifier'
-      creationDate:
-        type: string
-        format: date-time
-        description: Date the transaction has been created in the system
-    title: Transaction
-  ApiResponseEntityTransactionDetails:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/TransactionDetails'
-    description: Transaction Details entity
-    title: ApiResponseEntityTransactionDetails
-  NotFoundErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/NotFoundResponseMetadata'
-    title: NotFoundErrorApiResponse
-  BadGatewayErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadGatewayResponseMetadata'
-    title: BadGatewayErrorApiResponse
-  InternalServerErrorErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/InternalServerErrorResponseMetadata'
-    title: InternalServerErrorErrorApiResponse
-  InternalServerErrorResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 500
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Internal server error
-        description: Executed REST API status message
-    title: InternalServerErrorResponseMetadata
-  UnauthorizedErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/UnauthorizedResponseMetadata'
-    title: UnauthorizedResponseMetadata
-  ApiResponseEntityCreateDisputeResponse:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/CreateDisputeResponse'
-    description: Issuer response entity
-    title: ApiResponseEntityCreateDisputeResponse
-  DisputeMessage:
-    type: object
-    properties:
-      type:
-        type: string
-        description: Identifies the type de the message FIRST_PRESENTMENT, CHARGEBACK etc ... associated to the Dispute Folder
-      status:
-        type: string
-        description: Status of the message  associated to the Dispute Folder
-      creationDate:
-        type: string
-        format: date-time
-        description: Date of the message creation associated to the Dispute Folder
-      amount:
-        description: Amount in Scheme Reconciliation Currency of the message creation associated to the Dispute Folder
-        allOf:
-        - $ref: '#/definitions/Amount'
-      reasonCode:
-        type: string
-        description: Reason Code of the message associated to the Dispute Folder
-      reasonCodeDescription:
-        type: string
-        description: Description of the Reason Code of the message associated to the Dispute Folder
-      reverseFlag:
-        type: boolean
-        description: Identifies if the message is reversed or not
-      schemeCaseId:
-        type: string
-        description: The Scheme Case Id received from the Scheme VROL or MasterCom related to a chargeback message
-    title: DisputeMessage
-  CreateDisputeRequest:
-    type: object
-    properties:
-      disputeReason:
-        type: string
-        description: 'Indicates the dispute reason. Example of values are : UNKNOWN_CARD, HIGH_AMOUNT, DUPLICATE_TRANSACTION, LATE_PRESENTMENT , INVALID_PAYMENT, INACTIVE_CARD, CREATED_CARD, COUNTERFEIT_CARD, BLOCKED_CARD, ACTIVE_CARD_TED.'
-      refundRedebitIndicator:
-        type: string
-        description: 'Indicator to perform or not a Refund (for Debit transaction) / Redebit (for Credit transaction) on ''Cardholder Account'' on the disputed transaction. Possible values:
-
-          - FULL: Refund Redebit the full amount of the transaction.
-
-          - PARTIAL : Refund Redebit a partial amount, the partial amount should be provided in the field Refund Redebit Amount
-
-          - NONE : no refund redebit is requested, this is the default value'
-      refundRedebitAmount:
-        description: The issuer should provide the Amount to Refund or Redebit when Refund Redebit Indicator is PARTIAL. Otherwise it is not checked
-        allOf:
-        - $ref: '#/definitions/Amount'
-      declareFraudIndicator:
-        type: boolean
-        description: 'Indicator to perform a fraud declaration. Possible values:
-
-          true: fraud declaration will be sent to the scheme.
-
-          false: No fraud declaration, this is the default value.'
-      issuerDisputeExternalReference:
-        type: string
-        description: 'The issuer Dispute External Reference : should be unique by issuer, there is no constraint regarding the format, only  maximum length is 50 CHAR.'
-      originalValueDate:
-        type: string
-        format: date-time
-        description: Optional parameter external Value Date
-      disputePostings:
-        type: array
-        description: 'Issuer can provide a posting operation to perform on the created dispute folder, example:
-
-          - Do a refund towards the cardholder account
-
-          - Do a write-off towards an issuer account (Profit and Loss, Fraud,..)
-
-          - do a Foreign exchange fee, Financial Advice Exchange Rate Difference'
-        items:
-          $ref: '#/definitions/CreatePostingRequest'
-      disputeEvents:
-        type: array
-        description: 'Issuer can provide an event to add to the created dispute folder.
-
-          This manual event will be added to events generated internally by our system.
-
-          For example, the issuer can add an event to indicate that there is a communication from/to cardholder.'
-        items:
-          $ref: '#/definitions/CreateEventRequest'
-      disputeDocuments:
-        type: array
-        description: Issuer can provide a list of Documents to add to the created dispute folder.
-        items:
-          $ref: '#/definitions/CreateDocumentRequest'
-      autoAssignmentRule:
-        type: string
-        description: 'List of possible values: DISPUTE_REASON, automatically assigns the dispute to the user in charge based on the dispute reason.'
-    title: CreateDisputeRequest
-  Links:
-    type: object
-    required:
-    - self
-    properties:
-      self:
-        type: string
-        example: /x/{x}?x=x
-        description: Service method URL
-      next:
-        type: string
-        example: /x/{x}?page[offset]=2
-        description: URL pagination query parameter next page
-    title: Links
-  TravelDetailLeg:
-    type: object
-    properties:
-      flightNumber:
-        type: string
-        description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
-      carrier:
-        type: string
-        description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
-      class:
-        type: string
-        description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
-      stopOver:
-        type: string
-        description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
-      destination:
-        type: string
-        description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
-      fareCode:
-        type: string
-        description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
-    title: TravelDetailLeg
-  DisputeFolderIdentifier:
-    type: object
-    required:
-    - disputeFolderReference
-    properties:
-      disputeFolderReference:
-        type: string
-        description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
-      issuerDisputeExternalReference:
-        type: string
-        description: The issuer Dispute External Reference, Present if provided in the request.
-    title: DisputeFolderIdentifier
-  Dispute:
-    type: object
-    properties:
-      issuerId:
-        type: string
-        description: Issuer Identifier (unique per platform)
-      disputeFolderIdentifier:
-        description: Dispute Folder Identifier
-        allOf:
-        - $ref: '#/definitions/DisputeFolderIdentifier'
-      events:
-        type: array
-        description: 'Events attached to the dispute folder.Event can be triggered by our system or  added by the issuer (purpose can to indicate a communication from/to cardholder)
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        items:
-          $ref: '#/definitions/DisputeEvent'
-      postings:
-        type: array
-        description: "Posted operation on the dispute folder, example : Do a refund towards the cardholder account, \nDo a write-off towards an issuer account (Profit and Loss, Fraud,..), \ndo a Foreign exchange fee, Financial Advice Exchange Rate Difference\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._"
-        items:
-          $ref: '#/definitions/DisputePosting'
-      documents:
-        type: array
-        description: 'Documents added to the dispute folder.
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        items:
-          $ref: '#/definitions/DisputeDocument'
-      messages:
-        type: array
-        description: 'Messages exchanged with the scheme linked to the dispute folder.
-
-          _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        items:
-          $ref: '#/definitions/DisputeMessage'
-      acquirerReferenceData:
-        type: string
-        description: Acquiring Reference Number (ARN) related to the disputed transaction
-      transactionType:
-        type: string
-        description: DEPRECATED
-      transactionTime:
-        type: string
-        format: date-time
-        description: Transaction Date and Time on the Merchant site related to the disputed transaction
-      transactionAmount:
-        description: Transaction Amount (Value/Currency/Currency Exponent) related to the disputed transaction
-        allOf:
-        - $ref: '#/definitions/Amount'
-      reconciliationAmount:
-        description: Scheme Reconciliation Amount (Value/Currency/Currency Exponent) related to the disputed transaction
-        allOf:
-        - $ref: '#/definitions/Amount'
-      billingAmount:
-        description: Cardholder Billing Amount (Value/Currency/Currency Exponent) related to the disputed transaction on Cardholder point of view
-        allOf:
-        - $ref: '#/definitions/Amount'
-      billingFees:
-        description: Cardholder Billing Fees Amount (Value/Currency/Currency Exponent)  associated to the disputed transaction on Cardholder point of view
-        allOf:
-        - $ref: '#/definitions/Amount'
-      outstandingBalance:
-        description: Cardholder Outstanding balance (Value/Currency/Currency Exponent) associated to the disputed transaction
-        allOf:
-        - $ref: '#/definitions/Amount'
-      issuerAccountingBalance:
-        description: Issuer Accounting Balance (Value/Currency/Currency Exponent) related to the dispute on issuer point of view
-        allOf:
-        - $ref: '#/definitions/Amount'
-      statusCode:
-        type: string
-        description: Dispute status (open, closed) associated to the Dispute Folder
-      reason:
-        type: string
-        description: Dispute Reason associated to the Dispute Folder
-      creationDate:
-        type: string
-        format: date-time
-        description: Date of the Dispute Folder creation
-      cardAcceptorName:
-        type: string
-        description: Merchant Address Name related to the disputed transaction
-      cardAcceptorCity:
-        type: string
-        description: Merchant Address City related to the disputed transaction
-      cardAcceptorCountry:
-        type: string
-        description: Merchant Address Country Code (num-3) related to the disputed transaction
-      cardAcceptorIdCode:
-        type: string
-        description: Merchant Identifier related to the disputed transaction
-      cardAcceptorZipCode:
-        type: string
-        description: Merchant Address Zip Code related to the disputed transaction
-      userInCharge:
-        type: string
-        description: User in charge of the Dispute Folder
-      cardIdentifier:
-        description: Card Identifier related to the disputed transaction
-        allOf:
-        - $ref: '#/definitions/CardIdentifier'
-      lastMessageType:
-        type: string
-        description: Type of the last Message of the Dispute Folder
-      lastMessageDate:
-        type: string
-        format: date-time
-        description: Date of the last Message of the Dispute Folder
-      lastMessageStatus:
-        type: string
-        description: Status of the last Message of the Dispute Folder
-      superFolderReference:
-        type: string
-        description: Super folder reference if super folder exists
-      transactionCategory:
-        type: string
-        description: Internal Transaction category (SALES, CASH_WITHDRAWAL,  etc ..) related to the disputed transaction
-      transmissionDate:
-        type: string
-        format: date-time
-        description: 'Transmission date from the scheme
-
-          MCI : PDS 0158 - s5 Central Site Business Date
-
-          VISA : TCR0 164-167 Central Processing Date (YDDD)'
-      clientOpenDate:
-        type: string
-        format: date-time
-        description: Date when the cardholder has raised the Dispute, used to track the receipt of the cardholder dispute
-      originalValueDate:
-        type: string
-        format: date-time
-        description: Optional parameter external Value Date
-    title: Dispute
-  ECommerceSecurityLevelIndicator:
-    type: object
-    properties:
-      securityProtocol:
-        type: string
-        description: 'MCI : PDS 0052 s1 - Security Protocol indicates the presence and type of security protocol present in the authorization process.'
-      cardHolderAuthentication:
-        type: string
-        description: 'MCI : PDS 0052 s2 - Cardholder Authentication indicates the type of cardholder authentication used in the authorization process'
-      ucafCollectionIndicator:
-        type: string
-        description: 'MCI : PDS 0052 s3 - UCAF Collection Indicator identifies the level of UCAF supported in the authorization process'
-    title: ECommerceSecurityLevelIndicator
-  UnauthorizedResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 401
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Unauthorized
-        description: Executed REST API status message
-    title: UnauthorizedResponseMetadata
-  DisputePosting:
-    type: object
-    properties:
-      postingAmount:
-        description: Amount in Scheme Reconciliation Currency associated to the posting (message, write off, cardholder refund ...)
-        allOf:
-        - $ref: '#/definitions/Amount'
-      message:
-        type: string
-        description: Message information for the posting
-      immediateReimbursement:
-        type: boolean
-        description: Optional parameter for impacting cardholder account immediatly
-      postingTypeReference:
-        type: string
-        description: 'Identifier of the external reference of the posting. The list of values are configured by issuer:
-
-          Three family of postings type:
-
-          - Cardholder: For impacting the cardholder account, possible values can be: ''Cardholder Account'', ''POST TO OTHER ACCOUNT''
-
-          - Issuer: Write off: possible values can be ''ISSUER_ACCOUNT'', ''PROFIT AND LOSS'', ''FRAUD''
-
-          - Foreign exchange fee (''FOREIGN_EXCHANGE_FEE''), Financial Advice Exchange Rate Difference (''ADVANCE_EXCHANGE_RATE_DIFFERENCE''):  the dispute officer can manually create a dispute posting amount to this account'
-      operationReference:
-        type: string
-        description: Internal reference of a transaction in external service, is needed for posting to cardholder account.
-      disputeAdjustmentType:
-        type: string
-        description: Dispute adjustment type
-      creationDate:
-        type: string
-        format: date-time
-        description: Date of posting creation
-    title: DisputePosting
-  LodgingInformation:
-    type: object
-    properties:
-      businessFormatCode:
-        type: string
-        description: 'The fields represents additional data from VISA clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Business Format Code (Value: CA); POS: 17-18.'
-      noShowIndicator:
-        type: string
-        description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging No-Show Indicator; POS 27.
-
-          MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
-      extraCharges:
-        type: string
-        description: 'The fields represents additional data from VISA clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Extra Charges; POS 28–33.'
-      checkInDate:
-        type: string
-        description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Check-in Date (YYMMDD); POS 38-43.
-
-          MCI mapping is the following: PDS 0574. PDS 0574 (Arrival Date) contains the cardholder check-in date (YYMMDD).'
-      dailyRoomRate:
-        type: string
-        description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Daily Room Rate; POS 44-55.
-
-          MCI mapping is the following: PDS 0580. PDS 0580 (Room Rate) contains the daily room charges exclusive of taxes and fees. This PDS consists of two subfields:
-
-          1. Room Rate Amount; POS: 1-12
-
-          2. Room Rate Exponent; POS: 13'
-      totalTax:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Tax; POS 56-67.
-
-          MCI mapping is the following: PDS 0597. PDS 0597 (Total Tax Amount) contains the total amount of sales tax or value added tax (VAT) on the total purchase amount.'
-      prepaidExpenses:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Prepaid Expenses; POS 68-79.
-
-          MCI mapping is the following: PDS 0704. PDS 0704 (Prepaid Expenses) provides the amount of deposit or other prepaid amounts for the lodging stay.'
-      foodBeverageCharge:
-        type: string
-        description: 'The field represents additional data from VISA clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Food/Beverage Charges; POS 80-91.'
-      folioCashAdvances:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Folio Cash Advances; POS 92-103.
-
-          MCI mapping is the following: PDS 0706. PDS 0706 (Cash Advances) provides the amount of cash received during the lodging stay.'
-      totalRoomNights:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Room Nights; POS 104-105.
-
-          MCI mapping is the following: PDS 0703. PDS 0703 (Total Room Nights) provides the total number of nights for which a room was contracted during a lodging stay.'
-      totalRoomTax:
-        type: string
-        description: "The field represents additional data from VISA and MCI clearing file addendum.\nVISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Room Tax; POS 106-117.\nMCI mapping is the following: PDS 0581. PDS 0581 (Total Room Tax) contains tax amount information such as the daily room tax, occupancy tax, energy tax, and tourist tax amounts. This PDS consists of three subfields:\n1. Total Room Tax Amount; POS: 1-12\n2. Total Room Tax Exponent; POS: 13\n 3. Total Room Tax Sign; POS: 14"
-    title: LodgingInformation
-  NotFoundResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 404
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Not found
-        description: Executed REST API status message
-    title: NotFoundResponseMetadata
-  ResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      links:
-        description: Metadata Links
-        allOf:
-        - $ref: '#/definitions/Links'
-      statusMessage:
-        type: string
-        example: Executed successfully
-        description: Executed REST API status message
-      statusCode:
-        type: integer
-        format: int32
-        example: 200
-        description: HTTP status code
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      timeTakenMs:
-        type: integer
-        format: int64
-        example: 12
-        description: Wall clock time required from service to generate the response
-    title: ResponseMetadata
-  AccountIdentifier:
-    type: object
-    properties:
-      accountReference:
-        type: string
-        description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-      issuerAccountExternalReference:
-        type: string
-        description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-    title: AccountIdentifier
-  TransactionIdentifier:
-    type: object
-    properties:
-      transactionId:
-        type: string
-        description: Internal transaction identifier generated by our system. 17-digit incremental number (10000000000000001)
-    title: TransactionIdentifier
-  CarRentalInformation:
-    type: object
-    properties:
-      businessFormatCode:
-        type: string
-        description: 'The fields represents additional data from VISA clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Business Format Code (Value: CA); POS 17-18.'
-      days:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Days Rented; POS 19-20.
-
-          MCI mapping is the following: PDS 0691. PDS 0691 (Days Rented) provides the number of days that the vehicle was rented.'
-      noShowIndicator:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental No-Show Indicator; POS 27.
-
-          MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
-      extraCharges:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental Extra Charges; POS 28-33.
-
-          MCI mapping is the following: PDS 0701. PDS 0701 (Extra Charges) provides the extra charges associated with the vehicle rental.'
-      checkOutDate:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Rental Check-out Date (YYMMDD); POS 38-43.
-
-          MCI mapping is the following: PDS 0551. PDS 0551 (Rental Check-Out Date) is the date when the vehicle was originally rented (YYMMDD).'
-      dailyRentRate:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Daily Rental Rate; POS 44-55.
-
-          MCI mapping is the following: PDS 0553. PDS 0553 (Rental Rate) contains the rental rate charged for the vehicle and indicates whether it is a daily, weekly, or monthly rate. This PDS consists of two subfields:
-
-          1. Rental Rate Indicator; POS: 1
-
-          - D: Daily rate
-
-          - W: Weekly rate
-
-          - M: Monthly rate
-
-          - space: Unknown or unreported
-
-          2. Rental Rate; POS: 2-13'
-      weeklyRentRate:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Weekly Rental Rate; POS 56-67.
-
-          MCI mapping is the following: PDS 0692. PDS 0692 (Weekly Rental Amount) provides the amount charged for a seven-day rental period.'
-      insuranceCharge:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Insurance Charges; POS 68-79.
-
-          MCI mapping is the following: PDS 0559. PDS 0559 (Vehicle Insurance) contains an indicator of whether the customer purchased insurance and of the insurance amount. This PDS consists of two subfields:
-
-          1. Insurance Indicator; POS: 1
-
-          - Y: Yes (insurance was purchased)
-
-          - N: No (insurance was not purchased)
-
-          - spaces: Unknown or unreported
-
-          2. Insurance Charges; POS: 2-13'
-      fuelCharge:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Fuel Charges; POS 80-91.
-
-          MCI mapping is the following: PDS 0698. PDS 0698 (Fuel Charge) provides the amount charged for fuel used during vehicle rental.'
-      classCode:
-        type: string
-        description: "The field represents additional data from VISA and MCI clearing file addendum.\n VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Car Class Code; POS 92-93.\nMCI mapping is the following: PDS 0568. PDS 0568 (Rental Class ID) contains the classification, such as midsize or luxury, of the vehicle rented."
-      oneWayDropCharge:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: One-Way Drop-off Charges; POS 94-105.
-
-          MCI mapping is the following: PDS 0694. PDS 0694 (One Way Drop Off Charge) provides a charge associated with not returning a vehicle to the original rental location.'
-      renterName:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - CAR RENTAL; Field: Renter Name; POS 106-145.
-
-          MCI mapping is the following: PDS 0545. PDS 0545 (Renter Name) is the name of the individual making the vehicle rental agreement.'
-    title: CarRentalInformation
-  Amount:
-    type: object
-    required:
-    - value
-    - exponent
-    - isoCode
-    properties:
-      value:
-        type: integer
-        format: int64
-        description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-      exponent:
-        type: integer
-        format: int32
-        description: Exponent of Amount. Number of decimal digits.
-      isoCode:
-        type: string
-        description: 'Currency code of amount
-
-          The currency in ISO4217 alphabetic format.
-
-          Example: EUR for Euro'
-    title: Amount
-  ForbiddenErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/ForbiddenResponseMetadata'
-    title: ForbiddenErrorApiResponse
-  PanTokenIdentifier:
-    type: object
-    required:
-    - panTokenReference
-    properties:
-      panTokenReference:
-        type: string
-        description: Pan Token Reference
-    title: PanTokenIdentifier
-  DisputeDocument:
-    type: object
-    properties:
-      data:
-        type: string
-        description: Contains the document (letter) attached to the Dispute Folder encoded in Base64
-      type:
-        type: string
-        description: Type of the document attached to the Dispute Folder
-      label:
-        type: string
-        description: Label of the external document attached to the Dispute Folder
-      fileName:
-        type: string
-        description: File name of the external document attached to the Dispute Folder
-      creationDate:
-        type: string
-        format: date-time
-        description: Date of the external document creation attached to the Dispute Folder
-    title: DisputeDocument
-  PointOfService:
-    type: object
-    properties:
-      entryModePan:
-        type: string
-        description: VISA TCR0 PosEntryMode.
-      entryModePin:
-        type: string
-        description: VISA TCR0 CardholderIDMethod.
-      conditionCode:
-        type: string
-        description: VISA. Field equals to "02" if PosEntryMode is populated, "00" if not populated.
-      posTerminalCapability:
-        type: string
-        description: VISA TCR0 PosTerminalCapability
-      cardDataInputCapability:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 1 indicates the set of methods supported by the terminal for the input of account number, card, or mobile device data.
-      cardholderAuthenticationCapability:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 2 describes the capability of the terminal device to support/accept authentication data.
-      cardCaptureCapability:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 3 indicates whether the terminal has card capture capabilities.
-      terminalOperatingEnvironment:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 4 indicates whether the card acceptor is attending the terminal and the location of the terminal.
-      cardholderPresentData:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 5 indicates whether the cardholder is present at the point of service and explains the condition if the cardholder is not present.
-      cardPresentData:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 6 indicates if the card is present at the point of service.
-      cardDataInputMode:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 7 indicates the method used for PAN entry to initiate a transaction.
-      cardholderAuthenticationMethod:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 8 indicates the method by which the cardholder’s identity was verified at the point of service.
-      cardholderAuthenticationEntity:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 9 indicates the entity through which the cardholder’s identity was verified at the point of service.
-      cardDataOutputCapability:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 10 indicates the ability of the terminal to write or output data to a card.
-      terminalDataOutputCapability:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 11 indicates the print and display capabilities of the terminal.
-      pinCaptureCapability:
-        type: string
-        description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 12 indicates the maximum number of PIN characters that the POS terminal can capture.
-    title: PointOfService
-  DisputeEvent:
-    type: object
-    properties:
-      type:
-        type: string
-        description: Dispute Event Type  (values shared between WL and the issuer)
-      message:
-        type: string
-        description: Description of the event
-      external:
-        type: boolean
-        description: Indicates if the event is external (value true) or internal (value false)
-      creationDate:
-        type: string
-        format: date-time
-        description: Date of the event creation
-    title: DisputeEvent
-  AuthorizationBusinessCaseIdentifier:
-    type: object
-    required:
-    - businessCaseId
-    properties:
-      businessCaseId:
-        type: string
-        description: 'Business case to which the transaction belongs.
-
-          The provided information reflects its status after transaction completion.
-
-          A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
-    title: AuthorizationBusinessCaseIdentifier
-  CreatePostingRequest:
-    type: object
-    required:
-    - postingAmount
-    - postingTypeReference
-    properties:
-      postingAmount:
-        description: Mandatory parameter specifying the posting amount. The posting amount can be negative amount (- sign in the beginning of the amount digits)
-        allOf:
-        - $ref: '#/definitions/Amount'
-      message:
-        type: string
-        description: Description message that will associated to the posted operation in the statement
-      immediateReimbursement:
-        type: boolean
-        description: Optional parameter for impacting card holder account immediately
-      postingTypeReference:
-        type: string
-        description: 'The issuer must provide the identifier of the external reference of the posting. The list of values are configured by issuer:
-
-          Three family of postings type:
-
-          - Cardholder: For impacting the cardholder account, possible values can be: ''Cardholder Account'', ''POST TO OTHER ACCOUNT''
-
-          - Issuer: Write off: possible values can be ''ISSUER_ACCOUNT'', ''PROFIT AND LOSS'', ''FRAUD''
-
-          - Foreign exchange fee (''FOREIGN_EXCHANGE_FEE''), Financial Advice Exchange Rate Difference (''ADVANCE_EXCHANGE_RATE_DIFFERENCE''):  the dispute officer can manually create a dispute posting amount to this account'
-    title: CreatePostingRequest
-  AirItineraryInformation:
-    type: object
-    properties:
-      businessFormatCode:
-        type: string
-        description: 'The fields represents additional data from VISA clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Business Format Code; POS 17-18.'
-      travelAgent:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Name; POS 92-116.
-
-          MCI mapping is the following: PDS 0511. PDS 0511 (Travel Agency Name) is the name of the travel agency that issued the ticket.'
-      travelAgentCode:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Code; POS 84-91.
-
-          MCI mapping is the following: PDS 0510. PDS 0510 (Travel Agency Code) is a code assigned to the travel agency.'
-      passengerName:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Passenger Name; POS 27-46.
-
-          MCI mapping is the following: PDS 0505. PDS 0505 (Passenger Name) contains the name of the passenger to whom the ticket was issued.'
-      departureDate:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Departure Date (MMDDYY); POS 47-52.
-
-          MCI mapping is the following: PDS 0520. PDS 0520 (Travel Date) is the effective ticket date, also referred as departure date (YYMMDD).'
-      originCityCode:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Origination City/Airport Code; POS 53-55.
-
-          MCI mapping is the following: PDS 0523. PDS 0523 (City of Origin/Airport Code) is the originating airport or railway name standard abbreviation.'
-      restrictedTicketIndicator:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Restricted Ticket Indicator; POS 117.
-
-          MCI mapping is the following: PDS 0713. PDS 0713 (Restricted Ticket Indicator) provides the identifier noting that the ticket purchased has some restriction associated with its use.'
-      reservationSystem:
-        type: string
-        description: 'The fields represents additional data from VISA clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Computerized Reservation System; POS 142-145.'
-      creditReasonIndicator:
-        type: string
-        description: 'The fields represents additional data from VISA clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Credit Reason Indicator; POS 166.'
-      ticketChangeIndicator:
-        type: string
-        description: 'The fields represents additional data from VISA clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Ticket Change Indicator; POS 167.'
-      ticketNumber:
-        type: string
-        description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-          VISA mapping is the following: TC05, TCR0; Field: Merchant Name POS 92-116; POS 13-25 of this field should be taken as input.
-
-          MCI mapping is the following: PDS 0506. PDS 0506 (Ticket Number) contains the number on the ticket.'
-      IATACode:
-        type: string
-        description: 'The field represents additional data from MCI clearing file addendum.
-
-          MCI mapping is the following: PDS 0717. PDS 0717 (IATA Client Code) provides the International Air Transport Association (IATA) code identifying the company that purchased the ticket.'
-      leg1:
-        allOf:
-        - $ref: '#/definitions/TravelDetailLeg'
-        description: Description of first leg of trip
-      leg2:
-        allOf:
-        - $ref: '#/definitions/TravelDetailLeg'
-        description: Description of second leg of trip
-      leg3:
-        allOf:
-        - $ref: '#/definitions/TravelDetailLeg'
-        description: Description of third leg of trip
-      leg4:
-        allOf:
-        - $ref: '#/definitions/TravelDetailLeg'
-        description: Description of fourth leg of trip
-    title: AirItineraryInformation
-  CreateEventRequest:
-    type: object
-    required:
-    - type
-    properties:
-      type:
-        type: string
-        description: 'Contains the dispute Event Type label of the Event to post to the Dispute Folder.
-
-          The allowed event type list is configured per issuer in the platform. Type value generally used by issuers: ''Comment'''
-      message:
-        type: string
-        description: Contains a free defined input that will be displayed in the eventMessage in the Dispute Folder
-    title: CreateEventRequest
-  CreateEventResponse:
-    type: object
-    required:
-    - type
-    - creationDate
-    properties:
-      type:
-        type: string
-        description: Contains the dispute Event Type label of the Event to post to the Dispute Folder.
-      creationDate:
-        type: string
-        format: date-time
-        description: The effective date of creation of the event
-    title: CreateEventResponse
-  BadRequestResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 400
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad request
-        description: Executed REST API status message
-    title: BadRequestResponseMetadata
-  CreateDocumentRequest:
-    type: object
-    required:
-    - data
-    - type
-    - fileName
-    properties:
-      data:
-        type: string
-        description: 'The issuer must provide the data of the document in Base64 encoding format that has to be attached to the Dispute Folder.
-
-          The maximum size per document is:
-
-          - 10 Mo for PDF, TIFF or JPEG format (for Visa or Mastercard)
-
-          - 15 Mo for ZIP format (only for Mastercard)'
-      type:
-        type: string
-        description: 'The issuer must provide the document type,  Possible values:
-
-          - ''image/jpeg'':  data of attached document in JPEG format
-
-          - ''image/tiff'':  data of attached document in TIFF format
-
-          - ''application/pdf'':  data of attached document in PDF format
-
-          - ''application/zip'': data of attached document in ZIP format for Mastercard only'
-      label:
-        type: string
-        description: Contains optional label to be displayed on the event generated in the Dispute Folder
-      fileName:
-        type: string
-        description: 'Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder
-
-          Only for a Mastercard operation, the file name must have a maximum lenght of 16 with only alpha and numeric values (no constraint for a VISA operation)'
-      documentTypeId:
-        type: string
-        description: Contains optional document type Id
-    title: CreateDocumentRequest
-  CreateDocumentResponse:
-    type: object
-    required:
-    - fileName
-    - creationDate
-    properties:
-      fileName:
-        type: string
-        description: Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder
-      creationDate:
-        type: string
-        format: date-time
-        description: The effective date of creation of the document
-      documentTypeId:
-        type: string
-        description: Contains Mandatory document Type Id of the document to be displayed on the event generated in the Dispute Folder
-    title: CreateDocumentResponse
-  CreateDisputeResponse:
-    type: object
-    required:
-    - disputeFolderIdentifier
-    properties:
-      disputeFolderIdentifier:
-        description: Dispute Folder Identifier
-        allOf:
-        - $ref: '#/definitions/DisputeFolderIdentifier'
-      disputePostings:
-        type: array
-        description: 'Posting operation to perform on the created dispute folder, example:
-
-          - Do a refund towards the cardholder account
-
-          - Do a write-off towards an issuer account (Profit and Loss, Fraud,..)
-
-          - do a Foreign exchange fee, Financial Advice Exchange Rate Difference'
-        items:
-          $ref: '#/definitions/CreatePostingResponse'
-      disputeEvents:
-        type: array
-        description: Event to add to the created dispute folder.
-        items:
-          $ref: '#/definitions/CreateEventResponse'
-      disputeDocuments:
-        type: array
-        description: List of Documents to add to the created dispute folder
-        items:
-          $ref: '#/definitions/CreateDocumentResponse'
-      disputeFolderInternalId:
-        type: string
-        description: 'Dispute Folder ID '
-    title: CreateDisputeResponse
-  InterchangeFee:
-    type: object
-    properties:
-      type:
-        type: string
-        description: 'Indicates the type of the interchange fee Possible value : EXTERNAL (interchange fee coming from the scheme).'
-      code:
-        type: string
-        description: Interchange fee code.
-      amount:
-        description: Interchange fee amount
-        allOf:
-        - $ref: '#/definitions/Amount'
-    title: InterchangeFee
-  BadGatewayResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 502
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Bad Gateway
-        description: Executed REST API status message
-    title: BadGatewayResponseMetadata
-  TransactionDetails:
-    type: object
-    allOf:
-    - $ref: '#/definitions/Transaction'
-    - properties:
-        alternativeIban:
+    PaymentData:
+      type: object
+      properties:
+        merchantPaymentId:
           type: string
-          description: 'Corresponds to PAN token received from the scheme MCI : pds0001 - Mastercard Mapping Service Account Number'
-        brand:
+          description: Unique identification of the payment in which this transaction has been paid out
+          example: SO-000000017036619028
+        merchantPaymentAggregationLevelCode:
           type: string
-          description: Brand associated to the Issuer Account Range (BIN) such as "MCC" (MasterCard) , "DMC" (Debit MasterCard), "MSI" (Maestro), "CIR" (Cirrus), "VIS" (VISA).
-        cardTypeCode:
+          description: Code for the merchant payment aggregation level.
+          example: '02'
+        paymentType:
           type: string
-          description: Scheme Product associated in the Issuing Back Office system to the Issuer Account Range
-        cashAmount:
-          description: 'Additional Amount / Currency / Exponent for Cash Back transaction amount
-
-            * MCI : DE 054 s2 = 40 - Amount, Cash Back
-
-            * VISA : TCR1 pos. 158-166 Cashback'
-          allOf:
-          - $ref: '#/definitions/Amount'
-        dccIndicator:
+          description: Type for which payment created. Transaction Fee, Transaction
+          example: '03'
+        paymentDate:
           type: string
-          description: 'This field must contain one of these values (optional):
-
-            1 = DCC performed
-
-            space = default, no DCC has been performed'
-        gratuityAmount:
-          description: Additional Amount / Currency / Exponent for Gratuity transaction amount in the transaction currency Only for MC
-          allOf:
-          - $ref: '#/definitions/Amount'
-        panExpiryDate:
+          description: payment date (yyyy-mm-ddT00:00:00+01:00) (Note, including 00:00:00+hh:00)
+          format: date
+        paymentCrossReferenceURI:
           type: string
-          description: 'Card expiry date present in the transaction Format is "MMYY" (month and year)
-
-
-            MCI : DE 14 - Date Expiration'
-        panSequenceNumber:
+          description: URI to the MerchantApiPayment to get the payment that belongs to this transaction. Only available if there is a payment date.
+          example: acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD
+    Amount_2:
+      type: object
+      properties:
+        amount:
           type: string
-          description: 'PAN sequence number from the transaction
+          description: 'Amount in the major units of the currency according to ISO 4217.
 
 
-            MCI : DE 23 - Card Sequence Number
+            In case of euro, "3.10" (is 3.10 euro)
 
-            VISA : TCR7 pos. 7-9 Card Sequence Number'
-        poiAmount:
-          description: Additional Amount / Currency / Exponent for DCC (Dynamic Currency Conversion) transaction amount - Only for MC
-          allOf:
-          - $ref: '#/definitions/Amount'
-        surchargeAmount:
-          description: Additional Amount / Currency / Exponent for surcharge transaction amount in Transaction Currency
-          allOf:
-          - $ref: '#/definitions/Amount'
-        terminalId:
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        currency:
           type: string
-          description: Code that identifies the card acceptor terminal or ATM.
-        acquiringBankCode:
-          type: string
-          description: Determined using the originator member id. Bank code stored in the system for the member.
-        originatorMemberId:
-          type: string
-          description: 'Transaction Originator Member ID. Identifies the transaction originator institution.
-
-            MCI  : DE94 - Transaction Originator Institution ID Code
-
-            VISA: TCR0 27-49 acquiring reference number position 2-7'
-        schemeTransactionIdentifier:
-          type: string
-          description: 'Scheme Transaction Identifier allows to identify uniquely a transaction through its full life cycle.
-
-            MCI : DE63 - Transaction Life Cycle ID S2 - Trace ID
-
-            VISA : TCR5 Transaction Identifier'
-        destinationRegionCode:
-          type: string
-          description: Region code stored in the system for the member linked to the card prefix.
-        schemeExchangeRateDate:
-          type: string
-          format: date-time
-          description: 'Indicates the date of used exchange rates when performing currency conversions.
-
-            Presence of the date does not imply that a currency conversion took place. Having the exchange rate date stored allows retrieving a rate for a given day.
-
-            E.g. used when recalculating the interchange amount or in dispute scenarios where an amount also need to be calculated using the exchange rate of a specific day.
-
-            MCI : PDS158 - Business Activity Subfield 5 - Business Date. VISA : Central Processing Date  TCR0 164-167.'
-        feeProgramIndicator:
-          type: string
-          description: 'Visa field containing an interchange reimbursement fee program indicator (FPI), which is used in assessing the fee amount applied to.
-
-            Set in First Presentments and required in subsequent lifecycle messages.VISA : TCR1 pos 76-78'
-        functionCode:
-          type: integer
-          description: 'The IPM message uses a combination of two elements to define the message type : Message Type Identifier (MTI) + Data Element (DE) 24 (Function Code)
-
-            The MTI identifies the general ISO message type and the Function Code more specifically defines the message’s purpose.MCI : DE24 Function Code'
-        inputInterfaceCode:
-          type: string
-          description: Identifies the service forwarding transactions into the transaction processing service
-        messageTypeIdentifier:
-          type: integer
-          description: Message Type Identifier (MTI) is a four-digit numeric field identifying the general classification of a message being processed. MCI only
-        originatorCountryCode:
-          type: string
-          description: Determined using the originator member id. Country code stored in the system for the member.
-        originatorRegionCode:
-          type: string
-          description: Determined using the originator member id. Region code stored in the system for the member.
-        outputInterfaceCodes:
-          type: array
-          description: Identifies the output services to which the transaction processing service has forwarded the transaction
-          items:
-            type: string
-        processingCode:
-          description: 'Processing Code is a series of digits that describe the effect of a transaction on a customer account and the type of accounts affected.Used for MasterCard Interchange validation and determination.Further, required for MasterCard Fee collection messages created in the Transaction processing service MCI : DE03 - Processing Code'
-          allOf:
-          - $ref: '#/definitions/ProcessingCode'
-        receivingMemberId:
-          type: string
-          description: "Receiving Member ID identifies the receiving institution. \nMCI : DE100 - Receiving Institution ID Code. If not present – it is found as the processor member of the destinationMemberId"
-        retrievalReferenceNumber:
-          type: string
-          description: 'Retrieval Reference Number is a transaction information document reference number.
-
-            MCI : DE37 - Retrieval Reference Number'
-        routingMode:
-          type: string
-          description: 'Internal determined routing mode.Possible values : ACQUIRER, ISSUER, DISPUTE, UNDECIDED, PROCESSOR, ONUS, EXTERNAL'
-        suspendDescription:
-          type: string
-          description: Text field in which a more detailed description of the exact suspends conditions can be recorded.Used informatively to resolve suspend cases easier.
-        suspendReasonCode:
-          type: string
-          description: Reason code for transaction suspension. List of possible values is configurable in our system.
-        terminalTypeCode:
-          type: string
-          description: 'Terminal Type code for terminal devices.Used for interchange validation and determination. Also, used in dispute context for establishing transactions conditions and rule set.
-
-            MCI : PDS 023 - Terminal Type
-
-            VIS : TCR1 pos.124 UnattendedAcceptanceTerminalIndicator'
-        cardValidationIndicator:
-          type: string
-          description: 'CVC 2 Validation Program Indicator.
-
-            MCI : PDS 44 - Program Participation Indicator Subfield 1 - CVC 2 Validation Program Indicator'
-        contactlessChargebackEligibilityIndicator:
-          type: string
-          description: 'QPS/PayPass Chargeback Eligibility Indicator.
-
-            MCI : PDS 44 - Program Participation Indicator Subfield 2 - QPS/PayPass Chargeback Eligibility Indicator'
-        floorLimitIndicator:
-          type: string
-          description: 'Mandatory for Visa presentments. Not applicable to other card schemes.Indicates if the transaction was above or below the merchant’s floor limit for the date of the purchase.
-
-            VIS :TCR0 - Floor Limit Indicator'
-        multipleClearingSequenceNumber:
-          type: integer
-          description: 'Can be used when acquirers submit multiple clearing transactions for a single card-not-present authorization message.The multiple clearing sequence number distinguishes a specific clearing transaction from all other clearing transactions submitted for the same authorization
-
-            VIS : TCR05 - Multiple Clearing Sequence Number'
-        multipleClearingSequenceCount:
-          type: integer
-          description: 'Can be used when acquirers submit multiple clearing transactions for a single card-not-present authorization message.The multiple clearing sequence count qualifies the total of multi clearing transactions VIS : TCR05 - Multiple Clearing Sequence Count'
-        offline:
-          type: boolean
-          description: If true it indicates that the first presentment was done without authorization.
-        onUs:
-          type: boolean
-          description: This field is received in VISA and MCI file header to identify if the received file is onus or offus
-        bookingDate:
-          type: string
-          format: date-time
-          description: 'This date is received in VISA and MCI file header
-
-
-            MCI : PDS105 - File ID Subfield 2  - File Reference Date
-
-            VIS : TC90 Processing Date'
-        cardAcceptorStreet:
-          type: string
-          description: 'Card Acceptor Street associated to the transaction
-
-            MCI : DE43 - Card Acceptor Name/Location Subfield 2 - Card Acceptor Street Address'
-        processorId:
-          type: string
-          description: 'VISA : TC90 File Header Processing BIN ,MCI : n/a'
-        rejected:
-          type: boolean
-          description: 'Rejected Flag Always false for FP: not rejected by cardscheme'
-        approvalResponseCode:
-          type: string
-          description: "Approval response code calculated from card Scheme data.\nProvided only accordingly rules bellow\n*\tAPPROVED\n*\tPARTIALLY_APPROVED\n*\tDECLINED\n-VISA: rules\nAPPROVED\nif TCR 5 Authorization Response Code Pos. 35-36 = Y3\nor for Offline approved transaction\nif TCR5 Authorization Response Code Pos. 35-36=Y1 (Offline Approval)\nelse\nDECLINED\n-MCI: rules\nAPPROVED\nMCI: DE 038 Approval Code present\nor for offline transaction\nif DE 038 Approval code not present and DE 22 (Point of Service Data Code) is present and DE\n22, subfield 7 = F, indicating an offline chip transaction\nelse\nDECLINED"
-        settlementDate:
-          type: string
-          format: date-time
-          description: 'Settlement date
-
-            - VISA : TCR0 pos 164-167 (Central processing date YDDD) converted in DateTime
-
-            - MCI: PDS 0159 s8 Settlement Date YYMMDD'
-        embargoCheckCode:
-          type: string
-          description: "This code indicates if the transaction can be posted or not on the cardholder account after an Embargo check performed by an external system (Smaragd).\nPossible values :\n- SENT : a request for Embargo is sent to the external system to check the transaction \n- WAIT : the external system responds the requestor has to wait for the final answer \n- HIT : the feeddback from the external system is not sucessfull and the credit cannot be posted on cardholder account \n- NO_HIT : the feeddback from the external system is sucessful and the credit can be posted on cardholder account"
-        interchangeFees:
-          type: array
-          items:
-            $ref: '#/definitions/InterchangeFee'
-        disputeReason:
-          type: string
-          description: disputeReason. Relevant if the failure of the check implies a dispute folder opening only if success = false
-    title: TransactionDetails
-  AuthorizationIdentifier:
-    type: object
-    properties:
-      transactionId:
-        type: string
-        description: 'minLength: 18
-
-          maxLength: 18
-
-          Unique identifier of notified transaction in WLP FO. '
-      issuerExternalAuthorizationReference:
-        type: string
-        description: Issuer external authorization reference
-    title: AuthorizationIdentifier
-  BadRequestErrorApiResponse:
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        allOf:
-        - $ref: '#/definitions/BadRequestResponseMetadata'
-    title: BadRequestErrorApiResponse
-  ProcessingCode:
-    type: object
-    required:
-    - fromAccountType
-    - toAccountType
-    - transactionType
-    properties:
-      fromAccountType:
-        type: string
-        description: 'MCI : DE3 Subfield 2 - CardHolder "From" Account Type Code'
-      toAccountType:
-        type: string
-        description: 'MCI : DE3 Subfield 3 - CardHolder "To" Account Type Code'
-      transactionType:
-        type: string
-        description: 'MCI : DE3 Subfield 1 - Cardholder Transaction Type'
-    title: ProcessingCode
-  ForbiddenResponseMetadata:
-    type: object
-    required:
-    - correlationId
-    - responseDateTime
-    - statusCode
-    - statusMessage
-    properties:
-      correlationId:
-        type: string
-        description: Correlation Identifier
-      responseDateTime:
-        type: string
-        example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-        description: Timestamp when response date was generated
-      statusCode:
-        type: integer
-        format: int32
-        example: 403
-        description: HTTP status code
-      statusMessage:
-        type: string
-        example: Forbidden
-        description: Executed REST API status message
-    title: ForbiddenResponseMetadata
-  ApiResponseEntityDispute:
-    x-wl-api-response: true
-    type: object
-    required:
-    - responseMetadata
-    properties:
-      responseMetadata:
-        description: Response metadata
-        allOf:
-        - $ref: '#/definitions/ResponseMetadata'
-      data:
-        description: Response data
-        allOf:
-        - $ref: '#/definitions/Dispute'
-    description: Issuer response entity
-    title: ApiResponseEntityDispute
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+          description: Currency of the amount
+          example: EUR
+  securitySchemes:
+    basic:
+      type: oauth2
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+x-refined-from:
+- worldline-card-issuing-api-2.41.1.json
+- worldline-transactions-api-2.0.2.yaml

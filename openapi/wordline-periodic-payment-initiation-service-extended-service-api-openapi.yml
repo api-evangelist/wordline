@@ -1,15 +1,33 @@
-swagger: '2.0'
+openapi: 3.2.0
 info:
-  description: 'The current set of APIs will be available in Q2 2026 on Worldline Global Issuing Platforms.
+  title: Open Banking Payment Initiation Service Periodic Payment Initiation Service (Extended service) API
+  description: '### Introduction
 
-    Additional APIs are under construction and planned to be available in 2026.'
-  version: 2.41.1
-  title: Worldline Card Issuing Account - AccountState Periodic Payment Initiation Service (Extended service) API
-  contact: {}
-host: sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing
-basePath: /api/v2
-schemes:
-- https
+    There are several flows (sequence of API calls) to complete a payment. Which
+
+    API''s are required depend on the choosen `PaymentProduct`, ASPSP (debtor bank) and the chosen strong customer
+
+    authentication approach. The response of an API call will indicate in the ''Links'' section which next
+
+    API call is required to complete the payment. Both PSD2 and IDEAL payments are supported.
+
+
+    #### PSD2 Sandbox
+
+    Several AspspId''s are available to test specific PSD2 payment initiation scenario''s, see sandbox documentation.
+
+
+    The following authorization token can be used to test in the sandbox (unlike a real token this one doesn''t expire):
+
+    **97fb13a74c712d8c7a50476e71769eaf**
+
+    '
+  version: 3.15.0
+servers:
+- url: https://xs2a.awltest.de/xs2a/routingservice/services/ob/pis/v3
+  description: PSD2 Sandbox
+- url: https://digitalroutingservice.awltest.de/xs2a/routingservice/services/ob/pis/v3
+  description: iDEAL Sandbox
 tags:
 - name: Periodic Payment Initiation Service (Extended service)
 paths:
@@ -632,475 +650,85 @@ paths:
         511:
           $ref: '#/components/responses/511'
 components:
-  parameters:
-    AspspPsuId:
-      name: AspspPsuId
-      in: header
-      description: 'PSU’s Id at ASPSP. Allows the unique identification of the PSU at
-
-        the ASPSP.
-
-        '
-      schema:
-        type: string
-      example: Psu-12345
-    Signature:
-      name: Signature
-      in: header
-      description: 'Conditionally required for iDEAL payments. The signature in the request should include a keyId with the value of fingerprint of the certificate
-
-        '
-      schema:
-        type: string
-    DeviceId:
-      name: DeviceId
-      in: header
-      description: 'UUID (Universally Unique Identifier) for a device, which is used by
-
-        the PSU. UUID identifies either a device or a device dependant
-
-        application installation. In case of an installation identification
-
-        this ID need to be unaltered until removal from device.
-
-        '
-      schema:
-        maxLength: 500
-        minLength: 1
-        type: string
-    PsuIpAddress:
-      name: PsuIpAddress
-      in: header
-      description: 'PSU Session information.
-
-
-        The forwarded IP Address header field consists of the corresponding
-
-        HTTP request IP Address field between PSU and TPP . It shall be
-
-        contained if and only if this request was actively initiated by the
-
-        PSU.
-
-        '
-      schema:
-        maxLength: 35
-        minLength: 1
-        type: string
-    InitiatingPartyReturnUrl:
-      name: InitiatingPartyReturnUrl
-      in: header
-      description: 'The callback URL for the redirection back to the initiating party
-
-        after authorization.
-
-        '
-      schema:
-        maxLength: 4000
-        minLength: 1
-        type: string
-        example: https://www.example.org
-    AspspPsuCorporateIdType:
-      name: AspspPsuCorporateIdType
-      in: header
-      description: 'This is describing the type of the identification needed by the
-
-        ASPSP to identify the PsuCorporate-ID content.
-
-        '
-      schema:
-        type: string
-    LastLogin:
-      name: LastLogin
-      in: header
-      description: 'PSU Session information.
-
-
-        The time when the PSU last logged in with the TPP. ISO 8601 DateTime.
-
-        '
-      schema:
-        type: string
-        format: date-time
-    Digest:
-      name: Digest
-      in: header
-      description: Is contained if and only if the `Signature` element is contained in the header of the request.
-      schema:
-        type: string
-      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
-    PsuId:
-      name: PsuId
-      in: header
-      schema:
-        type: string
-      description: 'If this field is filled the Open Banking Service will try to
-
-        retrieve previously stored information to complete the
-
-        payment. The Open Banking Solution will:
-
-        * check for a pre authentication token in case pre-authentication is available for the ASPSP.
-
-        * check for debtor token in case of IDEAL payments
-
-        '
-    HttpHeaderAcceptLanguage:
-      name: HttpHeaderAcceptLanguage
-      in: header
-      description: 'PSU Session information.
-
-
-        The forwarded IP Accept header fields consist of the corresponding
-
-        HTTP request Accept header fields between PSU and TPP.
-
-        '
-      schema:
-        maxLength: 500
-        minLength: 1
-        type: string
-    AppRedirectPreferred:
-      name: AppRedirectPreferred
-      in: header
-      schema:
-        type: boolean
-        default: false
-      description: 'If set to ''true'' the Open Banking Service will try to steer the flow towards an App redirect for the authentication of the PSU and authorization of the payment.
-
-        This can potentially improve the user journey as the banking application may use biometrics for SCA and skip the identification process if the user is already logged in.
-
-
-        NOTE that, depending on the implementation of the ASPSP, it may so happen that the flows breaks if the user does not have the banking application installed on their mobile device.
-
-        '
-    InitiatingPartyNotificationUrl:
-      name: InitiatingPartyNotificationUrl
-      in: header
-      description: 'The URL which will be used for notification service request. The Open Banking Service supports two ways in which this field can be filled:
-
-        * **Option A)** with an URL ending on /v2 or /v3, indicating the version of the Notification API implemented by the Initiating Party. In this case the URL called for notifications will be extended with /notification/status by the Open Banking Service. The ''NotificationVersion'' field MUST NOT be filled.
-
-        * **Option B)** with a full URL. The version information MUST BE provided in the ''NotificationVersion'' field. In this case the provided URL will not be extended, and used as-is.
-
-        '
-      examples:
-        Option A:
-          value: https://www.example.org/myendpoint/v3
-        Option B:
-          value: https://www.example.org/myendpoint/notification
-      schema:
-        maxLength: 4000
-        minLength: 1
-        type: string
-    confirm:
-      name: confirm
-      in: query
-      description: 'If set to ''true'' the transaction will be immediately confirmed
-
-        by the Open Banking Service if confirmation of the payment by the Initiating Party is required by the ASPSP.
-
-        '
-      schema:
-        type: string
-    authorisationId:
-      name: authorisationId
-      in: path
-      required: true
-      schema:
-        type: string
-      example: aid-4846
-      description: 'The Id used by the Open Banking Service to refer to an authorisation resource.
-
-        '
-    HttpHeaderUserAgent:
-      name: HttpHeaderUserAgent
-      in: header
-      description: 'PSU Session information.
-
-
-        The forwarded Agent header field of the HTTP request between PSU
-
-        and TPP.
-
-
-        Required if
-
-        * the `PaymentProduct`equals `IDEAL`
-
-        * `PsuId`is provided
-
-        * `UseDebtorToken` does not equal `false`
-
-        '
-      schema:
-        maxLength: 500
-        minLength: 1
-        type: string
-    GeoLocation:
-      name: GeoLocation
-      in: header
-      description: 'The forwarded Geo Location of the corresponding http request
-
-        between PSU and TPP.
-
-        '
-      schema:
-        maxLength: 500
-        minLength: 1
-        type: string
-    MessageCreateDateTime:
-      name: MessageCreateDateTime
-      in: header
-      description: 'The message create date time.
-
-
-        ISO 8601 DateTime.
-
-        '
-      required: true
-      schema:
-        type: string
-        format: date-time
-      example: '2020-09-25T08:15:00.856Z'
-    AspspPsuCorporateId:
-      name: AspspPsuCorporateId
-      in: header
-      description: 'Identification of a Corporate in the Online Channels.
-
-        '
-      schema:
-        type: string
-    confirmForNotification:
-      name: confirm
-      in: query
-      description: 'If set to ''true'' the transaction will be immediately confirmed by the Open Banking Service if confirmation of the payment by the Initiating Party is required by the ASPSP.
-
-        <br>**Note:** This field is only applicable when the notification service is used by the Initiating Party to receive the status of the payment. When the notification is not used this flag can be set in the GET status API.
-
-        '
-      schema:
-        type: string
-    NotificationVersion:
-      name: NotificationVersion
-      in: header
-      description: "The version of the Notification API, implemented by the Initiating Party, which shall be used for notification service request. Can be filled with v2 or v3. This field is only applicable if option 'B' is chosen, see 'InitiatingPartyNotificationUrl' description. \n"
-      example: v3
-      schema:
-        type: string
-    HttpHeaderAccept:
-      name: HttpHeaderAccept
-      in: header
-      description: 'PSU Session information.
-
-
-        The forwarded IP Accept header fields consist of the corresponding
-
-        HTTP request Accept header fields between PSU and TPP.
-
-        '
-      schema:
-        maxLength: 500
-        minLength: 1
-        type: string
-    HttpHeaderReferer:
-      name: HttpHeaderReferer
-      in: header
-      description: 'PSU Session information.
-
-        '
-      schema:
-        maxLength: 500
-        minLength: 1
-        type: string
-    Locale:
-      name: Locale
-      in: header
-      schema:
-        type: string
-      description: '2-digit ISO-639 code for the language in which the Bank Selection Interface are displayed.
-
-
-        For special languages can be used 5-digit code like nl-BE, where first is ISO-639 langauge code and the second is ISO-3166 country code.
-
-
-        If not set, the language of the Bank Selection Interface is taken over from the end user’s browser configuration or the system configuration of the Bank Selection Interface server.
-
-        '
-    HttpMethod:
-      name: HttpMethod
-      in: header
-      description: 'PSU Session information.
-
-
-        HTTP method used at the PSU-TPP interface. Available values - GET,
-
-        POST, PUT, DELETE.
-
-        '
-      schema:
-        maxLength: 6
-        minLength: 3
-        type: string
-    HttpHeaderAcceptEncoding:
-      name: HttpHeaderAcceptEncoding
-      in: header
-      description: 'PSU Session information.
-
-
-        The forwarded IP Accept header fields consist of the corresponding
-
-        HTTP request Accept header fields between PSU and TPP.
-
-        '
-      schema:
-        maxLength: 500
-        minLength: 1
-        type: string
-    AspspPsuIdType:
-      name: AspspPsuIdType
-      in: header
-      description: 'Type of the Aspsp PSU-ID, needed in scenarios where PSUs have
-
-        several PSU-IDs as access possibility.
-
-        '
-      schema:
-        type: string
-    X-Request-ID:
-      name: X-Request-ID
-      in: header
-      description: 'UUID for unique request identification.
-
-        '
-      required: true
-      schema:
-        maxLength: 36
-        minLength: 1
-        type: string
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
-    HttpHeaderAcceptCharset:
-      name: HttpHeaderAcceptCharset
-      in: header
-      description: 'PSU Session information.
-
-
-        The forwarded IP Accept header fields consist of the corresponding
-
-        HTTP request Accept header fields between PSU and TPP.
-
-        '
-      schema:
-        maxLength: 500
-        minLength: 1
-        type: string
-    paymentId:
-      name: paymentId
-      in: path
-      description: 'The Id used by the Open Banking Service to refer to a payment.
-
-
-        Optionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.
-
-        '
-      required: true
-      schema:
-        type: string
-      example: 486215
-    PsuIpPort:
-      name: PsuIpPort
-      in: header
-      description: 'PSU Session information.
-
-
-        The forwarded IP Port header field consists of the corresponding
-
-        HTTP request IP Port field between PSU and TPP, if available.
-
-        '
-      schema:
-        maxLength: 5
-        minLength: 1
-        type: string
-    UseAuthorisationLandingPages:
-      name: UseAuthorisationLandingPages
-      in: header
-      schema:
-        type: boolean
-        default: false
-      description: 'If true, Bank Selection Interface will be used to request required information from PSU directly
-
-        '
   schemas:
-    PaymentProductEnum:
-      type: string
-      default: PSD2-SCT
-      description: 'Indicates the requested payment method.
-
-        '
-      enum:
-      - PSD2-SCT
-      - PSD2-SCT-Inst
-      - PSD2-Target2
-      - PSD2-Domestic
-      - PSD2-Domestic-Inst
-      - IDEAL
-      - WERO
-    CommonPaymentDataIdentificationResponse:
+    PaymentIdentificationRequest:
       type: object
       additionalProperties: false
-      required:
-      - PaymentId
-      - PaymentStatus
       properties:
-        PaymentId:
+        PsuData:
+          $ref: '#/components/schemas/PsuDataIdentification'
+    RemittanceInformationStructured:
+      required:
+      - Reference
+      type: object
+      additionalProperties: false
+      properties:
+        Reference:
+          type: string
+          pattern: '[a-zA-Z0-9]{1,35}'
+          description: 'The actual reference.
+
+            '
+        ReferenceType:
           maxLength: 35
           minLength: 1
           type: string
-          description: 'Id generated by the Open Banking Service. This should be used to
-
-            refer to this payment in subsequent api calls.
+          description: 'Reference type.
 
             '
-        PaymentStatus:
-          $ref: '#/components/schemas/PaymentStatusEnum'
-        AuthStatus:
-          $ref: '#/components/schemas/AuthStatusEnum'
-        PsuMessage:
-          maxLength: 1024
+        ReferenceIssuer:
+          maxLength: 35
           minLength: 1
           type: string
-          description: 'Text to be displayed to the PSU.
+          description: 'Identification of the issuer of the ReferenceType.
 
             '
-    EstimatedTotalAmount:
+    ScaMethods:
+      required:
+      - AuthenticationMethodId
+      - AuthenticationType
       type: object
       additionalProperties: false
-      required:
-      - Currency
-      - Amount
       properties:
-        Currency:
-          pattern: '[A-Z]{3,3}'
+        AuthenticationType:
           type: string
-          description: 'A code allocated to a currency by a Maintenance Agency under
+          description: 'Type of the SCA authentication method. The following methods are commonly seen coming from the ASPSP:
 
-            an international identification scheme, as described in the latest edition
+            -  SMS_OTP: The PSU will receive a One Time Password via SMS
 
-            of the international standard ISO 4217 "Codes for the representation of
+            -  CHIP_OTP: The PSU will be presented with a picture or text to create a One Time Password using their bank card
 
-            currencies and funds".
+            -  PHOTO_OTP: The PSU will be presented with a picture to create a One Time Password
+
+            -  PUSH_OTP: The PSU will receive a One Time Password via push notification on their mobile device
+
+            -  SMTP_OTP: The PSU will receive a One Time Password via email
 
             '
-        Amount:
-          pattern: ^\d{1,13}\.\d{1,2}$
+        AuthenticationMethodId:
+          minLength: 1
           type: string
-          description: 'Amount
+          description: 'Id of the authentication method. Used in subsequent API calls to refer to the authentication method.
 
             '
-      description: 'Estimated Total Amount.
+        Version:
+          minLength: 1
+          type: string
+          description: 'Version of the method.
 
-        '
+            '
+        Name:
+          minLength: 1
+          type: string
+          description: 'Name of the method in readable form. This name shall be used by the TPP when presenting a list of authentication methods to the PSU, if available.
+
+            '
+        Explanation:
+          minLength: 1
+          type: string
+          description: 'Detailed information about the SCA method, meant for the PSU.
+
+            '
     AddressData:
       type: object
       additionalProperties: false
@@ -1174,122 +802,13 @@ components:
             '
           maxLength: 35
           minLength: 1
-    InitiationResponseLinks:
-      type: object
-      additionalProperties: false
-      description: 'A list of hyperlinks to be recognized by the Initiating Party. The actual
-
-        hyperlinks used in the response depend on the dynamical decisions on
-
-        authorization approach for example. Remark - All links are full links.
-
-        * ''PreAuthenticationForEmbedded'': In case of an embedded pre-authentication required by the ASPSP, the Initiating Party has to use this link.
-
-        * ''RedirectUrl'': In case of an Redirect approach, the Initiating Party has to use this link to redirect the PSU’s browser session.
-
-        * ''PostAuthorisationForExplicit'': In case the ASPSP requires explicit start of authorization.
-
-        * ''PostIdentificationForDecoupled'': In case of a Decoupled approach, identification of the PSU required to start the decoupled authorization.
-
-        * ''PostAuthorisationForEmbedded'': In case of an embedded approach, endpoint to be called to start the embedded authorization.
-
-        * ''SelectAuthenticationMethod'': In case of an embedded approach, the Initiating Party has to use this link to pass the SCA method.
-
-        * ''AuthorizeTransaction'': In case of an embedded approach, the Initiating Party has to authorize the payment by providing the SCA OneTimePassword.
-
-        * ''ConfirmationRequired'': Endpoint to be called for payment confirmation for ASPSPs that require explicit confirmation of payments.
-
-        * ''GetPaymentStatus'': Endpoint to be called for retrieving the payment status.
-
-        * ''PrintLink'': A link to return a payment link. The payment link can be used by the PSU to authorize the payment. Lifetime is dictated by the PrintOptions parameter.
-
-        * ''PrintQRCode'': A link to retrieve a QR code. The QR code can be used by the PSU to authorize the payment. Lifetime is dictated by the PrintOptions parameter.
-
-        '
-      properties:
-        PreAuthenticationForEmbedded:
-          $ref: '#/components/schemas/Link'
-        RedirectUrl:
-          $ref: '#/components/schemas/Link'
-        PostAuthorisationForExplicit:
-          $ref: '#/components/schemas/Link'
-        PostIdentificationForDecoupled:
-          $ref: '#/components/schemas/Link'
-        PostAuthorisationForEmbedded:
-          $ref: '#/components/schemas/Link'
-        SelectAuthenticationMethod:
-          $ref: '#/components/schemas/Link'
-        AuthorizeTransaction:
-          $ref: '#/components/schemas/Link'
-        ConfirmationRequired:
-          $ref: '#/components/schemas/Link'
-        GetPaymentStatus:
-          $ref: '#/components/schemas/Link'
-        PrintLink:
-          $ref: '#/components/schemas/Link'
-        PrintQRCode:
-          $ref: '#/components/schemas/Link'
-    Links:
-      type: object
-      additionalProperties: false
-      description: 'A list of hyperlinks to be recognized by the Initiating Party. The actual
-
-        hyperlinks used in the response depend on the dynamical decisions on
-
-        authorization approach for example. Remark - All links are full links.
-
-
-        * ''GetPaymentStatus'': Endpoint to be called for retrieving the payment status.
-
-        '
-      properties:
-        GetPaymentStatus:
-          $ref: '#/components/schemas/Link'
-    ProductSpecificMasterData:
-      type: object
-      additionalProperties: false
-      required:
-      - ParamName
-      - ParamValue
-      properties:
-        ParamName:
-          type: string
-          minLength: 1
-          maxLength: 250
-          description: 'Name of the parameter exactly as required by the payment method.
-
-            '
-        ParamValue:
-          type: string
-          minLength: 1
-          maxLength: 2048
-          description: 'Actual value of the parameter.
-
-            '
-    CommonPaymentDataResponse:
+    CommonPaymentDataIdentificationResponse:
       type: object
       additionalProperties: false
       required:
       - PaymentId
       - PaymentStatus
       properties:
-        ExpiryDateTimestamp:
-          type: string
-          format: date-time
-          description: 'The timestamp from which the transaction operation will expire, expressed in UTC time format(YYYY-MM-DDThh:mm:ss.sssZ)
-
-            '
-        GuaranteedAmount:
-          description: 'The amount guaranteed by the ASPSP/Issuer to the Merchant/CPSP. Will be provided if the min max amount values are defined in the request
-
-            '
-          pattern: ^\d{1,13}\.\d{1,5}$
-          type: string
-          example: '123.45'
-        PaymentStatus:
-          $ref: '#/components/schemas/PaymentStatusEnum'
-        LevelOfGuarantee:
-          $ref: '#/components/schemas/LevelOfGuaranteeEnum'
         PaymentId:
           maxLength: 35
           minLength: 1
@@ -1299,40 +818,10 @@ components:
             refer to this payment in subsequent api calls.
 
             '
-        AspspPaymentId:
-          maxLength: 35
-          minLength: 1
-          type: string
-          description: 'Id used by the ASPSP/iDEAL Hub to refer to the payment.
-
-            '
-        AspspId:
-          maxLength: 35
-          minLength: 1
-          type: string
-          description: 'Id of the ASPSP selected by the PSU.
-
-            '
-        InitiatingPartyReferenceId:
-          maxLength: 36
-          minLength: 1
-          type: string
-          description: 'Reference to the payment created by the Initiating Party.
-
-            This Id will not be visible to the Payment Service User.
-
-            '
-        FundsAvailable:
-          type: boolean
-          description: 'Information whether sufficient funding is available.
-
-            '
-        DebtorInformation:
-          $ref: '#/components/schemas/DebtorInformationResponse'
-        AmountRelatedDetails:
-          $ref: '#/components/schemas/AmountRelatedDetails'
-        AuthorisationRequiredData:
-          $ref: '#/components/schemas/AuthorisationRequiredData'
+        PaymentStatus:
+          $ref: '#/components/schemas/PaymentStatusEnum'
+        AuthStatus:
+          $ref: '#/components/schemas/AuthStatusEnum'
         PsuMessage:
           maxLength: 1024
           minLength: 1
@@ -1340,51 +829,37 @@ components:
           description: 'Text to be displayed to the PSU.
 
             '
-    AuthorisationRequiredData:
-      type: object
-      additionalProperties: false
-      description: 'The data required for PSU authentication and transaction authorisation
+    RegulatoryReportingCode:
+      maxLength: 10
+      type: string
+      description: 'Information needed due to regulatory and statutory requirements.
+
+        Economical codes to be used are provided by the National Competent Authority
 
         '
-      properties:
-        PsuCredentials:
-          type: array
-          description: 'List of credentials the PSU has on the ASPSP''s system. The PSU has to provide the CredentialValue for each of these (Username & Password).
-
-            '
-          items:
-            $ref: '#/components/schemas/PsuCredentials'
-        ScaMethods:
-          type: array
-          description: 'Array of available ScaMethods.
-
-            '
-          items:
-            $ref: '#/components/schemas/ScaMethods'
-        ChosenScaMethod:
-          $ref: '#/components/schemas/ScaMethods'
-        ChallengeData:
-          $ref: '#/components/schemas/ScaChallengeData'
-    CreditorAccount:
+      x-DefinitionType: ISO20022
+    DebtorAccount:
+      required:
+      - Identification
       type: object
       additionalProperties: false
       properties:
-        SecondaryIdentification:
-          type: string
-          description: 'Secondary identification of the Creditor Account, to which
-
-            a credit entry will be made as a result of the transaction. (Only Openbank
-
-            UK)
-
-            '
         SchemeName:
           $ref: '#/components/schemas/IdentificationTypeEnum'
         Identification:
           type: string
-          description: 'Identification of the Creditor Account. Can be given for P2P
+          description: 'Unambiguous identification of the account of the debtor to
 
-            payments only.
+            which a debit entry will be made as a result of the transaction.
+
+            '
+        SecondaryIdentification:
+          type: string
+          description: 'Secondary identification of the Debtor Account, to which a
+
+            debit entry will be made as a result of the transaction. (Only Openbank
+
+            UK)
 
             '
         Currency:
@@ -1399,200 +874,180 @@ components:
             currencies and funds".
 
             '
-    BillingAddress:
+    PsuCredentials:
+      required:
+      - CredentialsDetails
       type: object
       additionalProperties: false
       properties:
-        SameAsShippingAddress:
-          type: boolean
-          default: false
-          description: 'Indicates whether the billing addess is the same with shipping address. If true the information provided under `BillingAddressDetails` will be ignored
-
-            '
-        BillingAddressDetails:
-          $ref: '#/components/schemas/AddressData'
-    DebtorContactDetailsResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        FirstName:
+        AspspProductCode:
           type: string
-          description: 'The first name of the debtor
+          description: 'Product Identification. Used to contextualize the credentials
+
+            provided by the PSU for those ASPSP that need of it.
 
             '
-        LastName:
-          type: string
-          description: 'The last name of the debtor
-
-            '
-        PhoneNumber:
-          type: string
-          description: 'The phone number of the debtor in E.164 format
-
-            '
-          pattern: ^\+[1-9][0-9]{1,14}$
-          example: '+31612345678'
-        Email:
-          type: string
-          description: 'The e-mail address of the debtor
-
-            '
-          format: email
-          example: bob.smith@mymail.com
-          minLength: 1
-    PaymentIdentificationResponse:
-      description: 'PaymentIdentificationresponse
+        CredentialsDetails:
+          type: array
+          description: Credentials Details
+          items:
+            $ref: '#/components/schemas/CredentialDetails'
+      description: 'PSU Credentials on the Bank system.
 
         '
+    CredentialDetails:
+      required:
+      - CredentialId
+      - IsSecret
+      - LabelList
+      type: object
+      additionalProperties: false
+      properties:
+        IsSecret:
+          type: boolean
+          description: 'Binary identification of the transparancy of the provided
+
+            credentials by the PSU. Can have 2 values,
+
+            * true
+
+            * false
+
+
+            Can be provided by ASPSP. If not provided by the
+
+            ASPSP then by default,
+
+            * true, if the CredentialId=ewl-password
+
+            * false, if CredentialId=ewl-user-id
+
+            '
+        CredentialId:
+          type: string
+          description: 'Credential detail identification of the PSU credential at the
+
+            bank (provided bi CBI if approach is Embedded). If not provided
+
+            by the ASPSP, then default values should be,
+
+            * ewl-user-id, when IsSecret=false
+
+            * ewl-password, when IsSecret=true
+
+            '
+        LabelList:
+          type: array
+          description: 'The list of the labels to show to the PSU. They are
+
+            internationalized.
+
+            '
+          items:
+            $ref: '#/components/schemas/CredentialLabel'
+      description: 'Credentials Details.
+
+        '
+    AuthorisationResponseLinks:
+      type: object
+      additionalProperties: false
+      description: 'A list of hyperlinks to be recognized by the Initiating Party. The actual
+
+        hyperlinks used in the response depend on the dynamical decisions on
+
+        authorization approach for example. Remark - All links are full links.
+
+        * ''RedirectUrl'': In case of an Redirect approach, the Initiating Party has to use this link to redirect the PSU’s browser session.
+
+        * ''PutAuthorisationForEmbedded'': In case of an embedded approach, endpoint to be called to start the embedded authorization.
+
+        * ''SelectAuthenticationMethod'': In case of an embedded approach, the Initiating Party has to use this link to pass the SCA method.
+
+        * ''AuthorizeTransaction'': In case of an embedded approach, the Initiating Party has to authorize the payment by providing the SCA OneTimePassword.
+
+        * ''ConfirmationRequired'': Endpoint to be called for payment confirmation for ASPSPs that require explicit confirmation of payments.
+
+        * ''GetPaymentStatus'': Endpoint to be called for retrieving the payment status.
+
+        '
+      properties:
+        RedirectUrl:
+          $ref: '#/components/schemas/Link'
+        PutAuthorisationForEmbedded:
+          $ref: '#/components/schemas/Link'
+        SelectAuthenticationMethod:
+          $ref: '#/components/schemas/Link'
+        AuthorizeTransaction:
+          $ref: '#/components/schemas/Link'
+        ConfirmationRequired:
+          $ref: '#/components/schemas/Link'
+        GetPaymentStatus:
+          $ref: '#/components/schemas/Link'
+    CreditorDateAndPlaceOfBirth:
+      required:
+      - BirthDate
+      - CityOfBirth
+      - CountryOfBirth
+      type: object
+      additionalProperties: false
+      properties:
+        BirthDate:
+          type: string
+          description: Date on which a person is born.
+          format: date
+        CityOfBirth:
+          maxLength: 35
+          type: string
+          description: City where a person was born.
+        CountryOfBirth:
+          pattern: ^[A-Z]{2,2}$
+          type: string
+          description: Country where a person was born.
+      description: 'Date and place of birth of a person.
+
+        This information must be requested for detection of Fraud, Money-Laundering and Terrorism Financing in case of international payment.
+
+        '
+      x-DefinitionType: ISO20022
+    PaymentCancellationResponse:
       type: object
       additionalProperties: false
       properties:
         CommonPaymentData:
-          $ref: '#/components/schemas/CommonPaymentDataIdentificationResponse'
+          $ref: '#/components/schemas/CommonPaymentDataAuthorisationResponse'
         Links:
-          $ref: '#/components/schemas/Links'
-    ExchangeRateInformationResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        UnitCurrency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'Currency in which the rate of exchange is expressed in a currency
-
-            exchange. In the example 1GBP = xxxCUR, the unit currency is GBP.
-
-            '
-        ExchangeRate:
-          type: number
-          description: 'The factor used for conversion of an amount from one currency
-
-            to another. This reflects the price at which one currency was bought with
-
-            another currency. Rate expressed as a decimal, for example, 0.7 is 7/10
-
-            and 70%.
-
-            '
-        RateType:
-          type: string
-          description: 'Specifies the type used to complete the currency exchange.
-
-            * Spot: Exchange rate applied is the spot rate.
-
-            * Sale: Exchange rate applied is the market rate at the time of the sale.
-
-            * Agreed: Exchange rate applied is the rate agreed between the parties.
-
-            '
-          enum:
-          - Spot
-          - Sale
-          - Agreed
-        ContractIdentification:
-          maxLength: 256
-          minLength: 1
-          type: string
-          description: 'Unique and unambiguous reference to the foreign exchange contract
-
-            agreed between the initiating party/creditor and the debtor agent.
-
-            '
-        ExpirationDateTime:
-          type: string
-          description: 'Expiration date time. ISO 8601 DateTime.
-
-            '
-          format: date-time
-      description: 'Provides details on the currency exchange rate and contract.
-
-        '
-    ScaChallengeData:
-      type: object
-      additionalProperties: false
-      properties:
-        AdditionalInformation:
-          type: string
-          description: 'Additional Information for the PSU describing the method.
-
-            '
-        Data:
-          type: array
-          description: 'A collection of strings as challenge data.
-
-            '
-          items:
-            type: string
-        Image:
-          type: string
-          description: 'Image in base64 encoding
-
-            '
-        ImageLink:
-          type: string
-          description: 'URL of image
-
-            '
-        OtpFormat:
-          type: string
-          description: 'The OTP format.
-
-            '
-        OtpMaxLength:
-          type: integer
-          description: 'The maximum length for the OTP.
-
-            '
-          format: int32
-      description: 'JSON DTO used to represent challenge data.
-
-        '
-    CredentialLabel:
-      required:
-      - Label
-      - Language
-      type: object
-      additionalProperties: false
-      properties:
-        Label:
-          type: string
-          description: 'The label associated to the credentials to show to the PSU.
-
-            '
-        Language:
-          type: string
-          description: 'Label internationalization. It specifies the language of the
-
-            label. The default value is EN
-
-            '
-    PaymentStatusEnum:
-      type: string
-      description: 'Payment status.
-
-        * ''TimeoutAtTpp'': This status can only occur in combination with the Bank Selection Interface (UseAuthorisationLandingPages = true). It''s set if the Bank Selection Interface concludes that the payment cannot be completed because of a timeout. It''s a final state.
-
-        '
-      enum:
-      - Open
-      - Authorised
-      - PartiallyAuthorised
-      - Pending
-      - SettlementInProcess
-      - SettlementCompleted
-      - ReceivedByCreditorBank
-      - ReceivedOnCreditorAccount
-      - Cancelled
-      - CancelledAtTPP
-      - TimeoutAtTpp
-      - Error
-      - Expired
+          $ref: '#/components/schemas/InitiationResponseLinks'
     ConfirmationRequest:
       type: object
       additionalProperties: false
       properties:
         PsuData:
           $ref: '#/components/schemas/PsuDataIdentification'
+    CommonPaymentDataConfirmationResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - PaymentId
+      - PaymentStatus
+      properties:
+        PaymentId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'Id generated by the Open Banking Service. This should be used to
+
+            refer to this payment in subsequent api calls.
+
+            '
+        PaymentStatus:
+          $ref: '#/components/schemas/PaymentStatusEnum'
+        PsuMessage:
+          maxLength: 1024
+          minLength: 1
+          type: string
+          description: 'Text to be displayed to the PSU.
+
+            '
     CrossCurrencyPayment:
       type: object
       additionalProperties: false
@@ -1607,37 +1062,37 @@ components:
             '
         ExchangeRateInformation:
           $ref: '#/components/schemas/ExchangeRateInformationRequest'
-    CurrencyConversionFee:
+    CommonPaymentDataAuthorisationResponse:
       type: object
       additionalProperties: false
       required:
-      - Currency
-      - Amount
-      - Rate
+      - PaymentId
+      - PaymentStatus
       properties:
-        Currency:
-          pattern: '[A-Z]{3,3}'
+        PaymentId:
+          maxLength: 35
+          minLength: 1
           type: string
-          description: 'A code allocated to a currency by a Maintenance Agency under
+          description: 'Id generated by the Open Banking Service. This should be used to
 
-            an international identification scheme, as described in the latest edition
-
-            of the international standard ISO 4217 "Codes for the representation of
-
-            currencies and funds".
+            refer to this payment in subsequent api calls.
 
             '
-        Amount:
-          pattern: ^\d{1,13}\.\d{1,2}$
+        PaymentStatus:
+          $ref: '#/components/schemas/PaymentStatusEnum'
+        AuthStatus:
+          $ref: '#/components/schemas/AuthStatusEnum'
+        TransactionFees:
+          $ref: '#/components/schemas/TransactionFees'
+        AuthorisationRequiredData:
+          $ref: '#/components/schemas/AuthorisationRequiredData'
+        PsuMessage:
+          maxLength: 1024
+          minLength: 1
           type: string
-          description: 'Amount of the fees.
+          description: 'Text to be displayed to the PSU.
 
             '
-        Rate:
-          type: number
-      description: 'Currency Conversion Fee
-
-        '
     RiskInformation:
       type: object
       additionalProperties: false
@@ -1725,150 +1180,25 @@ components:
       description: 'Information used for risk scoring by the ASPSP.
 
         '
-    PeriodRules:
+    CredentialLabel:
       required:
-      - Frequency
-      - StartDateTime
+      - Label
+      - Language
       type: object
       additionalProperties: false
       properties:
-        StartDateTime:
+        Label:
           type: string
-          description: 'Date of first occurence. ISO 8601 DateTime.
+          description: 'The label associated to the credentials to show to the PSU.
 
             '
-          format: date-time
-        ExecutionRule:
+        Language:
           type: string
-          description: 'Specifies the execution rule to follow in the cases when the
+          description: 'Label internationalization. It specifies the language of the
 
-            computed execution dates cannot be processed (e.g. bank holidays). The
-
-            default value sent to the ASPSP will be FWNG.
+            label. The default value is EN
 
             '
-          enum:
-          - FWNG
-          - PREC
-        EndDate:
-          type: string
-          description: 'Optional date for closing the periodic payment. Must be given
-
-            in ISO LOCAL DATE format.
-
-            '
-        Frequency:
-          type: string
-          description: 'Specifies the frequency of the payment in order to compute
-
-            further execution dates.
-
-            '
-          enum:
-          - DAIL
-          - WEEK
-          - TOWK
-          - MNTH
-          - TOMN
-          - QUTR
-          - SEMI
-          - YEAR
-        DayOfExecution:
-          maximum: 31
-          minimum: 1
-          type: integer
-          description: 'Sepcifies the day of execution. Day of the month 1...31. Applicable
-
-            only for MNTH or higher.
-
-            '
-    EstimatedInterbankSettlementAmount:
-      type: object
-      additionalProperties: false
-      required:
-      - Currency
-      - Amount
-      properties:
-        Currency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'A code allocated to a currency by a Maintenance Agency under
-
-            an international identification scheme, as described in the latest edition
-
-            of the international standard ISO 4217 "Codes for the representation of
-
-            currencies and funds".
-
-            '
-        Amount:
-          pattern: ^\d{1,13}\.\d{1,5}$
-          type: string
-          description: 'Amount
-
-            '
-      description: 'Estimated Interbank Settlement Amount.
-
-        '
-    PsuData:
-      type: object
-      additionalProperties: false
-      properties:
-        AspspId:
-          minLength: 1
-          type: string
-          description: 'The Id of the ASPSP. The Open Banking Service needs this
-
-            information for PSD2 payments to route the payment. It has to be either
-
-            provided in this field or by the PSU in the Bank Selection Interface.
-
-            '
-        AspspProductCode:
-          type: string
-          description: 'This is describing the ProductCode as defined by the ASPSP.
-
-            '
-        AspspPsuId:
-          type: string
-          example: Psu-12345
-          description: 'PSU’s Id at ASPSP. Allows the unique identification of the PSU at
-
-            the ASPSP.
-
-            '
-        AspspCustomerId:
-          type: string
-          example: Psu-12345
-          description: 'PSU’s second Id at ASPSP. Required for some ASPSPs
-
-            '
-        AspspPsuIdType:
-          type: string
-          description: 'Type of the ASPSP PSU-ID, needed in scenarios where PSU''s have
-
-            several PSU-IDs as access possibility.
-
-            '
-        AspspPsuCorporateId:
-          type: string
-          description: 'Identification of a Corporate in the Online Channels.
-
-            '
-        AspspPsuCorporateIdType:
-          type: string
-          description: 'This is describing the type of the identification needed by the
-
-            ASPSP to identify the PsuCorporate-ID content.
-
-            '
-        Country:
-          type: string
-          minLength: 2
-          maxLength: 2
-          pattern: '[A-Z]{2,2}'
-          example: FR
-          description: It is used to select a preferred country that is pre-selected on the bank selection page.
     DebtorInformationResponse:
       type: object
       additionalProperties: false
@@ -1898,82 +1228,440 @@ components:
           $ref: '#/components/schemas/AddressData'
         BillingAddress:
           $ref: '#/components/schemas/AddressData'
-    CreditorInformation:
+    PaymentAuthorisationResponse:
       type: object
       additionalProperties: false
-      description: 'All creditor relavant data
+      properties:
+        CommonPaymentData:
+          $ref: '#/components/schemas/CommonPaymentDataAuthorisationResponse'
+        Links:
+          $ref: '#/components/schemas/AuthorisationResponseLinks'
+    CreditorAccount:
+      type: object
+      additionalProperties: false
+      properties:
+        SecondaryIdentification:
+          type: string
+          description: 'Secondary identification of the Creditor Account, to which
+
+            a credit entry will be made as a result of the transaction. (Only Openbank
+
+            UK)
+
+            '
+        SchemeName:
+          $ref: '#/components/schemas/IdentificationTypeEnum'
+        Identification:
+          type: string
+          description: 'Identification of the Creditor Account. Can be given for P2P
+
+            payments only.
+
+            '
+        Currency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
+
+            '
+    BillingAddress:
+      type: object
+      additionalProperties: false
+      properties:
+        SameAsShippingAddress:
+          type: boolean
+          default: false
+          description: 'Indicates whether the billing addess is the same with shipping address. If true the information provided under `BillingAddressDetails` will be ignored
+
+            '
+        BillingAddressDetails:
+          $ref: '#/components/schemas/AddressData'
+    PsuAuthCredentials:
+      type: object
+      additionalProperties: false
+      required:
+      - CredentialId
+      - CredentialValue
+      properties:
+        CredentialId:
+          type: string
+          description: 'CredentialId as retrieved in the response of the previous request.
+
+            '
+        CredentialValue:
+          type: string
+          description: 'Value of the credential.
+
+            '
+    CategoryPurposeEnum:
+      type: string
+      description: 'Specifies the high level purpose of the instruction based on a set of pre-defined categories.
+
+        This is used by the initiating party to provide information concerning the processing of the payment. It is likely to trigger special processing by any of the agents involved in the payment chain.
+
+        Not all of the given codes might be accepted by all banks. The standard for STET for example is limited to CASH, CORT, DVPM, INTC and TREA
+
+        '
+      enum:
+      - CASH
+      - CORT
+      - DIVI
+      - DVPM
+      - INTC
+      - INTE
+      - PENS
+      - SALA
+      - SSBE
+      - SUPP
+      - TAXS
+      - TREA
+    AuthorisationRequiredData:
+      type: object
+      additionalProperties: false
+      description: 'The data required for PSU authentication and transaction authorisation
 
         '
       properties:
-        InitiatingPartySubId:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: 'External identification of the subsidiary initiating party.
+        PsuCredentials:
+          type: array
+          description: 'List of credentials the PSU has on the ASPSP''s system. The PSU has to provide the CredentialValue for each of these (Username & Password).
 
             '
-        Name:
-          type: string
-          description: 'The name of creditor. Can be given for P2P payments only.
+          items:
+            $ref: '#/components/schemas/PsuCredentials'
+        ScaMethods:
+          type: array
+          description: 'Array of available ScaMethods.
 
             '
-        Account:
-          $ref: '#/components/schemas/CreditorAccount'
-        Agent:
-          pattern: '[A-Z0-9]{4,4}[A-Z]{2,2}[A-Z0-9]{2,2}([A-Z0-9]{3,3}){0,1}'
-          type: string
-          description: 'BIC of the financial institution servicing an account for
-
-            the creditor.
-
-            '
-        UltimateCreditor:
-          maxLength: 140
-          type: string
-          description: 'Ultimate party to which an amount of money is due.
-
-            '
-        PostalAddress:
-          $ref: '#/components/schemas/AddressData'
-        CreditorDateAndPlaceOfBirth:
-          $ref: '#/components/schemas/CreditorDateAndPlaceOfBirth'
-        UltimateCreditorAccount:
-          $ref: '#/components/schemas/CreditorAccount'
-    AuthStatusEnum:
-      description: "This data element is containing information about the status of the SCA method applied.\n\nThe following codes are defined for this data type.\n\n  * 'Received':\n    An authorisation or cancellation-authorisation resource has been created successfully.\n  * 'PsuIdentified':\n    The PSU related to the authorisation or cancellation-authorisation resource has been identified.\n  * 'PsuAuthenticated':\n    The PSU related to the authorisation or cancellation-authorisation resource has been identified and authenticated e.g. by a password or by an access token.\n  * 'ScaMethodSelected':\n    The PSU/TPP has selected the related SCA routine.\n    If the SCA method is chosen implicitly since only one SCA method is available,\n    then this is the first status to be reported instead of 'received'.\n  * 'Started':\n    The addressed SCA routine has been started.\n  * 'Finalised':\n    The SCA routine has been finalised successfully.\n  * 'Failed':\n    The SCA routine failed\n  * 'Exempted':\n    SCA was exempted for the related transaction, the related authorisation is successful.\n  * 'Unconfirmed':\n              SCA is technically successfully finalised by the PSU, but the authorisation resource needs a confirmation command by the TPP yet.\n"
-      type: string
-      enum:
-      - Received
-      - PsuIdentified
-      - PsuAuthenticated
-      - ScaMethodSelected
-      - Started
-      - Finalised
-      - Failed
-      - Exempted
-      - Unconfirmed
-    AmountBreakdown:
+          items:
+            $ref: '#/components/schemas/ScaMethods'
+        ChosenScaMethod:
+          $ref: '#/components/schemas/ScaMethods'
+        ChallengeData:
+          $ref: '#/components/schemas/ScaChallengeData'
+    PaymentAuthorisationRequest:
       type: object
       additionalProperties: false
-      description: Breakdown of the transaction amount. The sum of all the fields within this breakdown must be equal to the transaction amount. Possible to use for iDEAL payments, only in the FastCheckout flow.
-      required:
-      - OrderAmount
-      - ShippingCost
       properties:
-        OrderAmount:
-          pattern: ^\d{1,13}\.\d{1,5}$
+        PsuData:
+          $ref: '#/components/schemas/PsuDataIdentification'
+        PsuCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/PsuAuthCredentials'
+      example:
+        PsuData:
+          AspspPsuId: Psu-12345
+          AspspCustomerId: Psu-12345
+          AspspPsuIdType: string
+          AspspPsuCorporateId: string
+          AspspPsuCorporateIdType: string
+        PsuCredentials:
+        - CredentialId: ewl-user-id
+          CredentialValue: Test User
+        - CredentialId: ewl-password
+          CredentialValue: qwerty
+    CommonPaymentDataResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - PaymentId
+      - PaymentStatus
+      properties:
+        ExpiryDateTimestamp:
           type: string
-          description: 'Order amount. Possible to use for iDEAL payments, only in the fast-checkout flow.
+          format: date-time
+          description: 'The timestamp from which the transaction operation will expire, expressed in UTC time format(YYYY-MM-DDThh:mm:ss.sssZ)
 
             '
-          example: '123.45'
-        ShippingCost:
-          pattern: ^\d{1,13}\.\d{1,5}$
-          type: string
-          description: 'Shipping cost. Possible to use for iDEAL payments, only in the fast-checkout flow.
+        GuaranteedAmount:
+          description: 'The amount guaranteed by the ASPSP/Issuer to the Merchant/CPSP. Will be provided if the min max amount values are defined in the request
 
             '
+          pattern: ^\d{1,13}\.\d{1,5}$
+          type: string
           example: '123.45'
+        PaymentStatus:
+          $ref: '#/components/schemas/PaymentStatusEnum'
+        LevelOfGuarantee:
+          $ref: '#/components/schemas/LevelOfGuaranteeEnum'
+        PaymentId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'Id generated by the Open Banking Service. This should be used to
+
+            refer to this payment in subsequent api calls.
+
+            '
+        AspspPaymentId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'Id used by the ASPSP/iDEAL Hub to refer to the payment.
+
+            '
+        AspspId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'Id of the ASPSP selected by the PSU.
+
+            '
+        InitiatingPartyReferenceId:
+          maxLength: 36
+          minLength: 1
+          type: string
+          description: 'Reference to the payment created by the Initiating Party.
+
+            This Id will not be visible to the Payment Service User.
+
+            '
+        FundsAvailable:
+          type: boolean
+          description: 'Information whether sufficient funding is available.
+
+            '
+        DebtorInformation:
+          $ref: '#/components/schemas/DebtorInformationResponse'
+        AmountRelatedDetails:
+          $ref: '#/components/schemas/AmountRelatedDetails'
+        AuthorisationRequiredData:
+          $ref: '#/components/schemas/AuthorisationRequiredData'
+        PsuMessage:
+          maxLength: 1024
+          minLength: 1
+          type: string
+          description: 'Text to be displayed to the PSU.
+
+            '
+    PaymentAuthorisationUpdateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        PsuData:
+          $ref: '#/components/schemas/PsuDataIdentification'
+        PsuCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/PsuAuthCredentials'
+        AuthenticationMethodId:
+          type: string
+          description: 'Id of the selected method.
+
+            '
+        ScaAuthenticationData:
+          type: string
+          description: 'Depending on method. In case of binary data it has to be
+
+            given base64 encoded.
+
+            '
+      example:
+        AuthenticationMethodId: '13'
+    PaymentInitiationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        CommonPaymentData:
+          $ref: '#/components/schemas/CommonPaymentDataResponse'
+        Links:
+          $ref: '#/components/schemas/InitiationResponseLinks'
+        UseWaitingScreen:
+          type: boolean
+          description: 'if `true` the IP should show a waiting screen even if the the RedirectUrl is provided. On the waiting screen a redirection button should be placed. Click on the button should redirect the PSU by the link from `RedirectUrl`
+
+            '
+      description: 'Payment Initiation Response
+
+        '
+    PaymentConfirmationResponse:
+      description: 'PaymentConfirmationResponse
+
+        '
+      type: object
+      additionalProperties: false
+      properties:
+        CommonPaymentData:
+          $ref: '#/components/schemas/CommonPaymentDataConfirmationResponse'
+        Links:
+          $ref: '#/components/schemas/Links'
+    LevelOfGuaranteeEnum:
+      type: string
+      description: 'Level of payment guarantee for Payment Status.
+
+        #### The level of guarantee for banks in countries where SCT Instant is either absent or entails a higher cost, as well as in scenarios where collection services are unavailable, is carefully assessed to ensure adequate risk management and payment assurance.
+
+        ##### The level of payment guarantee ranges from 0, representing a minimum payment assurance, to 5, denoting a maximum payment guarantee, contingent upon the payment status returned by the customer''s bank.
+
+        #### Remark:
+
+        ##### The configuration for this level of payment guarantee is fully customizable, allowing for tailored adjustments based on the specific needs of each tenant and the respective policies of the customer''s bank.
+
+        '
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    EstimatedTotalAmount:
+      type: object
+      additionalProperties: false
+      required:
+      - Currency
+      - Amount
+      properties:
+        Currency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
+
+            '
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,2}$
+          type: string
+          description: 'Amount
+
+            '
+      description: 'Estimated Total Amount.
+
+        '
+    Link:
+      required:
+      - Href
+      type: object
+      additionalProperties: false
+      properties:
+        Href:
+          maxLength: 1024
+          minLength: 1
+          type: string
+    IdentificationTypeEnum:
+      type: string
+      description: 'Type of the account number.
+
+        '
+      enum:
+      - IBAN
+      - SortCodeAccountNumber
+    PaymentDetailedInformation:
+      type: object
+      additionalProperties: false
+      properties:
+        PaymentProductUsed:
+          $ref: '#/components/schemas/PaymentProductEnum'
+        CommonPaymentData:
+          $ref: '#/components/schemas/CommonPaymentDataResponse'
+        Links:
+          $ref: '#/components/schemas/StatusResponseLinks'
+        UseWaitingScreen:
+          type: boolean
+          description: 'if `true` the Initiating Party should show a waiting screen even if the the RedirectUrl is provided. On the waiting screen a redirection button should be placed. Click on the button should redirect the PSU to the link provided in the `RedirectUrl` field.
+
+            '
+      description: 'Payment Status Response
+
+        '
+    PaymentStatusEnum:
+      type: string
+      description: 'Payment status.
+
+        * ''TimeoutAtTpp'': This status can only occur in combination with the Bank Selection Interface (UseAuthorisationLandingPages = true). It''s set if the Bank Selection Interface concludes that the payment cannot be completed because of a timeout. It''s a final state.
+
+        '
+      enum:
+      - Open
+      - Authorised
+      - PartiallyAuthorised
+      - Pending
+      - SettlementInProcess
+      - SettlementCompleted
+      - ReceivedByCreditorBank
+      - ReceivedOnCreditorAccount
+      - Cancelled
+      - CancelledAtTPP
+      - TimeoutAtTpp
+      - Error
+      - Expired
+    Links:
+      type: object
+      additionalProperties: false
+      description: 'A list of hyperlinks to be recognized by the Initiating Party. The actual
+
+        hyperlinks used in the response depend on the dynamical decisions on
+
+        authorization approach for example. Remark - All links are full links.
+
+
+        * ''GetPaymentStatus'': Endpoint to be called for retrieving the payment status.
+
+        '
+      properties:
+        GetPaymentStatus:
+          $ref: '#/components/schemas/Link'
+    TransactionFees:
+      type: object
+      additionalProperties: false
+      properties:
+        Currency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
+
+            '
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,5}$
+          type: string
+          description: 'Amount of the fees.
+
+            '
+        FeesApply:
+          type: boolean
+          default: false
+          description: 'Indicates if transaction fees are applicable on the payment.
+
+            '
+      description: 'Information used for transporting transaction fees by the ASPSP.
+
+        '
+    AmountRelatedDetails:
+      type: object
+      additionalProperties: false
+      description: 'contains additional information about the fees and estimated amount
+
+        '
+      properties:
+        TransactionFees:
+          $ref: '#/components/schemas/TransactionFees'
+        ExchangeRateInformation:
+          $ref: '#/components/schemas/ExchangeRateInformationResponse'
+        CurrencyConversionFee:
+          $ref: '#/components/schemas/CurrencyConversionFee'
+        EstimatedTotalAmount:
+          $ref: '#/components/schemas/EstimatedTotalAmount'
+        EstimatedInterbankSettlementAmount:
+          $ref: '#/components/schemas/EstimatedInterbankSettlementAmount'
     ExchangeRateInformationRequest:
       type: object
       additionalProperties: false
@@ -2023,90 +1711,246 @@ components:
       description: 'Provides details on the currency exchange rate and contract.
 
         '
-    Amount:
-      required:
-      - Amount
+    AmountBreakdown:
       type: object
       additionalProperties: false
+      description: Breakdown of the transaction amount. The sum of all the fields within this breakdown must be equal to the transaction amount. Possible to use for iDEAL payments, only in the FastCheckout flow.
+      required:
+      - OrderAmount
+      - ShippingCost
       properties:
-        Type:
-          type: string
-          deprecated: true
-          description: '* _Fixed_ - The amount defined by the merchant can not be changed by the user
-
-            * _Change_ - The amount defined by the merchant can be changed by the user within the defined bounds. Currently can be used only for iDEAL Payments
-
-            * _Define_ - The amount needs to be defined by the user. Currently can be used only for iDEAL Payments'
-          enum:
-          - Fixed
-          - Change
-          - Define
-          default: Fixed
-        Amount:
+        OrderAmount:
           pattern: ^\d{1,13}\.\d{1,5}$
           type: string
-          description: 'Amount of the payment. The decimal separator is a dot.
+          description: 'Order amount. Possible to use for iDEAL payments, only in the fast-checkout flow.
 
             '
           example: '123.45'
-        MaximumAmount:
+        ShippingCost:
           pattern: ^\d{1,13}\.\d{1,5}$
           type: string
-          deprecated: true
-          description: 'Conditionally used for amount type Change or Define.
-
-            The value in case of Change should be greater than or equal to the amount value.
-
-            In case of Fixed, this value will be ignored.'
-          example: '1000.00'
-        MinimumAmount:
-          pattern: ^\d{1,13}\.\d{1,5}$
-          type: string
-          deprecated: true
-          description: 'Conditionally used for amount type Change or Define.
-
-            The value in case of Change should be less than or equal to the amount.
-
-            In case of Fixed, this value will be ignored.'
-          example: '5.00'
-        Currency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'Currency of the payment. ISO 4217 currency codes should be
-
-            used. For iDEAL only EUR is possible
+          description: 'Shipping cost. Possible to use for iDEAL payments, only in the fast-checkout flow.
 
             '
-          example: EUR
-          default: EUR
-        AmountBreakdown:
-          $ref: '#/components/schemas/AmountBreakdown'
-    RemittanceInformationStructured:
-      required:
-      - Reference
+          example: '123.45'
+    ScaChallengeData:
       type: object
       additionalProperties: false
       properties:
-        Reference:
+        AdditionalInformation:
           type: string
-          pattern: '[a-zA-Z0-9]{1,35}'
-          description: 'The actual reference.
+          description: 'Additional Information for the PSU describing the method.
 
             '
-        ReferenceType:
-          maxLength: 35
+        Data:
+          type: array
+          description: 'A collection of strings as challenge data.
+
+            '
+          items:
+            type: string
+        Image:
+          type: string
+          description: 'Image in base64 encoding
+
+            '
+        ImageLink:
+          type: string
+          description: 'URL of image
+
+            '
+        OtpFormat:
+          type: string
+          description: 'The OTP format.
+
+            '
+        OtpMaxLength:
+          type: integer
+          description: 'The maximum length for the OTP.
+
+            '
+          format: int32
+      description: 'JSON DTO used to represent challenge data.
+
+        '
+    PeriodicPaymentInitiationRequest:
+      type: object
+      additionalProperties: false
+      description: 'Periodic Payment Initiation Request
+
+        '
+      required:
+      - CommonPaymentData
+      properties:
+        PaymentProduct:
+          type: array
+          description: 'Multiple PaymentProducts can only be supplied if `UseAuthorisationLandingPages` equals `TRUE`. These will then influence ASPSPs visible to the PSU on the Bank Selection Interface.
+
+            '
+          items:
+            $ref: '#/components/schemas/PaymentProductEnum'
+        PaymentProductChangeable:
+          type: boolean
+          default: false
+          description: 'Allowing PSU to change pre-selected payment product if the ASPSP supports more than one from the list provided by the Initiating Party. Usable only if `UseAuthorisationLandingPages` equals `TRUE`. Otherwise will be ignored.
+
+            '
+        ProductSpecificMasterData:
+          type: array
+          description: 'The array is defined to mention the master data specific to selected payment product
+
+            '
+          items:
+            $ref: '#/components/schemas/ProductSpecificMasterData'
+        PsuData:
+          $ref: '#/components/schemas/PsuData'
+        CommonPaymentData:
+          $ref: '#/components/schemas/PeriodicPaymentInitiationRequestBasic'
+    CurrencyConversionFee:
+      type: object
+      additionalProperties: false
+      required:
+      - Currency
+      - Amount
+      - Rate
+      properties:
+        Currency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
+
+            '
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,2}$
+          type: string
+          description: 'Amount of the fees.
+
+            '
+        Rate:
+          type: number
+      description: 'Currency Conversion Fee
+
+        '
+    PaymentIdentificationResponse:
+      description: 'PaymentIdentificationresponse
+
+        '
+      type: object
+      additionalProperties: false
+      properties:
+        CommonPaymentData:
+          $ref: '#/components/schemas/CommonPaymentDataIdentificationResponse'
+        Links:
+          $ref: '#/components/schemas/Links'
+    ProductSpecificMasterData:
+      type: object
+      additionalProperties: false
+      required:
+      - ParamName
+      - ParamValue
+      properties:
+        ParamName:
+          type: string
           minLength: 1
-          type: string
-          description: 'Reference type.
+          maxLength: 250
+          description: 'Name of the parameter exactly as required by the payment method.
 
             '
-        ReferenceIssuer:
-          maxLength: 35
+        ParamValue:
+          type: string
           minLength: 1
-          type: string
-          description: 'Identification of the issuer of the ReferenceType.
+          maxLength: 2048
+          description: 'Actual value of the parameter.
 
             '
+    AuthStatusEnum:
+      description: "This data element is containing information about the status of the SCA method applied.\n\nThe following codes are defined for this data type.\n\n  * 'Received':\n    An authorisation or cancellation-authorisation resource has been created successfully.\n  * 'PsuIdentified':\n    The PSU related to the authorisation or cancellation-authorisation resource has been identified.\n  * 'PsuAuthenticated':\n    The PSU related to the authorisation or cancellation-authorisation resource has been identified and authenticated e.g. by a password or by an access token.\n  * 'ScaMethodSelected':\n    The PSU/TPP has selected the related SCA routine.\n    If the SCA method is chosen implicitly since only one SCA method is available,\n    then this is the first status to be reported instead of 'received'.\n  * 'Started':\n    The addressed SCA routine has been started.\n  * 'Finalised':\n    The SCA routine has been finalised successfully.\n  * 'Failed':\n    The SCA routine failed\n  * 'Exempted':\n    SCA was exempted for the related transaction, the related authorisation is successful.\n  * 'Unconfirmed':\n              SCA is technically successfully finalised by the PSU, but the authorisation resource needs a confirmation command by the TPP yet.\n"
+      type: string
+      enum:
+      - Received
+      - PsuIdentified
+      - PsuAuthenticated
+      - ScaMethodSelected
+      - Started
+      - Finalised
+      - Failed
+      - Exempted
+      - Unconfirmed
+    InitiationResponseLinks:
+      type: object
+      additionalProperties: false
+      description: 'A list of hyperlinks to be recognized by the Initiating Party. The actual
+
+        hyperlinks used in the response depend on the dynamical decisions on
+
+        authorization approach for example. Remark - All links are full links.
+
+        * ''PreAuthenticationForEmbedded'': In case of an embedded pre-authentication required by the ASPSP, the Initiating Party has to use this link.
+
+        * ''RedirectUrl'': In case of an Redirect approach, the Initiating Party has to use this link to redirect the PSU’s browser session.
+
+        * ''PostAuthorisationForExplicit'': In case the ASPSP requires explicit start of authorization.
+
+        * ''PostIdentificationForDecoupled'': In case of a Decoupled approach, identification of the PSU required to start the decoupled authorization.
+
+        * ''PostAuthorisationForEmbedded'': In case of an embedded approach, endpoint to be called to start the embedded authorization.
+
+        * ''SelectAuthenticationMethod'': In case of an embedded approach, the Initiating Party has to use this link to pass the SCA method.
+
+        * ''AuthorizeTransaction'': In case of an embedded approach, the Initiating Party has to authorize the payment by providing the SCA OneTimePassword.
+
+        * ''ConfirmationRequired'': Endpoint to be called for payment confirmation for ASPSPs that require explicit confirmation of payments.
+
+        * ''GetPaymentStatus'': Endpoint to be called for retrieving the payment status.
+
+        * ''PrintLink'': A link to return a payment link. The payment link can be used by the PSU to authorize the payment. Lifetime is dictated by the PrintOptions parameter.
+
+        * ''PrintQRCode'': A link to retrieve a QR code. The QR code can be used by the PSU to authorize the payment. Lifetime is dictated by the PrintOptions parameter.
+
+        '
+      properties:
+        PreAuthenticationForEmbedded:
+          $ref: '#/components/schemas/Link'
+        RedirectUrl:
+          $ref: '#/components/schemas/Link'
+        PostAuthorisationForExplicit:
+          $ref: '#/components/schemas/Link'
+        PostIdentificationForDecoupled:
+          $ref: '#/components/schemas/Link'
+        PostAuthorisationForEmbedded:
+          $ref: '#/components/schemas/Link'
+        SelectAuthenticationMethod:
+          $ref: '#/components/schemas/Link'
+        AuthorizeTransaction:
+          $ref: '#/components/schemas/Link'
+        ConfirmationRequired:
+          $ref: '#/components/schemas/Link'
+        GetPaymentStatus:
+          $ref: '#/components/schemas/Link'
+        PrintLink:
+          $ref: '#/components/schemas/Link'
+        PrintQRCode:
+          $ref: '#/components/schemas/Link'
+    PaymentProductEnum:
+      type: string
+      default: PSD2-SCT
+      description: 'Indicates the requested payment method.
+
+        '
+      enum:
+      - PSD2-SCT
+      - PSD2-SCT-Inst
+      - PSD2-Target2
+      - PSD2-Domestic
+      - PSD2-Domestic-Inst
+      - IDEAL
+      - WERO
     PeriodicPaymentInitiationRequestBasic:
       type: object
       additionalProperties: false
@@ -2195,8 +2039,6 @@ components:
             '
           minimum: 60
           maximum: 3600
-          exclusiveMinimum: false
-          exclusiveMaximum: false
         Amount:
           $ref: '#/components/schemas/Amount'
         DebtorInformation:
@@ -2264,83 +2106,170 @@ components:
       description: 'Basic type for Periodic Payment InitiationRequest
 
         '
-    Link:
+    PsuData:
+      type: object
+      additionalProperties: false
+      properties:
+        AspspId:
+          minLength: 1
+          type: string
+          description: 'The Id of the ASPSP. The Open Banking Service needs this
+
+            information for PSD2 payments to route the payment. It has to be either
+
+            provided in this field or by the PSU in the Bank Selection Interface.
+
+            '
+        AspspProductCode:
+          type: string
+          description: 'This is describing the ProductCode as defined by the ASPSP.
+
+            '
+        AspspPsuId:
+          type: string
+          example: Psu-12345
+          description: 'PSU’s Id at ASPSP. Allows the unique identification of the PSU at
+
+            the ASPSP.
+
+            '
+        AspspCustomerId:
+          type: string
+          example: Psu-12345
+          description: 'PSU’s second Id at ASPSP. Required for some ASPSPs
+
+            '
+        AspspPsuIdType:
+          type: string
+          description: 'Type of the ASPSP PSU-ID, needed in scenarios where PSU''s have
+
+            several PSU-IDs as access possibility.
+
+            '
+        AspspPsuCorporateId:
+          type: string
+          description: 'Identification of a Corporate in the Online Channels.
+
+            '
+        AspspPsuCorporateIdType:
+          type: string
+          description: 'This is describing the type of the identification needed by the
+
+            ASPSP to identify the PsuCorporate-ID content.
+
+            '
+        Country:
+          type: string
+          minLength: 2
+          maxLength: 2
+          pattern: '[A-Z]{2,2}'
+          example: FR
+          description: It is used to select a preferred country that is pre-selected on the bank selection page.
+    PeriodRules:
       required:
-      - Href
+      - Frequency
+      - StartDateTime
       type: object
       additionalProperties: false
       properties:
-        Href:
-          maxLength: 1024
-          minLength: 1
+        StartDateTime:
           type: string
-    ScaMethods:
-      required:
-      - AuthenticationMethodId
-      - AuthenticationType
+          description: 'Date of first occurence. ISO 8601 DateTime.
+
+            '
+          format: date-time
+        ExecutionRule:
+          type: string
+          description: 'Specifies the execution rule to follow in the cases when the
+
+            computed execution dates cannot be processed (e.g. bank holidays). The
+
+            default value sent to the ASPSP will be FWNG.
+
+            '
+          enum:
+          - FWNG
+          - PREC
+        EndDate:
+          type: string
+          description: 'Optional date for closing the periodic payment. Must be given
+
+            in ISO LOCAL DATE format.
+
+            '
+        Frequency:
+          type: string
+          description: 'Specifies the frequency of the payment in order to compute
+
+            further execution dates.
+
+            '
+          enum:
+          - DAIL
+          - WEEK
+          - TOWK
+          - MNTH
+          - TOMN
+          - QUTR
+          - SEMI
+          - YEAR
+        DayOfExecution:
+          maximum: 31
+          minimum: 1
+          type: integer
+          description: 'Sepcifies the day of execution. Day of the month 1...31. Applicable
+
+            only for MNTH or higher.
+
+            '
+    StatusResponseLinks:
       type: object
       additionalProperties: false
-      properties:
-        AuthenticationType:
-          type: string
-          description: 'Type of the SCA authentication method. The following methods are commonly seen coming from the ASPSP:
+      description: 'A list of hyperlinks to be recognized by the Initiating Party. The actual
 
-            -  SMS_OTP: The PSU will receive a One Time Password via SMS
+        hyperlinks used in the response depend on the dynamical decisions on
 
-            -  CHIP_OTP: The PSU will be presented with a picture or text to create a One Time Password using their bank card
+        authorization approach for example. Remark - All links are full links.
 
-            -  PHOTO_OTP: The PSU will be presented with a picture to create a One Time Password
 
-            -  PUSH_OTP: The PSU will receive a One Time Password via push notification on their mobile device
+        * ''RedirectUrl'': In case of an Redirect approach, the Initiating Party has to use this link to redirect the PSU’s browser session.
 
-            -  SMTP_OTP: The PSU will receive a One Time Password via email
+        * ''PostAuthorisationForExplicit'': In case the ASPSP requires explicit start of authorization.
 
-            '
-        AuthenticationMethodId:
-          minLength: 1
-          type: string
-          description: 'Id of the authentication method. Used in subsequent API calls to refer to the authentication method.
+        * ''PostIdentificationForDecoupled'': In case of a Decoupled approach, identification of the PSU required to start the decoupled authorization.
 
-            '
-        Version:
-          minLength: 1
-          type: string
-          description: 'Version of the method.
+        * ''PutAuthorisationForEmbedded'': In case of an embedded approach, endpoint to be called to add information to the Authorization.
 
-            '
-        Name:
-          minLength: 1
-          type: string
-          description: 'Name of the method in readable form. This name shall be used by the TPP when presenting a list of authentication methods to the PSU, if available.
+        * ''SelectAuthenticationMethod'': In case of an embedded approach, the Initiating Party has to use this link to pass the SCA method.
 
-            '
-        Explanation:
-          minLength: 1
-          type: string
-          description: 'Detailed information about the SCA method, meant for the PSU.
+        * ''AuthorizeTransaction'': In case of an embedded approach, the Initiating Party has to authorize the payment by providing the SCA OneTimePassword.
 
-            '
-    PaymentDetailedInformation:
-      type: object
-      additionalProperties: false
-      properties:
-        PaymentProductUsed:
-          $ref: '#/components/schemas/PaymentProductEnum'
-        CommonPaymentData:
-          $ref: '#/components/schemas/CommonPaymentDataResponse'
-        Links:
-          $ref: '#/components/schemas/StatusResponseLinks'
-        UseWaitingScreen:
-          type: boolean
-          description: 'if `true` the Initiating Party should show a waiting screen even if the the RedirectUrl is provided. On the waiting screen a redirection button should be placed. Click on the button should redirect the PSU to the link provided in the `RedirectUrl` field.
-
-            '
-      description: 'Payment Status Response
+        * ''ConfirmationRequired'': Endpoint to be called for payment confirmation for ASPSPs that require explicit confirmation of payments.
 
         '
-    TransactionFees:
+      properties:
+        RedirectUrl:
+          $ref: '#/components/schemas/Link'
+        PostAuthorisationForExplicit:
+          $ref: '#/components/schemas/Link'
+        PostIdentificationForDecoupled:
+          $ref: '#/components/schemas/Link'
+        PostAuthorisationForEmbedded:
+          $ref: '#/components/schemas/Link'
+        PutAuthorisationForEmbedded:
+          $ref: '#/components/schemas/Link'
+        SelectAuthenticationMethod:
+          $ref: '#/components/schemas/Link'
+        AuthorizeTransaction:
+          $ref: '#/components/schemas/Link'
+        ConfirmationRequired:
+          $ref: '#/components/schemas/Link'
+    EstimatedInterbankSettlementAmount:
       type: object
       additionalProperties: false
+      required:
+      - Currency
+      - Amount
       properties:
         Currency:
           pattern: '[A-Z]{3,3}'
@@ -2357,107 +2286,138 @@ components:
         Amount:
           pattern: ^\d{1,13}\.\d{1,5}$
           type: string
-          description: 'Amount of the fees.
+          description: 'Amount
 
             '
-        FeesApply:
-          type: boolean
-          default: false
-          description: 'Indicates if transaction fees are applicable on the payment.
-
-            '
-      description: 'Information used for transporting transaction fees by the ASPSP.
+      description: 'Estimated Interbank Settlement Amount.
 
         '
-    PaymentConfirmationResponse:
-      description: 'PaymentConfirmationResponse
+    DebtorContactDetailsResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        FirstName:
+          type: string
+          description: 'The first name of the debtor
+
+            '
+        LastName:
+          type: string
+          description: 'The last name of the debtor
+
+            '
+        PhoneNumber:
+          type: string
+          description: 'The phone number of the debtor in E.164 format
+
+            '
+          pattern: ^\+[1-9][0-9]{1,14}$
+          example: '+31612345678'
+        Email:
+          type: string
+          description: 'The e-mail address of the debtor
+
+            '
+          format: email
+          example: bob.smith@mymail.com
+          minLength: 1
+    ExchangeRateInformationResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        UnitCurrency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'Currency in which the rate of exchange is expressed in a currency
+
+            exchange. In the example 1GBP = xxxCUR, the unit currency is GBP.
+
+            '
+        ExchangeRate:
+          type: number
+          description: 'The factor used for conversion of an amount from one currency
+
+            to another. This reflects the price at which one currency was bought with
+
+            another currency. Rate expressed as a decimal, for example, 0.7 is 7/10
+
+            and 70%.
+
+            '
+        RateType:
+          type: string
+          description: 'Specifies the type used to complete the currency exchange.
+
+            * Spot: Exchange rate applied is the spot rate.
+
+            * Sale: Exchange rate applied is the market rate at the time of the sale.
+
+            * Agreed: Exchange rate applied is the rate agreed between the parties.
+
+            '
+          enum:
+          - Spot
+          - Sale
+          - Agreed
+        ContractIdentification:
+          maxLength: 256
+          minLength: 1
+          type: string
+          description: 'Unique and unambiguous reference to the foreign exchange contract
+
+            agreed between the initiating party/creditor and the debtor agent.
+
+            '
+        ExpirationDateTime:
+          type: string
+          description: 'Expiration date time. ISO 8601 DateTime.
+
+            '
+          format: date-time
+      description: 'Provides details on the currency exchange rate and contract.
 
         '
+    CreditorInformation:
       type: object
       additionalProperties: false
-      properties:
-        CommonPaymentData:
-          $ref: '#/components/schemas/CommonPaymentDataConfirmationResponse'
-        Links:
-          $ref: '#/components/schemas/Links'
-    PsuAuthCredentials:
-      type: object
-      additionalProperties: false
-      required:
-      - CredentialId
-      - CredentialValue
-      properties:
-        CredentialId:
-          type: string
-          description: 'CredentialId as retrieved in the response of the previous request.
-
-            '
-        CredentialValue:
-          type: string
-          description: 'Value of the credential.
-
-            '
-    PaymentCancellationResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        CommonPaymentData:
-          $ref: '#/components/schemas/CommonPaymentDataAuthorisationResponse'
-        Links:
-          $ref: '#/components/schemas/InitiationResponseLinks'
-    CredentialDetails:
-      required:
-      - CredentialId
-      - IsSecret
-      - LabelList
-      type: object
-      additionalProperties: false
-      properties:
-        IsSecret:
-          type: boolean
-          description: 'Binary identification of the transparancy of the provided
-
-            credentials by the PSU. Can have 2 values,
-
-            * true
-
-            * false
-
-
-            Can be provided by ASPSP. If not provided by the
-
-            ASPSP then by default,
-
-            * true, if the CredentialId=ewl-password
-
-            * false, if CredentialId=ewl-user-id
-
-            '
-        CredentialId:
-          type: string
-          description: 'Credential detail identification of the PSU credential at the
-
-            bank (provided bi CBI if approach is Embedded). If not provided
-
-            by the ASPSP, then default values should be,
-
-            * ewl-user-id, when IsSecret=false
-
-            * ewl-password, when IsSecret=true
-
-            '
-        LabelList:
-          type: array
-          description: 'The list of the labels to show to the PSU. They are
-
-            internationalized.
-
-            '
-          items:
-            $ref: '#/components/schemas/CredentialLabel'
-      description: 'Credentials Details.
+      description: 'All creditor relavant data
 
         '
+      properties:
+        InitiatingPartySubId:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: 'External identification of the subsidiary initiating party.
+
+            '
+        Name:
+          type: string
+          description: 'The name of creditor. Can be given for P2P payments only.
+
+            '
+        Account:
+          $ref: '#/components/schemas/CreditorAccount'
+        Agent:
+          pattern: '[A-Z0-9]{4,4}[A-Z]{2,2}[A-Z0-9]{2,2}([A-Z0-9]{3,3}){0,1}'
+          type: string
+          description: 'BIC of the financial institution servicing an account for
+
+            the creditor.
+
+            '
+        UltimateCreditor:
+          maxLength: 140
+          type: string
+          description: 'Ultimate party to which an amount of money is due.
+
+            '
+        PostalAddress:
+          $ref: '#/components/schemas/AddressData'
+        CreditorDateAndPlaceOfBirth:
+          $ref: '#/components/schemas/CreditorDateAndPlaceOfBirth'
+        UltimateCreditorAccount:
+          $ref: '#/components/schemas/CreditorAccount'
     PsuDataIdentification:
       type: object
       additionalProperties: false
@@ -2530,425 +2490,469 @@ components:
           $ref: '#/components/schemas/AddressData'
         BillingAddress:
           $ref: '#/components/schemas/BillingAddress'
-    RegulatoryReportingCode:
-      maxLength: 10
-      type: string
-      description: 'Information needed due to regulatory and statutory requirements.
-
-        Economical codes to be used are provided by the National Competent Authority
-
-        '
-      x-DefinitionType: ISO20022
-    LevelOfGuaranteeEnum:
-      type: string
-      description: 'Level of payment guarantee for Payment Status.
-
-        #### The level of guarantee for banks in countries where SCT Instant is either absent or entails a higher cost, as well as in scenarios where collection services are unavailable, is carefully assessed to ensure adequate risk management and payment assurance.
-
-        ##### The level of payment guarantee ranges from 0, representing a minimum payment assurance, to 5, denoting a maximum payment guarantee, contingent upon the payment status returned by the customer''s bank.
-
-        #### Remark:
-
-        ##### The configuration for this level of payment guarantee is fully customizable, allowing for tailored adjustments based on the specific needs of each tenant and the respective policies of the customer''s bank.
-
-        '
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-    PeriodicPaymentInitiationRequest:
-      type: object
-      additionalProperties: false
-      description: 'Periodic Payment Initiation Request
-
-        '
+    Amount:
       required:
-      - CommonPaymentData
-      properties:
-        PaymentProduct:
-          type: array
-          description: 'Multiple PaymentProducts can only be supplied if `UseAuthorisationLandingPages` equals `TRUE`. These will then influence ASPSPs visible to the PSU on the Bank Selection Interface.
-
-            '
-          items:
-            $ref: '#/components/schemas/PaymentProductEnum'
-        PaymentProductChangeable:
-          type: boolean
-          default: false
-          description: 'Allowing PSU to change pre-selected payment product if the ASPSP supports more than one from the list provided by the Initiating Party. Usable only if `UseAuthorisationLandingPages` equals `TRUE`. Otherwise will be ignored.
-
-            '
-        ProductSpecificMasterData:
-          type: array
-          description: 'The array is defined to mention the master data specific to selected payment product
-
-            '
-          items:
-            $ref: '#/components/schemas/ProductSpecificMasterData'
-        PsuData:
-          $ref: '#/components/schemas/PsuData'
-        CommonPaymentData:
-          $ref: '#/components/schemas/PeriodicPaymentInitiationRequestBasic'
-    PaymentInitiationResponse:
+      - Amount
       type: object
       additionalProperties: false
       properties:
-        CommonPaymentData:
-          $ref: '#/components/schemas/CommonPaymentDataResponse'
-        Links:
-          $ref: '#/components/schemas/InitiationResponseLinks'
-        UseWaitingScreen:
-          type: boolean
-          description: 'if `true` the IP should show a waiting screen even if the the RedirectUrl is provided. On the waiting screen a redirection button should be placed. Click on the button should redirect the PSU by the link from `RedirectUrl`
+        Type:
+          type: string
+          deprecated: true
+          description: '* _Fixed_ - The amount defined by the merchant can not be changed by the user
+
+            * _Change_ - The amount defined by the merchant can be changed by the user within the defined bounds. Currently can be used only for iDEAL Payments
+
+            * _Define_ - The amount needs to be defined by the user. Currently can be used only for iDEAL Payments'
+          enum:
+          - Fixed
+          - Change
+          - Define
+          default: Fixed
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,5}$
+          type: string
+          description: 'Amount of the payment. The decimal separator is a dot.
 
             '
-      description: 'Payment Initiation Response
-
-        '
-    StatusResponseLinks:
-      type: object
-      additionalProperties: false
-      description: 'A list of hyperlinks to be recognized by the Initiating Party. The actual
-
-        hyperlinks used in the response depend on the dynamical decisions on
-
-        authorization approach for example. Remark - All links are full links.
-
-
-        * ''RedirectUrl'': In case of an Redirect approach, the Initiating Party has to use this link to redirect the PSU’s browser session.
-
-        * ''PostAuthorisationForExplicit'': In case the ASPSP requires explicit start of authorization.
-
-        * ''PostIdentificationForDecoupled'': In case of a Decoupled approach, identification of the PSU required to start the decoupled authorization.
-
-        * ''PutAuthorisationForEmbedded'': In case of an embedded approach, endpoint to be called to add information to the Authorization.
-
-        * ''SelectAuthenticationMethod'': In case of an embedded approach, the Initiating Party has to use this link to pass the SCA method.
-
-        * ''AuthorizeTransaction'': In case of an embedded approach, the Initiating Party has to authorize the payment by providing the SCA OneTimePassword.
-
-        * ''ConfirmationRequired'': Endpoint to be called for payment confirmation for ASPSPs that require explicit confirmation of payments.
-
-        '
-      properties:
-        RedirectUrl:
-          $ref: '#/components/schemas/Link'
-        PostAuthorisationForExplicit:
-          $ref: '#/components/schemas/Link'
-        PostIdentificationForDecoupled:
-          $ref: '#/components/schemas/Link'
-        PostAuthorisationForEmbedded:
-          $ref: '#/components/schemas/Link'
-        PutAuthorisationForEmbedded:
-          $ref: '#/components/schemas/Link'
-        SelectAuthenticationMethod:
-          $ref: '#/components/schemas/Link'
-        AuthorizeTransaction:
-          $ref: '#/components/schemas/Link'
-        ConfirmationRequired:
-          $ref: '#/components/schemas/Link'
-    CategoryPurposeEnum:
-      type: string
-      description: 'Specifies the high level purpose of the instruction based on a set of pre-defined categories.
-
-        This is used by the initiating party to provide information concerning the processing of the payment. It is likely to trigger special processing by any of the agents involved in the payment chain.
-
-        Not all of the given codes might be accepted by all banks. The standard for STET for example is limited to CASH, CORT, DVPM, INTC and TREA
-
-        '
-      enum:
-      - CASH
-      - CORT
-      - DIVI
-      - DVPM
-      - INTC
-      - INTE
-      - PENS
-      - SALA
-      - SSBE
-      - SUPP
-      - TAXS
-      - TREA
-    PaymentAuthorisationRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        PsuData:
-          $ref: '#/components/schemas/PsuDataIdentification'
-        PsuCredentials:
-          type: array
-          items:
-            $ref: '#/components/schemas/PsuAuthCredentials'
-      example:
-        PsuData:
-          AspspPsuId: Psu-12345
-          AspspCustomerId: Psu-12345
-          AspspPsuIdType: string
-          AspspPsuCorporateId: string
-          AspspPsuCorporateIdType: string
-        PsuCredentials:
-        - CredentialId: ewl-user-id
-          CredentialValue: Test User
-        - CredentialId: ewl-password
-          CredentialValue: qwerty
-    CommonPaymentDataConfirmationResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - PaymentId
-      - PaymentStatus
-      properties:
-        PaymentId:
-          maxLength: 35
-          minLength: 1
+          example: '123.45'
+        MaximumAmount:
+          pattern: ^\d{1,13}\.\d{1,5}$
           type: string
-          description: 'Id generated by the Open Banking Service. This should be used to
+          deprecated: true
+          description: 'Conditionally used for amount type Change or Define.
 
-            refer to this payment in subsequent api calls.
+            The value in case of Change should be greater than or equal to the amount value.
 
-            '
-        PaymentStatus:
-          $ref: '#/components/schemas/PaymentStatusEnum'
-        PsuMessage:
-          maxLength: 1024
-          minLength: 1
+            In case of Fixed, this value will be ignored.'
+          example: '1000.00'
+        MinimumAmount:
+          pattern: ^\d{1,13}\.\d{1,5}$
           type: string
-          description: 'Text to be displayed to the PSU.
+          deprecated: true
+          description: 'Conditionally used for amount type Change or Define.
 
-            '
-    CommonPaymentDataAuthorisationResponse:
-      type: object
-      additionalProperties: false
-      required:
-      - PaymentId
-      - PaymentStatus
-      properties:
-        PaymentId:
-          maxLength: 35
-          minLength: 1
-          type: string
-          description: 'Id generated by the Open Banking Service. This should be used to
+            The value in case of Change should be less than or equal to the amount.
 
-            refer to this payment in subsequent api calls.
-
-            '
-        PaymentStatus:
-          $ref: '#/components/schemas/PaymentStatusEnum'
-        AuthStatus:
-          $ref: '#/components/schemas/AuthStatusEnum'
-        TransactionFees:
-          $ref: '#/components/schemas/TransactionFees'
-        AuthorisationRequiredData:
-          $ref: '#/components/schemas/AuthorisationRequiredData'
-        PsuMessage:
-          maxLength: 1024
-          minLength: 1
-          type: string
-          description: 'Text to be displayed to the PSU.
-
-            '
-    AuthorisationResponseLinks:
-      type: object
-      additionalProperties: false
-      description: 'A list of hyperlinks to be recognized by the Initiating Party. The actual
-
-        hyperlinks used in the response depend on the dynamical decisions on
-
-        authorization approach for example. Remark - All links are full links.
-
-        * ''RedirectUrl'': In case of an Redirect approach, the Initiating Party has to use this link to redirect the PSU’s browser session.
-
-        * ''PutAuthorisationForEmbedded'': In case of an embedded approach, endpoint to be called to start the embedded authorization.
-
-        * ''SelectAuthenticationMethod'': In case of an embedded approach, the Initiating Party has to use this link to pass the SCA method.
-
-        * ''AuthorizeTransaction'': In case of an embedded approach, the Initiating Party has to authorize the payment by providing the SCA OneTimePassword.
-
-        * ''ConfirmationRequired'': Endpoint to be called for payment confirmation for ASPSPs that require explicit confirmation of payments.
-
-        * ''GetPaymentStatus'': Endpoint to be called for retrieving the payment status.
-
-        '
-      properties:
-        RedirectUrl:
-          $ref: '#/components/schemas/Link'
-        PutAuthorisationForEmbedded:
-          $ref: '#/components/schemas/Link'
-        SelectAuthenticationMethod:
-          $ref: '#/components/schemas/Link'
-        AuthorizeTransaction:
-          $ref: '#/components/schemas/Link'
-        ConfirmationRequired:
-          $ref: '#/components/schemas/Link'
-        GetPaymentStatus:
-          $ref: '#/components/schemas/Link'
-    PsuCredentials:
-      required:
-      - CredentialsDetails
-      type: object
-      additionalProperties: false
-      properties:
-        AspspProductCode:
-          type: string
-          description: 'Product Identification. Used to contextualize the credentials
-
-            provided by the PSU for those ASPSP that need of it.
-
-            '
-        CredentialsDetails:
-          type: array
-          description: Credentials Details
-          items:
-            $ref: '#/components/schemas/CredentialDetails'
-      description: 'PSU Credentials on the Bank system.
-
-        '
-    IdentificationTypeEnum:
-      type: string
-      description: 'Type of the account number.
-
-        '
-      enum:
-      - IBAN
-      - SortCodeAccountNumber
-    CreditorDateAndPlaceOfBirth:
-      required:
-      - BirthDate
-      - CityOfBirth
-      - CountryOfBirth
-      type: object
-      additionalProperties: false
-      properties:
-        BirthDate:
-          type: string
-          description: Date on which a person is born.
-          format: date
-        CityOfBirth:
-          maxLength: 35
-          type: string
-          description: City where a person was born.
-        CountryOfBirth:
-          pattern: ^[A-Z]{2,2}$
-          type: string
-          description: Country where a person was born.
-      description: 'Date and place of birth of a person.
-
-        This information must be requested for detection of Fraud, Money-Laundering and Terrorism Financing in case of international payment.
-
-        '
-      x-DefinitionType: ISO20022
-    DebtorAccount:
-      required:
-      - Identification
-      type: object
-      additionalProperties: false
-      properties:
-        SchemeName:
-          $ref: '#/components/schemas/IdentificationTypeEnum'
-        Identification:
-          type: string
-          description: 'Unambiguous identification of the account of the debtor to
-
-            which a debit entry will be made as a result of the transaction.
-
-            '
-        SecondaryIdentification:
-          type: string
-          description: 'Secondary identification of the Debtor Account, to which a
-
-            debit entry will be made as a result of the transaction. (Only Openbank
-
-            UK)
-
-            '
+            In case of Fixed, this value will be ignored.'
+          example: '5.00'
         Currency:
           pattern: '[A-Z]{3,3}'
           type: string
-          description: 'A code allocated to a currency by a Maintenance Agency under
+          description: 'Currency of the payment. ISO 4217 currency codes should be
 
-            an international identification scheme, as described in the latest edition
-
-            of the international standard ISO 4217 "Codes for the representation of
-
-            currencies and funds".
+            used. For iDEAL only EUR is possible
 
             '
-    PaymentAuthorisationUpdateRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        PsuData:
-          $ref: '#/components/schemas/PsuDataIdentification'
-        PsuCredentials:
-          type: array
-          items:
-            $ref: '#/components/schemas/PsuAuthCredentials'
-        AuthenticationMethodId:
-          type: string
-          description: 'Id of the selected method.
+          example: EUR
+          default: EUR
+        AmountBreakdown:
+          $ref: '#/components/schemas/AmountBreakdown'
+  parameters:
+    HttpHeaderAcceptLanguage:
+      name: HttpHeaderAcceptLanguage
+      in: header
+      description: 'PSU Session information.
 
-            '
-        ScaAuthenticationData:
-          type: string
-          description: 'Depending on method. In case of binary data it has to be
 
-            given base64 encoded.
+        The forwarded IP Accept header fields consist of the corresponding
 
-            '
-      example:
-        AuthenticationMethodId: '13'
-    PaymentIdentificationRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        PsuData:
-          $ref: '#/components/schemas/PsuDataIdentification'
-    PaymentAuthorisationResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        CommonPaymentData:
-          $ref: '#/components/schemas/CommonPaymentDataAuthorisationResponse'
-        Links:
-          $ref: '#/components/schemas/AuthorisationResponseLinks'
-    AmountRelatedDetails:
-      type: object
-      additionalProperties: false
-      description: 'contains additional information about the fees and estimated amount
+        HTTP request Accept header fields between PSU and TPP.
 
         '
-      properties:
-        TransactionFees:
-          $ref: '#/components/schemas/TransactionFees'
-        ExchangeRateInformation:
-          $ref: '#/components/schemas/ExchangeRateInformationResponse'
-        CurrencyConversionFee:
-          $ref: '#/components/schemas/CurrencyConversionFee'
-        EstimatedTotalAmount:
-          $ref: '#/components/schemas/EstimatedTotalAmount'
-        EstimatedInterbankSettlementAmount:
-          $ref: '#/components/schemas/EstimatedInterbankSettlementAmount'
+      schema:
+        maxLength: 500
+        minLength: 1
+        type: string
+    LastLogin:
+      name: LastLogin
+      in: header
+      description: 'PSU Session information.
+
+
+        The time when the PSU last logged in with the TPP. ISO 8601 DateTime.
+
+        '
+      schema:
+        type: string
+        format: date-time
+    HttpHeaderAcceptEncoding:
+      name: HttpHeaderAcceptEncoding
+      in: header
+      description: 'PSU Session information.
+
+
+        The forwarded IP Accept header fields consist of the corresponding
+
+        HTTP request Accept header fields between PSU and TPP.
+
+        '
+      schema:
+        maxLength: 500
+        minLength: 1
+        type: string
+    AppRedirectPreferred:
+      name: AppRedirectPreferred
+      in: header
+      schema:
+        type: boolean
+        default: false
+      description: 'If set to ''true'' the Open Banking Service will try to steer the flow towards an App redirect for the authentication of the PSU and authorization of the payment.
+
+        This can potentially improve the user journey as the banking application may use biometrics for SCA and skip the identification process if the user is already logged in.
+
+
+        NOTE that, depending on the implementation of the ASPSP, it may so happen that the flows breaks if the user does not have the banking application installed on their mobile device.
+
+        '
+    HttpHeaderAcceptCharset:
+      name: HttpHeaderAcceptCharset
+      in: header
+      description: 'PSU Session information.
+
+
+        The forwarded IP Accept header fields consist of the corresponding
+
+        HTTP request Accept header fields between PSU and TPP.
+
+        '
+      schema:
+        maxLength: 500
+        minLength: 1
+        type: string
+    confirmForNotification:
+      name: confirm
+      in: query
+      description: 'If set to ''true'' the transaction will be immediately confirmed by the Open Banking Service if confirmation of the payment by the Initiating Party is required by the ASPSP.
+
+        <br>**Note:** This field is only applicable when the notification service is used by the Initiating Party to receive the status of the payment. When the notification is not used this flag can be set in the GET status API.
+
+        '
+      schema:
+        type: string
+    HttpMethod:
+      name: HttpMethod
+      in: header
+      description: 'PSU Session information.
+
+
+        HTTP method used at the PSU-TPP interface. Available values - GET,
+
+        POST, PUT, DELETE.
+
+        '
+      schema:
+        maxLength: 6
+        minLength: 3
+        type: string
+    NotificationVersion:
+      name: NotificationVersion
+      in: header
+      description: "The version of the Notification API, implemented by the Initiating Party, which shall be used for notification service request. Can be filled with v2 or v3. This field is only applicable if option 'B' is chosen, see 'InitiatingPartyNotificationUrl' description. \n"
+      example: v3
+      schema:
+        type: string
+    Signature:
+      name: Signature
+      in: header
+      description: 'Conditionally required for iDEAL payments. The signature in the request should include a keyId with the value of fingerprint of the certificate
+
+        '
+      schema:
+        type: string
+    UseAuthorisationLandingPages:
+      name: UseAuthorisationLandingPages
+      in: header
+      schema:
+        type: boolean
+        default: false
+      description: 'If true, Bank Selection Interface will be used to request required information from PSU directly
+
+        '
+    AspspPsuCorporateIdType:
+      name: AspspPsuCorporateIdType
+      in: header
+      description: 'This is describing the type of the identification needed by the
+
+        ASPSP to identify the PsuCorporate-ID content.
+
+        '
+      schema:
+        type: string
+    PsuIpAddress:
+      name: PsuIpAddress
+      in: header
+      description: 'PSU Session information.
+
+
+        The forwarded IP Address header field consists of the corresponding
+
+        HTTP request IP Address field between PSU and TPP . It shall be
+
+        contained if and only if this request was actively initiated by the
+
+        PSU.
+
+        '
+      schema:
+        maxLength: 35
+        minLength: 1
+        type: string
+    Digest:
+      name: Digest
+      in: header
+      description: Is contained if and only if the `Signature` element is contained in the header of the request.
+      schema:
+        type: string
+      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
+    InitiatingPartyReturnUrl:
+      name: InitiatingPartyReturnUrl
+      in: header
+      description: 'The callback URL for the redirection back to the initiating party
+
+        after authorization.
+
+        '
+      schema:
+        maxLength: 4000
+        minLength: 1
+        type: string
+        example: https://www.example.org
+    Locale:
+      name: Locale
+      in: header
+      schema:
+        type: string
+      description: '2-digit ISO-639 code for the language in which the Bank Selection Interface are displayed.
+
+
+        For special languages can be used 5-digit code like nl-BE, where first is ISO-639 langauge code and the second is ISO-3166 country code.
+
+
+        If not set, the language of the Bank Selection Interface is taken over from the end user’s browser configuration or the system configuration of the Bank Selection Interface server.
+
+        '
+    authorisationId:
+      name: authorisationId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: aid-4846
+      description: 'The Id used by the Open Banking Service to refer to an authorisation resource.
+
+        '
+    AspspPsuIdType:
+      name: AspspPsuIdType
+      in: header
+      description: 'Type of the Aspsp PSU-ID, needed in scenarios where PSUs have
+
+        several PSU-IDs as access possibility.
+
+        '
+      schema:
+        type: string
+    paymentId:
+      name: paymentId
+      in: path
+      description: 'The Id used by the Open Banking Service to refer to a payment.
+
+
+        Optionally the payment can also be refered by the **InitiatingPartyReferenceId** or the **EndToEndId**, to do so start with **ref** or **e2e** prefixes followed by the respective identifier.
+
+        '
+      required: true
+      schema:
+        type: string
+      example: 486215
+    PsuId:
+      name: PsuId
+      in: header
+      schema:
+        type: string
+      description: 'If this field is filled the Open Banking Service will try to
+
+        retrieve previously stored information to complete the
+
+        payment. The Open Banking Solution will:
+
+        * check for a pre authentication token in case pre-authentication is available for the ASPSP.
+
+        * check for debtor token in case of IDEAL payments
+
+        '
+    GeoLocation:
+      name: GeoLocation
+      in: header
+      description: 'The forwarded Geo Location of the corresponding http request
+
+        between PSU and TPP.
+
+        '
+      schema:
+        maxLength: 500
+        minLength: 1
+        type: string
+    confirm:
+      name: confirm
+      in: query
+      description: 'If set to ''true'' the transaction will be immediately confirmed
+
+        by the Open Banking Service if confirmation of the payment by the Initiating Party is required by the ASPSP.
+
+        '
+      schema:
+        type: string
+    MessageCreateDateTime:
+      name: MessageCreateDateTime
+      in: header
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2020-09-25T08:15:00.856Z'
+    DeviceId:
+      name: DeviceId
+      in: header
+      description: 'UUID (Universally Unique Identifier) for a device, which is used by
+
+        the PSU. UUID identifies either a device or a device dependant
+
+        application installation. In case of an installation identification
+
+        this ID need to be unaltered until removal from device.
+
+        '
+      schema:
+        maxLength: 500
+        minLength: 1
+        type: string
+    HttpHeaderAccept:
+      name: HttpHeaderAccept
+      in: header
+      description: 'PSU Session information.
+
+
+        The forwarded IP Accept header fields consist of the corresponding
+
+        HTTP request Accept header fields between PSU and TPP.
+
+        '
+      schema:
+        maxLength: 500
+        minLength: 1
+        type: string
+    AspspPsuId:
+      name: AspspPsuId
+      in: header
+      description: 'PSU’s Id at ASPSP. Allows the unique identification of the PSU at
+
+        the ASPSP.
+
+        '
+      schema:
+        type: string
+      example: Psu-12345
+    HttpHeaderReferer:
+      name: HttpHeaderReferer
+      in: header
+      description: 'PSU Session information.
+
+        '
+      schema:
+        maxLength: 500
+        minLength: 1
+        type: string
+    AspspPsuCorporateId:
+      name: AspspPsuCorporateId
+      in: header
+      description: 'Identification of a Corporate in the Online Channels.
+
+        '
+      schema:
+        type: string
+    X-Request-ID:
+      name: X-Request-ID
+      in: header
+      description: 'UUID for unique request identification.
+
+        '
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 1
+        type: string
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    InitiatingPartyNotificationUrl:
+      name: InitiatingPartyNotificationUrl
+      in: header
+      description: 'The URL which will be used for notification service request. The Open Banking Service supports two ways in which this field can be filled:
+
+        * **Option A)** with an URL ending on /v2 or /v3, indicating the version of the Notification API implemented by the Initiating Party. In this case the URL called for notifications will be extended with /notification/status by the Open Banking Service. The ''NotificationVersion'' field MUST NOT be filled.
+
+        * **Option B)** with a full URL. The version information MUST BE provided in the ''NotificationVersion'' field. In this case the provided URL will not be extended, and used as-is.
+
+        '
+      examples:
+        Option A:
+          value: https://www.example.org/myendpoint/v3
+        Option B:
+          value: https://www.example.org/myendpoint/notification
+      schema:
+        maxLength: 4000
+        minLength: 1
+        type: string
+    PsuIpPort:
+      name: PsuIpPort
+      in: header
+      description: 'PSU Session information.
+
+
+        The forwarded IP Port header field consists of the corresponding
+
+        HTTP request IP Port field between PSU and TPP, if available.
+
+        '
+      schema:
+        maxLength: 5
+        minLength: 1
+        type: string
+    HttpHeaderUserAgent:
+      name: HttpHeaderUserAgent
+      in: header
+      description: 'PSU Session information.
+
+
+        The forwarded Agent header field of the HTTP request between PSU
+
+        and TPP.
+
+
+        Required if
+
+        * the `PaymentProduct`equals `IDEAL`
+
+        * `PsuId`is provided
+
+        * `UseDebtorToken` does not equal `false`
+
+        '
+      schema:
+        maxLength: 500
+        minLength: 1
+        type: string
   headers:
     DebtorDataSource:
       description: "Key- value pair which indicates the source for a certain field in the 'DebtorInformation' object in the body of this request. The following Key's can occur:\n - Name\n - Account.Identification\n\n The following Value's can occur:\n - IP (Initiating Party)\n - PSU (Payment Service User)\n - ASPSP (Account Servicing Payment Service Provider, The Bank of the PSU)\n - Collecting Bank (The bank which receives the money)\n\n More then one Key-Value pair can be provided, separated by a pipe.\n"
       schema:
         type: string
       example: Name:IP|Account.Identification:PSU
-    Digest:
-      description: Is contained if and only if the `Signature` element is contained in the header of the request.
-      schema:
-        type: string
-      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
-    PaymentStatusSource:
-      description: 'Has the value ''CollectingBank'' if the PaymentStatus originated from the Collecting Bank. If the PaymentStatus originates from another source, such as the debtor bank, then this header is not sent.
-
-        '
-      schema:
-        type: string
-      example: CollectingBank
     X-Request-ID:
       required: true
       description: 'UUID for unique request identification
@@ -2959,6 +2963,10 @@ components:
         maxLength: 36
         minLength: 1
       example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    AspspScaApproach:
+      description: "Indicates whether a decoupled flow is used by the ASPSP to continue the Strong Customer Authentication. \nThis field only returns the values 'Decoupled' or 'SuspectedDecoupled'. Other possible flow options are communicated within the Links section of the response.\n"
+      schema:
+        type: string
     MessageCreateDateTime:
       required: true
       schema:
@@ -2971,6 +2979,18 @@ components:
 
         '
       example: '2020-09-25T08:15:00.856Z'
+    Digest:
+      description: Is contained if and only if the `Signature` element is contained in the header of the request.
+      schema:
+        type: string
+      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
+    PaymentStatusSource:
+      description: 'Has the value ''CollectingBank'' if the PaymentStatus originated from the Collecting Bank. If the PaymentStatus originates from another source, such as the debtor bank, then this header is not sent.
+
+        '
+      schema:
+        type: string
+      example: CollectingBank
     Signature:
       required: false
       description: 'Required for IDEAL payments.
@@ -2978,12 +2998,25 @@ components:
         '
       schema:
         type: string
-    AspspScaApproach:
-      description: "Indicates whether a decoupled flow is used by the ASPSP to continue the Strong Customer Authentication. \nThis field only returns the values 'Decoupled' or 'SuspectedDecoupled'. Other possible flow options are communicated within the Links section of the response.\n"
-      schema:
-        type: string
-securityDefinitions:
-  basic:
-    type: oauth2
-    flow: application
-    tokenUrl: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/token
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      description: 'The ''Authorization'' field must be filled with an access token.
+
+        #### How to get an access token
+
+        To request an access token, the Initiating Party must digitally sign the relevant request headers using the private key that corresponds to the certificate uploaded to the Open Banking Service Portal. This action is to be performed in the `POST /token` endpoint.
+
+
+        Upon a successful request, the Open Banking Service provides the Initiating Party with an access token.
+
+
+        #### Validity
+
+        Tokens are valid for 60 minutes (3600 seconds). After 60 minutes have elapsed, the Initiating Party will need to request a new token.
+
+
+        There is an overlap period during the last 10 minutes (between the 50th and 60th minute). This means if the Initiating Party were to request a new token between 50th minute to 60th minute, they would receive a new access token. However, for those 10 minutes, the previous token would also still be valid.
+
+        '
