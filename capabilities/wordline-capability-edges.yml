@@ -1,0 +1,263 @@
+slug: wordline
+provider: Worldline
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 24
+edges:
+- tag: Payment Initiation Service
+  spec_file: wordline-payment-initiation-service-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.93
+  evidence: POST /payments  paymentInitiate  Payment initiation request; POST /payments/{paymentId}/authorisations  Payment
+    authorisation request
+  reason: 'PSD2/iDEAL PISP surface: capture of a payment instruction, identification, SCA authorisation,
+    status and cancellation. This is plainly payment instruction capture, validation and authorisation.'
+- tag: Scheduled Payment Initiation Service (Extended service)
+  spec_file: wordline-scheduled-payment-initiation-service-extended-service-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.93
+  evidence: POST /scheduled-payments scheduledPaymentInitiate "Payment initiation request"; "Payment authorisation
+    request"; "Payment cancellation request"; schema ScheduledPaymentInitiationRequest
+  reason: 'PSD2 open-banking payment initiation flow: instruction capture, SCA authorisation, confirmation
+    and cancellation of scheduled payments — squarely Payment Initiation Management.'
+- tag: Periodic Payment Initiation Service (Extended service)
+  spec_file: wordline-periodic-payment-initiation-service-extended-service-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.92
+  evidence: POST /periodic-payments  periodicPaymentInitiate  Payment initiation request; periodicPaymentAuthorisation  Payment
+    authorisation request
+  reason: Same PSD2 payment-initiation flow applied to standing/periodic payment orders — initiation,
+    confirmation, authorisation and cancellation of payment instructions.
+- tag: Bulk Payment Initiation Service (Extended service)
+  spec_file: wordline-bulk-payment-initiation-service-extended-service-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.9
+  evidence: POST /bulk-payments  bulkPaymentInitiate  Payment initiation request ... bulkPaymentAuthorisation  Payment
+    authorisation request
+  reason: 'PSD2 open-banking payment initiation service: instruction capture, status, authorisation and
+    cancellation of payment requests — payment initiation management.'
+- tag: Dispute
+  spec_file: wordline-dispute-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.88
+  evidence: '"Generate a ChargeBack to the scheme by dispute reference"; "Perform a posting (Refund or
+    WriteOff) related to the Dispute Folder"'
+  reason: Card issuing dispute folder management with chargeback generation to the scheme, refunds/write-offs
+    and evidence documents — squarely card transaction processing (chargebacks) on the issuing side.
+- tag: Account - Authorization
+  spec_file: wordline-account-authorization-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.85
+  evidence: GET /issuers/{issuerId}/accounts/{accountReference}/authorizations  getMultipleAuthorizations  Get
+    authorizations; schemas Authorization, VelocityLimitCheck, AuthorizationBusinessCaseIdentifier
+  reason: Card issuing platform surface exposing card authorization records, authorization business cases
+    and reservations per issuer account — this is card transaction authorisation/processing, i.e. Card
+    Transaction Processing Management.
+- tag: Card
+  spec_file: wordline-card-api-openapi.yml
+  capability_id: BC-1340.60
+  capability_id_l1: BC-1340
+  capability_name: Card Issuance Management
+  confidence: 0.85
+  evidence: activateCardByIssuerExtRef  Activate a card by external reference; blockAndReplaceCardByIssuerExtRef  Block
+    and replace a card
+  reason: Card issuing platform operations — activation, blocking, replacement, PIN reminders, card orders
+    — i.e. card issuance and lifecycle for an issuer.
+- tag: Credit Transfer
+  spec_file: wordline-credit-transfer-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.85
+  evidence: POST /issuers/{issuerId}/credit-transfers createCreditTransfer "Create a credit transfer instruction";
+    "Cancel credit transfer"; schemas CreateCreditTransferRequest, CreditTransferStatusHistory
+  reason: Capture, retrieval and cancellation of credit transfer payment instructions keyed by endToEndId
+    — payment initiation in the strict sense.
+- tag: Card - Order
+  spec_file: wordline-card-order-api-openapi.yml
+  capability_id: BC-1340.60
+  capability_id_l1: BC-1340
+  capability_name: Card Issuance Management
+  confidence: 0.8
+  evidence: GET /issuers/{issuerId}/cards/{cardReference}/orders/{orderReference}  retrieveOrder  Retrieve
+    card order
+  reason: Retrieval and release of card orders on the issuing platform — card production/dispatch ordering,
+    i.e. card issuance management.
+- tag: Customer
+  spec_file: wordline-customer-api-openapi.yml
+  capability_id: BC-1300.40
+  capability_id_l1: BC-1300
+  capability_name: Customer Information Management
+  confidence: 0.8
+  evidence: '"Create a Customer (beta)", "Update customer partially", "Retrieve list of historic updates
+    of a customer"; schemas CreateCustomerRequest, ModifyCustomerRequest'
+  reason: Customer master-record management for a card issuer (create, update, retrieve, change history,
+    linked addresses) — banking customer information management.
+- tag: Direct Debit
+  spec_file: wordline-direct-debit-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.8
+  evidence: POST /issuers/{issuerId}/direct-debits "Create a direct debit instruction"; "Cancel direct
+    debit"
+  reason: Operations create, retrieve and cancel direct debit payment instructions — payment instruction
+    capture and authorisation. Sub-capability could arguably be clearing/settlement (SEPA DD), hence 0.8.
+- tag: Mobile Payment Operations
+  spec_file: wordline-mobile-payment-operations-api-openapi.yml
+  capability_id: BC-1340.60
+  capability_id_l1: BC-1340
+  capability_name: Card Issuance Management
+  confidence: 0.8
+  evidence: 'createAppleTokenizedCard  Token Provisioning: Apple push provisioning; clickToPayEnroll  Click-To-Pay:
+    Enroll a card'
+  reason: Operations digitise and provision issued cards into wallets (Apple/Google/Samsung push provisioning),
+    manage token lifecycle and Click-to-Pay enrolment for an issuer's cards. This is card issuance/digitisation
+    within Payments & Card Management; the alternative reading (transaction authorisation) is not supported
+    by the operations.
+- tag: Refund Initiation Service V3 (Extended services)
+  spec_file: wordline-refund-initiation-service-v3-extended-services-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.8
+  evidence: POST /refunds  refundInitiate  Refund initiation request; POST /refunds/{refundId}/authorisations  Refund
+    authorisation request
+  reason: PISP-initiated refund instructions with identification, confirmation and SCA authorisation —
+    the same instruction-capture-and-authorise pattern as payment initiation, applied to refunds.
+- tag: Registration Resource
+  spec_file: wordline-registration-resource-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: POST /v1.0/webauthn/register  Initiate fido registration; schemas PublicKeyCredentialUserEntity,
+    AuthenticatorSelectionCriteria
+  reason: FIDO2/WebAuthn credential registration for users — enrolment of strong-authentication credentials,
+    i.e. identity and access management rather than any payment business capability.
+- tag: Transaction
+  spec_file: wordline-transaction-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.8
+  evidence: POST /issuers/{issuerId}/transactions/{transactionId}/dispute "Create a dispute from a transaction";
+    GET .../acquirers/{acquirerId}/transactions/{transactionId} "Retrieve a transaction"; schemas InterchangeFee,
+    Dispute, CardIdentifier
+  reason: Card issuing and acquiring transaction retrieval plus dispute/chargeback creation — card transaction
+    processing including chargebacks.
+- tag: Authentication Resource
+  spec_file: wordline-authentication-resource-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: POST /v1.0/webauthn/authn  Initiate fido authentication; PATCH /v1.0/webauthn/authn  Finish
+    fido authentication; schemas PublicKeyCredentialAssertion, UserVerificationRequirement
+  reason: FIDO/WebAuthn server performing strong user authentication ceremonies — an identity and access
+    management capability. Not mapped to a banking capability since it is generic authentication infrastructure.
+- tag: Authorization
+  spec_file: wordline-authorization-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.75
+  evidence: GET /acquiring/transaction/v2.0/acquirers/{acquirerId}/authorizations  getAuthorizations  Retrieve
+    authorizations
+  reason: Acquiring-side retrieval of card transaction authorizations (schemas TransactionIdentification,
+    Authorization, ContractIdentification) — card transaction/authorisation processing rather than card
+    production.
+- tag: Company
+  spec_file: wordline-company-api-openapi.yml
+  capability_id: BC-1300.40
+  capability_id_l1: BC-1300
+  capability_name: Customer Information Management
+  confidence: 0.75
+  evidence: POST /issuers/{issuerId}/companies createCompany "Create company"; "Retrieve list of historic
+    updates of a company"; schemas Address, EmailAddress, CompanyHistory
+  reason: Card-issuing platform CRUD over corporate customer master records (create/update/retrieve company,
+    address, change history) — banking customer information management rather than any payment execution
+    capability.
+- tag: Card - Pin
+  spec_file: wordline-card-pin-api-openapi.yml
+  capability_id: BC-1340.60
+  capability_id_l1: BC-1340
+  capability_name: Card Issuance Management
+  confidence: 0.72
+  evidence: POST /issuers/{issuerId}/cards/{cardReference}/pin  setPin  Set a PIN for a card
+  reason: Issuer PIN set/display for cards — card personalisation and activation credentials within card
+    issuance management.
+- tag: Account - Authorization Restriction
+  spec_file: wordline-account-authorization-restriction-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.7
+  evidence: getMultipleAuthorizationRestrictions  List the Authorization Restrictions; createAuthorizationRestrictionOverride  Create
+    an Authorization Restriction Override
+  reason: Manages restrictions and overrides that govern which card authorisations are permitted on an
+    issuer account — control layer of card authorisation processing. Some ambiguity with product/account
+    parameter configuration, hence moderate confidence.
+- tag: Account - Operation
+  spec_file: wordline-account-operation-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: postFeeOperationByIssuerExtRef  Post a fee operation for an account by external reference;
+    postLoadOperationByIssuerExtRef  Load an account by external reference; reverseBalanceAdjustmentOperation...
+  reason: Posting and reversing financial operations (payments, fees, loads/unloads, reimbursements, balance
+    adjustments) on card issuing accounts — clearly within Payments & Card Management, but the specific
+    sub-capability (card processing vs account posting) is ambiguous so only L1 is asserted.
+- tag: Card - CVV
+  spec_file: wordline-card-cvv-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: POST /issuers/{issuerId}/cards/{cardReference}/display-cvv  displayCvv  Get the CVV; validateCvv  Validate
+    the CVV
+  reason: Card issuing security-credential surface (CVV retrieval/validation); clearly within payments
+    & card management but ambiguous between issuance/personalisation and transaction authorisation, so
+    no L2 asserted.
+- tag: Company - Address
+  spec_file: wordline-company-address-api-openapi.yml
+  capability_id: BC-1300.40
+  capability_id_l1: BC-1300
+  capability_name: Customer Information Management
+  confidence: 0.7
+  evidence: '"Create address for a company customer", "Update company address", "Activate address of a
+    company"; schemas CreateAddressUsageRequest, AddressUsage'
+  reason: Maintenance of address data and address usages attached to company customers of the card issuer
+    — customer data/master-record upkeep, not product or payment processing.
+- tag: Customer - Address
+  spec_file: wordline-customer-address-api-openapi.yml
+  capability_id: BC-1300.40
+  capability_id_l1: BC-1300
+  capability_name: Customer Information Management
+  confidence: 0.7
+  evidence: '"Create address for a customer by external reference", "Invalidate address", "Add an address
+    usage"; schemas CreateAddressUsageRequest, ActivateAddressResponse'
+  reason: Lifecycle of customer address records and their usages (create, modify, activate, deactivate,
+    invalidate) — upkeep of customer data on the issuing platform.
