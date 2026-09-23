@@ -18,7 +18,13 @@ paths:
       - Card - Pin
       summary: Display PIN for a card
       operationId: displayPin
-      description: "This service offers the option to the issuer to display the PIN inside the mobile app for a given card. \nThe card is identified either by the internal or external card reference.\nNote: Worldline will only send the PIN block towards the issuer. \nThe issuer is responsible for displaying the PIN inside the mobile app or Homebanking device."
+      description: 'This service offers the option to the issuer to display the PIN inside the mobile app for a given card.
+
+        The card is identified either by the internal or external card reference.
+
+        Note: Worldline will only send the PIN block towards the issuer.
+
+        The issuer is responsible for displaying the PIN inside the mobile app or Homebanking device.'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -104,7 +110,9 @@ paths:
       - Card - Pin
       summary: Set a PIN for a card
       operationId: setPin
-      description: "This Service allows the issuer to set the PIN after card creation, via issuer home banking or mobile app. \nThe card is identified either by the internal or external card reference."
+      description: 'This Service allows the issuer to set the PIN after card creation, via issuer home banking or mobile app.
+
+        The card is identified either by the internal or external card reference.'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -191,7 +199,13 @@ paths:
       - Card - Pin
       summary: Display PIN for a card by external reference
       operationId: displayPinByIssuerExtRef
-      description: "This service offers the option to the issuer to display the PIN inside the mobile app for a given card. \nThe card is identified either by the internal or external card reference.\nNote: Worldline will only send the PIN block towards the issuer. \nThe issuer is responsible for displaying the PIN inside the mobile app or Homebanking device."
+      description: 'This service offers the option to the issuer to display the PIN inside the mobile app for a given card.
+
+        The card is identified either by the internal or external card reference.
+
+        Note: Worldline will only send the PIN block towards the issuer.
+
+        The issuer is responsible for displaying the PIN inside the mobile app or Homebanking device.'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -376,7 +390,9 @@ paths:
       - Card - Pin
       summary: Set a PIN for a card by external reference
       operationId: setPinByIssuerExtRef
-      description: "This Service allows the issuer to set the PIN after card creation, via issuer home banking or mobile app. \nThe card is identified either by the internal or external card reference."
+      description: 'This Service allows the issuer to set the PIN after card creation, via issuer home banking or mobile app.
+
+        The card is identified either by the internal or external card reference.'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -459,79 +475,67 @@ paths:
         required: true
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
+    ApiResponseEntitySetPinResponse:
       type: object
       required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
+      - responseMetadata
       properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
+        data:
+          description: Response data
           allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    SetPinRequest:
+          - $ref: '#/components/schemas/SetPinResponse'
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntitySetPinResponse
+      description: Issuer response entity
+    GetPinResponse:
       type: object
       required:
-      - pinAttribute
+      - externalPinAttribute
       properties:
-        event:
-          type: string
-          description: EXTERNAL (default), INTERNAL, ATM or IVR
-        panExpiryDate:
-          type: string
-          description: Format MMYY
-        pinAttribute:
+        cardIdentifier:
+          $ref: '#/components/schemas/CardIdentifier'
+        externalPinAttribute:
           $ref: '#/components/schemas/PinAttribute'
-      title: SetPinRequest
+      title: GetPinResponse
+    EncryptedData:
+      type: object
+      required:
+      - algoId
+      - encryptedData
+      - keyId
+      properties:
+        algoId:
+          type: string
+          description: 'Algorithm used to encrypt Session Key
+
+            Allowed Value:
+
+            06 for RSA'
+        encryptedData:
+          type: string
+          description: Cryptogram in hexadecimal string representation
+        keyId:
+          type: string
+          description: 'Key set used for request
+
+            Allowed Value:
+
+            01 - Keyset1
+
+            02 - Keyset2'
+      title: EncryptedData
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
     PinAttribute:
       type: object
       required:
@@ -573,66 +577,15 @@ components:
           type: string
           description: ISO-4, ISO-1-BAPOF, RSA-APAC, BEST-PIN, etc. (free text, no strict constraint)
       title: PinAttribute
-    EncryptedData:
-      type: object
-      required:
-      - algoId
-      - encryptedData
-      - keyId
-      properties:
-        algoId:
-          type: string
-          description: 'Algorithm used to encrypt Session Key
-
-            Allowed Value:
-
-            06 for RSA'
-        encryptedData:
-          type: string
-          description: Cryptogram in hexadecimal string representation
-        keyId:
-          type: string
-          description: 'Key set used for request
-
-            Allowed Value:
-
-            01 - Keyset1
-
-            02 - Keyset2'
-      title: EncryptedData
-    BadRequestErrorApiResponse:
+    BadGatewayErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    ApiResponseEntityGetPinResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/GetPinResponse'
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetPinResponse
-      description: Issuer response entity
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     ForbiddenErrorApiResponse:
       type: object
       required:
@@ -642,7 +595,31 @@ components:
           allOf:
           - $ref: '#/components/schemas/ForbiddenResponseMetadata'
       title: ForbiddenErrorApiResponse
-    NotFoundResponseMetadata:
+    CardIdentifier:
+      type: object
+      description: Identification of the card either by Issuer card external reference or by card reference
+      properties:
+        cardReference:
+          type: string
+          description: 'Reference of the card generated by our system, unique per platform.
+
+            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
+        issuerCardExternalReference:
+          type: string
+          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+
+            This reference is unique per issuer and may be used to carry out research and find information.'
+      title: CardIdentifier
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    BadRequestResponseMetadata:
       type: object
       required:
       - correlationId
@@ -660,104 +637,22 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 404
+          example: 400
           description: HTTP status code
         statusMessage:
           type: string
-          example: Not found
+          example: Bad request
           description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    EncryptedPanData:
-      type: object
-      required:
-      - algoId
-      - encryptedData
-      - keyId
-      properties:
-        algoId:
-          type: string
-          description: 00 = PCI-AES, 01 = BEST, 02 = PCI-PAN, 03 = AES-GCM, 11 = PCI-TDES
-        encryptedData:
-          type: string
-          description: Cryptogram in hexadecimal string representation
-        keyId:
-          type: string
-          description: Either PCI hexadecimal key index or 01 for BEST/AES-GCM keyset 1 or 02 for BEST/AES-GCM keyset 2
-        sessionKey:
-          type: string
-          description: BEST session key in hexadecimal string representation
-        initializationVector:
-          type: string
-          description: BEST or AES-GCM initialization vector in hexadecimal string representation
-        authenticationTag:
-          type: string
-          description: AES-GCM authentication tag in hexadecimal string representation
-      title: EncryptedPanData
-    UnauthorizedErrorApiResponse:
+      title: BadRequestResponseMetadata
+    InternalServerErrorErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    SetPinByPanRequest:
-      type: object
-      required:
-      - pinAttribute
-      properties:
-        event:
-          type: string
-          description: EXTERNAL (default -> just don't mention the field), INTERNAL, ATM or IVR
-        pinAttribute:
-          $ref: '#/components/schemas/PinAttribute'
-        encryptedPan:
-          $ref: '#/components/schemas/EncryptedPanData'
-        pan:
-          type: string
-          description: Either encryptedPan or pan should be mentioned
-        panSequenceNumber:
-          type: string
-          description: Either panSequenceNumber or panExpiryDate should be mentioned, or both
-        panExpiryDate:
-          type: string
-          description: Format MMYY - Either panSequenceNumber or panExpiryDate should be mentioned, or both
-        encryptedPinBlockPan:
-          $ref: '#/components/schemas/EncryptedPanData'
-        pinBlockPan:
-          type: string
-          description: Only for cases where PAN input to PIN block computation should be overriden; either encryptedPinBlockPan or pinBlockPan should be mentioned
-      title: SetPinByPanRequest
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    CardIdentifier:
-      type: object
-      description: Identification of the card either by Issuer card external reference or by card reference
-      properties:
-        cardReference:
-          type: string
-          description: 'Reference of the card generated by our system, unique per platform.
-
-            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
-        issuerCardExternalReference:
-          type: string
-          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
-
-            This reference is unique per issuer and may be used to carry out research and find information.'
-      title: CardIdentifier
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
     ForbiddenResponseMetadata:
       type: object
       required:
@@ -790,7 +685,41 @@ components:
         pinAttribute:
           $ref: '#/components/schemas/PinAttribute'
       title: SetPinResponse
-    ApiResponseEntitySetPinResponse:
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    ApiResponseEntityGetPinResponse:
       type: object
       required:
       - responseMetadata
@@ -798,22 +727,100 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/SetPinResponse'
+          - $ref: '#/components/schemas/GetPinResponse'
         responseMetadata:
           description: Response metadata
           allOf:
           - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntitySetPinResponse
+      title: ApiResponseEntityGetPinResponse
       description: Issuer response entity
-    InternalServerErrorErrorApiResponse:
+    BadGatewayResponseMetadata:
       type: object
       required:
-      - responseMetadata
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    GetPinRequest:
+      type: object
+      description: encryptedSessionKey is the encrypted session key to be used for encrypting the PIN in the reply
+      properties:
+        event:
+          type: string
+          description: EXTERNAL (default), INTERNAL, ATM or IVR
+        encryptedSessionKey:
+          $ref: '#/components/schemas/EncryptedData'
+      title: GetPinRequest
+    SetPinByPanRequest:
+      type: object
+      required:
+      - pinAttribute
+      properties:
+        event:
+          type: string
+          description: EXTERNAL (default -> just don't mention the field), INTERNAL, ATM or IVR
+        pinAttribute:
+          $ref: '#/components/schemas/PinAttribute'
+        encryptedPan:
+          $ref: '#/components/schemas/EncryptedPanData'
+        pan:
+          type: string
+          description: Either encryptedPan or pan should be mentioned
+        panSequenceNumber:
+          type: string
+          description: Either panSequenceNumber or panExpiryDate should be mentioned, or both
+        panExpiryDate:
+          type: string
+          description: Format MMYY - Either panSequenceNumber or panExpiryDate should be mentioned, or both
+        encryptedPinBlockPan:
+          $ref: '#/components/schemas/EncryptedPanData'
+        pinBlockPan:
+          type: string
+          description: Only for cases where PAN input to PIN block computation should be overriden; either encryptedPinBlockPan or pinBlockPan should be mentioned
+      title: SetPinByPanRequest
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
     UnauthorizedResponseMetadata:
       type: object
       required:
@@ -839,6 +846,94 @@ components:
           example: Unauthorized
           description: Executed REST API status message
       title: UnauthorizedResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    EncryptedPanData:
+      type: object
+      required:
+      - algoId
+      - encryptedData
+      - keyId
+      properties:
+        algoId:
+          type: string
+          description: 00 = PCI-AES, 01 = BEST, 02 = PCI-PAN, 03 = AES-GCM, 11 = PCI-TDES
+        encryptedData:
+          type: string
+          description: Cryptogram in hexadecimal string representation
+        keyId:
+          type: string
+          description: Either PCI hexadecimal key index or 01 for BEST/AES-GCM keyset 1 or 02 for BEST/AES-GCM keyset 2
+        sessionKey:
+          type: string
+          description: BEST session key in hexadecimal string representation
+        initializationVector:
+          type: string
+          description: BEST or AES-GCM initialization vector in hexadecimal string representation
+        authenticationTag:
+          type: string
+          description: AES-GCM authentication tag in hexadecimal string representation
+      title: EncryptedPanData
+    SetPinRequest:
+      type: object
+      required:
+      - pinAttribute
+      properties:
+        event:
+          type: string
+          description: EXTERNAL (default), INTERNAL, ATM or IVR
+        panExpiryDate:
+          type: string
+          description: Format MMYY
+        pinAttribute:
+          $ref: '#/components/schemas/PinAttribute'
+      title: SetPinRequest
     GetPinByPanRequest:
       type: object
       description: encryptedSessionKey is the encrypted session key to be used for encrypting the PIN in the reply
@@ -865,85 +960,6 @@ components:
           type: string
           description: Only for cases where PAN input to PIN block computation should be overriden; either encryptedPinBlockPan or pinBlockPan should be mentioned
       title: GetPinByPanRequest
-    GetPinResponse:
-      type: object
-      required:
-      - externalPinAttribute
-      properties:
-        cardIdentifier:
-          $ref: '#/components/schemas/CardIdentifier'
-        externalPinAttribute:
-          $ref: '#/components/schemas/PinAttribute'
-      title: GetPinResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    GetPinRequest:
-      type: object
-      description: encryptedSessionKey is the encrypted session key to be used for encrypting the PIN in the reply
-      properties:
-        event:
-          type: string
-          description: EXTERNAL (default), INTERNAL, ATM or IVR
-        encryptedSessionKey:
-          $ref: '#/components/schemas/EncryptedData'
-      title: GetPinRequest
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

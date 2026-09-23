@@ -1,27 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Open Banking Payment Initiation Service Debtor Preference Retrieval API
+  title: Open Banking Payment Initiation Service Debtor Preference…
   description: '### Introduction
 
-    There are several flows (sequence of API calls) to complete a payment. Which
-
-    API''s are required depend on the choosen `PaymentProduct`, ASPSP (debtor bank) and the chosen strong customer
-
-    authentication approach. The response of an API call will indicate in the ''Links'' section which next
-
-    API call is required to complete the payment. Both PSD2 and IDEAL payments are supported.
-
-
-    #### PSD2 Sandbox
-
-    Several AspspId''s are available to test specific PSD2 payment initiation scenario''s, see sandbox documentation.
-
-
-    The following authorization token can be used to test in the sandbox (unlike a real token this one doesn''t expire):
-
-    **97fb13a74c712d8c7a50476e71769eaf**
-
-    '
+    There are several flows (sequence of API calls) to complete a payment.'
   version: 3.15.0
 servers:
 - url: https://xs2a.awltest.de/xs2a/routingservice/services/ob/pis/v3
@@ -37,9 +19,7 @@ paths:
       - Authorization: []
       tags:
       - Debtor Preference Retrieval
-      description: 'Currently could be used only for iDEAL 2.0 payments
-
-        '
+      description: Currently could be used only for iDEAL 2.0 payments
       summary: Get PSU preferred bank and preferred account
       operationId: getAllPsuBanksWithAccounts
       parameters:
@@ -95,7 +75,141 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
+  parameters:
+    Psuid:
+      name: Psuid
+      in: path
+      description: 'The Id of the PSU registered at the Open Banking Service
+
+        '
+      required: true
+      schema:
+        type: string
+      example: 12345
+    InitiatingPartySubId:
+      name: InitiatingPartySubId
+      in: header
+      schema:
+        type: string
+      description: 'External identification of the subsidiary initiating party.
+
+        '
+    Signature:
+      name: Signature
+      in: header
+      description: 'Conditionally required for iDEAL payments. The signature in the request should include a keyId with the value of fingerprint of the certificate
+
+        '
+      schema:
+        type: string
+    AspspId:
+      name: AspspId
+      in: header
+      description: The AspspId used within the Open Banking Service to identify a specific ASPSP.
+      schema:
+        type: string
+      example: '121'
+    Digest:
+      name: Digest
+      in: header
+      description: Is contained if and only if the `Signature` element is contained in the header of the request.
+      schema:
+        type: string
+      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
+    X-Request-ID:
+      name: X-Request-ID
+      in: header
+      description: 'UUID for unique request identification.
+
+        '
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 1
+        type: string
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    MessageCreateDateTime:
+      name: MessageCreateDateTime
+      in: header
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2020-09-25T08:15:00.856Z'
+  headers:
+    Digest:
+      description: Is contained if and only if the `Signature` element is contained in the header of the request.
+      schema:
+        type: string
+      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
+    MessageCreateDateTime:
+      required: true
+      schema:
+        type: string
+        format: date-time
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      example: '2020-09-25T08:15:00.856Z'
+    Signature:
+      required: false
+      description: 'Required for IDEAL payments.
+
+        '
+      schema:
+        type: string
+    X-Request-ID:
+      required: true
+      description: 'UUID for unique request identification
+
+        '
+      schema:
+        type: string
+        maxLength: 36
+        minLength: 1
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
   schemas:
+    PsuBankPreferences:
+      type: object
+      additionalProperties: false
+      description: 'The PSU preferenes details saved in the PSU Management
+
+        '
+      properties:
+        AspspName:
+          type: string
+          description: 'The name of the ASPSP/Issuer
+
+            '
+        AspspLogoUrl:
+          type: string
+          description: 'the logo url of the ASPSP/Issuer
+
+            '
+        DebtorAccountIdentification:
+          type: string
+          description: 'The masked IBAN or any other identifier recognized by the PSU and ASPSP/Issuer
+
+            '
+    Link:
+      required:
+      - Href
+      type: object
+      additionalProperties: false
+      properties:
+        Href:
+          maxLength: 1024
+          minLength: 1
+          type: string
     Error:
       required:
       - Code
@@ -205,140 +319,6 @@ components:
         |503        |016  |Request limit of the ASPSP server exceeded
 
         '
-    PsuBankPreferences:
-      type: object
-      additionalProperties: false
-      description: 'The PSU preferenes details saved in the PSU Management
-
-        '
-      properties:
-        AspspName:
-          type: string
-          description: 'The name of the ASPSP/Issuer
-
-            '
-        AspspLogoUrl:
-          type: string
-          description: 'the logo url of the ASPSP/Issuer
-
-            '
-        DebtorAccountIdentification:
-          type: string
-          description: 'The masked IBAN or any other identifier recognized by the PSU and ASPSP/Issuer
-
-            '
-    Link:
-      required:
-      - Href
-      type: object
-      additionalProperties: false
-      properties:
-        Href:
-          maxLength: 1024
-          minLength: 1
-          type: string
-  headers:
-    MessageCreateDateTime:
-      required: true
-      schema:
-        type: string
-        format: date-time
-      description: 'The message create date time.
-
-
-        ISO 8601 DateTime.
-
-        '
-      example: '2020-09-25T08:15:00.856Z'
-    Signature:
-      required: false
-      description: 'Required for IDEAL payments.
-
-        '
-      schema:
-        type: string
-    Digest:
-      description: Is contained if and only if the `Signature` element is contained in the header of the request.
-      schema:
-        type: string
-      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
-    X-Request-ID:
-      required: true
-      description: 'UUID for unique request identification
-
-        '
-      schema:
-        type: string
-        maxLength: 36
-        minLength: 1
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
-  parameters:
-    X-Request-ID:
-      name: X-Request-ID
-      in: header
-      description: 'UUID for unique request identification.
-
-        '
-      required: true
-      schema:
-        maxLength: 36
-        minLength: 1
-        type: string
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
-    InitiatingPartySubId:
-      name: InitiatingPartySubId
-      in: header
-      schema:
-        type: string
-      description: 'External identification of the subsidiary initiating party.
-
-        '
-    MessageCreateDateTime:
-      name: MessageCreateDateTime
-      in: header
-      description: 'The message create date time.
-
-
-        ISO 8601 DateTime.
-
-        '
-      required: true
-      schema:
-        type: string
-        format: date-time
-      example: '2020-09-25T08:15:00.856Z'
-    Psuid:
-      name: Psuid
-      in: path
-      description: 'The Id of the PSU registered at the Open Banking Service
-
-        '
-      required: true
-      schema:
-        type: string
-      example: 12345
-    Signature:
-      name: Signature
-      in: header
-      description: 'Conditionally required for iDEAL payments. The signature in the request should include a keyId with the value of fingerprint of the certificate
-
-        '
-      schema:
-        type: string
-    AspspId:
-      name: AspspId
-      in: header
-      description: The AspspId used within the Open Banking Service to identify a specific ASPSP.
-      schema:
-        type: string
-      example: '121'
-    Digest:
-      name: Digest
-      in: header
-      description: Is contained if and only if the `Signature` element is contained in the header of the request.
-      schema:
-        type: string
-      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
   securitySchemes:
     Authorization:
       type: http

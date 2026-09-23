@@ -1,27 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Open Banking Payment Initiation Service Currency Conversion (Extended services) API
+  title: Open Banking Payment Initiation Service Currency Conversion…
   description: '### Introduction
 
-    There are several flows (sequence of API calls) to complete a payment. Which
-
-    API''s are required depend on the choosen `PaymentProduct`, ASPSP (debtor bank) and the chosen strong customer
-
-    authentication approach. The response of an API call will indicate in the ''Links'' section which next
-
-    API call is required to complete the payment. Both PSD2 and IDEAL payments are supported.
-
-
-    #### PSD2 Sandbox
-
-    Several AspspId''s are available to test specific PSD2 payment initiation scenario''s, see sandbox documentation.
-
-
-    The following authorization token can be used to test in the sandbox (unlike a real token this one doesn''t expire):
-
-    **97fb13a74c712d8c7a50476e71769eaf**
-
-    '
+    There are several flows (sequence of API calls) to complete a payment.'
   version: 3.15.0
 servers:
 - url: https://xs2a.awltest.de/xs2a/routingservice/services/ob/pis/v3
@@ -38,9 +20,7 @@ paths:
       tags:
       - Currency Conversion (Extended services)
       summary: Exchange rate request
-      description: 'Utilize this API to obtain exchange rate details relative to the payer''s local currency and the merchant''s currency as the base currency (EURO). This will allow you to calculate the total amount payable in the payer''s local currency, including any markup for currency conversion fees.
-
-        '
+      description: Utilize this API to obtain exchange rate details relative to the payer's local currency and the merchant's currency as the base currency (EURO). This will allow you to calculate the total amount payable in the payer's local currency, including any markup for currency conversion fees.
       operationId: exchangeRate
       parameters:
       - $ref: '#/components/parameters/X-Request-ID'
@@ -79,114 +59,6 @@ paths:
           $ref: '#/components/responses/503'
 components:
   schemas:
-    ExchangeRateReferences:
-      type: object
-      additionalProperties: false
-      properties:
-        SourceCurrencyReferenceId:
-          maxLength: 35
-          minLength: 1
-          type: string
-          description: 'This should be used to refer to this exchange rate details for currency conversion from the new exchange rate table.
-
-            '
-        TargetCurrencyReferenceId:
-          maxLength: 35
-          minLength: 1
-          type: string
-          description: 'This should be used to reference the second entry ID in the exchange rate table row when cross-currency conversion is required, and two entries are selected for calculation.
-
-            '
-    ExchangeRateInformation:
-      type: object
-      additionalProperties: false
-      required:
-      - UnitCurrency
-      - ExchangeRate
-      - RateType
-      properties:
-        UnitCurrency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'Currency in which the rate of exchange is expressed in a currency exchange.
-
-            '
-          example: EUR
-        ExchangeRate:
-          type: number
-          description: 'The factor used for conversion of an amount from one currency
-
-            to another. This reflects the price at which one currency was bought with
-
-            another currency. Rate expressed as a decimal, for example, 0.7 is 7/10
-
-            and 70%.
-
-            '
-        RateType:
-          type: string
-          description: 'Specifies the type used to complete the currency exchange.
-
-            * Spot: Exchange rate applied is the spot rate.
-
-            '
-          enum:
-          - Spot
-    ExchangeRateRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        Amount:
-          pattern: ^\d{1,13}\.\d{1,5}$
-          type: string
-          description: 'Amount of the payment. Amount to be converted. The decimal separator is a dot.
-
-            '
-          example: '123.45'
-        TargetCurrency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'Currency of the payment. The currency being referenced or converted from. ISO 4217 currency codes should be used.
-
-            '
-          example: CHF
-        UnitCurrency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'The currency against which the target currency is being measured. ISO 4217 currency codes should be used.
-
-            '
-          example: EUR
-      required:
-      - Amount
-      - TargetCurrency
-      - UnitCurrency
-    ExchangeRateResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        ExchangeRateReferences:
-          $ref: '#/components/schemas/ExchangeRateReferences'
-        ExchangeRateInformation:
-          $ref: '#/components/schemas/ExchangeRateInformation'
-        CurrencyConversionFee:
-          $ref: '#/components/schemas/CurrencyConversionFee'
-        EstimatedTotalAmount:
-          $ref: '#/components/schemas/EstimatedTotalAmount'
-        ValidUntil:
-          type: string
-          description: 'This exchange rate is valid until the next run of the scheduled batch to get new exchange rate details. ISO 8601 DateTime.
-
-            '
-          format: date-time
-      description: 'ExchangeRateResponse
-
-        '
-      required:
-      - ExchangeRateInformation
-      - CurrencyConversionFee
-      - EstimatedTotalAmount
-      - ValidUntil
     EstimatedTotalAmount:
       type: object
       additionalProperties: false
@@ -246,6 +118,114 @@ components:
       description: 'Currency Conversion Fee
 
         '
+    ExchangeRateInformation:
+      type: object
+      additionalProperties: false
+      required:
+      - UnitCurrency
+      - ExchangeRate
+      - RateType
+      properties:
+        UnitCurrency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'Currency in which the rate of exchange is expressed in a currency exchange.
+
+            '
+          example: EUR
+        ExchangeRate:
+          type: number
+          description: 'The factor used for conversion of an amount from one currency
+
+            to another. This reflects the price at which one currency was bought with
+
+            another currency. Rate expressed as a decimal, for example, 0.7 is 7/10
+
+            and 70%.
+
+            '
+        RateType:
+          type: string
+          description: 'Specifies the type used to complete the currency exchange.
+
+            * Spot: Exchange rate applied is the spot rate.
+
+            '
+          enum:
+          - Spot
+    ExchangeRateReferences:
+      type: object
+      additionalProperties: false
+      properties:
+        SourceCurrencyReferenceId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'This should be used to refer to this exchange rate details for currency conversion from the new exchange rate table.
+
+            '
+        TargetCurrencyReferenceId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'This should be used to reference the second entry ID in the exchange rate table row when cross-currency conversion is required, and two entries are selected for calculation.
+
+            '
+    ExchangeRateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,5}$
+          type: string
+          description: 'Amount of the payment. Amount to be converted. The decimal separator is a dot.
+
+            '
+          example: '123.45'
+        TargetCurrency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'Currency of the payment. The currency being referenced or converted from. ISO 4217 currency codes should be used.
+
+            '
+          example: CHF
+        UnitCurrency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'The currency against which the target currency is being measured. ISO 4217 currency codes should be used.
+
+            '
+          example: EUR
+      required:
+      - Amount
+      - TargetCurrency
+      - UnitCurrency
+    ExchangeRateResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        ExchangeRateReferences:
+          $ref: '#/components/schemas/ExchangeRateReferences'
+        ExchangeRateInformation:
+          $ref: '#/components/schemas/ExchangeRateInformation'
+        CurrencyConversionFee:
+          $ref: '#/components/schemas/CurrencyConversionFee'
+        EstimatedTotalAmount:
+          $ref: '#/components/schemas/EstimatedTotalAmount'
+        ValidUntil:
+          type: string
+          description: 'This exchange rate is valid until the next run of the scheduled batch to get new exchange rate details. ISO 8601 DateTime.
+
+            '
+          format: date-time
+      description: 'ExchangeRateResponse
+
+        '
+      required:
+      - ExchangeRateInformation
+      - CurrencyConversionFee
+      - EstimatedTotalAmount
+      - ValidUntil
   headers:
     MessageCreateDateTime:
       required: true

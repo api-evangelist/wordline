@@ -19,7 +19,9 @@ paths:
       tags:
       - Authorization
       summary: Retrieve authorizations
-      description: "This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated authorization(s) data. \nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+      description: 'This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated authorization(s) data.
+
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links'
       operationId: getAuthorizations
       parameters:
       - name: acquirerId
@@ -121,101 +123,6 @@ paths:
           content: {}
 components:
   schemas:
-    TransactionIdentification:
-      type: object
-      properties:
-        transactionId:
-          type: string
-          description: Unique identification for a Cardholder Initiated Transaction
-          example: TDS16172008721825920
-        actionId:
-          type: string
-          description: Action ID in UUID format
-          example: 432956ee-6974-42d2-bfdb-878997f21653
-        acquirerReferenceNumber:
-          type: string
-          description: Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks
-          example: '11223344662288134679854'
-        merchantReference:
-          type: string
-          description: Merchant Reference. This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.
-          example: trx reference by merchant
-        merchantTransactionReference:
-          type: string
-          description: '*** DEPRECATED*** (Not available in v2.1. please use merchantReference)
-
-            Merchant Reference. This is a reference that the merchant can
-
-            add to an authorization request towards the terminal by entering it via
-
-            the keyboard of the merchant.
-
-            '
-          example: DEPRECATED. Not available in v2.1. Please use merchantReference
-        pspReference:
-          type: string
-          description: Additional information provided by the concentrator to return on his statement.
-        retrievalReferenceNumber:
-          type: string
-          description: External retrieval reference number.
-        stan:
-          type: integer
-          description: Systems Trace Audit Number
-          format: int32
-          example: 12752
-    Amount:
-      type: object
-      properties:
-        amount:
-          type: string
-          description: 'Amount in the major units of the currency according to ISO 4217.
-
-
-            In case of euro, "3.10" (is 3.10 euro)
-
-            '
-          format: unlimited size decimal
-          example: '3.00'
-        currency:
-          type: string
-          description: Currency of the amount
-          example: EUR
-    ContractIdentification:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-          example: '671234567'
-        pspId:
-          type: string
-          description: Psp Id
-        holdingId:
-          type: integer
-          description: Unique identification of the holding, determined by equensWorldline
-          format: int32
-          example: 200
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-          example: '1280300'
-        contractId:
-          type: string
-          description: Unique identification of the contract, determined by the acquirer
-          example: '12872'
-        cardAcceptorId:
-          type: string
-          description: Unique identification of the cardAcceptor within the contract
-          example: '30010'
-        siteId:
-          type: integer
-          description: Unique identification of the site within the contract
-          format: int32
-          example: 30010
-        terminalId:
-          type: string
-          description: Unique code identifying the terminal at the Card acceptor location
-          example: 20YT45
     Authorization:
       type: object
       properties:
@@ -339,3 +246,98 @@ components:
           $ref: '#/components/schemas/Amount'
         tipAmount:
           $ref: '#/components/schemas/Amount'
+    Amount:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: 'Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        currency:
+          type: string
+          description: Currency of the amount
+          example: EUR
+    ContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+          example: '671234567'
+        pspId:
+          type: string
+          description: Psp Id
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1280300'
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '12872'
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the cardAcceptor within the contract
+          example: '30010'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+          example: 30010
+        terminalId:
+          type: string
+          description: Unique code identifying the terminal at the Card acceptor location
+          example: 20YT45
+    TransactionIdentification:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique identification for a Cardholder Initiated Transaction
+          example: TDS16172008721825920
+        actionId:
+          type: string
+          description: Action ID in UUID format
+          example: 432956ee-6974-42d2-bfdb-878997f21653
+        acquirerReferenceNumber:
+          type: string
+          description: Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks
+          example: '11223344662288134679854'
+        merchantReference:
+          type: string
+          description: Merchant Reference. This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.
+          example: trx reference by merchant
+        merchantTransactionReference:
+          type: string
+          description: '*** DEPRECATED*** (Not available in v2.1. please use merchantReference)
+
+            Merchant Reference. This is a reference that the merchant can
+
+            add to an authorization request towards the terminal by entering it via
+
+            the keyboard of the merchant.
+
+            '
+          example: DEPRECATED. Not available in v2.1. Please use merchantReference
+        pspReference:
+          type: string
+          description: Additional information provided by the concentrator to return on his statement.
+        retrievalReferenceNumber:
+          type: string
+          description: External retrieval reference number.
+        stan:
+          type: integer
+          description: Systems Trace Audit Number
+          format: int32
+          example: 12752

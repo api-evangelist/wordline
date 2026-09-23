@@ -30,6 +30,8 @@ paths:
           description: Not Authorized
         '403':
           description: Not Allowed
+      operationId: postV10WebauthnAuthn
+      x-operation-id-source: derived
     patch:
       summary: Finish fido authentication
       tags:
@@ -50,23 +52,10 @@ paths:
           description: Not Authorized
         '403':
           description: Not Allowed
+      operationId: patchV10WebauthnAuthn
+      x-operation-id-source: derived
 components:
   schemas:
-    UserVerificationRequirement:
-      type: object
-      properties:
-        value:
-          type: string
-    PublicKeyCredentialType:
-      type: object
-      properties:
-        value:
-          type: string
-    AuthenticatorTransport:
-      type: object
-      properties:
-        value:
-          type: string
     PublicKeyCredentialUserEntity:
       required:
       - name
@@ -78,6 +67,121 @@ components:
         id:
           type: string
         displayName:
+          type: string
+    UserVerificationRequirement:
+      type: object
+      properties:
+        value:
+          type: string
+    AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput:
+      type: object
+      properties:
+        uvm:
+          type: boolean
+          writeOnly: true
+        credProtect:
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/CredentialProtectionPolicy'
+          writeOnly: true
+        hMACSecret: {}
+    AuthOptionRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
+        userVerification:
+          type: string
+        extensions:
+          type: object
+          additionalProperties:
+            type: string
+    Status:
+      enum:
+      - OK
+      - FAILED
+      type: string
+    PublicKeyCredentialDescriptor:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PublicKeyCredentialType'
+        id:
+          type: string
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticatorTransport'
+    PublicKeyCredentialAssertion:
+      required:
+      - response
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+        rawId:
+          type: string
+        response:
+          $ref: '#/components/schemas/AuthenticatorAssertionResponse'
+        getClientExtensionResults:
+          type: object
+          additionalProperties:
+            type: string
+        type:
+          minLength: 1
+          pattern: public-key
+          type: string
+    PublicKeyCredentialType:
+      type: object
+      properties:
+        value:
+          type: string
+    AssertionResponse:
+      required:
+      - sessionId
+      type: object
+      properties:
+        sessionId:
+          minLength: 1
+          type: string
+        assertionBlob:
+          $ref: '#/components/schemas/PublicKeyCredentialAssertion'
+    CredentialProtectionPolicy:
+      enum:
+      - USER_VERIFICATION_OPTIONAL
+      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
+      - USER_VERIFICATION_REQUIRED
+      type: string
+    AuthenticatorTransport:
+      type: object
+      properties:
+        value:
+          type: string
+    AuthOptionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        errorMessage:
+          type: string
+        challenge:
+          type: string
+        timeout:
+          format: int64
+          type: integer
+        rpId:
+          type: string
+        allowCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKeyCredentialDescriptor'
+        userVerification:
+          $ref: '#/components/schemas/UserVerificationRequirement'
+        extensions:
+          $ref: '#/components/schemas/AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput'
+        sessionId:
           type: string
     ServerResponse:
       type: object
@@ -104,103 +208,3 @@ components:
           type: string
         userHandle:
           type: string
-    AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput:
-      type: object
-      properties:
-        uvm:
-          type: boolean
-          writeOnly: true
-        credProtect:
-          type: string
-          allOf:
-          - $ref: '#/components/schemas/CredentialProtectionPolicy'
-          writeOnly: true
-        hMACSecret: {}
-    PublicKeyCredentialAssertion:
-      required:
-      - response
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-        rawId:
-          type: string
-        response:
-          $ref: '#/components/schemas/AuthenticatorAssertionResponse'
-        getClientExtensionResults:
-          type: object
-          additionalProperties:
-            type: string
-        type:
-          minLength: 1
-          pattern: public-key
-          type: string
-    CredentialProtectionPolicy:
-      enum:
-      - USER_VERIFICATION_OPTIONAL
-      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
-      - USER_VERIFICATION_REQUIRED
-      type: string
-    AuthOptionRequest:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
-        userVerification:
-          type: string
-        extensions:
-          type: object
-          additionalProperties:
-            type: string
-    Status:
-      enum:
-      - OK
-      - FAILED
-      type: string
-    AuthOptionResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        errorMessage:
-          type: string
-        challenge:
-          type: string
-        timeout:
-          format: int64
-          type: integer
-        rpId:
-          type: string
-        allowCredentials:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicKeyCredentialDescriptor'
-        userVerification:
-          $ref: '#/components/schemas/UserVerificationRequirement'
-        extensions:
-          $ref: '#/components/schemas/AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput'
-        sessionId:
-          type: string
-    AssertionResponse:
-      required:
-      - sessionId
-      type: object
-      properties:
-        sessionId:
-          minLength: 1
-          type: string
-        assertionBlob:
-          $ref: '#/components/schemas/PublicKeyCredentialAssertion'
-    PublicKeyCredentialDescriptor:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PublicKeyCredentialType'
-        id:
-          type: string
-        transports:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/AuthenticatorTransport'

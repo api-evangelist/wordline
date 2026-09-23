@@ -18,7 +18,13 @@ paths:
       - Card - CVV
       summary: Get the CVV
       operationId: displayCvv
-      description: "This service offers the option to the issuer to display the CVV2 inside the mobile app.\nAs the CVV2 is not stored it must be re-created using the received card data from the request.\nNote: Worldline will send the encrypted CVV2 towards the issuer. \nThe issuer is responsible for displaying the CVV2 inside the mobile app or Homebanking service"
+      description: 'This service offers the option to the issuer to display the CVV2 inside the mobile app.
+
+        As the CVV2 is not stored it must be re-created using the received card data from the request.
+
+        Note: Worldline will send the encrypted CVV2 towards the issuer.
+
+        The issuer is responsible for displaying the CVV2 inside the mobile app or Homebanking service'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -160,7 +166,13 @@ paths:
       tags:
       - Card - CVV
       summary: Get the CVV by external reference
-      description: "This service offers the option to the issuer to display the CVV2 inside the mobile app.\nAs the CVV2 is not stored it must be re-created using the received card data from the request.\nNote: Worldline will send the encrypted CVV2 towards the issuer. \nThe issuer is responsible for displaying the CVV2 inside the mobile app or Homebanking service"
+      description: 'This service offers the option to the issuer to display the CVV2 inside the mobile app.
+
+        As the CVV2 is not stored it must be re-created using the received card data from the request.
+
+        Note: Worldline will send the encrypted CVV2 towards the issuer.
+
+        The issuer is responsible for displaying the CVV2 inside the mobile app or Homebanking service'
       operationId: displayCvvByIssuerExtRef
       parameters:
       - name: WL-Correlation-ID
@@ -300,6 +312,266 @@ paths:
         required: true
 components:
   schemas:
+    EncryptedCardSecurityCode:
+      type: object
+      required:
+      - algoId
+      - encryptedData
+      - keyId
+      - initializationVector
+      - authenticationTag
+      properties:
+        algoId:
+          type: string
+          description: 03 for AES-GCM
+        encryptedData:
+          type: string
+          description: Cryptogram in hexadecimal string representation
+        keyId:
+          type: string
+          description: 00 for a session key
+        initializationVector:
+          type: string
+          description: AES-GCM initialization vector in hexadecimal string representation
+        authenticationTag:
+          type: string
+          description: AES-GCM authentication tag in hexadecimal string representation
+      title: EncryptedCardSecurityCode
+    EncryptedData:
+      type: object
+      required:
+      - algoId
+      - encryptedData
+      - keyId
+      properties:
+        algoId:
+          type: string
+          description: 'Algorithm used to encrypt Session Key
+
+            Allowed Value:
+
+            06 for RSA'
+        encryptedData:
+          type: string
+          description: Cryptogram in hexadecimal string representation
+        keyId:
+          type: string
+          description: 'Key set used for request
+
+            Allowed Value:
+
+            01 - Keyset1
+
+            02 - Keyset2'
+      title: EncryptedData
+    GetCvvResponse:
+      type: object
+      required:
+      - encryptedCardSecurityCode
+      properties:
+        encryptedCardSecurityCode:
+          $ref: '#/components/schemas/EncryptedCardSecurityCode'
+      title: GetCvvResponse
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    ValidateCvvRequest:
+      type: object
+      description: Either cardSecurityCode or encryptedCardSecurityCode + encryptedSessionKey should be mentioned - in the latter case, encryptedSessionKey is the encrypted session key used for encrypting the CVV in the request
+      properties:
+        cardSecurityCode:
+          type: string
+        encryptedCardSecurityCode:
+          $ref: '#/components/schemas/EncryptedCardSecurityCode'
+        encryptedSessionKey:
+          $ref: '#/components/schemas/EncryptedData'
+      title: ValidateCvvRequest
+    ApiResponseEntityGetCvvResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/GetCvvResponse'
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetCvvResponse
+      description: Issuer response entity
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    GetCvvRequest:
+      type: object
+      description: encryptedSessionKey is the encrypted session key to be used for encrypting the CVV in the reply
+      required:
+      - encryptedSessionKey
+      properties:
+        encryptedSessionKey:
+          $ref: '#/components/schemas/EncryptedData'
+      title: GetCvvRequest
+    ApiResponseEntityValidateCvvResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          $ref: '#/components/schemas/ValidateCvvResponse'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityValidateCvvResponse
+      description: Issuer response entity
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
     InternalServerErrorResponseMetadata:
       type: object
       required:
@@ -325,21 +597,31 @@ components:
           example: Internal server error
           description: Executed REST API status message
       title: InternalServerErrorResponseMetadata
-    ApiResponseEntityGetCvvResponse:
+    UnauthorizedResponseMetadata:
       type: object
       required:
-      - responseMetadata
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/GetCvvResponse'
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetCvvResponse
-      description: Issuer response entity
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
     ResponseMetadata:
       type: object
       required:
@@ -374,105 +656,6 @@ components:
           example: 12
           description: Wall clock time required from service to generate the response
       title: ResponseMetadata
-    EncryptedData:
-      type: object
-      required:
-      - algoId
-      - encryptedData
-      - keyId
-      properties:
-        algoId:
-          type: string
-          description: 'Algorithm used to encrypt Session Key
-
-            Allowed Value:
-
-            06 for RSA'
-        encryptedData:
-          type: string
-          description: Cryptogram in hexadecimal string representation
-        keyId:
-          type: string
-          description: 'Key set used for request
-
-            Allowed Value:
-
-            01 - Keyset1
-
-            02 - Keyset2'
-      title: EncryptedData
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    ApiResponseEntityValidateCvvResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/ValidateCvvResponse'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityValidateCvvResponse
-      description: Issuer response entity
     Links:
       type: object
       required:
@@ -487,177 +670,6 @@ components:
           example: /x/{x}?page[offset]=2
           description: URL pagination query parameter next page
       title: Links
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    GetCvvResponse:
-      type: object
-      required:
-      - encryptedCardSecurityCode
-      properties:
-        encryptedCardSecurityCode:
-          $ref: '#/components/schemas/EncryptedCardSecurityCode'
-      title: GetCvvResponse
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    GetCvvRequest:
-      type: object
-      description: encryptedSessionKey is the encrypted session key to be used for encrypting the CVV in the reply
-      required:
-      - encryptedSessionKey
-      properties:
-        encryptedSessionKey:
-          $ref: '#/components/schemas/EncryptedData'
-      title: GetCvvRequest
-    EncryptedCardSecurityCode:
-      type: object
-      required:
-      - algoId
-      - encryptedData
-      - keyId
-      - initializationVector
-      - authenticationTag
-      properties:
-        algoId:
-          type: string
-          description: 03 for AES-GCM
-        encryptedData:
-          type: string
-          description: Cryptogram in hexadecimal string representation
-        keyId:
-          type: string
-          description: 00 for a session key
-        initializationVector:
-          type: string
-          description: AES-GCM initialization vector in hexadecimal string representation
-        authenticationTag:
-          type: string
-          description: AES-GCM authentication tag in hexadecimal string representation
-      title: EncryptedCardSecurityCode
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    ValidateCvvRequest:
-      type: object
-      description: Either cardSecurityCode or encryptedCardSecurityCode + encryptedSessionKey should be mentioned - in the latter case, encryptedSessionKey is the encrypted session key used for encrypting the CVV in the request
-      properties:
-        cardSecurityCode:
-          type: string
-        encryptedCardSecurityCode:
-          $ref: '#/components/schemas/EncryptedCardSecurityCode'
-        encryptedSessionKey:
-          $ref: '#/components/schemas/EncryptedData'
-      title: ValidateCvvRequest
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
     ValidateCvvResponse:
       type: object
       required:

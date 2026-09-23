@@ -9,12 +9,12 @@ info:
 servers:
 - url: https://sbx-wlip.api1-eu2.psapigateway.preprod.giservices.io/card-issuing/api/v2
 tags:
-- name: HealthCheck
+- name: Health Check
 paths:
   /health:
     get:
       tags:
-      - HealthCheck
+      - Health Check
       summary: getHealthCheckResponse
       operationId: getHealthCheckResponseUsingGET
       description: This API enables the caller to check globally the status of our solution. This can be considered as a watch-dog message.
@@ -42,20 +42,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
     ResponseMetadata:
       type: object
       required:
@@ -90,12 +76,6 @@ components:
           example: 12
           description: Wall clock time required from service to generate the response
       title: ResponseMetadata
-    HealthCheckStatus:
-      type: object
-      properties:
-        status:
-          type: string
-      title: HealthCheckStatus
     apiResponseEntityHealthCheckStatus:
       type: object
       required:
@@ -111,6 +91,26 @@ components:
           - $ref: '#/components/schemas/ResponseMetadata'
       title: apiResponseEntityHealthCheckStatus
       description: Issuer response entity
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    HealthCheckStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      title: HealthCheckStatus
   securitySchemes:
     basic:
       type: oauth2

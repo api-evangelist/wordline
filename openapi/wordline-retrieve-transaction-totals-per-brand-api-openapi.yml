@@ -21,7 +21,15 @@ paths:
       tags:
       - Retrieve transaction totals per brand
       summary: Retrieve daily totals
-      description: "This operation of the Analysis API will help you to retrieve aggregated data from different levels \nof the equensWorldline Acquiring Contract hierarchy, divided by brand. \nYou can do this using by providing an entity from the equensWorldline contract hierarchy, such as a contractId. \nThe results are aggregated transaction numbers and revenue, split by brand, on a daily basis, \ndivided by type Purchases, refunds and chargebacks. \n"
+      description: 'This operation of the Analysis API will help you to retrieve aggregated data from different levels
+
+        of the equensWorldline Acquiring Contract hierarchy, divided by brand.
+
+        You can do this using by providing an entity from the equensWorldline contract hierarchy, such as a contractId.
+
+        The results are aggregated transaction numbers and revenue, split by brand, on a daily basis,
+
+        divided by type Purchases, refunds and chargebacks.'
       operationId: getBrandTotalsPerDayUsingGET
       parameters:
       - name: levelId
@@ -110,7 +118,15 @@ paths:
       tags:
       - Retrieve transaction totals per brand
       summary: Retrieve monthly totals
-      description: "This operation of the Analysis API will help you to retrieve aggregated data from different levels of \nthe equensWorldline Acquiring Contract hierarchy, divided by brand. You can do this using by providing \nan entity from the equensWorldline contract hierarchy, such as a contractId. \nThe results are aggregated transaction numbers and revenue, split by brand, on a monthly basis, \ndivided by type Purchases, refunds and chargebacks.\n"
+      description: 'This operation of the Analysis API will help you to retrieve aggregated data from different levels of
+
+        the equensWorldline Acquiring Contract hierarchy, divided by brand. You can do this using by providing
+
+        an entity from the equensWorldline contract hierarchy, such as a contractId.
+
+        The results are aggregated transaction numbers and revenue, split by brand, on a monthly basis,
+
+        divided by type Purchases, refunds and chargebacks.'
       operationId: getBrandTotalsPerMonthUsingGET
       parameters:
       - name: levelId
@@ -196,26 +212,6 @@ paths:
           description: Backend service not available
 components:
   schemas:
-    RestTotalBrand:
-      type: object
-      properties:
-        brand:
-          type: string
-          example: VISA, MAST, MAES, etc
-        total:
-          $ref: '#/components/schemas/RestTotal'
-    RestPeriodTotalBrand:
-      type: object
-      properties:
-        period:
-          type: string
-          description: YYYYMMDD for day-period. YYYYMM for month-period
-          example: 20161231 for day-period or 201612 for month-period
-        totalbrandList:
-          type: array
-          description: List of totals per brand
-          items:
-            $ref: '#/components/schemas/RestTotalBrand'
     RestTotal:
       type: object
       properties:
@@ -240,3 +236,23 @@ components:
           type: integer
           format: int64
           description: Total number of chargebacks
+    RestPeriodTotalBrand:
+      type: object
+      properties:
+        period:
+          type: string
+          description: YYYYMMDD for day-period. YYYYMM for month-period
+          example: 20161231 for day-period or 201612 for month-period
+        totalbrandList:
+          type: array
+          description: List of totals per brand
+          items:
+            $ref: '#/components/schemas/RestTotalBrand'
+    RestTotalBrand:
+      type: object
+      properties:
+        brand:
+          type: string
+          example: VISA, MAST, MAES, etc
+        total:
+          $ref: '#/components/schemas/RestTotal'

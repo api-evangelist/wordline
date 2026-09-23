@@ -315,84 +315,6 @@ paths:
               $ref: '#/components/schemas/CancelDirectDebitRequest'
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    CancelDirectDebitResponse:
-      type: object
-      required:
-      - directDebitIdentifier
-      - status
-      - cancellationDate
-      properties:
-        directDebitIdentifier:
-          description: Direct debit identifier
-          allOf:
-          - $ref: '#/components/schemas/DirectDebitIdentifier'
-        status:
-          type: string
-          description: Direct debit status
-        cancellationDate:
-          type: string
-          format: date-time
-          description: The date when the Direct Debit order was canceled
-      title: CancelDirectDebitResponse
     BadRequestErrorApiResponse:
       type: object
       required:
@@ -402,257 +324,29 @@ components:
           allOf:
           - $ref: '#/components/schemas/BadRequestResponseMetadata'
       title: BadRequestErrorApiResponse
-    ApiResponseEntityCancelDirectDebitResponse:
-      x-wl-api-response: true
+    Amount:
       type: object
       required:
-      - responseMetadata
+      - value
+      - exponent
+      - isoCode
       properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CancelDirectDebitResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCancelDirectDebitResponse
-    ApiResponseEntityDirectDebit:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/DirectDebit'
-      description: Issuer response entity
-      title: ApiResponseEntityDirectDebit
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
           type: integer
           format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
           type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    CreateDirectDebitResponse:
-      type: object
-      required:
-      - directDebitIdentifier
-      - status
-      properties:
-        directDebitIdentifier:
-          description: Direct debit identifier
-          allOf:
-          - $ref: '#/components/schemas/DirectDebitIdentifier'
-        status:
-          type: string
-          description: Direct debit status
-      title: CreateDirectDebitResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    CreateDirectDebitRequest:
-      type: object
-      required:
-      - overPaymentAccountIdentifier
-      - amount
-      properties:
-        overPaymentAccountIdentifier:
-          description: Card account identifier to be credited
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        amount:
-          description: Amount of Direct Debit
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        externalOperationCode:
-          type: string
-          description: The external operation code of the balance adjustment can be provided.
-        paymentReason:
-          type: string
-          description: 'The reason why the payment is triggerred
+          description: 'Currency code of amount
 
-            The list of possible payment reasons is configurable per issuer.'
-      title: CreateDirectDebitRequest
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    CancelDirectDebitRequest:
-      type: object
-      properties:
-        rejectionReason:
-          type: string
-          description: Reason for cancelling the direct debit (free text)
-      title: CancelDirectDebitRequest
-    ApiResponseEntityCreateDirectDebitResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateDirectDebitResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateDirectDebitResponse
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
     DirectDebit:
       type: object
       properties:
@@ -733,6 +427,206 @@ components:
           type: string
           description: "Reason why the payment is triggered \nThe list of possible payment reasons is configurable per issuer."
       title: DirectDebit
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    ApiResponseEntityCancelDirectDebitResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CancelDirectDebitResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCancelDirectDebitResponse
+    CancelDirectDebitRequest:
+      type: object
+      properties:
+        rejectionReason:
+          type: string
+          description: Reason for cancelling the direct debit (free text)
+      title: CancelDirectDebitRequest
+    DirectDebitStatusHistory:
+      type: object
+      properties:
+        status:
+          type: string
+          description: 'Status of the direct debit transfer on the particular status date '
+        statusDate:
+          type: string
+          format: date-time
+          description: Date of the direct debit status change
+        username:
+          type: string
+          description: Name of the user who requested to create or cancel the direct debit
+        origin:
+          type: string
+          description: Origin used when the direct debit was requested or cancelled.
+      title: DirectDebitStatusHistory
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    ApiResponseEntityDirectDebit:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/DirectDebit'
+      description: Issuer response entity
+      title: ApiResponseEntityDirectDebit
+    CreateDirectDebitResponse:
+      type: object
+      required:
+      - directDebitIdentifier
+      - status
+      properties:
+        directDebitIdentifier:
+          description: Direct debit identifier
+          allOf:
+          - $ref: '#/components/schemas/DirectDebitIdentifier'
+        status:
+          type: string
+          description: Direct debit status
+      title: CreateDirectDebitResponse
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
+          type: string
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
+          type: string
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
     BadGatewayResponseMetadata:
       type: object
       required:
@@ -758,56 +652,162 @@ components:
           example: Bad Gateway
           description: Executed REST API status message
       title: BadGatewayResponseMetadata
-    AccountIdentifier:
-      type: object
-      properties:
-        accountReference:
-          type: string
-          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-        issuerAccountExternalReference:
-          type: string
-          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-      title: AccountIdentifier
-    DirectDebitStatusHistory:
-      type: object
-      properties:
-        status:
-          type: string
-          description: 'Status of the direct debit transfer on the particular status date '
-        statusDate:
-          type: string
-          format: date-time
-          description: Date of the direct debit status change
-        username:
-          type: string
-          description: Name of the user who requested to create or cancel the direct debit
-        origin:
-          type: string
-          description: Origin used when the direct debit was requested or cancelled.
-      title: DirectDebitStatusHistory
-    Amount:
+    CancelDirectDebitResponse:
       type: object
       required:
-      - value
-      - exponent
-      - isoCode
+      - directDebitIdentifier
+      - status
+      - cancellationDate
       properties:
-        value:
-          type: integer
-          format: int64
-          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-        exponent:
+        directDebitIdentifier:
+          description: Direct debit identifier
+          allOf:
+          - $ref: '#/components/schemas/DirectDebitIdentifier'
+        status:
+          type: string
+          description: Direct debit status
+        cancellationDate:
+          type: string
+          format: date-time
+          description: The date when the Direct Debit order was canceled
+      title: CancelDirectDebitResponse
+    ApiResponseEntityCreateDirectDebitResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateDirectDebitResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateDirectDebitResponse
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
           type: integer
           format: int32
-          description: Exponent of Amount. Number of decimal digits.
-        isoCode:
+          example: 500
+          description: HTTP status code
+        statusMessage:
           type: string
-          description: 'Currency code of amount
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    CreateDirectDebitRequest:
+      type: object
+      required:
+      - overPaymentAccountIdentifier
+      - amount
+      properties:
+        overPaymentAccountIdentifier:
+          description: Card account identifier to be credited
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        amount:
+          description: Amount of Direct Debit
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        externalOperationCode:
+          type: string
+          description: The external operation code of the balance adjustment can be provided.
+        paymentReason:
+          type: string
+          description: 'The reason why the payment is triggerred
 
-            The currency in ISO4217 alphabetic format.
-
-            Example: EUR for Euro'
-      title: Amount
+            The list of possible payment reasons is configurable per issuer.'
+      title: CreateDirectDebitRequest
     DirectDebitIdentifier:
       type: object
       properties:

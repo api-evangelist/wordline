@@ -19,7 +19,11 @@ paths:
       tags:
       - Transaction Lifecycle
       summary: Retrieve by AcquirerRefNo
-      description: "This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated \nfirst/second presentment(s) data \\nand the associated transaction data of the different stages in the dispute life cycle.\nIf there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links\n"
+      description: 'This operation uses the unique AcquirerRefNo (acquirerReferenceNumber ARN) to retrieve the associated
+
+        first/second presentment(s) data \nand the associated transaction data of the different stages in the dispute life cycle.
+
+        If there is a previous and/or next page the http response header will have a link (url) to this data. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Link#pagination_through_links'
       operationId: getLifeCycle
       parameters:
       - name: acquirerId
@@ -122,46 +126,6 @@ paths:
           content: {}
 components:
   schemas:
-    ContractIdentification:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-          example: '671234567'
-        pspId:
-          type: string
-          description: Psp Id
-        holdingId:
-          type: integer
-          description: Unique identification of the holding, determined by equensWorldline
-          format: int32
-          example: 200
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-          example: '1280300'
-        contractId:
-          type: string
-          description: Unique identification of the contract, determined by the acquirer
-          example: '12872'
-        cardAcceptorId:
-          type: string
-          description: Unique identification of the cardAcceptor within the contract
-          example: '30010'
-        siteId:
-          type: integer
-          description: Unique identification of the site within the contract
-          format: int32
-          example: 30010
-        terminalId:
-          type: string
-          description: Unique code identifying the terminal at the Card acceptor location
-          example: 20YT45
-    PaymentInfo:
-      type: array
-      items:
-        $ref: '#/components/schemas/PaymentData'
     TransactionIdentification:
       type: object
       properties:
@@ -204,29 +168,6 @@ components:
           description: Systems Trace Audit Number
           format: int32
           example: 12752
-    PaymentData:
-      type: object
-      properties:
-        merchantPaymentId:
-          type: string
-          description: Unique identification of the payment in which this transaction has been paid out
-          example: SO-000000017036619028
-        merchantPaymentAggregationLevelCode:
-          type: string
-          description: Code for the merchant payment aggregation level.
-          example: '02'
-        paymentType:
-          type: string
-          description: Type for which payment created. Transaction Fee, Transaction
-          example: '03'
-        paymentDate:
-          type: string
-          description: payment date (yyyy-mm-ddT00:00:00+01:00) (Note, including 00:00:00+hh:00)
-          format: date
-        paymentCrossReferenceURI:
-          type: string
-          description: URI to the MerchantApiPayment to get the payment that belongs to this transaction. Only available if there is a payment date.
-          example: acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD
     Lifecycle:
       type: object
       properties:
@@ -371,6 +312,65 @@ components:
           $ref: '#/components/schemas/Amount'
         merchantTransactionAmount:
           $ref: '#/components/schemas/Amount'
+    PaymentData:
+      type: object
+      properties:
+        merchantPaymentId:
+          type: string
+          description: Unique identification of the payment in which this transaction has been paid out
+          example: SO-000000017036619028
+        merchantPaymentAggregationLevelCode:
+          type: string
+          description: Code for the merchant payment aggregation level.
+          example: '02'
+        paymentType:
+          type: string
+          description: Type for which payment created. Transaction Fee, Transaction
+          example: '03'
+        paymentDate:
+          type: string
+          description: payment date (yyyy-mm-ddT00:00:00+01:00) (Note, including 00:00:00+hh:00)
+          format: date
+        paymentCrossReferenceURI:
+          type: string
+          description: URI to the MerchantApiPayment to get the payment that belongs to this transaction. Only available if there is a payment date.
+          example: acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD
+    ContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+          example: '671234567'
+        pspId:
+          type: string
+          description: Psp Id
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1280300'
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '12872'
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the cardAcceptor within the contract
+          example: '30010'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+          example: 30010
+        terminalId:
+          type: string
+          description: Unique code identifying the terminal at the Card acceptor location
+          example: 20YT45
     Amount:
       type: object
       properties:
@@ -388,3 +388,7 @@ components:
           type: string
           description: Currency of the amount
           example: EUR
+    PaymentInfo:
+      type: array
+      items:
+        $ref: '#/components/schemas/PaymentData'

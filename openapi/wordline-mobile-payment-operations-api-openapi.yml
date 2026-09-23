@@ -1482,7 +1482,7 @@ paths:
     post:
       tags:
       - Mobile Payment Operations
-      summary: Issuer service aimed to generate data specific elements for push provisioning with ApplePay (MBPAD, MBPAC)
+      summary: Issuer service aimed to generate data specific elements for push provisioning…
       operationId: vtsApplePushDataUsingPOST
       parameters:
       - name: WL-Correlation-ID
@@ -1554,7 +1554,7 @@ paths:
     post:
       tags:
       - Mobile Payment Operations
-      summary: Issuer service aimed to generate data specific elements for app to app provisioning (MBAAC)
+      summary: Issuer service aimed to generate data specific elements for app to app…
       operationId: vtsPushProvisioningRequestUsingPOST
       parameters:
       - name: WL-Correlation-ID
@@ -1626,7 +1626,7 @@ paths:
     post:
       tags:
       - Mobile Payment Operations
-      summary: Issuer service aimed to generate data specific elements for push provisioning for VTS
+      summary: Issuer service aimed to generate data specific elements for push provisioning…
       operationId: vtsPushProvisioningRequestUsingPOST_1
       parameters:
       - name: WL-Correlation-ID
@@ -1696,548 +1696,6 @@ paths:
         required: true
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    AddBaseRequest:
-      type: object
-      required:
-      - tokenProviderID
-      properties:
-        tokenProviderID:
-          type: string
-          description: Information about the token provider. Values are MDES, VTS
-          pattern: VTS|MDES
-    ApiResponseEntityMobileBankingAppAuthCodeResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: object
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/MobileBankingAppAuthCodeResponse'
-        responseMetadata:
-          type: object
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityMobileBankingAppAuthCodeResponse
-      description: Issuer response entity
-    CreateVtsTokenizedCardV2Response:
-      type: object
-      properties:
-        paymentInstrumentDetails:
-          type: string
-          description: The data that must be returned to the mobile application and transmitted to wallet provider. JWE structure as described in VTS Push Provisioning - Payment Instrument Details v12 specification
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ResponseV2:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: object
-          properties: {}
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    EncryptedPayload:
-      type: object
-      required:
-      - encryptedData
-      - encryptedKey
-      - publicKeyFingerprint
-      properties:
-        encryptedData:
-          type: string
-          example: fqeftrq1s6541c5v161f2d151e12
-          description: 'Contains an encrypted json object. Encrypted by the ephemeral AES key
-
-            using CBC mode (IV as provided in ''iv'', or zero if none provided) and
-
-            PKCS#7 padding. The JSON object being encrypted will be defined in
-
-            the context of the API call. Hex-encoded data (case-insensitive)'
-          minLength: 1
-          maxLength: 256000
-        encryptedKey:
-          type: string
-          example: ECD12A55458552152154
-          description: 'One-time use AES key encrypted by the Mastercard public key (as
-
-            identified by ''publicKeyFingerprint'') using the OAEP or RSA Encryption
-
-            Standard PKCS #1 v1.5 (depending on the value of
-
-            ''oaepHashingAlgorithm''.
-
-            Requirement is for a 128-bit key (with 256-bit key supported as an
-
-            option). Hex-encoded data (case-insensitive)'
-          minLength: 1
-          maxLength: 512
-        iv:
-          type: string
-          example: '000000000000'
-          description: 'The initialization vector used when encrypting data using the one-time
-
-            use AES key. Must be exactly 16 bytes (32 character hex string) to
-
-            match the block size.If not present, an IV of zero is assumed. Hex-encoded data (case-insensitive)'
-          minLength: 0
-          maxLength: 32
-        oaepHashingAlgorithm:
-          type: string
-          example: SHA512
-          description: 'Hashing algorithm used with the OAEP scheme. If omitted, then the RSA Encryption Standard PKCS #1 v1.5 will be used'
-          minLength: 0
-          maxLength: 6
-          pattern: SHA256|SHA512
-        publicKeyFingerprint:
-          type: string
-          example: fingerprint1245421
-          description: The fingerprint of the public key used to encrypt the ephemeral AES key. Hex-encoded data (case-insensitive)
-          minLength: 1
-          maxLength: 64
-      description: EncryptedPayload object containing a FundingAccountData object
-    ClickToPayEnrollUpdateRequest:
-      type: object
-      properties:
-        billingAddress:
-          $ref: '#/components/schemas/BillingAddress'
-        consumerInformation:
-          $ref: '#/components/schemas/ConsumerInformation'
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    GetCryptoOTPV2Response:
-      type: object
-      properties:
-        cryptoOTP:
-          type: string
-          description: 'For tokenProviderId VTS : format MBAAC-1-1-ciphertext, in base64 format. For MDES : TAV/activationData'
-    FundingAccountInfo:
-      type: object
-      required:
-      - encryptedPayload
-      properties:
-        encryptedPayload:
-          $ref: '#/components/schemas/EncryptedPayload'
-        panUniqueReference:
-          type: string
-          example: DNHI12354321571354
-          description: Reference to the PAN that is unique per Wallet Provider
-          minLength: 0
-          maxLength: 64
-        tokenUniqueReference:
-          type: string
-          example: 1234567896ABCD456456564
-          description: A unique reference assigned following the allocation of a token used to identify the token for the duration of its lifetime. Required in NotifyServiceActivated
-          minLength: 0
-          maxLength: 64
-      description: Json structure containing encrypted payload
-    MdesIssuerDigitizationDataResponse:
-      type: object
-      required:
-      - tokenizationAuthenticationValue
-      properties:
-        fundingAccountInfo:
-          $ref: '#/components/schemas/FundingAccountInfo'
-        tokenizationAuthenticationValue:
-          type: string
-          example: qzmernbhmlkjndpifjnzqef534ez1f65315z4ef61ez
-          description: TAV structure, in Base 64 format
-      description: The data that must be returned to the mobile application and transmitted to wallet provider
-    ResponseV2GetCardIdFromTokenV2Response:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/GetCardIdFromTokenV2Response'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    DetailsDataResponse:
-      type: object
-      properties:
-        deviceID:
-          type: string
-          example: C2ZBY14310005664
-          description: For SE or HCE only. Secure Element Id or Digital Wallet ID. Format Hex binary
-          minLength: 0
-          maxLength: 48
-        deviceName:
-          type: string
-          example: John's phone
-          description: Readable name for the device. Could contain UTF-8 international characters
-        deviceType:
-          type: string
-          example: MOBILEPHONE_OR_TABLET
-          description: Type of device
-          enum:
-          - UNKNOWN
-          - MOBILE_PHONE
-          - TABLET
-          - WATCH
-          - MOBILEPHONE_OR_TABLET
-          - PERSONAL_COMPUTER
-          - OTHER
-        lastTokenStatusUpdatedDate:
-          type: string
-          format: date-time
-          description: 'GMT date of last status update of the token Format ISO8601 : yyyy-MM-ddTHH:mm:ss.SSSZ'
-        tokenActivationDate:
-          type: string
-          format: date-time
-          description: 'GMT date & time of token activation (empty if inactive). Format ISO8601 : yyyy-MM-ddTHH:mm:ss.SSSZ'
-        tokenExpiryDate:
-          type: string
-          example: 2023-11
-          description: The year and month of the token expiry date. Format yyyy-MM
-          minLength: 7
-          maxLength: 7
-        tokenStatus:
-          type: string
-          description: "The status of the Token. Possible values are :\n IAC (Inactive), ACT (Active), SUS (Suspended), DEA (Deactivated)"
-        tokenSuffix:
-          type: string
-          example: '7890'
-          description: Last 4 digits of token value
-          minLength: 4
-          maxLength: 4
-        walletAccountId:
-          type: string
-          example: A4DF297BD8466140A4DF297BD8466140
-          description: User identifier on device for SE or HCE only
-          minLength: 0
-          maxLength: 32
-    ResponseV2ClickToPayRetrieveAccountDataResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/ClickToPayRetrieveAccountDataResponse'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-    ResponseV2CreateMdesTokenizedCardV2Response:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/CreateMdesTokenizedCardV2Response'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-    CreateMdesTokenizedCardV2Request:
-      type: object
-      required:
-      - clientWalletProvider
-      properties:
-        clientWalletProvider:
-          type: string
-          example: '50120834693'
-          description: Client Wallet Provider is the token requestor's ID (TRID) that designate the encryption key set. For Google, TRID is 50120834693, and Samsung is 50139059239
-          minLength: 11
-          maxLength: 11
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    ResponseV2GetCryptoOTPV2Response:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/GetCryptoOTPV2Response'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-    CreateMdesTokenizedCardV2Response:
-      type: object
-      properties:
-        issuerInitiatedDigitizationData:
-          $ref: '#/components/schemas/MdesIssuerDigitizationDataResponse'
-    ResponseV2CreateAppleTokenizedCardV2Response:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/CreateAppleTokenizedCardV2Response'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-    VtsPaymentInstrumentsDetailsRequest:
-      type: object
-      properties:
-        billingAddressline1:
-          type: string
-        billingAddressline2:
-          type: string
-        city:
-          type: string
-        clientAppId:
-          type: string
-        clientDeviceId:
-          type: string
-        clientWalletAccountId:
-          type: string
-        clientWalletProvider:
-          type: string
-        country:
-          type: string
-        pan:
-          type: string
-        panExpiryDate:
-          type: string
-        postalCode:
-          type: string
-        state:
-          type: string
-      title: VtsPaymentInstrumentsDetailsRequest
-    ApplePayPushProvisioningResponse:
-      type: object
-      properties:
-        mbpac:
-          type: string
-        mbpad:
-          type: string
-      title: ApplePayPushProvisioningResponse
-    ApiResponseEntityVtsPushProvisioningResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: object
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/VtsPushProvisioningResponse'
-        responseMetadata:
-          type: object
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityVtsPushProvisioningResponse
-      description: Issuer response entity
-    ResponseV2CreateVtsTokenizedCardV2Response:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/CreateVtsTokenizedCardV2Response'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-    VtsMobileBankingAuthCode:
-      type: object
-      properties:
-        authCode:
-          type: string
-        pan:
-          type: string
-      title: VtsMobileBankingAuthCode
-    ClickToPayRetrieveAccountDataResponse:
-      type: object
-      properties:
-        c2pProvider:
-          type: string
-          example: Visa
-          description: 'Click-to-Pay provider : Visa. Returned if card is valid'
-        cardDetails:
-          type: array
-          description: List of cardDetail structures that contains information on cards associated to a click-to-Pay account. Returned if min one present. See below for subfields
-          items:
-            $ref: '#/components/schemas/CardDetails'
-        cardholderReference:
-          type: string
-          example: 42936061AAAP8026
-          description: Anonymized card identifier (Surrogate of PAN), as defined by Issuer Card Management System
-        consumerInformation:
-          $ref: '#/components/schemas/ConsumerInformation'
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
     ConsumerInformation:
       type: object
       required:
@@ -2313,16 +1771,19 @@ components:
           description: 'Date/Time from which the consent is valid. Format ISO8601 : yyyy-MM-ddTHH:mm:ss.SSSZ'
           pattern: \d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}\.\d{3}Z
       description: Structure used for information related to click-to-pay account
-    ResponseV2GetTokenDataV2Response:
+    VtsApplePushDataRequest:
       type: object
-      required:
-      - responseMetadata
       properties:
-        data:
-          $ref: '#/components/schemas/GetTokenDataV2Response'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-    GetCardIdFromTokenV2Response:
+        authCode:
+          type: string
+        nonce:
+          type: string
+        pan:
+          type: string
+        panExpiryDate:
+          type: string
+      title: VtsApplePushDataRequest
+    GetTokenDataV2Response:
       type: object
       properties:
         cardExpiryMonth:
@@ -2343,18 +1804,130 @@ components:
           description: The 4 last digits of the cardnumber of the customer (PAN)
           minLength: 4
           maxLength: 4
-        issuerCardId:
+        tokenDataList:
+          type: array
+          description: Structure used for filling information related to the found tokens. Present if minimum one token found
+          items:
+            $ref: '#/components/schemas/AddTokenData'
+    ResponseV2CreateMdesTokenizedCardV2Response:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateMdesTokenizedCardV2Response'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+    GetCryptoOTPV2Response:
+      type: object
+      properties:
+        cryptoOTP:
           type: string
-          example: 52936061AAAP8026
-          description: Anonymized card identifier (Surrogate of PAN), as defined by Issuer. Present if response OK
-          minLength: 0
-          maxLength: 64
-        tokenType:
+          description: 'For tokenProviderId VTS : format MBAAC-1-1-ciphertext, in base64 format. For MDES : TAV/activationData'
+    ResponseV2CreateVtsTokenizedCardV2Response:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateVtsTokenizedCardV2Response'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    VtsCommonPushProvisioningRequest:
+      type: object
+      required:
+      - clientAppID
+      - clientDeviceId
+      - clientWalletAccountID
+      - clientWalletProvider
+      - country
+      properties:
+        clientAppID:
           type: string
-          example: HCE
-          description: 'Values are: SECURE_ELEMENT, HCE, CARD_ON_FILE, ECOMMERCE, QRC.'
-          pattern: SECURE_ELEMENT|HCE|CARD_ON_FILE|ECOMMERCE|QRC
-    ApiResponseApplePayPushProvisioning:
+          description: Unique identifier for the client mobile application. Must be the App ID matching to the cryptographic profile on Visa developer zone
+          minLength: 1
+          maxLength: 36
+        clientDeviceId:
+          type: string
+          description: Device Id as presented by the Wallet service provider (token requestor)
+          minLength: 1
+          maxLength: 24
+        clientWalletAccountID:
+          type: string
+          description: Wallet Id as presented by the Wallet service provider (token Requestor)
+          minLength: 1
+          maxLength: 24
+        clientWalletProvider:
+          type: string
+          description: Client Wallet Provider is the token requestor's ID (TRID) which is returned to the WP as part of onboarding
+          minLength: 11
+          maxLength: 11
+        country:
+          type: string
+          description: Country code, two digit country code as defined in alpha2 ISO 3166-1
+          minLength: 2
+          maxLength: 2
+    CreateAppleTokenizedCardV2Response:
+      type: object
+      properties:
+        activationData:
+          type: string
+          description: MBPAC element (encrypted activation code). TAV value for MDES or MBPAC value for VTS. Present if responseCode OK
+        encryptedPassData:
+          type: string
+          description: EncryptedPassData (encrypted card data). Present if responseCode OK
+        ephemeralPublicKey:
+          type: string
+          description: Ephemeral ECDSA public key, prefixed with 0x04. Always Base64 in V2 service. Present if responseCode OK
+    ResponseV2:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: object
+          properties: {}
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+    TokenSelfcareUpdateRequest:
+      type: object
+      required:
+      - operationType
+      - tokenRequestorId
+      properties:
+        operationType:
+          type: string
+          description: Type of requested action regarding Card
+          enum:
+          - ACTIVATE
+          - CLOSE
+          - BLOCK
+          - UNBLOCK
+        tokenRequestorId:
+          type: integer
+          format: int64
+          description: ID of the token requestor, assigned by the token service provider
+          minimum: 0
+          maximum: 99999999999
+    AddBaseRequest:
+      type: object
+      required:
+      - tokenProviderID
+      properties:
+        tokenProviderID:
+          type: string
+          description: Information about the token provider. Values are MDES, VTS
+          pattern: VTS|MDES
+    ApiResponseEntityMobileBankingAppAuthCodeResponse:
       type: object
       required:
       - responseMetadata
@@ -2363,14 +1936,489 @@ components:
           type: object
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/ApplePayPushProvisioningResponse'
+          - $ref: '#/components/schemas/MobileBankingAppAuthCodeResponse'
         responseMetadata:
           type: object
           description: Response metadata
           allOf:
           - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseApplePayPushProvisioning
+      title: ApiResponseEntityMobileBankingAppAuthCodeResponse
       description: Issuer response entity
+    VtsPushProvisioningResponse:
+      type: object
+      properties:
+        paymentInstrumentDetails:
+          type: string
+      title: VtsPushProvisioningResponse
+    MdesIssuerDigitizationDataResponse:
+      type: object
+      required:
+      - tokenizationAuthenticationValue
+      properties:
+        fundingAccountInfo:
+          $ref: '#/components/schemas/FundingAccountInfo'
+        tokenizationAuthenticationValue:
+          type: string
+          example: qzmernbhmlkjndpifjnzqef534ez1f65315z4ef61ez
+          description: TAV structure, in Base 64 format
+      description: The data that must be returned to the mobile application and transmitted to wallet provider
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    DetailsDataResponse:
+      type: object
+      properties:
+        deviceID:
+          type: string
+          example: C2ZBY14310005664
+          description: For SE or HCE only. Secure Element Id or Digital Wallet ID. Format Hex binary
+          minLength: 0
+          maxLength: 48
+        deviceName:
+          type: string
+          example: John's phone
+          description: Readable name for the device. Could contain UTF-8 international characters
+        deviceType:
+          type: string
+          example: MOBILEPHONE_OR_TABLET
+          description: Type of device
+          enum:
+          - UNKNOWN
+          - MOBILE_PHONE
+          - TABLET
+          - WATCH
+          - MOBILEPHONE_OR_TABLET
+          - PERSONAL_COMPUTER
+          - OTHER
+        lastTokenStatusUpdatedDate:
+          type: string
+          format: date-time
+          description: 'GMT date of last status update of the token Format ISO8601 : yyyy-MM-ddTHH:mm:ss.SSSZ'
+        tokenActivationDate:
+          type: string
+          format: date-time
+          description: 'GMT date & time of token activation (empty if inactive). Format ISO8601 : yyyy-MM-ddTHH:mm:ss.SSSZ'
+        tokenExpiryDate:
+          type: string
+          example: 2023-11
+          description: The year and month of the token expiry date. Format yyyy-MM
+          minLength: 7
+          maxLength: 7
+        tokenStatus:
+          type: string
+          description: "The status of the Token. Possible values are :\n IAC (Inactive), ACT (Active), SUS (Suspended), DEA (Deactivated)"
+        tokenSuffix:
+          type: string
+          example: '7890'
+          description: Last 4 digits of token value
+          minLength: 4
+          maxLength: 4
+        walletAccountId:
+          type: string
+          example: A4DF297BD8466140A4DF297BD8466140
+          description: User identifier on device for SE or HCE only
+          minLength: 0
+          maxLength: 32
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ClickToPayRetrieveAccountDataResponse:
+      type: object
+      properties:
+        c2pProvider:
+          type: string
+          example: Visa
+          description: 'Click-to-Pay provider : Visa. Returned if card is valid'
+        cardDetails:
+          type: array
+          description: List of cardDetail structures that contains information on cards associated to a click-to-Pay account. Returned if min one present. See below for subfields
+          items:
+            $ref: '#/components/schemas/CardDetails'
+        cardholderReference:
+          type: string
+          example: 42936061AAAP8026
+          description: Anonymized card identifier (Surrogate of PAN), as defined by Issuer Card Management System
+        consumerInformation:
+          $ref: '#/components/schemas/ConsumerInformation'
+    ResponseV2ClickToPayRetrieveAccountDataResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          $ref: '#/components/schemas/ClickToPayRetrieveAccountDataResponse'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    ResponseV2GetCardIdFromTokenV2Response:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          $ref: '#/components/schemas/GetCardIdFromTokenV2Response'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+    FundingAccountInfo:
+      type: object
+      required:
+      - encryptedPayload
+      properties:
+        encryptedPayload:
+          $ref: '#/components/schemas/EncryptedPayload'
+        panUniqueReference:
+          type: string
+          example: DNHI12354321571354
+          description: Reference to the PAN that is unique per Wallet Provider
+          minLength: 0
+          maxLength: 64
+        tokenUniqueReference:
+          type: string
+          example: 1234567896ABCD456456564
+          description: A unique reference assigned following the allocation of a token used to identify the token for the duration of its lifetime. Required in NotifyServiceActivated
+          minLength: 0
+          maxLength: 64
+      description: Json structure containing encrypted payload
+    EncryptedPayload:
+      type: object
+      required:
+      - encryptedData
+      - encryptedKey
+      - publicKeyFingerprint
+      properties:
+        encryptedData:
+          type: string
+          example: fqeftrq1s6541c5v161f2d151e12
+          description: 'Contains an encrypted json object. Encrypted by the ephemeral AES key
+
+            using CBC mode (IV as provided in ''iv'', or zero if none provided) and
+
+            PKCS#7 padding. The JSON object being encrypted will be defined in
+
+            the context of the API call. Hex-encoded data (case-insensitive)'
+          minLength: 1
+          maxLength: 256000
+        encryptedKey:
+          type: string
+          example: ECD12A55458552152154
+          description: 'One-time use AES key encrypted by the Mastercard public key (as
+
+            identified by ''publicKeyFingerprint'') using the OAEP or RSA Encryption
+
+            Standard PKCS #1 v1.5 (depending on the value of
+
+            ''oaepHashingAlgorithm''.
+
+            Requirement is for a 128-bit key (with 256-bit key supported as an
+
+            option). Hex-encoded data (case-insensitive)'
+          minLength: 1
+          maxLength: 512
+        iv:
+          type: string
+          example: '000000000000'
+          description: 'The initialization vector used when encrypting data using the one-time
+
+            use AES key. Must be exactly 16 bytes (32 character hex string) to
+
+            match the block size.If not present, an IV of zero is assumed. Hex-encoded data (case-insensitive)'
+          minLength: 0
+          maxLength: 32
+        oaepHashingAlgorithm:
+          type: string
+          example: SHA512
+          description: 'Hashing algorithm used with the OAEP scheme. If omitted, then the RSA Encryption Standard PKCS #1 v1.5 will be used'
+          minLength: 0
+          maxLength: 6
+          pattern: SHA256|SHA512
+        publicKeyFingerprint:
+          type: string
+          example: fingerprint1245421
+          description: The fingerprint of the public key used to encrypt the ephemeral AES key. Hex-encoded data (case-insensitive)
+          minLength: 1
+          maxLength: 64
+      description: EncryptedPayload object containing a FundingAccountData object
+    ApiResponseEntityVtsPushProvisioningResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: object
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/VtsPushProvisioningResponse'
+        responseMetadata:
+          type: object
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityVtsPushProvisioningResponse
+      description: Issuer response entity
+    ClickToPayEnrollUpdateRequest:
+      type: object
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/BillingAddress'
+        consumerInformation:
+          $ref: '#/components/schemas/ConsumerInformation'
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    ResponseV2GetTokenDataV2Response:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          $ref: '#/components/schemas/GetTokenDataV2Response'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+    VtsPaymentInstrumentsDetailsRequest:
+      type: object
+      properties:
+        billingAddressline1:
+          type: string
+        billingAddressline2:
+          type: string
+        city:
+          type: string
+        clientAppId:
+          type: string
+        clientDeviceId:
+          type: string
+        clientWalletAccountId:
+          type: string
+        clientWalletProvider:
+          type: string
+        country:
+          type: string
+        pan:
+          type: string
+        panExpiryDate:
+          type: string
+        postalCode:
+          type: string
+        state:
+          type: string
+      title: VtsPaymentInstrumentsDetailsRequest
+    BillingAddress:
+      type: object
+      required:
+      - city
+      - country
+      - line1
+      - postalCode
+      properties:
+        city:
+          type: string
+          example: San Francisco
+          description: Part of billing address
+          minLength: 1
+          maxLength: 10
+          pattern: ^[a-zA-Z0-9\s\.,']{1,64}$
+        country:
+          type: string
+          example: USA
+          description: Part of billing address. Country code as defined in alpha3 ISO 3166
+          minLength: 3
+          maxLength: 3
+        line1:
+          type: string
+          example: 1000 Main Street
+          description: Part of billing address
+          minLength: 1
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
+        line2:
+          type: string
+          example: Building 56
+          description: Part of billing address
+          minLength: 1
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
+        line3:
+          type: string
+          example: Suite 100
+          description: Part of billing address
+          minLength: 1
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
+        postalCode:
+          type: string
+          example: '94105'
+          description: Part of billing address
+          minLength: 1
+          maxLength: 10
+        state:
+          type: string
+          example: CA
+          description: Part of billing address
+          minLength: 1
+          maxLength: 2
+    CreateMdesTokenizedCardV2Response:
+      type: object
+      properties:
+        issuerInitiatedDigitizationData:
+          $ref: '#/components/schemas/MdesIssuerDigitizationDataResponse'
+    VtsMobileBankingAuthCode:
+      type: object
+      properties:
+        authCode:
+          type: string
+        pan:
+          type: string
+      title: VtsMobileBankingAuthCode
+    MobileBankingAppAuthCodeResponse:
+      type: object
+      properties:
+        mbaac:
+          type: string
+      title: MobileBankingAppAuthCodeResponse
+    ResponseV2CreateAppleTokenizedCardV2Response:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateAppleTokenizedCardV2Response'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
     AddTokenData:
       type: object
       required:
@@ -2459,128 +2507,30 @@ components:
           type: string
           description: Token reference ID of the auxiliary token, in case this token has one
       description: Structure used for filling information related to the found tokens. Present if minimum one token found
-    VtsPushProvisioningResponse:
-      type: object
-      properties:
-        paymentInstrumentDetails:
-          type: string
-      title: VtsPushProvisioningResponse
-    BillingAddress:
-      type: object
-      required:
-      - city
-      - country
-      - line1
-      - postalCode
-      properties:
-        city:
-          type: string
-          example: San Francisco
-          description: Part of billing address
-          minLength: 1
-          maxLength: 10
-          pattern: ^[a-zA-Z0-9\s\.,']{1,64}$
-        country:
-          type: string
-          example: USA
-          description: Part of billing address. Country code as defined in alpha3 ISO 3166
-          minLength: 3
-          maxLength: 3
-        line1:
-          type: string
-          example: 1000 Main Street
-          description: Part of billing address
-          minLength: 1
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
-        line2:
-          type: string
-          example: Building 56
-          description: Part of billing address
-          minLength: 1
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
-        line3:
-          type: string
-          example: Suite 100
-          description: Part of billing address
-          minLength: 1
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9\s\.,'\-_#:\/]{1,64}$
-        postalCode:
-          type: string
-          example: '94105'
-          description: Part of billing address
-          minLength: 1
-          maxLength: 10
-        state:
-          type: string
-          example: CA
-          description: Part of billing address
-          minLength: 1
-          maxLength: 2
-    BadGatewayErrorApiResponse:
+    ApiResponseApplePayPushProvisioning:
       type: object
       required:
       - responseMetadata
       properties:
-        responseMetadata:
+        data:
+          type: object
+          description: Response data
           allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    MobileBankingAppAuthCodeResponse:
+          - $ref: '#/components/schemas/ApplePayPushProvisioningResponse'
+        responseMetadata:
+          type: object
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseApplePayPushProvisioning
+      description: Issuer response entity
+    CreateVtsTokenizedCardV2Response:
       type: object
       properties:
-        mbaac:
+        paymentInstrumentDetails:
           type: string
-      title: MobileBankingAppAuthCodeResponse
-    VtsCommonPushProvisioningRequest:
-      type: object
-      required:
-      - clientAppID
-      - clientDeviceId
-      - clientWalletAccountID
-      - clientWalletProvider
-      - country
-      properties:
-        clientAppID:
-          type: string
-          description: Unique identifier for the client mobile application. Must be the App ID matching to the cryptographic profile on Visa developer zone
-          minLength: 1
-          maxLength: 36
-        clientDeviceId:
-          type: string
-          description: Device Id as presented by the Wallet service provider (token requestor)
-          minLength: 1
-          maxLength: 24
-        clientWalletAccountID:
-          type: string
-          description: Wallet Id as presented by the Wallet service provider (token Requestor)
-          minLength: 1
-          maxLength: 24
-        clientWalletProvider:
-          type: string
-          description: Client Wallet Provider is the token requestor's ID (TRID) which is returned to the WP as part of onboarding
-          minLength: 11
-          maxLength: 11
-        country:
-          type: string
-          description: Country code, two digit country code as defined in alpha2 ISO 3166-1
-          minLength: 2
-          maxLength: 2
-    CreateAppleTokenizedCardV2Response:
-      type: object
-      properties:
-        activationData:
-          type: string
-          description: MBPAC element (encrypted activation code). TAV value for MDES or MBPAC value for VTS. Present if responseCode OK
-        encryptedPassData:
-          type: string
-          description: EncryptedPassData (encrypted card data). Present if responseCode OK
-        ephemeralPublicKey:
-          type: string
-          description: Ephemeral ECDSA public key, prefixed with 0x04. Always Base64 in V2 service. Present if responseCode OK
-    BadRequestResponseMetadata:
+          description: The data that must be returned to the mobile application and transmitted to wallet provider. JWE structure as described in VTS Push Provisioning - Payment Instrument Details v12 specification
+    InternalServerErrorResponseMetadata:
       type: object
       required:
       - correlationId
@@ -2598,13 +2548,13 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 400
+          example: 500
           description: HTTP status code
         statusMessage:
           type: string
-          example: Bad request
+          example: Internal server error
           description: Executed REST API status message
-      title: BadRequestResponseMetadata
+      title: InternalServerErrorResponseMetadata
     ResponseV2DetailsDataResponse:
       type: object
       required:
@@ -2614,38 +2564,148 @@ components:
           $ref: '#/components/schemas/DetailsDataResponse'
         responseMetadata:
           $ref: '#/components/schemas/ResponseMetadata'
-    VtsApplePushDataRequest:
-      type: object
-      properties:
-        authCode:
-          type: string
-        nonce:
-          type: string
-        pan:
-          type: string
-        panExpiryDate:
-          type: string
-      title: VtsApplePushDataRequest
-    TokenSelfcareUpdateRequest:
+    ResponseMetadata:
       type: object
       required:
-      - operationType
-      - tokenRequestorId
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        operationType:
+        correlationId:
           type: string
-          description: Type of requested action regarding Card
-          enum:
-          - ACTIVATE
-          - CLOSE
-          - BLOCK
-          - UNBLOCK
-        tokenRequestorId:
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
           type: integer
           format: int64
-          description: ID of the token requestor, assigned by the token service provider
-          minimum: 0
-          maximum: 99999999999
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    CreateAppleTokenizedCardV2Request:
+      type: object
+      required:
+      - applePublicKey
+      - nonce
+      - nonceSignature
+      - tokenProviderID
+      properties:
+        applePublicKey:
+          type: string
+          description: Apple ECDSA public key, in Base 64 format, retrieved from the Apple public certificate
+        nonce:
+          type: string
+          description: Nonce generated by Apple, HEX encoded. Upper or lower letters accepted.
+          pattern: '[0-9a-fA-F]+'
+        nonceSignature:
+          type: string
+          description: Nonce signature generated by Apple, HEX encoded. Upper or lower letters accepted.
+          pattern: '[0-9a-fA-F]+'
+        tokenProviderID:
+          type: string
+          description: Information about the token provider. Values are MDES, VTS
+          pattern: VTS|MDES
+        auxiliaryCardIndicator:
+          type: boolean
+          description: Request to generate additional substructure for auxiliaryCard, in case of co-badging. Default false
+        productType:
+          type: string
+          description: Identifies type of card product. The default value depends on the provider. Must be provided if auxiliaryCardIndicator is true
+    GetCardIdFromTokenV2Response:
+      type: object
+      properties:
+        cardExpiryMonth:
+          type: string
+          example: '02'
+          description: The month of the card expiry date. For example 11
+          minLength: 2
+          maxLength: 2
+        cardExpiryYear:
+          type: string
+          example: '2023'
+          description: The year of the card expiry date. For example 2023
+          minLength: 4
+          maxLength: 4
+        cardLastDigits:
+          type: string
+          example: '4578'
+          description: The 4 last digits of the cardnumber of the customer (PAN)
+          minLength: 4
+          maxLength: 4
+        issuerCardId:
+          type: string
+          example: 52936061AAAP8026
+          description: Anonymized card identifier (Surrogate of PAN), as defined by Issuer. Present if response OK
+          minLength: 0
+          maxLength: 64
+        tokenType:
+          type: string
+          example: HCE
+          description: 'Values are: SECURE_ELEMENT, HCE, CARD_ON_FILE, ECOMMERCE, QRC.'
+          pattern: SECURE_ELEMENT|HCE|CARD_ON_FILE|ECOMMERCE|QRC
+    ApplePayPushProvisioningResponse:
+      type: object
+      properties:
+        mbpac:
+          type: string
+        mbpad:
+          type: string
+      title: ApplePayPushProvisioningResponse
     CardDetails:
       type: object
       required:
@@ -2698,86 +2758,26 @@ components:
           description: The unique identifier of the token associated to the card
           example: '123456789012345678'
       description: List of cardDetail structures that contains information on cards associated to a click-to-Pay account. Returned if min one present. See below for subfields
-    BadGatewayResponseMetadata:
+    ResponseV2GetCryptoOTPV2Response:
       type: object
       required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
+      - responseMetadata
       properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    GetTokenDataV2Response:
-      type: object
-      properties:
-        cardExpiryMonth:
-          type: string
-          example: '02'
-          description: The month of the card expiry date. For example 11
-          minLength: 2
-          maxLength: 2
-        cardExpiryYear:
-          type: string
-          example: '2023'
-          description: The year of the card expiry date. For example 2023
-          minLength: 4
-          maxLength: 4
-        cardLastDigits:
-          type: string
-          example: '4578'
-          description: The 4 last digits of the cardnumber of the customer (PAN)
-          minLength: 4
-          maxLength: 4
-        tokenDataList:
-          type: array
-          description: Structure used for filling information related to the found tokens. Present if minimum one token found
-          items:
-            $ref: '#/components/schemas/AddTokenData'
-    CreateAppleTokenizedCardV2Request:
+        data:
+          $ref: '#/components/schemas/GetCryptoOTPV2Response'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+    CreateMdesTokenizedCardV2Request:
       type: object
       required:
-      - applePublicKey
-      - nonce
-      - nonceSignature
-      - tokenProviderID
+      - clientWalletProvider
       properties:
-        applePublicKey:
+        clientWalletProvider:
           type: string
-          description: Apple ECDSA public key, in Base 64 format, retrieved from the Apple public certificate
-        nonce:
-          type: string
-          description: Nonce generated by Apple, HEX encoded. Upper or lower letters accepted.
-          pattern: '[0-9a-fA-F]+'
-        nonceSignature:
-          type: string
-          description: Nonce signature generated by Apple, HEX encoded. Upper or lower letters accepted.
-          pattern: '[0-9a-fA-F]+'
-        tokenProviderID:
-          type: string
-          description: Information about the token provider. Values are MDES, VTS
-          pattern: VTS|MDES
-        auxiliaryCardIndicator:
-          type: boolean
-          description: Request to generate additional substructure for auxiliaryCard, in case of co-badging. Default false
-        productType:
-          type: string
-          description: Identifies type of card product. The default value depends on the provider. Must be provided if auxiliaryCardIndicator is true
+          example: '50120834693'
+          description: Client Wallet Provider is the token requestor's ID (TRID) that designate the encryption key set. For Google, TRID is 50120834693, and Samsung is 50139059239
+          minLength: 11
+          maxLength: 11
   securitySchemes:
     basic:
       type: oauth2

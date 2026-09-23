@@ -18,7 +18,48 @@ paths:
       - Operation - Global Search
       summary: Global Search for Operations
       operationId: globalSearchOperation
-      description: "The API provides possibility to retrieve a list of operations for one or several accounts and for one or several contracts, based on certain criteria. The criteria used are the following:\n- 1st Group:\n         - Issuer Company External Reference\n         - Posting Account Identifier\n         - Virtual Service Card External Reference\n         - Virtual Service Card Number\n         - PAN\n         - Operation Identifier\n- 2nd Group:\n         - Transaction date range\n         - Posting date range\n- 3rd Group:\n         - Reference amount range\n         - Approval Code\n         - Card Acceptor Name. this criteria accepts wildcards ('%' allows to achieve a search with only a partial input, 'Plat%', '%hill', 'Al%gang')\n         - Operation Kinds\n\nThe rules of using this API and criteria for searching, are the following:\n - It will be mandatory to provide at least one of criteria from 1st Group. It is possible to provide two or three criteria at the same time. Virtual Service Card Number and Virtual Service Card External Reference can not be provided at the same time\n - It will be not mandatory to provide criteria from 2nd group if operation identifier is the criteria chosen for the 1st group. Otherwise, it will be mandatory to provide one criterion from 2nd Group. The two criteria can not be provided at the same time\n - All Criteria in 3rd Group are optional\n - Regarding Criteria that will include ranges, both minimum and maximum values should be provided"
+      description: 'The API provides possibility to retrieve a list of operations for one or several accounts and for one or several contracts, based on certain criteria. The criteria used are the following:
+
+        - 1st Group:
+
+        - Issuer Company External Reference
+
+        - Posting Account Identifier
+
+        - Virtual Service Card External Reference
+
+        - Virtual Service Card Number
+
+        - PAN
+
+        - Operation Identifier
+
+        - 2nd Group:
+
+        - Transaction date range
+
+        - Posting date range
+
+        - 3rd Group:
+
+        - Reference amount range
+
+        - Approval Code
+
+        - Card Acceptor Name. this criteria accepts wildcards (''%'' allows to achieve a search with only a partial input, ''Plat%'', ''%hill'', ''Al%gang'')
+
+        - Operation Kinds
+
+
+        The rules of using this API and criteria for searching, are the following:
+
+        - It will be mandatory to provide at least one of criteria from 1st Group. It is possible to provide two or three criteria at the same time. Virtual Service Card Number and Virtual Service Card External Reference can not be provided at the same time
+
+        - It will be not mandatory to provide criteria from 2nd group if operation identifier is the criteria chosen for the 1st group. Otherwise, it will be mandatory to provide one criterion from 2nd Group. The two criteria can not be provided at the same time
+
+        - All Criteria in 3rd Group are optional
+
+        - Regarding Criteria that will include ranges, both minimum and maximum values should be provided'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -128,240 +169,6 @@ paths:
         required: true
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    DisputeFolderIdentifier:
-      type: object
-      required:
-      - disputeFolderReference
-      properties:
-        disputeFolderReference:
-          type: string
-          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
-        issuerDisputeExternalReference:
-          type: string
-          description: The issuer Dispute External Reference, Present if provided in the request.
-      title: DisputeFolderIdentifier
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    TravelInformation:
-      type: object
-      properties:
-        passengerName:
-          type: string
-          description: 'passengerName (customer travel information) '
-        ticketNumber:
-          type: string
-          description: 'ticketNumber (customer travel information) '
-        travelDetailList:
-          type: array
-          description: 'List of TravelDetail '
-          items:
-            $ref: '#/components/schemas/TravelDetail'
-      title: TravelInformation
-    LoyaltyPoint:
-      type: object
-      properties:
-        unit:
-          type: string
-          description: ' Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional).'
-        cumulatedValue:
-          type: integer
-          format: int64
-          description: Total number of loyalty points (optional).
-      title: LoyaltyPoint
-    ApiResponseEntityGlobalSearchOperation:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          type: array
-          description: Response data
-          items:
-            $ref: '#/components/schemas/Operation'
-      title: ApiResponseEntityGlobalSearchOperation
-      description: Global Search Operation response
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    GlobalSearchOperationRequest:
-      type: object
-      properties:
-        issuerCompanyExternalReference:
-          description: 'Refer to Operation.issuerCompanyExternalReference
-
-            At least issuerCompanyExternalReference or postingAccountIdentifier or virtualServiceCardReference or virtualServiceCardNumber should be provided'
-          type: string
-        postingAccountIdentifier:
-          description: 'Refer to Operation.postingAccountIdentifier
-
-            At least issuerCompanyExternalReference or postingAccountIdentifier or virtualServiceCardExternalReference or virtualServiceCardNumber should be provided'
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        virtualServiceCardExternalReference:
-          description: 'Refer to Operation.virtualServiceCardExternalReference
-
-            At least issuerCompanyExternalReference or postingAccountIdentifier or virtualServiceCardExternalReference or virtualServiceCardNumber should be provided'
-          type: string
-        virtualServiceCardNumber:
-          description: 'Refer to Operation.virtualServiceCardNumber
-
-            At least issuerCompanyExternalReference or postingAccountIdentifier or virtualServiceCardExternalReference virtualServiceCardNumber should be provided'
-          type: string
-        transactionDateFrom:
-          description: 'Refer to Operation.transactionDate
-
-            Either the transactionDate range or postingDate range should be provided'
-          type: string
-          format: date-time
-        transactionDateTo:
-          description: 'Refer to Operation.transactionDate
-
-            Either the transactionDate range or postingDate range should be provided'
-          type: string
-          format: date-time
-        postingDateFrom:
-          description: 'Refer to Operation.postingDate
-
-            Either the transactionDate range or postingDate range should be provided'
-          type: string
-          format: date-time
-        postingDateTo:
-          description: 'Refer to Operation.postingDate
-
-            Either the transactionDate range or postingDate range should be provided'
-          type: string
-          format: date-time
-        referenceAmountFrom:
-          description: Refer to Operation.referenceAmount
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        referenceAmountTo:
-          description: Refer to Operation.referenceAmount
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        approvalCode:
-          description: Refer to Operation.approvalCode
-          type: string
-        cardAcceptorName:
-          description: Refer to Operation.cardAcceptorName. This criteria is optional and accept wildcards ('%' allows to achieve a search with only a partial input, 'Plat%', '%hill', 'Al%gang')
-          type: string
-        operationKinds:
-          description: Refer to Operation.operationKind
-          type: array
-          items:
-            type: string
-        operationIdentifier:
-          description: Refer to Operation.operationIdentifier
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-        pan:
-          description: Refer to Operation.pan
-          type: string
-      title: GlobalSearchOperationRequest
-    VirtualCardService:
-      type: object
-      properties:
-        virtualServiceCardExternalReference:
-          type: string
-          description: The external reference calculated for VCC by the Virtual Card Engine (VCE)
-        issuerCompanyExternalReference:
-          type: string
-          description: This attribute will represent a unique identifier of company (the corporate customer of the Issuer)
-        virtualServiceCardNumber:
-          type: string
-          description: Virtual Service Card Number of the operation (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
-        maskedVirtualServiceCardNumber:
-          type: string
-          description: Masked Virtual Service Card Number. This is the VCC (Virtula Credit Card) PAN in masked format
-        virtualServicesFields:
-          type: object
-          description: 'This attribute will return specific informative fields related to VCC (Virtual Credit Card) that the Virtual Card Engine will provide to the Issuing Back Office system,
-
-            List of external data (label:value), separated by a "|''", related to a virtual card that can be provided by e.g. the issuer for information or for usage by other systems.
-
-            Example : label1:value|label2:value
-
-            Those provided data have no impact on our system business processes.'
-          additionalProperties:
-            type: string
-      title: VirtualCardService
     Operation:
       type: object
       required:
@@ -833,6 +640,55 @@ components:
           type: string
           description: Identifier of the original operation in our system
       title: Operation
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    OperationAuthorization:
+      type: object
+      properties:
+        transactionDate:
+          type: string
+          format: date-time
+          description: The date and time on which the transaction was approved. Data is retrieved from the matched authorization transaction.
+      title: OperationAuthorization
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
+
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     ForbiddenErrorApiResponse:
       type: object
       required:
@@ -842,7 +698,31 @@ components:
           allOf:
           - $ref: '#/components/schemas/ForbiddenResponseMetadata'
       title: ForbiddenErrorApiResponse
-    NotFoundResponseMetadata:
+    CardIdentifier:
+      type: object
+      description: Identification of the card either by Issuer card external reference or by card reference
+      properties:
+        cardReference:
+          type: string
+          description: 'Reference of the card generated by our system, unique per platform.
+
+            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
+        issuerCardExternalReference:
+          type: string
+          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+
+            This reference is unique per issuer and may be used to carry out research and find information.'
+      title: CardIdentifier
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    BadRequestResponseMetadata:
       type: object
       required:
       - correlationId
@@ -860,64 +740,22 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 404
+          example: 400
           description: HTTP status code
         statusMessage:
           type: string
-          example: Not found
+          example: Bad request
           description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    UnauthorizedErrorApiResponse:
+      title: BadRequestResponseMetadata
+    InternalServerErrorErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    CardIdentifier:
-      type: object
-      description: Identification of the card either by Issuer card external reference or by card reference
-      properties:
-        cardReference:
-          type: string
-          description: 'Reference of the card generated by our system, unique per platform.
-
-            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
-        issuerCardExternalReference:
-          type: string
-          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
-
-            This reference is unique per issuer and may be used to carry out research and find information.'
-      title: CardIdentifier
-    AuthorizationBusinessCaseIdentifier:
-      type: object
-      required:
-      - businessCaseId
-      properties:
-        businessCaseId:
-          type: string
-          description: 'Business case to which the transaction belongs.
-
-            The provided information reflects its status after transaction completion.
-
-            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
-      title: AuthorizationBusinessCaseIdentifier
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
     ForbiddenResponseMetadata:
       type: object
       required:
@@ -943,6 +781,46 @@ components:
           example: Forbidden
           description: Executed REST API status message
       title: ForbiddenResponseMetadata
+    TravelInformation:
+      type: object
+      properties:
+        passengerName:
+          type: string
+          description: 'passengerName (customer travel information) '
+        ticketNumber:
+          type: string
+          description: 'ticketNumber (customer travel information) '
+        travelDetailList:
+          type: array
+          description: 'List of TravelDetail '
+          items:
+            $ref: '#/components/schemas/TravelDetail'
+      title: TravelInformation
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
     LodgingInformation:
       type: object
       properties:
@@ -1122,28 +1000,27 @@ components:
 
             MCI mapping is the following: PDS 0545. PDS 0545 (Renter Name) is the name of the individual making the vehicle rental agreement.'
       title: CarRentalInformation
-    TravelDetailLeg:
+    DisputeFolderIdentifier:
       type: object
+      required:
+      - disputeFolderReference
       properties:
-        flightNumber:
+        disputeFolderReference:
           type: string
-          description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
-        carrier:
+          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
+        issuerDisputeExternalReference:
           type: string
-          description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
-        class:
-          type: string
-          description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
-        stopOver:
-          type: string
-          description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
-        destination:
-          type: string
-          description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
-        fareCode:
-          type: string
-          description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
-      title: TravelDetailLeg
+          description: The issuer Dispute External Reference, Present if provided in the request.
+      title: DisputeFolderIdentifier
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
     AirItineraryInformation:
       type: object
       properties:
@@ -1238,80 +1115,104 @@ components:
           - $ref: '#/components/schemas/TravelDetailLeg'
           description: Description of fourth leg of trip
       title: AirItineraryInformation
-    PanTokenIdentifier:
+    AuthorizationBusinessCaseIdentifier:
       type: object
       required:
-      - panTokenReference
+      - businessCaseId
       properties:
-        panTokenReference:
+        businessCaseId:
           type: string
-          description: Pan Token Reference
-      title: PanTokenIdentifier
-    InternalServerErrorErrorApiResponse:
+          description: 'Business case to which the transaction belongs.
+
+            The provided information reflects its status after transaction completion.
+
+            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
+      title: AuthorizationBusinessCaseIdentifier
+    GlobalSearchOperationRequest:
       type: object
-      required:
-      - responseMetadata
       properties:
-        responseMetadata:
+        issuerCompanyExternalReference:
+          description: 'Refer to Operation.issuerCompanyExternalReference
+
+            At least issuerCompanyExternalReference or postingAccountIdentifier or virtualServiceCardReference or virtualServiceCardNumber should be provided'
+          type: string
+        postingAccountIdentifier:
+          description: 'Refer to Operation.postingAccountIdentifier
+
+            At least issuerCompanyExternalReference or postingAccountIdentifier or virtualServiceCardExternalReference or virtualServiceCardNumber should be provided'
           allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        virtualServiceCardExternalReference:
+          description: 'Refer to Operation.virtualServiceCardExternalReference
+
+            At least issuerCompanyExternalReference or postingAccountIdentifier or virtualServiceCardExternalReference or virtualServiceCardNumber should be provided'
           type: string
-          description: Correlation Identifier
-        responseDateTime:
+        virtualServiceCardNumber:
+          description: 'Refer to Operation.virtualServiceCardNumber
+
+            At least issuerCompanyExternalReference or postingAccountIdentifier or virtualServiceCardExternalReference virtualServiceCardNumber should be provided'
           type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
+        transactionDateFrom:
+          description: 'Refer to Operation.transactionDate
+
+            Either the transactionDate range or postingDate range should be provided'
           type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    TravelDetail:
-      type: object
-      properties:
-        flightNumber:
+          format: date-time
+        transactionDateTo:
+          description: 'Refer to Operation.transactionDate
+
+            Either the transactionDate range or postingDate range should be provided'
           type: string
-          description: flightNumber (customer travel details)
-        originCity:
+          format: date-time
+        postingDateFrom:
+          description: 'Refer to Operation.postingDate
+
+            Either the transactionDate range or postingDate range should be provided'
           type: string
-          description: originCity (customer travel details)
-        destinationCity:
+          format: date-time
+        postingDateTo:
+          description: 'Refer to Operation.postingDate
+
+            Either the transactionDate range or postingDate range should be provided'
           type: string
-          description: 'destinationCity (customer travel details) '
-      title: TravelDetail
-    OperationIdentifier:
-      type: object
-      required:
-      - operationId
-      properties:
-        operationId:
-          type: string
-          description: Internal operation identifier. 16-digit incremental number
-      title: OperationIdentifier
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
+          format: date-time
+        referenceAmountFrom:
+          description: Refer to Operation.referenceAmount
           allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
+          - $ref: '#/components/schemas/Amount'
+        referenceAmountTo:
+          description: Refer to Operation.referenceAmount
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        approvalCode:
+          description: Refer to Operation.approvalCode
+          type: string
+        cardAcceptorName:
+          description: Refer to Operation.cardAcceptorName. This criteria is optional and accept wildcards ('%' allows to achieve a search with only a partial input, 'Plat%', '%hill', 'Al%gang')
+          type: string
+        operationKinds:
+          description: Refer to Operation.operationKind
+          type: array
+          items:
+            type: string
+        operationIdentifier:
+          description: Refer to Operation.operationIdentifier
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+        pan:
+          description: Refer to Operation.pan
+          type: string
+      title: GlobalSearchOperationRequest
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
+          type: string
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
+          type: string
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
     PointOfService:
       type: object
       properties:
@@ -1364,59 +1265,28 @@ components:
           type: string
           description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 12 indicates the maximum number of PIN characters that the POS terminal can capture.
       title: PointOfService
-    DetailedFeeAmount:
+    TravelDetailLeg:
       type: object
       properties:
-        percentage:
+        flightNumber:
           type: string
-          description: Percentage used for amount calculation of the covered risk
-        name:
+          description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
+        carrier:
           type: string
-          description: Name of the covered risk
-        feeAmount:
-          description: Amount / Currency / Exponent of the covered risk
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        externalOperationCode:
+          description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
+        class:
           type: string
-          description: External operation code the covered risk
-        includeInOtherDetailFeeAmount:
-          type: boolean
-          description: Indicates if the detail fee amount is part of another detail fee amount
-      title: DetailedFeeAmount
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
+          description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
+        stopOver:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
+          description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
+        destination:
           type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
+          description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
+        fareCode:
           type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    OperationAuthorization:
-      type: object
-      properties:
-        transactionDate:
-          type: string
-          format: date-time
-          description: The date and time on which the transaction was approved. Data is retrieved from the matched authorization transaction.
-      title: OperationAuthorization
+          description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
+      title: TravelDetailLeg
     BadGatewayResponseMetadata:
       type: object
       required:
@@ -1442,39 +1312,210 @@ components:
           example: Bad Gateway
           description: Executed REST API status message
       title: BadGatewayResponseMetadata
-    AccountIdentifier:
-      type: object
-      properties:
-        accountReference:
-          type: string
-          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-        issuerAccountExternalReference:
-          type: string
-          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-      title: AccountIdentifier
-    Amount:
+    OperationIdentifier:
       type: object
       required:
-      - value
-      - exponent
-      - isoCode
+      - operationId
       properties:
-        value:
+        operationId:
+          type: string
+          description: Internal operation identifier. 16-digit incremental number
+      title: OperationIdentifier
+    ApiResponseEntityGlobalSearchOperation:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          type: array
+          description: Response data
+          items:
+            $ref: '#/components/schemas/Operation'
+      title: ApiResponseEntityGlobalSearchOperation
+      description: Global Search Operation response
+    DetailedFeeAmount:
+      type: object
+      properties:
+        percentage:
+          type: string
+          description: Percentage used for amount calculation of the covered risk
+        name:
+          type: string
+          description: Name of the covered risk
+        feeAmount:
+          description: Amount / Currency / Exponent of the covered risk
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        externalOperationCode:
+          type: string
+          description: External operation code the covered risk
+        includeInOtherDetailFeeAmount:
+          type: boolean
+          description: Indicates if the detail fee amount is part of another detail fee amount
+      title: DetailedFeeAmount
+    LoyaltyPoint:
+      type: object
+      properties:
+        unit:
+          type: string
+          description: ' Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional).'
+        cumulatedValue:
           type: integer
           format: int64
-          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-        exponent:
+          description: Total number of loyalty points (optional).
+      title: LoyaltyPoint
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
           type: integer
           format: int32
-          description: Exponent of Amount. Number of decimal digits.
-        isoCode:
+          example: 500
+          description: HTTP status code
+        statusMessage:
           type: string
-          description: 'Currency code of amount
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    TravelDetail:
+      type: object
+      properties:
+        flightNumber:
+          type: string
+          description: flightNumber (customer travel details)
+        originCity:
+          type: string
+          description: originCity (customer travel details)
+        destinationCity:
+          type: string
+          description: 'destinationCity (customer travel details) '
+      title: TravelDetail
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    PanTokenIdentifier:
+      type: object
+      required:
+      - panTokenReference
+      properties:
+        panTokenReference:
+          type: string
+          description: Pan Token Reference
+      title: PanTokenIdentifier
+    VirtualCardService:
+      type: object
+      properties:
+        virtualServiceCardExternalReference:
+          type: string
+          description: The external reference calculated for VCC by the Virtual Card Engine (VCE)
+        issuerCompanyExternalReference:
+          type: string
+          description: This attribute will represent a unique identifier of company (the corporate customer of the Issuer)
+        virtualServiceCardNumber:
+          type: string
+          description: Virtual Service Card Number of the operation (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
+        maskedVirtualServiceCardNumber:
+          type: string
+          description: Masked Virtual Service Card Number. This is the VCC (Virtula Credit Card) PAN in masked format
+        virtualServicesFields:
+          type: object
+          description: 'This attribute will return specific informative fields related to VCC (Virtual Credit Card) that the Virtual Card Engine will provide to the Issuing Back Office system,
 
-            The currency in ISO4217 alphabetic format.
+            List of external data (label:value), separated by a "|''", related to a virtual card that can be provided by e.g. the issuer for information or for usage by other systems.
 
-            Example: EUR for Euro'
-      title: Amount
+            Example : label1:value|label2:value
+
+            Those provided data have no impact on our system business processes.'
+          additionalProperties:
+            type: string
+      title: VirtualCardService
   securitySchemes:
     basic:
       type: oauth2

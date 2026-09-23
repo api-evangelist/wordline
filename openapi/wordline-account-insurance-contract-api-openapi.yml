@@ -18,7 +18,33 @@ paths:
       - Account - Insurance Contract
       summary: List insurance contracts for an account by external reference
       operationId: listInsuranceContractsByIssuerAccExtRef
-      description: "The API allows the list of insurance contracts for an account to be retrieved. \nThe main input fields requested by the API are:\n- The issuer ID\n- The account for which info is requested: It can be provided by using the account reference or the issuer external account reference.\n\nIn return, the list of insurance contracts is provided with the subscribed insurance package, the insurance events, the latest occurring events and the status for each contract.\nThe list of insurance events and their codes are pre-defined and configured in the insurance package.\nThe contracts with a closed status are not provided back.\nThe possible statuses of insurance contracts are:\n- ACTIVE,\n- INTERRUPTED,\n- DISABLED,\n- CLOSED\n\nThe statuses depends on the insurance events configuration."
+      description: 'The API allows the list of insurance contracts for an account to be retrieved.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference.
+
+
+        In return, the list of insurance contracts is provided with the subscribed insurance package, the insurance events, the latest occurring events and the status for each contract.
+
+        The list of insurance events and their codes are pre-defined and configured in the insurance package.
+
+        The contracts with a closed status are not provided back.
+
+        The possible statuses of insurance contracts are:
+
+        - ACTIVE,
+
+        - INTERRUPTED,
+
+        - DISABLED,
+
+        - CLOSED
+
+
+        The statuses depends on the insurance events configuration.'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -459,9 +485,29 @@ paths:
       x-wl-idempotent: true
       tags:
       - Account - Insurance Contract
-      summary: Add an insurance event to insurance contract for an account by external reference
+      summary: Add an insurance event to insurance contract for an account by external…
       operationId: createInsuranceEventByIssuerAccExtRef
-      description: "The API is used to pst some events to an insurance contract. \nThe complete list of event is defined in the product setup. The actions linked to the event can be:\n- activate insurance,\n- deactivate insurance\n- stop the fee calculation.\n\nThe main input fields requested by the API are:\n- The issuer ID\n- The account for which info is requested: It can be provided by using the account reference or the issuer external account reference\n- The insurance package identifier.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system"
+      description: 'The API is used to pst some events to an insurance contract.
+
+        The complete list of event is defined in the product setup. The actions linked to the event can be:
+
+        - activate insurance,
+
+        - deactivate insurance
+
+        - stop the fee calculation.
+
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference
+
+        - The insurance package identifier.
+
+
+        Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -564,7 +610,33 @@ paths:
       - Account - Insurance Contract
       summary: List insurance contracts for an account
       operationId: listInsuranceContracts
-      description: "The API allows the list of insurance contracts for an account to be retrieved. \nThe main input fields requested by the API are:\n- The issuer ID\n- The account for which info is requested: It can be provided by using the account reference or the issuer external account reference.\n\nIn return, the list of insurance contracts is provided with the subscribed insurance package, the insurance events, the latest occurring events and the status for each contract.\nThe list of insurance events and their codes are pre-defined and configured in the insurance package.\nThe contracts with a closed status are not provided back.\nThe possible statuses of insurance contracts are:\n- ACTIVE,\n- INTERRUPTED,\n- DISABLED,\n- CLOSED\n\nThe statuses depends on the insurance events configuration."
+      description: 'The API allows the list of insurance contracts for an account to be retrieved.
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference.
+
+
+        In return, the list of insurance contracts is provided with the subscribed insurance package, the insurance events, the latest occurring events and the status for each contract.
+
+        The list of insurance events and their codes are pre-defined and configured in the insurance package.
+
+        The contracts with a closed status are not provided back.
+
+        The possible statuses of insurance contracts are:
+
+        - ACTIVE,
+
+        - INTERRUPTED,
+
+        - DISABLED,
+
+        - CLOSED
+
+
+        The statuses depends on the insurance events configuration.'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -1007,7 +1079,27 @@ paths:
       - Account - Insurance Contract
       summary: Add an insurance event to insurance contract for an account
       operationId: createInsuranceEvent
-      description: "The API is used to pst some events to an insurance contract. \nThe complete list of event is defined in the product setup. The actions linked to the event can be:\n- activate insurance,\n- deactivate insurance\n- stop the fee calculation.\n\nThe main input fields requested by the API are:\n- The issuer ID\n- The account for which info is requested: It can be provided by using the account reference or the issuer external account reference\n- The insurance package identifier.\n\nIdempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system"
+      description: 'The API is used to pst some events to an insurance contract.
+
+        The complete list of event is defined in the product setup. The actions linked to the event can be:
+
+        - activate insurance,
+
+        - deactivate insurance
+
+        - stop the fee calculation.
+
+
+        The main input fields requested by the API are:
+
+        - The issuer ID
+
+        - The account for which info is requested: It can be provided by using the account reference or the issuer external account reference
+
+        - The insurance package identifier.
+
+
+        Idempotency is managed by the API; that is, if the request with the same WL-Correlation-ID is sent multiple times, it will be executed only once. The response will be retrieved directly from our system'
       parameters:
       - name: WL-Correlation-ID
         in: header
@@ -1106,76 +1198,17 @@ paths:
         required: true
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
+    InsuranceContractPackage:
       type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
       properties:
-        correlationId:
+        issuerId:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
+          description: Issuer identifier of the insurance package
+        insurancePackageIdentifier:
+          description: Unique identifier of the insurance contract package
           allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    CreateInsuranceEventResponse:
-      type: object
-      required:
-      - accountIdentifier
-      - insuranceContractIdentifier
-      properties:
-        accountIdentifier:
-          $ref: '#/components/schemas/AccountIdentifier'
-        insuranceContractIdentifier:
-          $ref: '#/components/schemas/InsuranceContractIdentifier'
-      title: CreateInsuranceEventResponse
+          - $ref: '#/components/schemas/InsurancePackageIdentifier'
+      title: InsuranceContractPackage
     BadRequestErrorApiResponse:
       type: object
       required:
@@ -1185,47 +1218,30 @@ components:
           allOf:
           - $ref: '#/components/schemas/BadRequestResponseMetadata'
       title: BadRequestErrorApiResponse
-    NotFoundErrorApiResponse:
+    CreateInsuranceContractResponse:
+      type: object
+      required:
+      - accountIdentifier
+      - insuranceContractIdentifier
+      properties:
+        accountIdentifier:
+          description: 'The account that insurance contract belongs to '
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        insuranceContractIdentifier:
+          description: The insurance package which is linked to this contract
+          allOf:
+          - $ref: '#/components/schemas/InsuranceContractIdentifier'
+      title: CreateInsuranceContractResponse
+    BadGatewayErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ApiResponseEntityCreateInsuranceContractResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateInsuranceContractResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateInsuranceContractResponse
-    ApiResponseEntityInsuranceContract:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/InsuranceContract'
-      description: Issuer response entity
-      title: ApiResponseEntityInsuranceContract
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     ForbiddenErrorApiResponse:
       type: object
       required:
@@ -1235,7 +1251,21 @@ components:
           allOf:
           - $ref: '#/components/schemas/ForbiddenResponseMetadata'
       title: ForbiddenErrorApiResponse
-    NotFoundResponseMetadata:
+    InsuranceEvent:
+      type: object
+      properties:
+        insuranceEventCode:
+          type: string
+          description: Insurance event code
+        insuranceEventDate:
+          type: string
+          format: date-time
+          description: Date of insurance event
+        insuranceEventDescription:
+          type: string
+          description: Description of the insurance event
+      title: InsuranceEvent
+    BadRequestResponseMetadata:
       type: object
       required:
       - correlationId
@@ -1253,36 +1283,22 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 404
+          example: 400
           description: HTTP status code
         statusMessage:
           type: string
-          example: Not found
+          example: Bad request
           description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    UnauthorizedErrorApiResponse:
+      title: BadRequestResponseMetadata
+    InternalServerErrorErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
     ForbiddenResponseMetadata:
       type: object
       required:
@@ -1308,55 +1324,103 @@ components:
           example: Forbidden
           description: Executed REST API status message
       title: ForbiddenResponseMetadata
-    InsurancePackageIdentifier:
+    CreateInsuranceContractRequest:
       type: object
-      description: Unique identifier of the insurance contract package
+      required:
+      - insurancePackageReference
       properties:
         insurancePackageReference:
           type: string
-          description: Reference of the insurance package
-      title: InsurancePackageIdentifier
-    InsuranceContractIdentifier:
-      type: object
-      description: 'The insurance package which is linked to this contract '
-      properties:
-        insurancePackageReference:
+          description: Insurance package reference among the ones configured for the issuer
+        insuranceEventCode:
           type: string
-          description: Reference of the insurance contract
-      title: InsuranceContractIdentifier
-    ApiResponseEntityListInsuranceContract:
-      x-wl-api-response: true
+          description: "Insurance event related to insurance activation can be provided. \nIf not provided, first event with 'Activate Insurance' action of the package is applied. "
+      title: CreateInsuranceContractRequest
+    UnauthorizedErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
-          description: Response metadata
           allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          type: array
-          description: Response data
-          items:
-            $ref: '#/components/schemas/InsuranceContract'
-      description: Issuer response entity
-      title: ApiResponseEntityListInsuranceContract
-    ApiResponseEntityCloseInsuranceContractResponse:
-      x-wl-api-response: true
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    CreateInsuranceEventRequest:
+      type: object
+      required:
+      - insuranceEventCode
+      - insuranceEventDate
+      properties:
+        insuranceEventCode:
+          type: string
+          description: Insurance event code
+        insuranceEventDate:
+          type: string
+          format: date-time
+          description: Insurance event date
+        insuranceEventDescription:
+          type: string
+          description: Insurance event description (free text)
+      title: CreateInsuranceEventRequest
+    CloseInsuranceContractResponse:
+      type: object
+      required:
+      - accountIdentifier
+      - insuranceContractIdentifier
+      properties:
+        accountIdentifier:
+          description: 'The account that insurance contract belongs to '
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        insuranceContractIdentifier:
+          description: The insurance package which is linked to this contract
+          allOf:
+          - $ref: '#/components/schemas/InsuranceContractIdentifier'
+      title: CloseInsuranceContractResponse
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    NotFoundErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
-          description: Response metadata
           allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CloseInsuranceContractResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCloseInsuranceContractResponse
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
+          type: string
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
+          type: string
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
     InsuranceContract:
       type: object
       properties:
@@ -1400,184 +1464,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/InsuranceContractPackage'
       title: InsuranceContract
-    ApiResponseEntityCreateInsuranceEventResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateInsuranceEventResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateInsuranceEventResponse
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    CloseInsuranceContractResponse:
-      type: object
-      required:
-      - accountIdentifier
-      - insuranceContractIdentifier
-      properties:
-        accountIdentifier:
-          description: 'The account that insurance contract belongs to '
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        insuranceContractIdentifier:
-          description: The insurance package which is linked to this contract
-          allOf:
-          - $ref: '#/components/schemas/InsuranceContractIdentifier'
-      title: CloseInsuranceContractResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    CreateInsuranceEventRequest:
-      type: object
-      required:
-      - insuranceEventCode
-      - insuranceEventDate
-      properties:
-        insuranceEventCode:
-          type: string
-          description: Insurance event code
-        insuranceEventDate:
-          type: string
-          format: date-time
-          description: Insurance event date
-        insuranceEventDescription:
-          type: string
-          description: Insurance event description (free text)
-      title: CreateInsuranceEventRequest
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    CreateInsuranceContractResponse:
-      type: object
-      required:
-      - accountIdentifier
-      - insuranceContractIdentifier
-      properties:
-        accountIdentifier:
-          description: 'The account that insurance contract belongs to '
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        insuranceContractIdentifier:
-          description: The insurance package which is linked to this contract
-          allOf:
-          - $ref: '#/components/schemas/InsuranceContractIdentifier'
-      title: CreateInsuranceContractResponse
-    InsuranceContractPackage:
-      type: object
-      properties:
-        issuerId:
-          type: string
-          description: Issuer identifier of the insurance package
-        insurancePackageIdentifier:
-          description: Unique identifier of the insurance contract package
-          allOf:
-          - $ref: '#/components/schemas/InsurancePackageIdentifier'
-      title: InsuranceContractPackage
-    CreateInsuranceContractRequest:
-      type: object
-      required:
-      - insurancePackageReference
-      properties:
-        insurancePackageReference:
-          type: string
-          description: Insurance package reference among the ones configured for the issuer
-        insuranceEventCode:
-          type: string
-          description: "Insurance event related to insurance activation can be provided. \nIf not provided, first event with 'Activate Insurance' action of the package is applied. "
-      title: CreateInsuranceContractRequest
-    InsuranceEvent:
-      type: object
-      properties:
-        insuranceEventCode:
-          type: string
-          description: Insurance event code
-        insuranceEventDate:
-          type: string
-          format: date-time
-          description: Date of insurance event
-        insuranceEventDescription:
-          type: string
-          description: Description of the insurance event
-      title: InsuranceEvent
-    AccountIdentifier:
-      type: object
-      properties:
-        accountReference:
-          type: string
-          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-        issuerAccountExternalReference:
-          type: string
-          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-      title: AccountIdentifier
     BadGatewayResponseMetadata:
       type: object
       required:
@@ -1603,6 +1489,212 @@ components:
           example: Bad Gateway
           description: Executed REST API status message
       title: BadGatewayResponseMetadata
+    InsuranceContractIdentifier:
+      type: object
+      description: 'The insurance package which is linked to this contract '
+      properties:
+        insurancePackageReference:
+          type: string
+          description: Reference of the insurance contract
+      title: InsuranceContractIdentifier
+    ApiResponseEntityCreateInsuranceEventResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateInsuranceEventResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateInsuranceEventResponse
+    InsurancePackageIdentifier:
+      type: object
+      description: Unique identifier of the insurance contract package
+      properties:
+        insurancePackageReference:
+          type: string
+          description: Reference of the insurance package
+      title: InsurancePackageIdentifier
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    ApiResponseEntityCloseInsuranceContractResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CloseInsuranceContractResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCloseInsuranceContractResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    CreateInsuranceEventResponse:
+      type: object
+      required:
+      - accountIdentifier
+      - insuranceContractIdentifier
+      properties:
+        accountIdentifier:
+          $ref: '#/components/schemas/AccountIdentifier'
+        insuranceContractIdentifier:
+          $ref: '#/components/schemas/InsuranceContractIdentifier'
+      title: CreateInsuranceEventResponse
+    ApiResponseEntityCreateInsuranceContractResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateInsuranceContractResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateInsuranceContractResponse
+    ApiResponseEntityInsuranceContract:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/InsuranceContract'
+      description: Issuer response entity
+      title: ApiResponseEntityInsuranceContract
+    ApiResponseEntityListInsuranceContract:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          type: array
+          description: Response data
+          items:
+            $ref: '#/components/schemas/InsuranceContract'
+      description: Issuer response entity
+      title: ApiResponseEntityListInsuranceContract
   securitySchemes:
     basic:
       type: oauth2

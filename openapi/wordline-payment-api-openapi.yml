@@ -19,9 +19,7 @@ paths:
       tags:
       - Payment
       summary: Get payment based on payment id
-      description: 'This operation uses the unique acquirerId and payment id to retrieve the payment data
-
-        '
+      description: This operation uses the unique acquirerId and payment id to retrieve the payment data
       operationId: getPayment
       parameters:
       - name: acquirerId
@@ -70,7 +68,10 @@ paths:
       tags:
       - Payment
       summary: Retrieve payments on search criteria
-      description: "This operation uses the unique acquirerId and IBAN or paymentReference to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+      description: 'This operation uses the unique acquirerId and IBAN or paymentReference to retrieve all the associated payment(s)
+
+
+        If there is a previous and/or next page the http response header will have a link (url) to this data'
       operationId: getPaymentsForSearchCriteria
       parameters:
       - name: acquirerId
@@ -198,7 +199,10 @@ paths:
       tags:
       - Payment
       summary: Retrieve payments on holding level
-      description: "This operation uses the unique acquirerId and holdingId to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+      description: 'This operation uses the unique acquirerId and holdingId to retrieve all the associated payment(s)
+
+
+        If there is a previous and/or next page the http response header will have a link (url) to this data'
       operationId: getPaymentsForHolding
       parameters:
       - name: acquirerId
@@ -310,7 +314,10 @@ paths:
       tags:
       - Payment
       summary: Retrieve payments on merchant level
-      description: "This operation uses the unique acquirerId and merchant id to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+      description: 'This operation uses the unique acquirerId and merchant id to retrieve all the associated payment(s)
+
+
+        If there is a previous and/or next page the http response header will have a link (url) to this data'
       operationId: getPaymentsForMerchant
       parameters:
       - name: acquirerId
@@ -421,7 +428,10 @@ paths:
       tags:
       - Payment
       summary: Retrieve payments on contract level
-      description: "This operation uses the unique acquirerId and contractId to retrieve all the associated payment(s)\n\nIf there is a previous and/or next page the http response header will have a link (url) to this data \n"
+      description: 'This operation uses the unique acquirerId and contractId to retrieve all the associated payment(s)
+
+
+        If there is a previous and/or next page the http response header will have a link (url) to this data'
       operationId: getPaymentsForContract
       parameters:
       - name: acquirerId
@@ -529,6 +539,43 @@ paths:
           description: Backend service problem
 components:
   schemas:
+    ContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+          example: '671234567'
+        holdingId:
+          type: integer
+          format: int32
+          description: Unique identification of the merchant hierarchy, determined by equensWorldline
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1280300'
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '12872'
+    Amount:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: unlimited size decimal
+          description: 'Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          example: '3.00'
+        currency:
+          type: string
+          description: Currency of the amount
+          example: EUR
     PaymentIdentification:
       type: object
       properties:
@@ -669,40 +716,3 @@ components:
           $ref: '#/components/schemas/Amount'
         serviceBasedFeesTotalAmount:
           $ref: '#/components/schemas/Amount'
-    ContractIdentification:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-          example: '671234567'
-        holdingId:
-          type: integer
-          format: int32
-          description: Unique identification of the merchant hierarchy, determined by equensWorldline
-          example: 200
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-          example: '1280300'
-        contractId:
-          type: string
-          description: Unique identification of the contract, determined by the acquirer
-          example: '12872'
-    Amount:
-      type: object
-      properties:
-        amount:
-          type: string
-          format: unlimited size decimal
-          description: 'Amount in the major units of the currency according to ISO 4217.
-
-
-            In case of euro, "3.10" (is 3.10 euro)
-
-            '
-          example: '3.00'
-        currency:
-          type: string
-          description: Currency of the amount
-          example: EUR

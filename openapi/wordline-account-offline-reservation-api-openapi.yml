@@ -506,7 +506,7 @@ paths:
       summary: Cancel an offline reservation (beta)
       description: 'The API allows an offline reservation of an account to be cancelled.
 
-        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation  of the account.
+        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation of the account.
 
         The main input fields are:
 
@@ -619,7 +619,7 @@ paths:
       summary: Cancel an offline reservation by reservation external reference (beta)
       description: 'The API allows an offline reservation of an account to be cancelled.
 
-        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation  of the account.
+        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation of the account.
 
         The main input fields are:
 
@@ -732,7 +732,7 @@ paths:
       summary: Cancel an offline reservation by account external reference (beta)
       description: 'The API allows an offline reservation of an account to be cancelled.
 
-        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation  of the account.
+        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation of the account.
 
         The main input fields are:
 
@@ -842,10 +842,10 @@ paths:
       x-wl-idempotent: true
       tags:
       - Account - Offline Reservation
-      summary: Cancel an offline reservation by reservation external reference by account external reference (beta)
+      summary: Cancel an offline reservation by reservation external reference by account…
       description: 'The API allows an offline reservation of an account to be cancelled.
 
-        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation  of the account.
+        An offline reservation cancellation has an impact on the Open to Buy (increased) and is considered to maintain (decrease) the total offline reservation of the account.
 
         The main input fields are:
 
@@ -952,84 +952,7 @@ paths:
               $ref: '#/components/schemas/CancelOfflineReservationRequest'
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ApiResponseEntityCancelOfflineReservationResponse:
+    ApiResponseEntityListOfflineReservationsResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -1042,18 +965,59 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/CancelOfflineReservationResponse'
+          - $ref: '#/components/schemas/ListOfflineReservationsResponse'
       description: Issuer response entity
-      title: ApiResponseEntityCancelOfflineReservationResponse
-    ListOfflineReservationsResponse:
+      title: ApiResponseEntityListOfflineReservationsResponse
+    CancelOfflineReservationRequest:
       type: object
       properties:
-        offlineReservation:
-          type: array
-          description: List of Offline Reservations
-          items:
-            $ref: '#/components/schemas/OfflineReservation'
-      title: ListOfflineReservationsResponse
+        cancellationReason:
+          description: 'Reason for which the offline reservation is cancelled
+
+            Free text'
+          type: string
+      title: CancelOfflineReservationRequest
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
+
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     ForbiddenErrorApiResponse:
       type: object
       required:
@@ -1063,7 +1027,16 @@ components:
           allOf:
           - $ref: '#/components/schemas/ForbiddenResponseMetadata'
       title: ForbiddenErrorApiResponse
-    NotFoundResponseMetadata:
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    BadRequestResponseMetadata:
       type: object
       required:
       - correlationId
@@ -1081,95 +1054,22 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 404
+          example: 400
           description: HTTP status code
         statusMessage:
           type: string
-          example: Not found
+          example: Bad request
           description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    OfflineReservationIdentifier:
-      type: object
-      properties:
-        issuerReservationExternalReference:
-          type: string
-          description: 'Reference of the offline reservation provided by the issuer
-
-            Must be unique per issuer'
-        reservationReference:
-          type: string
-          description: 'Reference of the offline reservation generated by the system
-
-            Must be unique per issuer'
-      title: OfflineReservationIdentifier
-    UnauthorizedErrorApiResponse:
+      title: BadRequestResponseMetadata
+    InternalServerErrorErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    CancelOfflineReservationResponse:
-      type: object
-      required:
-      - offlineReservationIdentifier
-      properties:
-        offlineReservationIdentifier:
-          description: Offline reservation identifier
-          allOf:
-          - $ref: '#/components/schemas/OfflineReservationIdentifier'
-      title: CancelOfflineReservationResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    OfflineReservationAccount:
-      type: object
-      properties:
-        accountIdentifier:
-          description: Account identifier
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        reservedAmount:
-          description: Offline reserved amount cumulated at account level
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-    CreateOfflineReservationRequest:
-      type: object
-      required:
-      - reservedAmount
-      properties:
-        issuerReservationExternalReference:
-          description: 'Reference of the offline reservation provided by the issuer
-
-            Must be unique per issuer'
-          type: string
-        reason:
-          description: 'Reason for which the offline reservation is created
-
-            Free text'
-          type: string
-        reservedAmount:
-          description: 'Offline reservation amount
-
-            Must be in the account currency and > 0
-
-            Must be lower than the own funds (credit balance)'
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-      title: CreateOfflineReservationRequest
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
     ForbiddenResponseMetadata:
       type: object
       required:
@@ -1195,6 +1095,119 @@ components:
           example: Forbidden
           description: Executed REST API status message
       title: ForbiddenResponseMetadata
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    CreateOfflineReservationResponse:
+      type: object
+      required:
+      - offlineReservationIdentifier
+      properties:
+        offlineReservationIdentifier:
+          description: Offline reservation identifier
+          allOf:
+          - $ref: '#/components/schemas/OfflineReservationIdentifier'
+      title: CreateOfflineReservationResponse
+    CreateOfflineReservationRequest:
+      type: object
+      required:
+      - reservedAmount
+      properties:
+        issuerReservationExternalReference:
+          description: 'Reference of the offline reservation provided by the issuer
+
+            Must be unique per issuer'
+          type: string
+        reason:
+          description: 'Reason for which the offline reservation is created
+
+            Free text'
+          type: string
+        reservedAmount:
+          description: 'Offline reservation amount
+
+            Must be in the account currency and > 0
+
+            Must be lower than the own funds (credit balance)'
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+      title: CreateOfflineReservationRequest
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
+          type: string
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
+          type: string
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    CancelOfflineReservationResponse:
+      type: object
+      required:
+      - offlineReservationIdentifier
+      properties:
+        offlineReservationIdentifier:
+          description: Offline reservation identifier
+          allOf:
+          - $ref: '#/components/schemas/OfflineReservationIdentifier'
+      title: CancelOfflineReservationResponse
     OfflineReservation:
       type: object
       properties:
@@ -1237,57 +1250,31 @@ components:
           allOf:
           - $ref: '#/components/schemas/OfflineReservationAccount'
           description: Account information
-    ApiResponseEntityCreateOfflineReservationResponse:
-      x-wl-api-response: true
+    InternalServerErrorResponseMetadata:
       type: object
       required:
-      - responseMetadata
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateOfflineReservationResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateOfflineReservationResponse
-    CreateOfflineReservationResponse:
-      type: object
-      required:
-      - offlineReservationIdentifier
-      properties:
-        offlineReservationIdentifier:
-          description: Offline reservation identifier
-          allOf:
-          - $ref: '#/components/schemas/OfflineReservationIdentifier'
-      title: CreateOfflineReservationResponse
-    ApiResponseEntityListOfflineReservationsResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ListOfflineReservationsResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityListOfflineReservationsResponse
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
     UnauthorizedResponseMetadata:
       type: object
       required:
@@ -1313,107 +1300,120 @@ components:
           example: Unauthorized
           description: Executed REST API status message
       title: UnauthorizedResponseMetadata
-    CancelOfflineReservationRequest:
+    ResponseMetadata:
       type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        cancellationReason:
-          description: 'Reason for which the offline reservation is cancelled
-
-            Free text'
+        correlationId:
           type: string
-      title: CancelOfflineReservationRequest
-    BadGatewayErrorApiResponse:
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    ApiResponseEntityCreateOfflineReservationResponse:
+      x-wl-api-response: true
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
+          description: Response metadata
           allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestResponseMetadata:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateOfflineReservationResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateOfflineReservationResponse
+    Links:
       type: object
       required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
+      - self
       properties:
-        correlationId:
+        self:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
           type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    AccountIdentifier:
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    ListOfflineReservationsResponse:
       type: object
       properties:
-        accountReference:
-          type: string
-          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-        issuerAccountExternalReference:
-          type: string
-          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-      title: AccountIdentifier
-    Amount:
+        offlineReservation:
+          type: array
+          description: List of Offline Reservations
+          items:
+            $ref: '#/components/schemas/OfflineReservation'
+      title: ListOfflineReservationsResponse
+    OfflineReservationAccount:
       type: object
-      required:
-      - value
-      - exponent
-      - isoCode
       properties:
-        value:
-          type: integer
-          format: int64
-          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-        exponent:
-          type: integer
-          format: int32
-          description: Exponent of Amount. Number of decimal digits.
-        isoCode:
+        accountIdentifier:
+          description: Account identifier
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        reservedAmount:
+          description: Offline reserved amount cumulated at account level
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+    OfflineReservationIdentifier:
+      type: object
+      properties:
+        issuerReservationExternalReference:
           type: string
-          description: 'Currency code of amount
+          description: 'Reference of the offline reservation provided by the issuer
 
-            The currency in ISO4217 alphabetic format.
+            Must be unique per issuer'
+        reservationReference:
+          type: string
+          description: 'Reference of the offline reservation generated by the system
 
-            Example: EUR for Euro'
-      title: Amount
+            Must be unique per issuer'
+      title: OfflineReservationIdentifier
+    ApiResponseEntityCancelOfflineReservationResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CancelOfflineReservationResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCancelOfflineReservationResponse
   securitySchemes:
     basic:
       type: oauth2
