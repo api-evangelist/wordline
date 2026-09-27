@@ -212,6 +212,26 @@ paths:
           description: Backend service not available
 components:
   schemas:
+    RestPeriodTotalBrand:
+      type: object
+      properties:
+        period:
+          type: string
+          description: YYYYMMDD for day-period. YYYYMM for month-period
+          example: 20161231 for day-period or 201612 for month-period
+        totalbrandList:
+          type: array
+          description: List of totals per brand
+          items:
+            $ref: '#/components/schemas/RestTotalBrand'
+    RestTotalBrand:
+      type: object
+      properties:
+        brand:
+          type: string
+          example: VISA, MAST, MAES, etc
+        total:
+          $ref: '#/components/schemas/RestTotal'
     RestTotal:
       type: object
       properties:
@@ -236,23 +256,3 @@ components:
           type: integer
           format: int64
           description: Total number of chargebacks
-    RestPeriodTotalBrand:
-      type: object
-      properties:
-        period:
-          type: string
-          description: YYYYMMDD for day-period. YYYYMM for month-period
-          example: 20161231 for day-period or 201612 for month-period
-        totalbrandList:
-          type: array
-          description: List of totals per brand
-          items:
-            $ref: '#/components/schemas/RestTotalBrand'
-    RestTotalBrand:
-      type: object
-      properties:
-        brand:
-          type: string
-          example: VISA, MAST, MAES, etc
-        total:
-          $ref: '#/components/schemas/RestTotal'

@@ -56,22 +56,96 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PublicKeyCredentialUserEntity:
-      required:
-      - name
+    AuthOptionRequest:
       type: object
       properties:
-        name:
+        user:
+          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
+        userVerification:
+          type: string
+        extensions:
+          type: object
+          additionalProperties:
+            type: string
+    CredentialProtectionPolicy:
+      enum:
+      - USER_VERIFICATION_OPTIONAL
+      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
+      - USER_VERIFICATION_REQUIRED
+      type: string
+    AuthenticatorTransport:
+      type: object
+      properties:
+        value:
+          type: string
+    ServerResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        errorMessage:
+          type: string
+    AssertionResponse:
+      required:
+      - sessionId
+      type: object
+      properties:
+        sessionId:
           minLength: 1
           type: string
-        id:
-          type: string
-        displayName:
-          type: string
+        assertionBlob:
+          $ref: '#/components/schemas/PublicKeyCredentialAssertion'
     UserVerificationRequirement:
       type: object
       properties:
         value:
+          type: string
+    Status:
+      enum:
+      - OK
+      - FAILED
+      type: string
+    AuthOptionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        errorMessage:
+          type: string
+        challenge:
+          type: string
+        timeout:
+          format: int64
+          type: integer
+        rpId:
+          type: string
+        allowCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKeyCredentialDescriptor'
+        userVerification:
+          $ref: '#/components/schemas/UserVerificationRequirement'
+        extensions:
+          $ref: '#/components/schemas/AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput'
+        sessionId:
+          type: string
+    AuthenticatorAssertionResponse:
+      required:
+      - clientDataJSON
+      - authenticatorData
+      - signature
+      type: object
+      properties:
+        clientDataJSON:
+          minLength: 1
+          type: string
+        authenticatorData:
+          minLength: 1
+          type: string
+        signature:
+          minLength: 1
+          type: string
+        userHandle:
           type: string
     AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput:
       type: object
@@ -85,34 +159,18 @@ components:
           - $ref: '#/components/schemas/CredentialProtectionPolicy'
           writeOnly: true
         hMACSecret: {}
-    AuthOptionRequest:
+    PublicKeyCredentialUserEntity:
+      required:
+      - name
       type: object
       properties:
-        user:
-          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
-        userVerification:
+        name:
+          minLength: 1
           type: string
-        extensions:
-          type: object
-          additionalProperties:
-            type: string
-    Status:
-      enum:
-      - OK
-      - FAILED
-      type: string
-    PublicKeyCredentialDescriptor:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PublicKeyCredentialType'
         id:
           type: string
-        transports:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/AuthenticatorTransport'
+        displayName:
+          type: string
     PublicKeyCredentialAssertion:
       required:
       - response
@@ -138,73 +196,15 @@ components:
       properties:
         value:
           type: string
-    AssertionResponse:
-      required:
-      - sessionId
+    PublicKeyCredentialDescriptor:
       type: object
       properties:
-        sessionId:
-          minLength: 1
+        type:
+          $ref: '#/components/schemas/PublicKeyCredentialType'
+        id:
           type: string
-        assertionBlob:
-          $ref: '#/components/schemas/PublicKeyCredentialAssertion'
-    CredentialProtectionPolicy:
-      enum:
-      - USER_VERIFICATION_OPTIONAL
-      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
-      - USER_VERIFICATION_REQUIRED
-      type: string
-    AuthenticatorTransport:
-      type: object
-      properties:
-        value:
-          type: string
-    AuthOptionResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        errorMessage:
-          type: string
-        challenge:
-          type: string
-        timeout:
-          format: int64
-          type: integer
-        rpId:
-          type: string
-        allowCredentials:
+        transports:
+          uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/PublicKeyCredentialDescriptor'
-        userVerification:
-          $ref: '#/components/schemas/UserVerificationRequirement'
-        extensions:
-          $ref: '#/components/schemas/AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput'
-        sessionId:
-          type: string
-    ServerResponse:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/Status'
-        errorMessage:
-          type: string
-    AuthenticatorAssertionResponse:
-      required:
-      - clientDataJSON
-      - authenticatorData
-      - signature
-      type: object
-      properties:
-        clientDataJSON:
-          minLength: 1
-          type: string
-        authenticatorData:
-          minLength: 1
-          type: string
-        signature:
-          minLength: 1
-          type: string
-        userHandle:
-          type: string
+            $ref: '#/components/schemas/AuthenticatorTransport'

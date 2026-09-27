@@ -2082,6 +2082,560 @@ paths:
       deprecated: false
 components:
   schemas:
+    ApiResponseEntityStatement:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/Statement'
+      description: Issuer response entity
+      title: ApiResponseEntityStatement
+    ApiResponseEntityListOperation:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          type: array
+          description: Response data
+          items:
+            $ref: '#/components/schemas/Operation'
+      description: Issuer response entity
+      title: ApiResponseEntityListOperation
+    OperationAuthorization:
+      type: object
+      properties:
+        transactionDate:
+          type: string
+          format: date-time
+          description: The date and time on which the transaction was approved. Data is retrieved from the matched authorization transaction.
+      title: OperationAuthorization
+    TravelInformation:
+      type: object
+      properties:
+        passengerName:
+          type: string
+          description: 'passengerName (customer travel information) '
+        ticketNumber:
+          type: string
+          description: 'ticketNumber (customer travel information) '
+        travelDetailList:
+          type: array
+          description: 'List of TravelDetail '
+          items:
+            $ref: '#/components/schemas/TravelDetail'
+      title: TravelInformation
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
+
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
+    AirItineraryInformation:
+      type: object
+      properties:
+        businessFormatCode:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Business Format Code; POS 17-18.'
+        travelAgent:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Name; POS 92-116.
+
+            MCI mapping is the following: PDS 0511. PDS 0511 (Travel Agency Name) is the name of the travel agency that issued the ticket.'
+        travelAgentCode:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Code; POS 84-91.
+
+            MCI mapping is the following: PDS 0510. PDS 0510 (Travel Agency Code) is a code assigned to the travel agency.'
+        passengerName:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Passenger Name; POS 27-46.
+
+            MCI mapping is the following: PDS 0505. PDS 0505 (Passenger Name) contains the name of the passenger to whom the ticket was issued.'
+        departureDate:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Departure Date (MMDDYY); POS 47-52.
+
+            MCI mapping is the following: PDS 0520. PDS 0520 (Travel Date) is the effective ticket date, also referred as departure date (YYMMDD).'
+        originCityCode:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Origination City/Airport Code; POS 53-55.
+
+            MCI mapping is the following: PDS 0523. PDS 0523 (City of Origin/Airport Code) is the originating airport or railway name standard abbreviation.'
+        restrictedTicketIndicator:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Restricted Ticket Indicator; POS 117.
+
+            MCI mapping is the following: PDS 0713. PDS 0713 (Restricted Ticket Indicator) provides the identifier noting that the ticket purchased has some restriction associated with its use.'
+        reservationSystem:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Computerized Reservation System; POS 142-145.'
+        creditReasonIndicator:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Credit Reason Indicator; POS 166.'
+        ticketChangeIndicator:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Ticket Change Indicator; POS 167.'
+        ticketNumber:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR0; Field: Merchant Name POS 92-116; POS 13-25 of this field should be taken as input.
+
+            MCI mapping is the following: PDS 0506. PDS 0506 (Ticket Number) contains the number on the ticket.'
+        IATACode:
+          type: string
+          description: 'The field represents additional data from MCI clearing file addendum.
+
+            MCI mapping is the following: PDS 0717. PDS 0717 (IATA Client Code) provides the International Air Transport Association (IATA) code identifying the company that purchased the ticket.'
+        leg1:
+          allOf:
+          - $ref: '#/components/schemas/TravelDetailLeg'
+          description: Description of first leg of trip
+        leg2:
+          allOf:
+          - $ref: '#/components/schemas/TravelDetailLeg'
+          description: Description of second leg of trip
+        leg3:
+          allOf:
+          - $ref: '#/components/schemas/TravelDetailLeg'
+          description: Description of third leg of trip
+        leg4:
+          allOf:
+          - $ref: '#/components/schemas/TravelDetailLeg'
+          description: Description of fourth leg of trip
+      title: AirItineraryInformation
+    TravelDetail:
+      type: object
+      properties:
+        flightNumber:
+          type: string
+          description: flightNumber (customer travel details)
+        originCity:
+          type: string
+          description: originCity (customer travel details)
+        destinationCity:
+          type: string
+          description: 'destinationCity (customer travel details) '
+      title: TravelDetail
+    DetailedFeeAmount:
+      type: object
+      properties:
+        percentage:
+          type: string
+          description: Percentage used for amount calculation of the covered risk
+        name:
+          type: string
+          description: Name of the covered risk
+        feeAmount:
+          description: Amount / Currency / Exponent of the covered risk
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        externalOperationCode:
+          type: string
+          description: External operation code the covered risk
+        includeInOtherDetailFeeAmount:
+          type: boolean
+          description: Indicates if the detail fee amount is part of another detail fee amount
+      title: DetailedFeeAmount
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    AuthorizationBusinessCaseIdentifier:
+      type: object
+      required:
+      - businessCaseId
+      properties:
+        businessCaseId:
+          type: string
+          description: 'Business case to which the transaction belongs.
+
+            The provided information reflects its status after transaction completion.
+
+            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
+      title: AuthorizationBusinessCaseIdentifier
+    Statement:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        accountIdentifier:
+          description: Refer to Account.accountIdentifier
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        cycleClosureDate:
+          type: string
+          format: date-time
+          description: Cycle closure date (mandatory)
+        reprintHistory:
+          type: array
+          description: 'Historic data of reprinting if any (optional).
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+          items:
+            $ref: '#/components/schemas/ReprintHistory'
+        creationDate:
+          type: string
+          format: date-time
+          description: Date when the statement is generated
+        paymentDueDate:
+          type: string
+          format: date-time
+          description: Deprecated
+        directDebitAmount:
+          description: 'Amount of the direct debit that is issued for payment when the payment mode is autopayment (direct debit).
+
+            Depending on the issuer configuration, the direct Debit Amount can be different from the amount calculated at the cycle closure date (field theoricDirectDebitAmount) if credit operations (reversal, credit voucher…) are posted to the account between the cycle closure date and the date the direct debit is issued.'
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        theoricDirectDebitAmount:
+          description: Direct debit amount calculated at the cycle closure date when the payment mode is autopayment (direct debit) and depending on the payment conditions.
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        cycleBalance:
+          description: Balance amount for the statement
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        previousCycleBalance:
+          description: 'Balance amount of the previous cyclic closure (start balance of the statement).
+
+            Not provided for a non-closed cycle.'
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        totalOfPayment:
+          description: Sum of all payment operations received during the cycle.
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        loyaltyPoints:
+          type: array
+          description: Refer to LoyaltyPoint.loyaltyPoints
+          items:
+            $ref: '#/components/schemas/LoyaltyPoint'
+        previousCycleClosureDate:
+          type: string
+          format: date-time
+          description: The closure date of the previous cycle (optional)
+        nextCycleClosureDate:
+          type: string
+          format: date-time
+          description: The date of the next cycle closure (optional)
+        amountDue:
+          description: Minimum payment amount calculated by our system depending  on the payment conditions of the customer (full payer/partial payer) the customer has to pay to reimburse his debt.
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        initialPastAmountDue:
+          description: Remaining amount due of the previous cycle, set at cycle closure (optional, no past amount due for the first cycle or if the amount due was fully repaid for during the previous cycle).
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        initialRemainingAmountDue:
+          description: Sum of the amountDue (minimum payment amount) of the cycle and the initialPastAmountDue (optional).
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        statementDuplicatedForCompany:
+          type: boolean
+          description: Indicates if the company receives a duplicate for statement generated by other paying accounts in the corporate contract
+        iban:
+          type: string
+          description: International Bank Account Number of the customer (debtor)
+        payingAccountIdentifier:
+          description: The reference of paying account
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        cycleInformation:
+          description: Dates related to the closure calendar for the closure cycle
+          allOf:
+          - $ref: '#/components/schemas/CycleInformation'
+      title: Statement
+    LoyaltyPoint:
+      type: object
+      properties:
+        unit:
+          type: string
+          description: ' Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional).'
+        cumulatedValue:
+          type: integer
+          format: int64
+          description: Total number of loyalty points (optional).
+      title: LoyaltyPoint
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    CardIdentifier:
+      type: object
+      description: Identification of the card either by Issuer card external reference or by card reference
+      properties:
+        cardReference:
+          type: string
+          description: 'Reference of the card generated by our system, unique per platform.
+
+            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
+        issuerCardExternalReference:
+          type: string
+          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+
+            This reference is unique per issuer and may be used to carry out research and find information.'
+      title: CardIdentifier
+    LodgingInformation:
+      type: object
+      properties:
+        businessFormatCode:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Business Format Code (Value: CA); POS: 17-18.'
+        noShowIndicator:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging No-Show Indicator; POS 27.
+
+            MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
+        extraCharges:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Extra Charges; POS 28–33.'
+        checkInDate:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Check-in Date (YYMMDD); POS 38-43.
+
+            MCI mapping is the following: PDS 0574. PDS 0574 (Arrival Date) contains the cardholder check-in date (YYMMDD).'
+        dailyRoomRate:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Daily Room Rate; POS 44-55.
+
+            MCI mapping is the following: PDS 0580. PDS 0580 (Room Rate) contains the daily room charges exclusive of taxes and fees. This PDS consists of two subfields:
+
+            1. Room Rate Amount; POS: 1-12
+
+            2. Room Rate Exponent; POS: 13'
+        totalTax:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Tax; POS 56-67.
+
+            MCI mapping is the following: PDS 0597. PDS 0597 (Total Tax Amount) contains the total amount of sales tax or value added tax (VAT) on the total purchase amount.'
+        prepaidExpenses:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Prepaid Expenses; POS 68-79.
+
+            MCI mapping is the following: PDS 0704. PDS 0704 (Prepaid Expenses) provides the amount of deposit or other prepaid amounts for the lodging stay.'
+        foodBeverageCharge:
+          type: string
+          description: 'The field represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Food/Beverage Charges; POS 80-91.'
+        folioCashAdvances:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Folio Cash Advances; POS 92-103.
+
+            MCI mapping is the following: PDS 0706. PDS 0706 (Cash Advances) provides the amount of cash received during the lodging stay.'
+        totalRoomNights:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Room Nights; POS 104-105.
+
+            MCI mapping is the following: PDS 0703. PDS 0703 (Total Room Nights) provides the total number of nights for which a room was contracted during a lodging stay.'
+        totalRoomTax:
+          type: string
+          description: "The field represents additional data from VISA and MCI clearing file addendum.\nVISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Room Tax; POS 106-117.\nMCI mapping is the following: PDS 0581. PDS 0581 (Total Room Tax) contains tax amount information such as the daily room tax, occupancy tax, energy tax, and tourist tax amounts. This PDS consists of three subfields:\n1. Total Room Tax Amount; POS: 1-12\n2. Total Room Tax Exponent; POS: 13\n 3. Total Room Tax Sign; POS: 14"
+      title: LodgingInformation
     Operation:
       type: object
       required:
@@ -2553,64 +3107,20 @@ components:
           type: string
           description: Identifier of the original operation in our system
       title: Operation
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    OperationAuthorization:
+    ReprintHistory:
       type: object
       properties:
-        transactionDate:
+        requestedDate:
           type: string
           format: date-time
-          description: The date and time on which the transaction was approved. Data is retrieved from the matched authorization transaction.
-      title: OperationAuthorization
-    Amount:
-      type: object
-      required:
-      - value
-      - exponent
-      - isoCode
-      properties:
-        value:
-          type: integer
-          format: int64
-          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-        exponent:
-          type: integer
-          format: int32
-          description: Exponent of Amount. Number of decimal digits.
-        isoCode:
+          description: The date of the reprinting request (mandatory)
+        origin:
           type: string
-          description: 'Currency code of amount
-
-            The currency in ISO4217 alphabetic format.
-
-            Example: EUR for Euro'
-      title: Amount
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
+          description: Origin used when the reprinting of the statement was requested.
+        username:
+          type: string
+          description: Name of the user who requested to reprint the statement
+      title: ReprintHistory
     PanTokenIdentifier:
       type: object
       required:
@@ -2620,22 +3130,149 @@ components:
           type: string
           description: Pan Token Reference
       title: PanTokenIdentifier
-    CardIdentifier:
+    NotFoundErrorApiResponse:
       type: object
-      description: Identification of the card either by Issuer card external reference or by card reference
+      required:
+      - responseMetadata
       properties:
-        cardReference:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    OperationIdentifier:
+      type: object
+      required:
+      - operationId
+      properties:
+        operationId:
           type: string
-          description: 'Reference of the card generated by our system, unique per platform.
-
-            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
-        issuerCardExternalReference:
+          description: Internal operation identifier. 16-digit incremental number
+      title: OperationIdentifier
+    CycleInformation:
+      type: object
+      description: Dates related to the closure calendar for the open closure cycle
+      properties:
+        cycleStartDate:
           type: string
-          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+          format: date-time
+          description: Date when the cycle is opened
+        cycleClosureDate:
+          type: string
+          format: date-time
+          description: Date when the open cycle is closed
+        statementGenerationDate:
+          type: string
+          format: date-time
+          description: Date when the statement is produced for the cycle
+        directDebitIssuingDate:
+          type: string
+          format: date-time
+          description: Direct debit issuing date of the cycle
+        directDebitDueDate:
+          type: string
+          format: date-time
+          description: Direct debit due date of the cycle
+        gracePeriodEndDate:
+          type: string
+          format: date-time
+          description: Grace period end date of the cycle
+        dueDateForSelfPayer:
+          type: string
+          format: date-time
+          description: Due date for self payer of the cycle
+        cycleDueDate:
+          type: string
+          format: date-time
+          description: Due date of the cycle, used for monitoring process (delinquency)
+        statementEffectiveStartDate:
+          type: string
+          format: date
+          description: "Effective start date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
+        statementEffectiveEndDate:
+          type: string
+          format: date
+          description: "Effective end date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
+      title: CycleInformation
+    DisputeFolderIdentifier:
+      type: object
+      required:
+      - disputeFolderReference
+      properties:
+        disputeFolderReference:
+          type: string
+          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
+        issuerDisputeExternalReference:
+          type: string
+          description: The issuer Dispute External Reference, Present if provided in the request.
+      title: DisputeFolderIdentifier
+    VirtualCardService:
+      type: object
+      properties:
+        virtualServiceCardExternalReference:
+          type: string
+          description: The external reference calculated for VCC by the Virtual Card Engine (VCE)
+        issuerCompanyExternalReference:
+          type: string
+          description: This attribute will represent a unique identifier of company (the corporate customer of the Issuer)
+        virtualServiceCardNumber:
+          type: string
+          description: Virtual Service Card Number of the operation (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
+        maskedVirtualServiceCardNumber:
+          type: string
+          description: Masked Virtual Service Card Number. This is the VCC (Virtula Credit Card) PAN in masked format
+        virtualServicesFields:
+          type: object
+          description: 'This attribute will return specific informative fields related to VCC (Virtual Credit Card) that the Virtual Card Engine will provide to the Issuing Back Office system,
 
-            This reference is unique per issuer and may be used to carry out research and find information.'
-      title: CardIdentifier
-    BadRequestResponseMetadata:
+            List of external data (label:value), separated by a "|''", related to a virtual card that can be provided by e.g. the issuer for information or for usage by other systems.
+
+            Example : label1:value|label2:value
+
+            Those provided data have no impact on our system business processes.'
+          additionalProperties:
+            type: string
+      title: VirtualCardService
+    TravelDetailLeg:
+      type: object
+      properties:
+        flightNumber:
+          type: string
+          description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
+        carrier:
+          type: string
+          description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
+        class:
+          type: string
+          description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
+        stopOver:
+          type: string
+          description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
+        destination:
+          type: string
+          description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
+        fareCode:
+          type: string
+          description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
+      title: TravelDetailLeg
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    UnauthorizedResponseMetadata:
       type: object
       required:
       - correlationId
@@ -2653,70 +3290,12 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 400
+          example: 401
           description: HTTP status code
         statusMessage:
           type: string
-          example: Bad request
+          example: Unauthorized
           description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    TravelInformation:
-      type: object
-      properties:
-        passengerName:
-          type: string
-          description: 'passengerName (customer travel information) '
-        ticketNumber:
-          type: string
-          description: 'ticketNumber (customer travel information) '
-        travelDetailList:
-          type: array
-          description: 'List of TravelDetail '
-          items:
-            $ref: '#/components/schemas/TravelDetail'
-      title: TravelInformation
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
       title: UnauthorizedResponseMetadata
     ApiResponseEntityReprintStatementResponse:
       x-wl-api-response: true
@@ -2734,23 +3313,40 @@ components:
           - $ref: '#/components/schemas/ReprintStatementResponse'
       description: Issuer response entity
       title: ApiResponseEntityReprintStatementResponse
-    ApiResponseEntityListStatement:
-      x-wl-api-response: true
+    InternalServerErrorErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
-          description: Response metadata
           allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          type: array
-          description: Response data
-          items:
-            $ref: '#/components/schemas/Statement'
-      description: Issuer response entity
-      title: ApiResponseEntityListStatement
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
     NotFoundResponseMetadata:
       type: object
       required:
@@ -2776,81 +3372,28 @@ components:
           example: Not found
           description: Executed REST API status message
       title: NotFoundResponseMetadata
-    LodgingInformation:
+    ReprintStatementResponse:
       type: object
       properties:
-        businessFormatCode:
+        accountIdentifier:
+          description: Refer to Account.accountIdentifier attribute
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        requestedDate:
           type: string
-          description: 'The fields represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Business Format Code (Value: CA); POS: 17-18.'
-        noShowIndicator:
+          format: date-time
+          description: Refer to ReprintHistory.requestedDate
+      title: ReprintStatementResponse
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
           type: string
-          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging No-Show Indicator; POS 27.
-
-            MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
-        extraCharges:
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
           type: string
-          description: 'The fields represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Extra Charges; POS 28–33.'
-        checkInDate:
-          type: string
-          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Check-in Date (YYMMDD); POS 38-43.
-
-            MCI mapping is the following: PDS 0574. PDS 0574 (Arrival Date) contains the cardholder check-in date (YYMMDD).'
-        dailyRoomRate:
-          type: string
-          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Daily Room Rate; POS 44-55.
-
-            MCI mapping is the following: PDS 0580. PDS 0580 (Room Rate) contains the daily room charges exclusive of taxes and fees. This PDS consists of two subfields:
-
-            1. Room Rate Amount; POS: 1-12
-
-            2. Room Rate Exponent; POS: 13'
-        totalTax:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Tax; POS 56-67.
-
-            MCI mapping is the following: PDS 0597. PDS 0597 (Total Tax Amount) contains the total amount of sales tax or value added tax (VAT) on the total purchase amount.'
-        prepaidExpenses:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Prepaid Expenses; POS 68-79.
-
-            MCI mapping is the following: PDS 0704. PDS 0704 (Prepaid Expenses) provides the amount of deposit or other prepaid amounts for the lodging stay.'
-        foodBeverageCharge:
-          type: string
-          description: 'The field represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Food/Beverage Charges; POS 80-91.'
-        folioCashAdvances:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Folio Cash Advances; POS 92-103.
-
-            MCI mapping is the following: PDS 0706. PDS 0706 (Cash Advances) provides the amount of cash received during the lodging stay.'
-        totalRoomNights:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Room Nights; POS 104-105.
-
-            MCI mapping is the following: PDS 0703. PDS 0703 (Total Room Nights) provides the total number of nights for which a room was contracted during a lodging stay.'
-        totalRoomTax:
-          type: string
-          description: "The field represents additional data from VISA and MCI clearing file addendum.\nVISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Room Tax; POS 106-117.\nMCI mapping is the following: PDS 0581. PDS 0581 (Total Room Tax) contains tax amount information such as the daily room tax, occupancy tax, energy tax, and tourist tax amounts. This PDS consists of three subfields:\n1. Total Room Tax Amount; POS: 1-12\n2. Total Room Tax Exponent; POS: 13\n 3. Total Room Tax Sign; POS: 14"
-      title: LodgingInformation
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
     CarRentalInformation:
       type: object
       properties:
@@ -2955,159 +3498,7 @@ components:
 
             MCI mapping is the following: PDS 0545. PDS 0545 (Renter Name) is the name of the individual making the vehicle rental agreement.'
       title: CarRentalInformation
-    ReprintHistory:
-      type: object
-      properties:
-        requestedDate:
-          type: string
-          format: date-time
-          description: The date of the reprinting request (mandatory)
-        origin:
-          type: string
-          description: Origin used when the reprinting of the statement was requested.
-        username:
-          type: string
-          description: Name of the user who requested to reprint the statement
-      title: ReprintHistory
-    DisputeFolderIdentifier:
-      type: object
-      required:
-      - disputeFolderReference
-      properties:
-        disputeFolderReference:
-          type: string
-          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
-        issuerDisputeExternalReference:
-          type: string
-          description: The issuer Dispute External Reference, Present if provided in the request.
-      title: DisputeFolderIdentifier
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    AirItineraryInformation:
-      type: object
-      properties:
-        businessFormatCode:
-          type: string
-          description: 'The fields represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Business Format Code; POS 17-18.'
-        travelAgent:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Name; POS 92-116.
-
-            MCI mapping is the following: PDS 0511. PDS 0511 (Travel Agency Name) is the name of the travel agency that issued the ticket.'
-        travelAgentCode:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Travel Agency Code; POS 84-91.
-
-            MCI mapping is the following: PDS 0510. PDS 0510 (Travel Agency Code) is a code assigned to the travel agency.'
-        passengerName:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Passenger Name; POS 27-46.
-
-            MCI mapping is the following: PDS 0505. PDS 0505 (Passenger Name) contains the name of the passenger to whom the ticket was issued.'
-        departureDate:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Departure Date (MMDDYY); POS 47-52.
-
-            MCI mapping is the following: PDS 0520. PDS 0520 (Travel Date) is the effective ticket date, also referred as departure date (YYMMDD).'
-        originCityCode:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Origination City/Airport Code; POS 53-55.
-
-            MCI mapping is the following: PDS 0523. PDS 0523 (City of Origin/Airport Code) is the originating airport or railway name standard abbreviation.'
-        restrictedTicketIndicator:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Restricted Ticket Indicator; POS 117.
-
-            MCI mapping is the following: PDS 0713. PDS 0713 (Restricted Ticket Indicator) provides the identifier noting that the ticket purchased has some restriction associated with its use.'
-        reservationSystem:
-          type: string
-          description: 'The fields represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Computerized Reservation System; POS 142-145.'
-        creditReasonIndicator:
-          type: string
-          description: 'The fields represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Credit Reason Indicator; POS 166.'
-        ticketChangeIndicator:
-          type: string
-          description: 'The fields represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR 3 - INDUSTRY-SPECIFIC DATA - PASSENGER ITINERARY DATA; Field: Ticket Change Indicator; POS 167.'
-        ticketNumber:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR0; Field: Merchant Name POS 92-116; POS 13-25 of this field should be taken as input.
-
-            MCI mapping is the following: PDS 0506. PDS 0506 (Ticket Number) contains the number on the ticket.'
-        IATACode:
-          type: string
-          description: 'The field represents additional data from MCI clearing file addendum.
-
-            MCI mapping is the following: PDS 0717. PDS 0717 (IATA Client Code) provides the International Air Transport Association (IATA) code identifying the company that purchased the ticket.'
-        leg1:
-          allOf:
-          - $ref: '#/components/schemas/TravelDetailLeg'
-          description: Description of first leg of trip
-        leg2:
-          allOf:
-          - $ref: '#/components/schemas/TravelDetailLeg'
-          description: Description of second leg of trip
-        leg3:
-          allOf:
-          - $ref: '#/components/schemas/TravelDetailLeg'
-          description: Description of third leg of trip
-        leg4:
-          allOf:
-          - $ref: '#/components/schemas/TravelDetailLeg'
-          description: Description of fourth leg of trip
-      title: AirItineraryInformation
-    AuthorizationBusinessCaseIdentifier:
-      type: object
-      required:
-      - businessCaseId
-      properties:
-        businessCaseId:
-          type: string
-          description: 'Business case to which the transaction belongs.
-
-            The provided information reflects its status after transaction completion.
-
-            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
-      title: AuthorizationBusinessCaseIdentifier
-    AccountIdentifier:
-      type: object
-      properties:
-        accountReference:
-          type: string
-          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-        issuerAccountExternalReference:
-          type: string
-          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-      title: AccountIdentifier
-    ApiResponseEntityListOperation:
+    ApiResponseEntityListStatement:
       x-wl-api-response: true
       type: object
       required:
@@ -3121,9 +3512,9 @@ components:
           type: array
           description: Response data
           items:
-            $ref: '#/components/schemas/Operation'
+            $ref: '#/components/schemas/Statement'
       description: Issuer response entity
-      title: ApiResponseEntityListOperation
+      title: ApiResponseEntityListStatement
     PointOfService:
       type: object
       properties:
@@ -3176,397 +3567,6 @@ components:
           type: string
           description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 12 indicates the maximum number of PIN characters that the POS terminal can capture.
       title: PointOfService
-    TravelDetailLeg:
-      type: object
-      properties:
-        flightNumber:
-          type: string
-          description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
-        carrier:
-          type: string
-          description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
-        class:
-          type: string
-          description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
-        stopOver:
-          type: string
-          description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
-        destination:
-          type: string
-          description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
-        fareCode:
-          type: string
-          description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
-      title: TravelDetailLeg
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    Statement:
-      type: object
-      properties:
-        issuerId:
-          type: string
-          description: Issuer identifier (unique per platform)
-        accountIdentifier:
-          description: Refer to Account.accountIdentifier
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        cycleClosureDate:
-          type: string
-          format: date-time
-          description: Cycle closure date (mandatory)
-        reprintHistory:
-          type: array
-          description: 'Historic data of reprinting if any (optional).
-
-            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-          items:
-            $ref: '#/components/schemas/ReprintHistory'
-        creationDate:
-          type: string
-          format: date-time
-          description: Date when the statement is generated
-        paymentDueDate:
-          type: string
-          format: date-time
-          description: Deprecated
-        directDebitAmount:
-          description: 'Amount of the direct debit that is issued for payment when the payment mode is autopayment (direct debit).
-
-            Depending on the issuer configuration, the direct Debit Amount can be different from the amount calculated at the cycle closure date (field theoricDirectDebitAmount) if credit operations (reversal, credit voucher…) are posted to the account between the cycle closure date and the date the direct debit is issued.'
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        theoricDirectDebitAmount:
-          description: Direct debit amount calculated at the cycle closure date when the payment mode is autopayment (direct debit) and depending on the payment conditions.
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        cycleBalance:
-          description: Balance amount for the statement
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        previousCycleBalance:
-          description: 'Balance amount of the previous cyclic closure (start balance of the statement).
-
-            Not provided for a non-closed cycle.'
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        totalOfPayment:
-          description: Sum of all payment operations received during the cycle.
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        loyaltyPoints:
-          type: array
-          description: Refer to LoyaltyPoint.loyaltyPoints
-          items:
-            $ref: '#/components/schemas/LoyaltyPoint'
-        previousCycleClosureDate:
-          type: string
-          format: date-time
-          description: The closure date of the previous cycle (optional)
-        nextCycleClosureDate:
-          type: string
-          format: date-time
-          description: The date of the next cycle closure (optional)
-        amountDue:
-          description: Minimum payment amount calculated by our system depending  on the payment conditions of the customer (full payer/partial payer) the customer has to pay to reimburse his debt.
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        initialPastAmountDue:
-          description: Remaining amount due of the previous cycle, set at cycle closure (optional, no past amount due for the first cycle or if the amount due was fully repaid for during the previous cycle).
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        initialRemainingAmountDue:
-          description: Sum of the amountDue (minimum payment amount) of the cycle and the initialPastAmountDue (optional).
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        statementDuplicatedForCompany:
-          type: boolean
-          description: Indicates if the company receives a duplicate for statement generated by other paying accounts in the corporate contract
-        iban:
-          type: string
-          description: International Bank Account Number of the customer (debtor)
-        payingAccountIdentifier:
-          description: The reference of paying account
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        cycleInformation:
-          description: Dates related to the closure calendar for the closure cycle
-          allOf:
-          - $ref: '#/components/schemas/CycleInformation'
-      title: Statement
-    OperationIdentifier:
-      type: object
-      required:
-      - operationId
-      properties:
-        operationId:
-          type: string
-          description: Internal operation identifier. 16-digit incremental number
-      title: OperationIdentifier
-    ReprintStatementResponse:
-      type: object
-      properties:
-        accountIdentifier:
-          description: Refer to Account.accountIdentifier attribute
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        requestedDate:
-          type: string
-          format: date-time
-          description: Refer to ReprintHistory.requestedDate
-      title: ReprintStatementResponse
-    DetailedFeeAmount:
-      type: object
-      properties:
-        percentage:
-          type: string
-          description: Percentage used for amount calculation of the covered risk
-        name:
-          type: string
-          description: Name of the covered risk
-        feeAmount:
-          description: Amount / Currency / Exponent of the covered risk
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        externalOperationCode:
-          type: string
-          description: External operation code the covered risk
-        includeInOtherDetailFeeAmount:
-          type: boolean
-          description: Indicates if the detail fee amount is part of another detail fee amount
-      title: DetailedFeeAmount
-    LoyaltyPoint:
-      type: object
-      properties:
-        unit:
-          type: string
-          description: ' Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional).'
-        cumulatedValue:
-          type: integer
-          format: int64
-          description: Total number of loyalty points (optional).
-      title: LoyaltyPoint
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    TravelDetail:
-      type: object
-      properties:
-        flightNumber:
-          type: string
-          description: flightNumber (customer travel details)
-        originCity:
-          type: string
-          description: originCity (customer travel details)
-        destinationCity:
-          type: string
-          description: 'destinationCity (customer travel details) '
-      title: TravelDetail
-    CycleInformation:
-      type: object
-      description: Dates related to the closure calendar for the open closure cycle
-      properties:
-        cycleStartDate:
-          type: string
-          format: date-time
-          description: Date when the cycle is opened
-        cycleClosureDate:
-          type: string
-          format: date-time
-          description: Date when the open cycle is closed
-        statementGenerationDate:
-          type: string
-          format: date-time
-          description: Date when the statement is produced for the cycle
-        directDebitIssuingDate:
-          type: string
-          format: date-time
-          description: Direct debit issuing date of the cycle
-        directDebitDueDate:
-          type: string
-          format: date-time
-          description: Direct debit due date of the cycle
-        gracePeriodEndDate:
-          type: string
-          format: date-time
-          description: Grace period end date of the cycle
-        dueDateForSelfPayer:
-          type: string
-          format: date-time
-          description: Due date for self payer of the cycle
-        cycleDueDate:
-          type: string
-          format: date-time
-          description: Due date of the cycle, used for monitoring process (delinquency)
-        statementEffectiveStartDate:
-          type: string
-          format: date
-          description: "Effective start date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
-        statementEffectiveEndDate:
-          type: string
-          format: date
-          description: "Effective end date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
-      title: CycleInformation
-    ApiResponseEntityStatement:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/Statement'
-      description: Issuer response entity
-      title: ApiResponseEntityStatement
-    VirtualCardService:
-      type: object
-      properties:
-        virtualServiceCardExternalReference:
-          type: string
-          description: The external reference calculated for VCC by the Virtual Card Engine (VCE)
-        issuerCompanyExternalReference:
-          type: string
-          description: This attribute will represent a unique identifier of company (the corporate customer of the Issuer)
-        virtualServiceCardNumber:
-          type: string
-          description: Virtual Service Card Number of the operation (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
-        maskedVirtualServiceCardNumber:
-          type: string
-          description: Masked Virtual Service Card Number. This is the VCC (Virtula Credit Card) PAN in masked format
-        virtualServicesFields:
-          type: object
-          description: 'This attribute will return specific informative fields related to VCC (Virtual Credit Card) that the Virtual Card Engine will provide to the Issuing Back Office system,
-
-            List of external data (label:value), separated by a "|''", related to a virtual card that can be provided by e.g. the issuer for information or for usage by other systems.
-
-            Example : label1:value|label2:value
-
-            Those provided data have no impact on our system business processes.'
-          additionalProperties:
-            type: string
-      title: VirtualCardService
   securitySchemes:
     basic:
       type: oauth2

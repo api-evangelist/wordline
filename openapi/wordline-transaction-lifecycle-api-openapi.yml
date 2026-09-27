@@ -126,48 +126,6 @@ paths:
           content: {}
 components:
   schemas:
-    TransactionIdentification:
-      type: object
-      properties:
-        transactionId:
-          type: string
-          description: Unique identification for a Cardholder Initiated Transaction
-          example: TDS16172008721825920
-        actionId:
-          type: string
-          description: Action ID in UUID format
-          example: 432956ee-6974-42d2-bfdb-878997f21653
-        acquirerReferenceNumber:
-          type: string
-          description: Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks
-          example: '11223344662288134679854'
-        merchantReference:
-          type: string
-          description: Merchant Reference. This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.
-          example: trx reference by merchant
-        merchantTransactionReference:
-          type: string
-          description: '*** DEPRECATED*** (Not available in v2.1. please use merchantReference)
-
-            Merchant Reference. This is a reference that the merchant can
-
-            add to an authorization request towards the terminal by entering it via
-
-            the keyboard of the merchant.
-
-            '
-          example: DEPRECATED. Not available in v2.1. Please use merchantReference
-        pspReference:
-          type: string
-          description: Additional information provided by the concentrator to return on his statement.
-        retrievalReferenceNumber:
-          type: string
-          description: External retrieval reference number.
-        stan:
-          type: integer
-          description: Systems Trace Audit Number
-          format: int32
-          example: 12752
     Lifecycle:
       type: object
       properties:
@@ -312,29 +270,48 @@ components:
           $ref: '#/components/schemas/Amount'
         merchantTransactionAmount:
           $ref: '#/components/schemas/Amount'
-    PaymentData:
+    TransactionIdentification:
       type: object
       properties:
-        merchantPaymentId:
+        transactionId:
           type: string
-          description: Unique identification of the payment in which this transaction has been paid out
-          example: SO-000000017036619028
-        merchantPaymentAggregationLevelCode:
+          description: Unique identification for a Cardholder Initiated Transaction
+          example: TDS16172008721825920
+        actionId:
           type: string
-          description: Code for the merchant payment aggregation level.
-          example: '02'
-        paymentType:
+          description: Action ID in UUID format
+          example: 432956ee-6974-42d2-bfdb-878997f21653
+        acquirerReferenceNumber:
           type: string
-          description: Type for which payment created. Transaction Fee, Transaction
-          example: '03'
-        paymentDate:
+          description: Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks
+          example: '11223344662288134679854'
+        merchantReference:
           type: string
-          description: payment date (yyyy-mm-ddT00:00:00+01:00) (Note, including 00:00:00+hh:00)
-          format: date
-        paymentCrossReferenceURI:
+          description: Merchant Reference. This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant.
+          example: trx reference by merchant
+        merchantTransactionReference:
           type: string
-          description: URI to the MerchantApiPayment to get the payment that belongs to this transaction. Only available if there is a payment date.
-          example: acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD
+          description: '*** DEPRECATED*** (Not available in v2.1. please use merchantReference)
+
+            Merchant Reference. This is a reference that the merchant can
+
+            add to an authorization request towards the terminal by entering it via
+
+            the keyboard of the merchant.
+
+            '
+          example: DEPRECATED. Not available in v2.1. Please use merchantReference
+        pspReference:
+          type: string
+          description: Additional information provided by the concentrator to return on his statement.
+        retrievalReferenceNumber:
+          type: string
+          description: External retrieval reference number.
+        stan:
+          type: integer
+          description: Systems Trace Audit Number
+          format: int32
+          example: 12752
     ContractIdentification:
       type: object
       properties:
@@ -388,6 +365,29 @@ components:
           type: string
           description: Currency of the amount
           example: EUR
+    PaymentData:
+      type: object
+      properties:
+        merchantPaymentId:
+          type: string
+          description: Unique identification of the payment in which this transaction has been paid out
+          example: SO-000000017036619028
+        merchantPaymentAggregationLevelCode:
+          type: string
+          description: Code for the merchant payment aggregation level.
+          example: '02'
+        paymentType:
+          type: string
+          description: Type for which payment created. Transaction Fee, Transaction
+          example: '03'
+        paymentDate:
+          type: string
+          description: payment date (yyyy-mm-ddT00:00:00+01:00) (Note, including 00:00:00+hh:00)
+          format: date
+        paymentCrossReferenceURI:
+          type: string
+          description: URI to the MerchantApiPayment to get the payment that belongs to this transaction. Only available if there is a payment date.
+          example: acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD
     PaymentInfo:
       type: array
       items:

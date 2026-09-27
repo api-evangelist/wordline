@@ -58,6 +58,33 @@ paths:
         503:
           $ref: '#/components/responses/503'
 components:
+  parameters:
+    X-Request-ID:
+      name: X-Request-ID
+      in: header
+      description: 'UUID for unique request identification.
+
+        '
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 1
+        type: string
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    MessageCreateDateTime:
+      name: MessageCreateDateTime
+      in: header
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2020-09-25T08:15:00.856Z'
   schemas:
     EstimatedTotalAmount:
       type: object
@@ -118,59 +145,6 @@ components:
       description: 'Currency Conversion Fee
 
         '
-    ExchangeRateInformation:
-      type: object
-      additionalProperties: false
-      required:
-      - UnitCurrency
-      - ExchangeRate
-      - RateType
-      properties:
-        UnitCurrency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'Currency in which the rate of exchange is expressed in a currency exchange.
-
-            '
-          example: EUR
-        ExchangeRate:
-          type: number
-          description: 'The factor used for conversion of an amount from one currency
-
-            to another. This reflects the price at which one currency was bought with
-
-            another currency. Rate expressed as a decimal, for example, 0.7 is 7/10
-
-            and 70%.
-
-            '
-        RateType:
-          type: string
-          description: 'Specifies the type used to complete the currency exchange.
-
-            * Spot: Exchange rate applied is the spot rate.
-
-            '
-          enum:
-          - Spot
-    ExchangeRateReferences:
-      type: object
-      additionalProperties: false
-      properties:
-        SourceCurrencyReferenceId:
-          maxLength: 35
-          minLength: 1
-          type: string
-          description: 'This should be used to refer to this exchange rate details for currency conversion from the new exchange rate table.
-
-            '
-        TargetCurrencyReferenceId:
-          maxLength: 35
-          minLength: 1
-          type: string
-          description: 'This should be used to reference the second entry ID in the exchange rate table row when cross-currency conversion is required, and two entries are selected for calculation.
-
-            '
     ExchangeRateRequest:
       type: object
       additionalProperties: false
@@ -226,19 +200,60 @@ components:
       - CurrencyConversionFee
       - EstimatedTotalAmount
       - ValidUntil
+    ExchangeRateReferences:
+      type: object
+      additionalProperties: false
+      properties:
+        SourceCurrencyReferenceId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'This should be used to refer to this exchange rate details for currency conversion from the new exchange rate table.
+
+            '
+        TargetCurrencyReferenceId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'This should be used to reference the second entry ID in the exchange rate table row when cross-currency conversion is required, and two entries are selected for calculation.
+
+            '
+    ExchangeRateInformation:
+      type: object
+      additionalProperties: false
+      required:
+      - UnitCurrency
+      - ExchangeRate
+      - RateType
+      properties:
+        UnitCurrency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'Currency in which the rate of exchange is expressed in a currency exchange.
+
+            '
+          example: EUR
+        ExchangeRate:
+          type: number
+          description: 'The factor used for conversion of an amount from one currency
+
+            to another. This reflects the price at which one currency was bought with
+
+            another currency. Rate expressed as a decimal, for example, 0.7 is 7/10
+
+            and 70%.
+
+            '
+        RateType:
+          type: string
+          description: 'Specifies the type used to complete the currency exchange.
+
+            * Spot: Exchange rate applied is the spot rate.
+
+            '
+          enum:
+          - Spot
   headers:
-    MessageCreateDateTime:
-      required: true
-      schema:
-        type: string
-        format: date-time
-      description: 'The message create date time.
-
-
-        ISO 8601 DateTime.
-
-        '
-      example: '2020-09-25T08:15:00.856Z'
     X-Request-ID:
       required: true
       description: 'UUID for unique request identification
@@ -249,32 +264,17 @@ components:
         maxLength: 36
         minLength: 1
       example: abcdef2e-3000-4000-88cc-ae40e3b113d7
-  parameters:
-    X-Request-ID:
-      name: X-Request-ID
-      in: header
-      description: 'UUID for unique request identification.
-
-        '
+    MessageCreateDateTime:
       required: true
       schema:
-        maxLength: 36
-        minLength: 1
         type: string
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
-    MessageCreateDateTime:
-      name: MessageCreateDateTime
-      in: header
+        format: date-time
       description: 'The message create date time.
 
 
         ISO 8601 DateTime.
 
         '
-      required: true
-      schema:
-        type: string
-        format: date-time
       example: '2020-09-25T08:15:00.856Z'
   securitySchemes:
     Authorization:

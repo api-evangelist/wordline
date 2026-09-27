@@ -75,141 +75,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
-  parameters:
-    Psuid:
-      name: Psuid
-      in: path
-      description: 'The Id of the PSU registered at the Open Banking Service
-
-        '
-      required: true
-      schema:
-        type: string
-      example: 12345
-    InitiatingPartySubId:
-      name: InitiatingPartySubId
-      in: header
-      schema:
-        type: string
-      description: 'External identification of the subsidiary initiating party.
-
-        '
-    Signature:
-      name: Signature
-      in: header
-      description: 'Conditionally required for iDEAL payments. The signature in the request should include a keyId with the value of fingerprint of the certificate
-
-        '
-      schema:
-        type: string
-    AspspId:
-      name: AspspId
-      in: header
-      description: The AspspId used within the Open Banking Service to identify a specific ASPSP.
-      schema:
-        type: string
-      example: '121'
-    Digest:
-      name: Digest
-      in: header
-      description: Is contained if and only if the `Signature` element is contained in the header of the request.
-      schema:
-        type: string
-      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
-    X-Request-ID:
-      name: X-Request-ID
-      in: header
-      description: 'UUID for unique request identification.
-
-        '
-      required: true
-      schema:
-        maxLength: 36
-        minLength: 1
-        type: string
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
-    MessageCreateDateTime:
-      name: MessageCreateDateTime
-      in: header
-      description: 'The message create date time.
-
-
-        ISO 8601 DateTime.
-
-        '
-      required: true
-      schema:
-        type: string
-        format: date-time
-      example: '2020-09-25T08:15:00.856Z'
-  headers:
-    Digest:
-      description: Is contained if and only if the `Signature` element is contained in the header of the request.
-      schema:
-        type: string
-      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
-    MessageCreateDateTime:
-      required: true
-      schema:
-        type: string
-        format: date-time
-      description: 'The message create date time.
-
-
-        ISO 8601 DateTime.
-
-        '
-      example: '2020-09-25T08:15:00.856Z'
-    Signature:
-      required: false
-      description: 'Required for IDEAL payments.
-
-        '
-      schema:
-        type: string
-    X-Request-ID:
-      required: true
-      description: 'UUID for unique request identification
-
-        '
-      schema:
-        type: string
-        maxLength: 36
-        minLength: 1
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
   schemas:
-    PsuBankPreferences:
-      type: object
-      additionalProperties: false
-      description: 'The PSU preferenes details saved in the PSU Management
-
-        '
-      properties:
-        AspspName:
-          type: string
-          description: 'The name of the ASPSP/Issuer
-
-            '
-        AspspLogoUrl:
-          type: string
-          description: 'the logo url of the ASPSP/Issuer
-
-            '
-        DebtorAccountIdentification:
-          type: string
-          description: 'The masked IBAN or any other identifier recognized by the PSU and ASPSP/Issuer
-
-            '
-    Link:
-      required:
-      - Href
-      type: object
-      additionalProperties: false
-      properties:
-        Href:
-          maxLength: 1024
-          minLength: 1
-          type: string
     Error:
       required:
       - Code
@@ -319,6 +185,140 @@ components:
         |503        |016  |Request limit of the ASPSP server exceeded
 
         '
+    Link:
+      required:
+      - Href
+      type: object
+      additionalProperties: false
+      properties:
+        Href:
+          maxLength: 1024
+          minLength: 1
+          type: string
+    PsuBankPreferences:
+      type: object
+      additionalProperties: false
+      description: 'The PSU preferenes details saved in the PSU Management
+
+        '
+      properties:
+        AspspName:
+          type: string
+          description: 'The name of the ASPSP/Issuer
+
+            '
+        AspspLogoUrl:
+          type: string
+          description: 'the logo url of the ASPSP/Issuer
+
+            '
+        DebtorAccountIdentification:
+          type: string
+          description: 'The masked IBAN or any other identifier recognized by the PSU and ASPSP/Issuer
+
+            '
+  parameters:
+    InitiatingPartySubId:
+      name: InitiatingPartySubId
+      in: header
+      schema:
+        type: string
+      description: 'External identification of the subsidiary initiating party.
+
+        '
+    X-Request-ID:
+      name: X-Request-ID
+      in: header
+      description: 'UUID for unique request identification.
+
+        '
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 1
+        type: string
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    Signature:
+      name: Signature
+      in: header
+      description: 'Conditionally required for iDEAL payments. The signature in the request should include a keyId with the value of fingerprint of the certificate
+
+        '
+      schema:
+        type: string
+    MessageCreateDateTime:
+      name: MessageCreateDateTime
+      in: header
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2020-09-25T08:15:00.856Z'
+    AspspId:
+      name: AspspId
+      in: header
+      description: The AspspId used within the Open Banking Service to identify a specific ASPSP.
+      schema:
+        type: string
+      example: '121'
+    Digest:
+      name: Digest
+      in: header
+      description: Is contained if and only if the `Signature` element is contained in the header of the request.
+      schema:
+        type: string
+      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
+    Psuid:
+      name: Psuid
+      in: path
+      description: 'The Id of the PSU registered at the Open Banking Service
+
+        '
+      required: true
+      schema:
+        type: string
+      example: 12345
+  headers:
+    X-Request-ID:
+      required: true
+      description: 'UUID for unique request identification
+
+        '
+      schema:
+        type: string
+        maxLength: 36
+        minLength: 1
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    Digest:
+      description: Is contained if and only if the `Signature` element is contained in the header of the request.
+      schema:
+        type: string
+      example: SHA-256=hl1/Eps8BEQW58FJhDApwJXjGY4nr1ArGDHIT25vq6A=
+    MessageCreateDateTime:
+      required: true
+      schema:
+        type: string
+        format: date-time
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      example: '2020-09-25T08:15:00.856Z'
+    Signature:
+      required: false
+      description: 'Required for IDEAL payments.
+
+        '
+      schema:
+        type: string
   securitySchemes:
     Authorization:
       type: http

@@ -56,65 +56,60 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    UserVerificationRequirement:
+    PublicKeyCredentialAttestation:
+      required:
+      - response
+      - type
       type: object
       properties:
-        value:
+        id:
           type: string
-    ResidentKeyRequirement:
-      type: object
-      properties:
-        value:
+        rawId:
           type: string
-    RegOptionRequest:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
-        friendlyName:
+        response:
+          $ref: '#/components/schemas/AuthenticatorAttestationResponse'
+        type:
+          minLength: 1
+          pattern: public-key
           type: string
-        authenticatorSelection:
-          $ref: '#/components/schemas/AuthenticatorSelection'
-        attestation:
-          type: string
-        extensions:
+        getClientExtensionResults:
           type: object
           additionalProperties:
             type: string
-    PublicKeyCredentialParameters:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PublicKeyCredentialType'
-        alg:
-          $ref: '#/components/schemas/COSEAlgorithmIdentifier'
-    AttestationConveyancePreference:
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    AuthenticatorAttachment:
       type: object
       properties:
         value:
           type: string
-    AuthenticatorSelection:
+    AuthenticatorTransport:
       type: object
       properties:
-        authenticatorAttachment:
+        value:
           type: string
-        residentKey:
-          type: string
-        requireResidentKey:
-          type: boolean
-        userVerification:
-          type: string
-    AuthenticatorSelectionCriteria:
+    PublicKeyCredentialRpEntity:
       type: object
       properties:
-        authenticatorAttachment:
-          $ref: '#/components/schemas/AuthenticatorAttachment'
-        requireResidentKey:
-          type: boolean
-        residentKey:
-          $ref: '#/components/schemas/ResidentKeyRequirement'
-        userVerification:
-          $ref: '#/components/schemas/UserVerificationRequirement'
+        name:
+          type: string
+        id:
+          type: string
+    PublicKeyCredentialUserEntity:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+        id:
+          type: string
+        displayName:
+          type: string
     RegOptionResponse:
       type: object
       properties:
@@ -147,66 +142,31 @@ components:
           type: string
         sessionId:
           type: string
-    COSEAlgorithmIdentifier:
+    RegOptionRequest:
       type: object
       properties:
-        value:
-          format: int64
-          type: integer
-    PublicKeyCredentialDescriptor:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PublicKeyCredentialType'
-        id:
+        user:
+          $ref: '#/components/schemas/PublicKeyCredentialUserEntity'
+        friendlyName:
           type: string
-        transports:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/AuthenticatorTransport'
-    PublicKeyCredentialAttestation:
-      required:
-      - response
-      - type
-      type: object
-      properties:
-        id:
+        authenticatorSelection:
+          $ref: '#/components/schemas/AuthenticatorSelection'
+        attestation:
           type: string
-        rawId:
-          type: string
-        response:
-          $ref: '#/components/schemas/AuthenticatorAttestationResponse'
-        type:
-          minLength: 1
-          pattern: public-key
-          type: string
-        getClientExtensionResults:
+        extensions:
           type: object
           additionalProperties:
             type: string
-        transports:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-    PublicKeyCredentialType:
+    AttestationResponse:
+      required:
+      - sessionId
       type: object
       properties:
-        value:
+        sessionId:
+          minLength: 1
           type: string
-    ServerResponse:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/Status'
-        errorMessage:
-          type: string
-    AuthenticatorAttachment:
-      type: object
-      properties:
-        value:
-          type: string
+        attestationBlob:
+          $ref: '#/components/schemas/PublicKeyCredentialAttestation'
     HMACGetSecretInput:
       type: object
       properties:
@@ -215,6 +175,41 @@ components:
           type: string
         salt2:
           format: binary
+          type: string
+    AuthenticatorSelectionCriteria:
+      type: object
+      properties:
+        authenticatorAttachment:
+          $ref: '#/components/schemas/AuthenticatorAttachment'
+        requireResidentKey:
+          type: boolean
+        residentKey:
+          $ref: '#/components/schemas/ResidentKeyRequirement'
+        userVerification:
+          $ref: '#/components/schemas/UserVerificationRequirement'
+    PublicKeyCredentialParameters:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PublicKeyCredentialType'
+        alg:
+          $ref: '#/components/schemas/COSEAlgorithmIdentifier'
+    COSEAlgorithmIdentifier:
+      type: object
+      properties:
+        value:
+          format: int64
+          type: integer
+    AuthenticatorSelection:
+      type: object
+      properties:
+        authenticatorAttachment:
+          type: string
+        residentKey:
+          type: string
+        requireResidentKey:
+          type: boolean
+        userVerification:
           type: string
     AuthenticationExtensionsClientInputsRegistrationExtensionClientInput:
       type: object
@@ -243,51 +238,56 @@ components:
           type: boolean
         hmacGetSecret:
           $ref: '#/components/schemas/HMACGetSecretInput'
-    CredentialProtectionPolicy:
-      enum:
-      - USER_VERIFICATION_OPTIONAL
-      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
-      - USER_VERIFICATION_REQUIRED
-      type: string
-    PublicKeyCredentialUserEntity:
-      required:
-      - name
+    PublicKeyCredentialDescriptor:
       type: object
       properties:
-        name:
-          minLength: 1
-          type: string
+        type:
+          $ref: '#/components/schemas/PublicKeyCredentialType'
         id:
           type: string
-        displayName:
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticatorTransport'
+    ResidentKeyRequirement:
+      type: object
+      properties:
+        value:
+          type: string
+    ServerResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        errorMessage:
+          type: string
+    UserVerificationRequirement:
+      type: object
+      properties:
+        value:
           type: string
     Status:
       enum:
       - OK
       - FAILED
       type: string
-    PublicKeyCredentialRpEntity:
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-    AttestationResponse:
-      required:
-      - sessionId
-      type: object
-      properties:
-        sessionId:
-          minLength: 1
-          type: string
-        attestationBlob:
-          $ref: '#/components/schemas/PublicKeyCredentialAttestation'
-    AuthenticatorTransport:
+    AttestationConveyancePreference:
       type: object
       properties:
         value:
           type: string
+    PublicKeyCredentialType:
+      type: object
+      properties:
+        value:
+          type: string
+    CredentialProtectionPolicy:
+      enum:
+      - USER_VERIFICATION_OPTIONAL
+      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
+      - USER_VERIFICATION_REQUIRED
+      type: string
     AuthenticatorAttestationResponse:
       required:
       - clientDataJSON
