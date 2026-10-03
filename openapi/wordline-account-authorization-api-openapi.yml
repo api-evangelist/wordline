@@ -1135,99 +1135,59 @@ paths:
       - basic: []
 components:
   schemas:
-    VelocityLimitCheck:
+    InternalServerErrorResponseMetadata:
       type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        amount:
-          description: "Cumulated authorization amount in period. Debits have a positive sign whereas credits have a negative one. \nThe returned value is the one being effective at operation execution time."
-          allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        count:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
           type: integer
           format: int32
-          description: "minimum: 0\nmaximum: 999999999\nCurrent number of transactions in period. \nThe returned value is the one being effective at operation execution time."
-        issuerId:
+          example: 500
+          description: HTTP status code
+        statusMessage:
           type: string
-          description: Not used, will be removed.
-        maximumAmount:
-          description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMaximum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be positive. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MaximumAmountCheck is true."
-          allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        maximumAmountCheck:
-          type: boolean
-          description: "Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time."
-        maximumAmountCheckOrigin:
-          type: string
-          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
-
-            Indicates from which entity MaximumAmountCheck has been taken.'
-        maximumAmountOrigin:
-          type: string
-          description: 'Indicates from which level MaximumAmountCheck has been taken
-
-            Only present in case MaximumAmount is present.
-
-            Enum:
-
-            [ Default, Exception, Override, Other ]'
-        maximumCount:
-          type: integer
-          format: int32
-          description: 'minimum: 0
-
-            maximum: 999999999
-
-            Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true. '
-        maximumCountCheck:
-          type: boolean
-          description: "Indicates whether the number of transactions in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time. "
-        maximumCountCheckOrigin:
-          type: string
-          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
-
-            Indicates from which entity MaximumCountCheck has been taken.'
-        maximumCountOrigin:
-          type: string
-          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
-
-            Indicates from which entity MaximumCount has been taken.
-
-            Only present if the maximum count check has been performed.'
-        minimumAmount:
-          description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMinimum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be negative. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MinimumAmountCheck is true."
-          allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        minimumAmountCheck:
-          type: boolean
-          description: "Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. \nThe returned value is the one being effective at operation execution time."
-        minimumAmountCheckOrigin:
-          type: string
-          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
-
-            Indicates from which entity MinimumAmountCheck has been taken.'
-        minimumAmountOrigin:
-          type: string
-          description: "Indicates from which level MinimumAmountCheck has been taken.  \nPossible values: Default, Exception, Override, Other.\nOnly present in case MinimumAmount is present."
-        velocityLimitIdentifier:
-          $ref: '#/components/schemas/VelocityLimitIdentifier'
-      title: VelocityLimitCheck
-    MonetaryAmountAlphaCurrency:
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    AuthorizationBusinessCaseIdentifier:
       type: object
+      required:
+      - businessCaseId
       properties:
-        exponent:
-          type: integer
-          format: int32
-          example: 2
-          description: 'Exponent of amount currency. Number of decimal digits. Example: 2 for Euro.'
-        isoCode:
+        businessCaseId:
           type: string
-          example: EUR
-          description: 'Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro.'
-        value:
-          type: integer
-          format: int64
-          description: 'Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents).'
-      title: MonetaryAmountAlphaCurrency
+          description: 'Business case to which the transaction belongs.
+
+            The provided information reflects its status after transaction completion.
+
+            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
+      title: AuthorizationBusinessCaseIdentifier
+    ApiResponseEntityGetBusinessCase:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/GetBusinessCaseResponse'
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetBusinessCase
+      description: Issuer response entity
     Authorization:
       type: object
       properties:
@@ -1508,21 +1468,6 @@ components:
           items:
             $ref: '#/components/schemas/VelocityLimitCheck'
       title: Authorization
-    ApiResponseEntityGetAuthorization:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/GetAuthorizationResponse'
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetAuthorization
-      description: Issuer response entity
     AuthorizationIdentifier:
       type: object
       properties:
@@ -1537,7 +1482,7 @@ components:
           type: string
           description: Issuer external authorization reference
       title: AuthorizationIdentifier
-    ForbiddenResponseMetadata:
+    NotFoundResponseMetadata:
       type: object
       required:
       - correlationId
@@ -1555,125 +1500,13 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 403
+          example: 404
           description: HTTP status code
         statusMessage:
           type: string
-          example: Forbidden
+          example: Not found
           description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    AuthorizationBusinessCaseIdentifier:
-      type: object
-      required:
-      - businessCaseId
-      properties:
-        businessCaseId:
-          type: string
-          description: 'Business case to which the transaction belongs.
-
-            The provided information reflects its status after transaction completion.
-
-            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
-      title: AuthorizationBusinessCaseIdentifier
-    ApiResponseEntityGetBusinessCases:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessCase'
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetBusinessCases
-      description: Issuer response entity
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    ApiResponseEntityGetReserves:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Reserve'
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetReserves
-      description: Issuer response entity
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    ApiResponseEntityGetAuthorizations:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Authorization'
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetAuthorizations
-      description: Issuer response entity
-    BusinessCasesEnquiryRequest:
-      type: object
-      required:
-      - endTime
-      - startTime
-      properties:
-        accountReference:
-          type: string
-        businessCaseIds:
-          type: array
-          items:
-            type: string
-        endTime:
-          type: string
-          format: date-time
-        startTime:
-          type: string
-          format: date-time
-      title: BusinessCasesEnquiryRequest
-      description: Request to enquire business cases. Either accountReference or businessCaseIds must be provided.
+      title: NotFoundResponseMetadata
     ForbiddenErrorApiResponse:
       type: object
       required:
@@ -1683,162 +1516,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/ForbiddenResponseMetadata'
       title: ForbiddenErrorApiResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    VelocityLimitIdentifier:
-      type: object
-      properties:
-        velocityLimitReference:
-          type: string
-          description: 'minLength: 1
-
-            maxLength: 60
-
-            Identifies the velocity check.'
-      title: VelocityLimitIdentifier
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    ApiResponseEntityGetBusinessCase:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/GetBusinessCaseResponse'
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetBusinessCase
-      description: Issuer response entity
-    Reserve:
-      type: object
-      properties:
-        amount:
-          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        approvalCode:
-          type: string
-        billingAmount:
-          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        businessCaseIdentifier:
-          $ref: '#/components/schemas/BusinessCaseIdentifier'
-        cardAcceptorCity:
-          type: string
-        cardAcceptorCountry:
-          type: string
-        cardAcceptorName:
-          type: string
-        expiryTime:
-          type: string
-        financialType:
-          type: string
-        firstAuthorizationIdentifier:
-          $ref: '#/components/schemas/AuthorizationIdentifier'
-        maskedCardNumber:
-          type: string
-        merchantCategoryCode:
-          type: string
-        operationTime:
-          type: string
-      title: Reserve
     UnauthorizedResponseMetadata:
       type: object
       required:
@@ -1864,6 +1541,24 @@ components:
           example: Unauthorized
           description: Executed REST API status message
       title: UnauthorizedResponseMetadata
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
     GetBusinessCaseResponse:
       type: object
       properties:
@@ -1959,71 +1654,304 @@ components:
           type: string
           description: The status of the business case
       title: GetBusinessCaseResponse
-    BusinessCaseIdentifier:
+    BadGatewayResponseMetadata:
       type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        businessCaseId:
+        correlationId:
           type: string
-      title: BusinessCaseIdentifier
-    InternalServerErrorErrorApiResponse:
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    BadRequestErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    InternalServerErrorResponseMetadata:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    Reserve:
       type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
       properties:
-        correlationId:
+        amount:
+          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        approvalCode:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
+        billingAmount:
+          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        businessCaseIdentifier:
+          $ref: '#/components/schemas/BusinessCaseIdentifier'
+        cardAcceptorCity:
           type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
+        cardAcceptorCountry:
+          type: string
+        cardAcceptorName:
+          type: string
+        expiryTime:
+          type: string
+        financialType:
+          type: string
+        firstAuthorizationIdentifier:
+          $ref: '#/components/schemas/AuthorizationIdentifier'
+        maskedCardNumber:
+          type: string
+        merchantCategoryCode:
+          type: string
+        operationTime:
+          type: string
+      title: Reserve
+    VelocityLimitCheck:
+      type: object
+      properties:
+        amount:
+          description: "Cumulated authorization amount in period. Debits have a positive sign whereas credits have a negative one. \nThe returned value is the one being effective at operation execution time."
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        count:
           type: integer
           format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
+          description: "minimum: 0\nmaximum: 999999999\nCurrent number of transactions in period. \nThe returned value is the one being effective at operation execution time."
+        issuerId:
           type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
+          description: Not used, will be removed.
+        maximumAmount:
+          description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMaximum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be positive. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MaximumAmountCheck is true."
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        maximumAmountCheck:
+          type: boolean
+          description: "Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time."
+        maximumAmountCheckOrigin:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
+          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+            Indicates from which entity MaximumAmountCheck has been taken.'
+        maximumAmountOrigin:
           type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
+          description: 'Indicates from which level MaximumAmountCheck has been taken
+
+            Only present in case MaximumAmount is present.
+
+            Enum:
+
+            [ Default, Exception, Override, Other ]'
+        maximumCount:
           type: integer
           format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
+          description: 'minimum: 0
+
+            maximum: 999999999
+
+            Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true. '
+        maximumCountCheck:
+          type: boolean
+          description: "Indicates whether the number of transactions in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time. "
+        maximumCountCheckOrigin:
           type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
+          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+            Indicates from which entity MaximumCountCheck has been taken.'
+        maximumCountOrigin:
+          type: string
+          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+            Indicates from which entity MaximumCount has been taken.
+
+            Only present if the maximum count check has been performed.'
+        minimumAmount:
+          description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMinimum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be negative. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MinimumAmountCheck is true."
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        minimumAmountCheck:
+          type: boolean
+          description: "Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. \nThe returned value is the one being effective at operation execution time."
+        minimumAmountCheckOrigin:
+          type: string
+          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+            Indicates from which entity MinimumAmountCheck has been taken.'
+        minimumAmountOrigin:
+          type: string
+          description: "Indicates from which level MinimumAmountCheck has been taken.  \nPossible values: Default, Exception, Override, Other.\nOnly present in case MinimumAmount is present."
+        velocityLimitIdentifier:
+          $ref: '#/components/schemas/VelocityLimitIdentifier'
+      title: VelocityLimitCheck
+    BusinessCasesEnquiryRequest:
+      type: object
+      required:
+      - endTime
+      - startTime
+      properties:
+        accountReference:
+          type: string
+        businessCaseIds:
+          type: array
+          items:
+            type: string
+        endTime:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+      title: BusinessCasesEnquiryRequest
+      description: Request to enquire business cases. Either accountReference or businessCaseIds must be provided.
+    BusinessCase:
+      type: object
+      properties:
+        accountReserveBillingAmount:
+          description: 'minimum: -1000000000000000000
+
+            maximum: 1000000000000000000
+
+            Fraction of ReserveBillingAmount which has not expired and has not been cancelled (i.e. no clearing and no manual intervention) so far and therefore still influences the open-to-buy via the account reserve (on top of the account balance). A positive value is a debit for the cardholder and a credit for the issuer. Whereas a negative value is a credit for the cardholder and a debit for the issuer.'
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        accountReserveStatus:
+          type: string
+          example: List'None', 'Active', 'Expired', 'Cancelled', 'Other'
+          description: 'Indicates together with AccountReserveBillingAmount to what extend the business case influences the open-to-buy via the account reserve (on top of the account balance). Possible values are:
+
+            - None (ReserveBillingAmount is and was never part of the account reserve; AccountReserveBillingAmount is absent)
+
+            - Active (ReserveBillingAmount amount is fully or partially part of the account reserve; it can be cancelled or updated; it can expire; AccountReserveBillingAmount is greater than zero)
+
+            - Expired (ReserveBillingAmount has expired and is no longer part of the account reserve; AccountReserveBillingAmount is zero)
+
+            - Cancelled (ReserveBillingAmount has been entirely cancelled (due to clearing or manual intervention) and is no longer part of the account reserve; AccountReserveBillingAmount is zero)
+
+            - Other
+
+            Can only be present in case BusinessCaseType is FinancialRequest. Absent in case Cancelled is true or all associated authorizations have been declined. The caller must be prepared to receive new values in this field at any time.'
+        businessCaseIdentifier:
+          description: Business case to which the transaction belongs. The provided information reflects its status after transaction completion. A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)
+          allOf:
+          - $ref: '#/components/schemas/BusinessCaseIdentifier'
+        businessCaseType:
+          type: string
+          example: List 'FinancialRequest', 'FinancialVerification', 'AccountVerification', 'BalanceEnquiry', 'StatementEnquiry', 'PinChange', 'PinUnblock', 'PickUp', 'CardReturn', 'Reconciliation', 'ReserveUpdate', 'ReserveExpiry', 'CardFileOperation', 'TokenLifeCycleEvent', 'Other', 'Unknown'
+          description: This value is the same for all transactions belonging to the same business case.
+        cardAcceptorCity:
+          type: string
+          description: 'maxLength: 60
+
+            City the acceptor is resident (e.g. Frankfurt).Often exchanged with other applications via ISO 8583 field DE 43.'
+        cardAcceptorCountry:
+          type: string
+          description: Generic.AlphaNumericAcceptorCountryCode for the initial authorization.
+        cardAcceptorName:
+          type: string
+          description: 'maxLength: 50
+
+            This field is not strictly defined and therefore variations are possible. Usually it is the merchant name as known to the cardholder. For ATMs it could be the location or the branch number. Often exchanged with other applications via ISO 8583 field DE 43.'
+        financialType:
+          type: string
+          example: List 'Cash', 'CashRefund', 'QuasiCash', 'QuasiCashRefund', 'Purchase', 'Refund', 'Load', 'Unload', 'FundsTransferCredit', 'FundsTransferDebit', 'OtherCredit', 'OtherDebit', 'Deposit', 'DepositRefund', 'Unknown'
+          description: Provides more details on the operation in case BusinessCaseType is FinancialRequest or FinancialVerification.This value is the same for all transactions belonging to the same financial business case.
+        firstAuthorizationIdentifier:
+          $ref: '#/components/schemas/AuthorizationIdentifier'
+        firstAuthorizationTransactionDate:
+          type: string
+          example: '2022-04-01T20:38:39Z'
+          description: 'Time when the transaction referenced by FirstTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ.'
+        issuerId:
+          type: string
+          description: Not used, will be removed
+        lastAuthorizationIdentifier:
+          $ref: '#/components/schemas/AuthorizationIdentifier'
+        lastAuthorizationTransactionDate:
+          type: string
+          example: '2022-04-01T20:38:39Z'
+          description: 'Time when the transaction referenced by LastTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ.'
+        merchantCategoryCode:
+          type: string
+          description: 'maxLength: 4
+
+            Category code assigned to the acceptor (MCC).'
+        reserveAmount:
+          description: 'minimum: -1000000000000000000
+
+            maximum: 1000000000000000000
+
+            Reserved amount in transaction (acceptor) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalAmount.'
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        reserveBillingAmount:
+          description: 'minimum: -1000000000000000000
+
+            maximum: 1000000000000000000
+
+            Reserved amount in billing (cardholder) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalBillingAmount.'
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        status:
+          type: string
+          description: Status of the business case
+      title: BusinessCase
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    MonetaryAmountAlphaCurrency:
+      type: object
+      properties:
+        exponent:
+          type: integer
+          format: int32
+          example: 2
+          description: 'Exponent of amount currency. Number of decimal digits. Example: 2 for Euro.'
+        isoCode:
+          type: string
+          example: EUR
+          description: 'Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro.'
+        value:
+          type: integer
+          format: int64
+          description: 'Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents).'
+      title: MonetaryAmountAlphaCurrency
+    ApiResponseEntityGetAuthorizations:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Authorization'
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetAuthorizations
+      description: Issuer response entity
     GetAuthorizationResponse:
       type: object
       properties:
@@ -2298,6 +2226,161 @@ components:
           items:
             $ref: '#/components/schemas/VelocityLimitCheck'
       title: GetAuthorizationResponse
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    VelocityLimitIdentifier:
+      type: object
+      properties:
+        velocityLimitReference:
+          type: string
+          description: 'minLength: 1
+
+            maxLength: 60
+
+            Identifies the velocity check.'
+      title: VelocityLimitIdentifier
+    ApiResponseEntityGetAuthorization:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/GetAuthorizationResponse'
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetAuthorization
+      description: Issuer response entity
+    ApiResponseEntityGetReserves:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reserve'
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetReserves
+      description: Issuer response entity
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    BusinessCaseIdentifier:
+      type: object
+      properties:
+        businessCaseId:
+          type: string
+      title: BusinessCaseIdentifier
+    ApiResponseEntityGetBusinessCases:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessCase'
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetBusinessCases
+      description: Issuer response entity
     AccountIdentifier:
       type: object
       properties:
@@ -2308,98 +2391,15 @@ components:
           type: string
           description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
       title: AccountIdentifier
-    BusinessCase:
+    UnauthorizedErrorApiResponse:
       type: object
+      required:
+      - responseMetadata
       properties:
-        accountReserveBillingAmount:
-          description: 'minimum: -1000000000000000000
-
-            maximum: 1000000000000000000
-
-            Fraction of ReserveBillingAmount which has not expired and has not been cancelled (i.e. no clearing and no manual intervention) so far and therefore still influences the open-to-buy via the account reserve (on top of the account balance). A positive value is a debit for the cardholder and a credit for the issuer. Whereas a negative value is a credit for the cardholder and a debit for the issuer.'
+        responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        accountReserveStatus:
-          type: string
-          example: List'None', 'Active', 'Expired', 'Cancelled', 'Other'
-          description: 'Indicates together with AccountReserveBillingAmount to what extend the business case influences the open-to-buy via the account reserve (on top of the account balance). Possible values are:
-
-            - None (ReserveBillingAmount is and was never part of the account reserve; AccountReserveBillingAmount is absent)
-
-            - Active (ReserveBillingAmount amount is fully or partially part of the account reserve; it can be cancelled or updated; it can expire; AccountReserveBillingAmount is greater than zero)
-
-            - Expired (ReserveBillingAmount has expired and is no longer part of the account reserve; AccountReserveBillingAmount is zero)
-
-            - Cancelled (ReserveBillingAmount has been entirely cancelled (due to clearing or manual intervention) and is no longer part of the account reserve; AccountReserveBillingAmount is zero)
-
-            - Other
-
-            Can only be present in case BusinessCaseType is FinancialRequest. Absent in case Cancelled is true or all associated authorizations have been declined. The caller must be prepared to receive new values in this field at any time.'
-        businessCaseIdentifier:
-          description: Business case to which the transaction belongs. The provided information reflects its status after transaction completion. A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)
-          allOf:
-          - $ref: '#/components/schemas/BusinessCaseIdentifier'
-        businessCaseType:
-          type: string
-          example: List 'FinancialRequest', 'FinancialVerification', 'AccountVerification', 'BalanceEnquiry', 'StatementEnquiry', 'PinChange', 'PinUnblock', 'PickUp', 'CardReturn', 'Reconciliation', 'ReserveUpdate', 'ReserveExpiry', 'CardFileOperation', 'TokenLifeCycleEvent', 'Other', 'Unknown'
-          description: This value is the same for all transactions belonging to the same business case.
-        cardAcceptorCity:
-          type: string
-          description: 'maxLength: 60
-
-            City the acceptor is resident (e.g. Frankfurt).Often exchanged with other applications via ISO 8583 field DE 43.'
-        cardAcceptorCountry:
-          type: string
-          description: Generic.AlphaNumericAcceptorCountryCode for the initial authorization.
-        cardAcceptorName:
-          type: string
-          description: 'maxLength: 50
-
-            This field is not strictly defined and therefore variations are possible. Usually it is the merchant name as known to the cardholder. For ATMs it could be the location or the branch number. Often exchanged with other applications via ISO 8583 field DE 43.'
-        financialType:
-          type: string
-          example: List 'Cash', 'CashRefund', 'QuasiCash', 'QuasiCashRefund', 'Purchase', 'Refund', 'Load', 'Unload', 'FundsTransferCredit', 'FundsTransferDebit', 'OtherCredit', 'OtherDebit', 'Deposit', 'DepositRefund', 'Unknown'
-          description: Provides more details on the operation in case BusinessCaseType is FinancialRequest or FinancialVerification.This value is the same for all transactions belonging to the same financial business case.
-        firstAuthorizationIdentifier:
-          $ref: '#/components/schemas/AuthorizationIdentifier'
-        firstAuthorizationTransactionDate:
-          type: string
-          example: '2022-04-01T20:38:39Z'
-          description: 'Time when the transaction referenced by FirstTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ.'
-        issuerId:
-          type: string
-          description: Not used, will be removed
-        lastAuthorizationIdentifier:
-          $ref: '#/components/schemas/AuthorizationIdentifier'
-        lastAuthorizationTransactionDate:
-          type: string
-          example: '2022-04-01T20:38:39Z'
-          description: 'Time when the transaction referenced by LastTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ.'
-        merchantCategoryCode:
-          type: string
-          description: 'maxLength: 4
-
-            Category code assigned to the acceptor (MCC).'
-        reserveAmount:
-          description: 'minimum: -1000000000000000000
-
-            maximum: 1000000000000000000
-
-            Reserved amount in transaction (acceptor) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalAmount.'
-          allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        reserveBillingAmount:
-          description: 'minimum: -1000000000000000000
-
-            maximum: 1000000000000000000
-
-            Reserved amount in billing (cardholder) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalBillingAmount.'
-          allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        status:
-          type: string
-          description: Status of the business case
-      title: BusinessCase
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

@@ -56,6 +56,106 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CredentialProtectionPolicy:
+      enum:
+      - USER_VERIFICATION_OPTIONAL
+      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
+      - USER_VERIFICATION_REQUIRED
+      type: string
+    PublicKeyCredentialUserEntity:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+        id:
+          type: string
+        displayName:
+          type: string
+    UserVerificationRequirement:
+      type: object
+      properties:
+        value:
+          type: string
+    AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput:
+      type: object
+      properties:
+        uvm:
+          type: boolean
+          writeOnly: true
+        credProtect:
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/CredentialProtectionPolicy'
+          writeOnly: true
+        hMACSecret: {}
+    PublicKeyCredentialAssertion:
+      required:
+      - response
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+        rawId:
+          type: string
+        response:
+          $ref: '#/components/schemas/AuthenticatorAssertionResponse'
+        getClientExtensionResults:
+          type: object
+          additionalProperties:
+            type: string
+        type:
+          minLength: 1
+          pattern: public-key
+          type: string
+    PublicKeyCredentialDescriptor:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PublicKeyCredentialType'
+        id:
+          type: string
+        transports:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticatorTransport'
+    AuthenticatorAssertionResponse:
+      required:
+      - clientDataJSON
+      - authenticatorData
+      - signature
+      type: object
+      properties:
+        clientDataJSON:
+          minLength: 1
+          type: string
+        authenticatorData:
+          minLength: 1
+          type: string
+        signature:
+          minLength: 1
+          type: string
+        userHandle:
+          type: string
+    Status:
+      enum:
+      - OK
+      - FAILED
+      type: string
+    AssertionResponse:
+      required:
+      - sessionId
+      type: object
+      properties:
+        sessionId:
+          minLength: 1
+          type: string
+        assertionBlob:
+          $ref: '#/components/schemas/PublicKeyCredentialAssertion'
     AuthOptionRequest:
       type: object
       properties:
@@ -67,44 +167,16 @@ components:
           type: object
           additionalProperties:
             type: string
-    CredentialProtectionPolicy:
-      enum:
-      - USER_VERIFICATION_OPTIONAL
-      - USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST
-      - USER_VERIFICATION_REQUIRED
-      type: string
     AuthenticatorTransport:
       type: object
       properties:
         value:
           type: string
-    ServerResponse:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/Status'
-        errorMessage:
-          type: string
-    AssertionResponse:
-      required:
-      - sessionId
-      type: object
-      properties:
-        sessionId:
-          minLength: 1
-          type: string
-        assertionBlob:
-          $ref: '#/components/schemas/PublicKeyCredentialAssertion'
-    UserVerificationRequirement:
+    PublicKeyCredentialType:
       type: object
       properties:
         value:
           type: string
-    Status:
-      enum:
-      - OK
-      - FAILED
-      type: string
     AuthOptionResponse:
       type: object
       properties:
@@ -129,82 +201,10 @@ components:
           $ref: '#/components/schemas/AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput'
         sessionId:
           type: string
-    AuthenticatorAssertionResponse:
-      required:
-      - clientDataJSON
-      - authenticatorData
-      - signature
+    ServerResponse:
       type: object
       properties:
-        clientDataJSON:
-          minLength: 1
+        status:
+          $ref: '#/components/schemas/Status'
+        errorMessage:
           type: string
-        authenticatorData:
-          minLength: 1
-          type: string
-        signature:
-          minLength: 1
-          type: string
-        userHandle:
-          type: string
-    AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput:
-      type: object
-      properties:
-        uvm:
-          type: boolean
-          writeOnly: true
-        credProtect:
-          type: string
-          allOf:
-          - $ref: '#/components/schemas/CredentialProtectionPolicy'
-          writeOnly: true
-        hMACSecret: {}
-    PublicKeyCredentialUserEntity:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          minLength: 1
-          type: string
-        id:
-          type: string
-        displayName:
-          type: string
-    PublicKeyCredentialAssertion:
-      required:
-      - response
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-        rawId:
-          type: string
-        response:
-          $ref: '#/components/schemas/AuthenticatorAssertionResponse'
-        getClientExtensionResults:
-          type: object
-          additionalProperties:
-            type: string
-        type:
-          minLength: 1
-          pattern: public-key
-          type: string
-    PublicKeyCredentialType:
-      type: object
-      properties:
-        value:
-          type: string
-    PublicKeyCredentialDescriptor:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PublicKeyCredentialType'
-        id:
-          type: string
-        transports:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/AuthenticatorTransport'

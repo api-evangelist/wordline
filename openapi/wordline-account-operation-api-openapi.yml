@@ -4296,446 +4296,10 @@ paths:
         required: true
 components:
   schemas:
-    OperationDetails:
+    ReverseOperationPaymentRequest:
       type: object
       required:
-      - debit
-      - status
-      - productIdentifier
-      allOf:
-      - $ref: '#/components/schemas/Operation'
-      - properties:
-          acquisitionMaterial:
-            type: string
-            description: 'Only for scheme transaction.
-
-              Type of material used to realize the operation.
-
-              Possible values:
-
-              ATM, POS, INTERNET, MANUAL, VOICE_PHONE, UNATTENDED_TERMINAL, MOBILE, UNKNOWN'
-          adjustment:
-            type: boolean
-            description: 'This flag indicates if this operation is an adjustment or not.
-
-              Value:
-
-              true : this operation adjusts already posted operation
-
-              false : this operation does not adjust the posted operation'
-          adjustmentReason:
-            type: string
-            description: "The reason why the adjustment has been created. (conditional)\nMandatory when adjustment is true.\n AdjustmentReasonType (DISPUTE_RESULT, COMMERCIAL_ADJUSTMENT, INVALID_OPERATION, ERROR_DURING_ACQUISITION, CONFIGURATION_REPROCESSING)"
-          alternativeIban:
-            type: string
-            description: Corresponds to PAN token received from the scheme
-          automaticPayment:
-            type: boolean
-            description: For credit cards, indicate if it is an automatic payment operation posted to an account in case of direct debit issued to repay an account (this account is automatically paid after N business days)
-          brand:
-            type: string
-            description: Brand associated to the Issuer Account Range (BIN) such as "MCC" (MasterCard) , "DMC" (Debit MasterCard), "MSI" (Maestro), "CIR" (Cirrus), "VIS" (VISA).
-          cardAcceptorIdCode:
-            type: string
-            description: 'Identifies the card acceptor ID assigned by the acquirer. This ID must represent a unique identifier for each merchant name/location within the acquiring BIN.
-
-              Card Acceptor (Merchant) Identifier associated to the transaction
-
-              - MCI : DE 042 - Card Acceptor ID Code
-
-              - VISA : TCR5 - Acquirer''s Business ID'
-          cardAcceptorZipCode:
-            type: string
-            description: 'Card Acceptor ZIP Code associated to the transaction
-
-
-              MCI : DE 043 s4 - Card Acceptor Postal (ZIP) Code
-
-              VISA : TCR0 - Merchant zip code'
-          cardTypeCode:
-            type: string
-            description: Scheme Product associated to the Issuer Account Range
-          cashAmount:
-            description: 'Additional Amount / Currency / Exponent for Cash Back transaction amount
-
-              * MCI : DE 054 s2 = 40 - Amount, Cash Back
-
-              * VISA : TCR1 pos. 158-166 Cashback'
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          cashAmountAccountCurrency:
-            description: Additional Amount / Currency / Exponent for Cash Back transaction amount converted in Cardholder Account Currency
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          dccIndicator:
-            type: string
-            description: 'This field must contain one of these values (optional):
-
-              1 = DCC performed
-
-              space = default, no DCC has been performed'
-          debit:
-            type: boolean
-            description: 'Sign associated to the transaction according to the Cardholder side
-
-              * D = Cardholder debited
-
-              * C = Cardholder credited'
-          destinationIban:
-            type: string
-            description: IBAN used for reimbursement operation
-          directDebitEndToEndId:
-            type: string
-            description: Identifier of the Direct Debit order linked to payment operation
-          entryMode:
-            type: string
-            description: 'Precise how the card information have been read. Conversion of the native fields.
-
-              Possible values :
-
-              UNKNOWN
-
-              OCR: Optical Character Reader
-
-              MANUAL
-
-              MAGSTRIPE: Magnetic Stripe read
-
-              CONTACTLESS: Contactless read (called proximity payment or Mobile Chip system)
-
-              CHIP: Chip read
-
-              BARCODE: Bar Code read'
-          externalMatchingOperationDate:
-            type: string
-            format: date-time
-            description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-              It is used for matching the current operation with the original operation.
-
-              Mandatory in case of reversal.
-
-              The field contains the value of externalOperationDate of the original operation (conditional).'
-          externalMatchingOperationReference:
-            type: string
-            description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-              It is used for matching the current operation with the original operation.
-
-              Mandatory in case of reversal.
-
-              The field contains the value of externalOperationReference of the original operation (conditional).'
-          externalMatchingOperationServicePoster:
-            type: string
-            description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-              It is used for matching the current operation with the original operation.
-
-              Mandatory in case of reversal.
-
-              The field contains the value of externalOperationServicePoster of the original operation (conditional).'
-          gratuityAmount:
-            description: 'Additional Amount / Currency / Exponent for Gratuity transaction amount in the transaction currency
-
-              Only for MC'
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          gratuityAmountAccountCurrency:
-            description: 'Additional Amount / Currency / Exponent for Gratuity transaction amount converted by our system in Cardholder Account Currency '
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          interestCondition:
-            type: string
-            description: Free zone, used to store description like rates, algorithm and values calculated.
-          interestStartDate:
-            type: string
-            format: date-time
-            description: The starting date used to calculate interest. Present for information purpose.
-          interestEndDate:
-            type: string
-            format: date-time
-            description: The ending date used to calculate interest. Present for information purpose.
-          interestType:
-            type: string
-            description: 'Type of Interest for an interest operation : CREDIT / DEBIT'
-          operationDate:
-            type: string
-            format: date-time
-          originatingAccountNumber:
-            type: string
-            description: The account number of the current balance transfer in the previous institution. For information purpose.
-          originatingInstitution:
-            type: string
-            description: The information about the originating financial institution having this balance. For information purpose.
-          pan:
-            type: string
-            description: Refer to Card.pan
-          panExpiryDate:
-            type: string
-            description: Refer to Card.expiryDate
-          panSequenceNumber:
-            type: string
-            description: Refer to Card.panSequenceNumber
-          partialOperation:
-            type: boolean
-            description: Indicates whether this operation is partial or not.
-          paymentChannel:
-            type: string
-            description: 'Indicates the channel of incoming payment operation from an external system (e.g. bank)
-
-              Ex. CHEQUE, CASH, ONLINE_MONEY, NO_CHANNEL_PROVIDED, INSTALMENT, INCOMING_PAYMENT.
-
-              INSTALMENT - set for payments generated for CreditInstalmentContract'
-          poiAmount:
-            description: Additional Amount / Currency / Exponent for DCC (Dynamic Currency Conversion) transaction amount - Only for MC
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          poiAmountAccountCurrency:
-            description: POI Amount in the Cardholder account currency  - Only for MC
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          sepa:
-            type: boolean
-            description: Indicates if an operation (e.g. incoming payment received from the issuer) was in SEPA format (e.g. SEPA payment).
-          status:
-            type: string
-            description: "Status of the transaction \n* PROCESSED\n* IN_ERROR\n* CAS_IN_DISPUTE (when the transaction is disputed)\n* CAS_PENDING"
-          surchargeAmount:
-            description: Additional Amount / Currency / Exponent for surcharge transaction amount in Transaction Currency
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          surchargeAmountAccountCurrency:
-            description: Additional Amount / Currency / Exponent for Surcharge transaction amount converted in Cardholder Account Currency
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          validationMode:
-            type: string
-            description: 'Precise how the transaction has been validated. Conversion based on information of the original message
-
-              MC : DE 022
-
-              VISA : TCR0 POS Entry Mode /Cardholder ID Method/POS Terminal Capability
-
-              Possible values: PIN, SIGNATURE, UNKNOWN'
-          terminalId:
-            type: string
-            description: Code that identifies the card acceptor terminal or ATM.
-          parentOperation:
-            description: 'This field is expandable and if needed - shows the list of operations linked to parentOperationIdentifier
-
-              Ex: TRANSACTION_FEE linked to FP (Parent).
-
-              _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-            allOf:
-            - $ref: '#/components/schemas/Operation'
-          parentOperationIdentifier:
-            description: 'Internal identifier associated to the transaction to which one this transaction is linked. 16-digit incremental number (1000000000000001)
-
-              Ex: TRANSACTION_FEE linked to FP (Parent)'
-            allOf:
-            - $ref: '#/components/schemas/OperationIdentifier'
-          productIdentifier:
-            description: OPC product identifier code
-            allOf:
-            - $ref: '#/components/schemas/ProductIdentifier'
-          overPaymentAccountIdentifier:
-            description: 'The identifier of the account in overpayment '
-            allOf:
-            - $ref: '#/components/schemas/AccountIdentifier'
-          loyaltyPoint:
-            description: Used when the operation has loyalty points
-            allOf:
-            - $ref: '#/components/schemas/LoyaltyPoint'
-          rewardedOperationIdentifier:
-            description: Internal identifier associated to the transaction linked to a Bonus operation 16-digit incremental number (1000000000000001). Used only if a Bonus operation is related to.
-            allOf:
-            - $ref: '#/components/schemas/OperationIdentifier'
-          lodgingInformation:
-            description: 'The list of lodging information parameters from the clearing file.
-
-              _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-            allOf:
-            - $ref: '#/components/schemas/LodgingInformation'
-          carRentalInformation:
-            description: 'The list of car rental information parameters from the clearing file.
-
-              _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-            allOf:
-            - $ref: '#/components/schemas/CarRentalInformation'
-          airItineraryInformation:
-            description: 'The list of air itinerary parameters from the clearing file.
-
-              _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-            allOf:
-            - $ref: '#/components/schemas/AirItineraryInformation'
-          subOperationIdentifiers:
-            type: array
-            description: List of suboperation identifiers for the parent operation
-            items:
-              $ref: '#/components/schemas/OperationIdentifier'
-          correction:
-            type: boolean
-            description: Represents weather the operation is a correction or not
-          intermediateAmount:
-            description: Calculated Cardholder Amount after potential Currency Conversion but before adding the Conversion Charge
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          billingAmount:
-            description: 'Cardholder Billing amount
-
-              MCI only - DE6 Amount, Cardholder Billing'
-            allOf:
-            - $ref: '#/components/schemas/Amount'
-          overallExhangeRate:
-            type: number
-            format: double
-            description: Currency Rate shows the rate of the complete conversion from Transaction Amount to Posted Cardholder Amount
-      title: OperationDetails
-    ApiResponseEntityCreateOperationInterestResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateOperationInterestResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateOperationInterestResponse
-    CreateOperationReimbursementResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the reimbursement (genereated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: CreateOperationReimbursementResponse
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    CreateOperationBalanceAdjustmentRequest:
-      type: object
-      required:
-      - 'balanceAdjustmentReason '
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      - referenceAmount
-      properties:
-        'balanceAdjustmentReason ':
-          type: string
-          description: 'The reason why the balance adjustment is requested
-
-            Allowed value list depends on the issuer configuration'
-          example: DISPUTE_ADJUSTMENT
-        description:
-          type: string
-          description: 'Textual description of the operation
-
-            Can contain a free text that can be used when the operation is presented to the Customer'
-        externalOperationReference:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation to be created.'
-        externalOperationDate:
-          format: date-time
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided).'
-        externalOperationServicePoster:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text)'
-        externalOperationCode:
-          type: string
-          description: The external operation code of the balance adjustment operation can be provided to identify the operation type in the issuer system.
-        referenceAmount:
-          description: The amount of the operation (amount/exponent/currency values)
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        valueDate:
-          type: string
-          format: date-time
-          description: 'The date when the operation impacts balances or counters.
-
-            If not provided, the value date is set to the external operation date if the external operation date is not in the past, otherwise the value date is set to the current date.'
-        specificFields:
-          type: object
-          description: "The issuer can provide Specific Fields for the operation.\n It is a list of external data {\"label\":\"value\"} separated by a \",\" related to the operation (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} Those provided data have no impact on our system business processes."
-          additionalProperties:
-            type: string
-      title: CreateOperationBalanceAdjustmentRequest
-    CreateOperationLoadResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the account loading (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: CreateOperationLoadResponse
-    CreateOperationInterestResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the interest generation (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: CreateOperationInterestResponse
-    ApiResponseEntityReverseOperationBalanceAdjustmentResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ReverseOperationBalanceAdjustmentResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityReverseOperationBalanceAdjustmentResponse
-    ReverseOperationBonusRequest:
-      type: object
-      required:
+      - reversalReason
       - externalMatchingOperationReference
       - externalMatchingOperationDate
       - externalMatchingOperationServicePoster
@@ -4743,51 +4307,51 @@ components:
       - externalOperationDate
       - externalOperationServicePoster
       properties:
+        reversalReason:
+          type: string
+          description: 'The reason why the reversal has been created.
+
+            Possible value:
+
+            REVERSAL_ON_DEMAND'
         description:
+          type: string
           description: 'Textual description of the operation
 
             Can contain a free text that can be used when the operation is presented to the Customer.'
-          type: string
         externalMatchingOperationReference:
-          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-            It is used for retrieving the operation to be reversed.
-
-            The field contains the value of externalOperationReference of the original operation to be reversed.'
           type: string
+          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed. \nThe field contains the value of externalOperationReference of the original operation to be reversed."
         externalMatchingOperationDate:
-          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-            It is used for retrieving the operation to be reversed.
-
-            The field contains the value of externalOperationDate of the original operation to be reversed.'
-          type: string
           format: date-time
-        externalMatchingOperationServicePoster:
-          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-            It is used for retrieving the operation to be reversed.
-
-            The field contains the value of externalOperationServicePoster of the original operation to be reversed.'
           type: string
+          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationDate of the original operation to be reversed."
+        externalMatchingOperationServicePoster:
+          type: string
+          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationServicePoster of the original operation to be reversed."
         externalOperationReference:
+          type: string
           description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
 
             External reference of the operation to be created.'
-          type: string
         externalOperationDate:
+          format: date-time
+          type: string
           description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
 
-            The date the operation is performed (in general, the current date should be provided) '
-          type: string
-          format: date-time
+            The date the operation is performed (in general, the current date should be provided)'
         externalOperationServicePoster:
+          type: string
           description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
 
             The identifier of the external system which provides the operation to be posted (free text).'
-          type: string
-      title: ReverseOperationBonusRequest
-    ApiResponseEntityCreateOperationFeeResponse:
+        specificFields:
+          type: object
+          description: "The issuer can provide Specific Fields for the operation.\n It is a list of external data {\"label\":\"value\"} separated by a \",\" related to the operation (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} Those provided data have no impact on our system business processes."
+          additionalProperties:
+            type: string
+      title: ReverseOperationPaymentRequest
+    ApiResponseEntityCreateOperationReimbursementResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -4800,9 +4364,32 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/CreateOperationFeeResponse'
+          - $ref: '#/components/schemas/CreateOperationReimbursementResponse'
       description: Issuer response entity
-      title: ApiResponseEntityCreateOperationFeeResponse
+      title: ApiResponseEntityCreateOperationReimbursementResponse
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
+
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
     CarRentalInformation:
       type: object
       properties:
@@ -4907,61 +4494,7 @@ components:
 
             MCI mapping is the following: PDS 0545. PDS 0545 (Renter Name) is the name of the individual making the vehicle rental agreement.'
       title: CarRentalInformation
-    ReverseOperationInterestRequest:
-      type: object
-      required:
-      - externalMatchingOperationReference
-      - externalMatchingOperationDate
-      - externalMatchingOperationServicePoster
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      properties:
-        description:
-          description: 'Textual description of the operation
-
-            Can contain a free text that can be used when the operation is presented to the Customer.'
-          type: string
-        externalMatchingOperationReference:
-          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-            It is used for retrieving the operation to be reversed.
-
-            The field contains the value of externalOperationReference of the original operation to be reversed.'
-          type: string
-        externalMatchingOperationDate:
-          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-            It is used for retrieving the operation to be reversed.
-
-            The field contains the value of externalOperationDate of the original operation to be reversed.'
-          type: string
-          format: date-time
-        externalMatchingOperationServicePoster:
-          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
-
-            It is used for retrieving the operation to be reversed.
-
-            The field contains the value of externalOperationServicePoster of the original operation to be reversed.'
-          type: string
-        externalOperationReference:
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation to be created.'
-          type: string
-        externalOperationDate:
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided)'
-          type: string
-          format: date-time
-        externalOperationServicePoster:
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text).'
-          type: string
-      title: ReverseOperationInterestRequest
-    ApiResponseEntityCreateOperationPaymentResponse:
+    ApiResponseEntityCreateOperationFeeResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -4974,9 +4507,387 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/CreateOperationPaymentResponse'
+          - $ref: '#/components/schemas/CreateOperationFeeResponse'
       description: Issuer response entity
-      title: ApiResponseEntityCreateOperationPaymentResponse
+      title: ApiResponseEntityCreateOperationFeeResponse
+    CreateOperationPaymentResponse:
+      type: object
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the payment (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: CreateOperationPaymentResponse
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    CreateOperationReimbursementResponse:
+      type: object
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the reimbursement (genereated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: CreateOperationReimbursementResponse
+    ApiResponseEntityReverseOperationBonusResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ReverseOperationBonusResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityReverseOperationBonusResponse
+    LoyaltyPoint:
+      type: object
+      properties:
+        unit:
+          type: string
+          description: ' Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional).'
+        cumulatedValue:
+          type: integer
+          format: int64
+          description: Total number of loyalty points (optional).
+      title: LoyaltyPoint
+    ProductIdentifier:
+      type: object
+      properties:
+        issuerProductExternalReference:
+          type: string
+          description: Product External Reference provided by the issuer
+        productReference:
+          type: string
+          description: Reference of the product in our system, unique per platform
+      title: ProductIdentifier
+    ResetBalanceResponse:
+      type: object
+      required:
+      - operationIdentifier
+      - referenceAmount
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the balance reset (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+        referenceAmount:
+          description: Amount of the balance reset on the account (amount/exponent/currency values)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+      title: ResetBalanceResponse
+    ApiResponseEntityCreateOperationInterestResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateOperationInterestResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateOperationInterestResponse
+    ApiResponseEntityReverseOperationBalanceAdjustmentResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ReverseOperationBalanceAdjustmentResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityReverseOperationBalanceAdjustmentResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    ApiResponseEntityCreateOperationBalanceAdjustmentResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateOperationBalanceAdjustmentResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateOperationBalanceAdjustmentResponse
+    CreateOperationFeeRequest:
+      type: object
+      required:
+      - adjustment
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      - feeType
+      - referenceAmount
+      properties:
+        description:
+          type: string
+          description: 'Textual description of the operation
+
+            Can contain a free text that can be used when the operation is presented to the Customer.'
+        adjustment:
+          type: boolean
+          description: This flag indicates if this operation is an adjustment or not.
+        'adjustmentReason ':
+          type: string
+          description: The reason why the adjustment fee is requested. Mandatory when adjustement is true. Possible values:ERROR_DURING_ACQUISITION, INVALID_OPERATION, COMMERCIAL_ADJUSTMENT, DISPUTE_RESULT, CONFIGURATION_REPROCESSING
+        externalOperationReference:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation to be created.'
+        externalOperationDate:
+          format: date-time
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided).'
+        externalOperationServicePoster:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text).'
+        externalOperationCode:
+          type: string
+          description: The external operation code of the fee operation can be provided to identify the operation type in the issuer system.
+        feeType:
+          type: string
+          description: "The type of fee used to create the current operation. \nPossible values (additional types can be configured for the issuer) : MARKUP_FEE, TRANSACTION_FEE, PERIODIC_FEE, VOLUME_FEE, INSURANCE_FEE, MANUAL_FEE, STATEMENT_FEE, EVENT_FEE, RMESSAGE_FEE, CARD_FEE, ACCOUNT_SETUP_FEE, MEMBERSHIP_FEE, ADDON_SERVICE_FEE"
+        referenceAmount:
+          description: The amount of the operation (amount/exponent/currency values)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        valueDate:
+          type: string
+          format: date-time
+          description: 'The date when the operation impacts balances or counters.
+
+            If not provided, the value date is set to the external operation date if the external operation date is not in the past, otherwise the value date is set to the current date.'
+        subFeeType:
+          description: Refer to Operation.subFeeType
+          type: string
+        frequency:
+          description: Refer to Operation.frequency
+          type: string
+      title: CreateOperationFeeRequest
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    ReverseOperationBonusResponse:
+      type: object
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the Bonus reversal (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: ReverseOperationBonusResponse
+    ReverseOperationReimbursementRequest:
+      type: object
+      required:
+      - reversalReason
+      - externalMatchingOperationReference
+      - externalMatchingOperationDate
+      - externalMatchingOperationServicePoster
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      properties:
+        reversalReason:
+          type: string
+          description: "The reason why the reversal has been created. \nPossible value:\nREVERSAL_ON_DEMAND"
+        description:
+          type: string
+          description: 'Textual description of the operation
+
+            Can contain a free text that can be used when the operation is presented to the Customer.'
+        externalMatchingOperationReference:
+          type: string
+          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed. \nThe field contains the value of externalOperationReference of the original operation to be reversed."
+        externalMatchingOperationDate:
+          format: date-time
+          type: string
+          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationDate of the original operation to be reversed."
+        externalMatchingOperationServicePoster:
+          type: string
+          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationServicePoster of the original operation to be reversed."
+        externalOperationReference:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation to be created.'
+        externalOperationDate:
+          format: date-time
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided)'
+        externalOperationServicePoster:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text).'
+        specificFields:
+          type: object
+          description: "The issuer can provide Specific Fields for the operation.\n It is a list of external data {\"label\":\"value\"} separated by a \",\" related to the operation (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} Those provided data have no impact on our system business processes."
+          additionalProperties:
+            type: string
+      title: ReverseOperationReimbursementRequest
+    ApiResponseEntityInquireOperationResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/OperationDetails'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityInquireOperationResponse
+      description: Inquire Operation response
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    CreateOperationFeeResponse:
+      type: object
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the fee generation (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: CreateOperationFeeResponse
+    AuthorizationBusinessCaseIdentifier:
+      type: object
+      required:
+      - businessCaseId
+      properties:
+        businessCaseId:
+          type: string
+          description: 'Business case to which the transaction belongs.
+
+            The provided information reflects its status after transaction completion.
+
+            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
+      title: AuthorizationBusinessCaseIdentifier
+    PanTokenIdentifier:
+      type: object
+      required:
+      - panTokenReference
+      properties:
+        panTokenReference:
+          type: string
+          description: Pan Token Reference
+      title: PanTokenIdentifier
+    CreateOperationBonusResponse:
+      type: object
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the Bonus generation (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: CreateOperationBonusResponse
     ReverseOperationBalanceAdjustmentRequest:
       type: object
       required:
@@ -5034,16 +4945,25 @@ components:
           additionalProperties:
             type: string
       title: ReverseOperationBalanceAdjustmentRequest
-    ProductIdentifier:
-      type: object
+    ReverseOperationPaymentResponse:
+      required:
+      - operationIdentifier
       properties:
-        issuerProductExternalReference:
-          type: string
-          description: Product External Reference provided by the issuer
-        productReference:
-          type: string
-          description: Reference of the product in our system, unique per platform
-      title: ProductIdentifier
+        operationIdentifier:
+          description: Identifier of the operation created during the payment reversal (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: ReverseOperationPaymentResponse
+    CreateOperationInterestResponse:
+      type: object
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the interest generation (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: CreateOperationInterestResponse
     BadGatewayResponseMetadata:
       type: object
       required:
@@ -5069,30 +4989,685 @@ components:
           example: Bad Gateway
           description: Executed REST API status message
       title: BadGatewayResponseMetadata
-    ResetBalanceResponse:
+    TravelInformation:
+      type: object
+      properties:
+        passengerName:
+          type: string
+          description: 'passengerName (customer travel information) '
+        ticketNumber:
+          type: string
+          description: 'ticketNumber (customer travel information) '
+        travelDetailList:
+          type: array
+          description: 'List of TravelDetail '
+          items:
+            $ref: '#/components/schemas/TravelDetail'
+      title: TravelInformation
+    DisputeFolderIdentifier:
+      type: object
+      required:
+      - disputeFolderReference
+      properties:
+        disputeFolderReference:
+          type: string
+          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
+        issuerDisputeExternalReference:
+          type: string
+          description: The issuer Dispute External Reference, Present if provided in the request.
+      title: DisputeFolderIdentifier
+    CreateOperationLoadRequest:
+      type: object
+      required:
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      - referenceAmount
+      properties:
+        description:
+          type: string
+          description: 'Textual description of the operation
+
+            Can contain a free text that can be used when the operation is presented to the Customer.'
+        externalOperationReference:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation to be created.'
+        externalOperationDate:
+          format: date-time
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided).'
+        externalOperationServicePoster:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text).'
+        externalOperationCode:
+          type: string
+          description: The external operation code of the load operation can be provided to identify the operation type in the issuer system.
+        referenceAmount:
+          description: The amount of the operation (amount/exponent/currency values)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        paymentChannel:
+          type: string
+          description: 'The channel by which the payment is performed.
+
+            The possible values are:
+
+            DIRECT_DEBIT
+
+            CHEQUE
+
+            CASH
+
+            ONLINE_MONEY
+
+            NO_CHANNEL_PROVIDED
+
+            INCOMING_PAYMENT
+
+            Note that NO_CHANNEL_PROVIDED will be set by default if the paymentChannel is not provided'
+        sepa:
+          type: boolean
+          description: "Indicates whether the payment is performed in SEPA format. \nBy default, the value is false."
+      title: CreateOperationLoadRequest
+    ApiResponseEntityReverseOperationReimbursementResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ReverseOperationReimbursementResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityReverseOperationReimbursementResponse
+    ReverseOperationInterestResponse:
       type: object
       required:
       - operationIdentifier
-      - referenceAmount
       properties:
         operationIdentifier:
-          description: Identifier of the operation created during the balance reset (generated by our system)
+          description: Identifier of the operation created during the interest reversal (generated by our system)
           allOf:
           - $ref: '#/components/schemas/OperationIdentifier'
+      title: ReverseOperationInterestResponse
+    ReverseOperationReimbursementResponse:
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the balance adjustment reversal (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: ReverseOperationReimbursementResponse
+    CardIdentifier:
+      type: object
+      description: Identification of the card either by Issuer card external reference or by card reference
+      properties:
+        cardReference:
+          type: string
+          description: 'Reference of the card generated by our system, unique per platform.
+
+            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
+        issuerCardExternalReference:
+          type: string
+          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+
+            This reference is unique per issuer and may be used to carry out research and find information.'
+      title: CardIdentifier
+    ApiResponseEntityCreateOperationUnloadResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateOperationUnloadResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateOperationUnloadResponse
+    CreateOperationLoadResponse:
+      type: object
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the account loading (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: CreateOperationLoadResponse
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ReverseOperationBonusRequest:
+      type: object
+      required:
+      - externalMatchingOperationReference
+      - externalMatchingOperationDate
+      - externalMatchingOperationServicePoster
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      properties:
+        description:
+          description: 'Textual description of the operation
+
+            Can contain a free text that can be used when the operation is presented to the Customer.'
+          type: string
+        externalMatchingOperationReference:
+          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+            It is used for retrieving the operation to be reversed.
+
+            The field contains the value of externalOperationReference of the original operation to be reversed.'
+          type: string
+        externalMatchingOperationDate:
+          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+            It is used for retrieving the operation to be reversed.
+
+            The field contains the value of externalOperationDate of the original operation to be reversed.'
+          type: string
+          format: date-time
+        externalMatchingOperationServicePoster:
+          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+            It is used for retrieving the operation to be reversed.
+
+            The field contains the value of externalOperationServicePoster of the original operation to be reversed.'
+          type: string
+        externalOperationReference:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation to be created.'
+          type: string
+        externalOperationDate:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided) '
+          type: string
+          format: date-time
+        externalOperationServicePoster:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text).'
+          type: string
+      title: ReverseOperationBonusRequest
+    ApiResponseEntityOperationDetails:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/OperationDetails'
+      description: Issuer response entity
+      title: ApiResponseEntityOperationDetails
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
+          type: string
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
+          type: string
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
+    CreateOperationUnloadRequest:
+      type: object
+      required:
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      - referenceAmount
+      properties:
+        description:
+          type: string
+          description: 'Textual description of the  operation
+
+            Can contain a free text that can be used when the operation is presented to the Customer.'
+        externalOperationReference:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation to be created.'
+        externalOperationDate:
+          format: date-time
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided).'
+        externalOperationServicePoster:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text).'
+        externalOperationCode:
+          type: string
+          description: The external operation code of the unload can be provided to identify the operation type in the issuer system.
         referenceAmount:
-          description: Amount of the balance reset on the account (amount/exponent/currency values)
+          description: The amount of the operation (amount/exponent/currency values)
           allOf:
           - $ref: '#/components/schemas/Amount'
-      title: ResetBalanceResponse
-    UnauthorizedErrorApiResponse:
+      title: CreateOperationUnloadRequest
+    ReverseOperationInterestRequest:
+      type: object
+      required:
+      - externalMatchingOperationReference
+      - externalMatchingOperationDate
+      - externalMatchingOperationServicePoster
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      properties:
+        description:
+          description: 'Textual description of the operation
+
+            Can contain a free text that can be used when the operation is presented to the Customer.'
+          type: string
+        externalMatchingOperationReference:
+          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+            It is used for retrieving the operation to be reversed.
+
+            The field contains the value of externalOperationReference of the original operation to be reversed.'
+          type: string
+        externalMatchingOperationDate:
+          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+            It is used for retrieving the operation to be reversed.
+
+            The field contains the value of externalOperationDate of the original operation to be reversed.'
+          type: string
+          format: date-time
+        externalMatchingOperationServicePoster:
+          description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+            It is used for retrieving the operation to be reversed.
+
+            The field contains the value of externalOperationServicePoster of the original operation to be reversed.'
+          type: string
+        externalOperationReference:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation to be created.'
+          type: string
+        externalOperationDate:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided)'
+          type: string
+          format: date-time
+        externalOperationServicePoster:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text).'
+          type: string
+      title: ReverseOperationInterestRequest
+    LodgingInformation:
+      type: object
+      properties:
+        businessFormatCode:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Business Format Code (Value: CA); POS: 17-18.'
+        noShowIndicator:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging No-Show Indicator; POS 27.
+
+            MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
+        extraCharges:
+          type: string
+          description: 'The fields represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Extra Charges; POS 28–33.'
+        checkInDate:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Check-in Date (YYMMDD); POS 38-43.
+
+            MCI mapping is the following: PDS 0574. PDS 0574 (Arrival Date) contains the cardholder check-in date (YYMMDD).'
+        dailyRoomRate:
+          type: string
+          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Daily Room Rate; POS 44-55.
+
+            MCI mapping is the following: PDS 0580. PDS 0580 (Room Rate) contains the daily room charges exclusive of taxes and fees. This PDS consists of two subfields:
+
+            1. Room Rate Amount; POS: 1-12
+
+            2. Room Rate Exponent; POS: 13'
+        totalTax:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Tax; POS 56-67.
+
+            MCI mapping is the following: PDS 0597. PDS 0597 (Total Tax Amount) contains the total amount of sales tax or value added tax (VAT) on the total purchase amount.'
+        prepaidExpenses:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Prepaid Expenses; POS 68-79.
+
+            MCI mapping is the following: PDS 0704. PDS 0704 (Prepaid Expenses) provides the amount of deposit or other prepaid amounts for the lodging stay.'
+        foodBeverageCharge:
+          type: string
+          description: 'The field represents additional data from VISA clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Food/Beverage Charges; POS 80-91.'
+        folioCashAdvances:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Folio Cash Advances; POS 92-103.
+
+            MCI mapping is the following: PDS 0706. PDS 0706 (Cash Advances) provides the amount of cash received during the lodging stay.'
+        totalRoomNights:
+          type: string
+          description: 'The field represents additional data from VISA and MCI clearing file addendum.
+
+            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Room Nights; POS 104-105.
+
+            MCI mapping is the following: PDS 0703. PDS 0703 (Total Room Nights) provides the total number of nights for which a room was contracted during a lodging stay.'
+        totalRoomTax:
+          type: string
+          description: "The field represents additional data from VISA and MCI clearing file addendum.\nVISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Room Tax; POS 106-117.\nMCI mapping is the following: PDS 0581. PDS 0581 (Total Room Tax) contains tax amount information such as the daily room tax, occupancy tax, energy tax, and tourist tax amounts. This PDS consists of three subfields:\n1. Total Room Tax Amount; POS: 1-12\n2. Total Room Tax Exponent; POS: 13\n 3. Total Room Tax Sign; POS: 14"
+      title: LodgingInformation
+    CreateOperationInterestRequest:
+      type: object
+      required:
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      - interestType
+      - referenceAmount
+      properties:
+        description:
+          description: 'Textual description of the operation
+
+            Can contain a free text that can be used when the operation is presented to the Customer'
+          type: string
+        externalOperationReference:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation in the caller system to be created.'
+          type: string
+        externalOperationDate:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided).'
+          type: string
+          format: date-time
+        externalOperationServicePoster:
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text)'
+          type: string
+        externalOperationCode:
+          description: The external operation code of the interest operation can be provided to identify the operation type in the issuer system.
+          type: string
+        interestType:
+          description: 'The issuer must provide the type of Interest for an interest operation
+
+            Possible values: CREDIT / DEBIT'
+          type: string
+        referenceAmount:
+          description: 'The reference amount has to be provided (amount/exponent/currency values)
+
+            If a debit operation is posted, the operation amount has to be positive.
+
+            If a credit operation is posted, the operation amount has to be negative.
+
+            The currency must be the same as the posting account.'
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+      title: CreateOperationInterestRequest
+    ReverseOperationFeeResponse:
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the fee reversal (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: ReverseOperationFeeResponse
+    OperationAuthorization:
+      type: object
+      properties:
+        transactionDate:
+          type: string
+          format: date-time
+          description: The date and time on which the transaction was approved. Data is retrieved from the matched authorization transaction.
+      title: OperationAuthorization
+    OperationIdentifier:
+      type: object
+      required:
+      - operationId
+      properties:
+        operationId:
+          type: string
+          description: Internal operation identifier. 16-digit incremental number
+      title: OperationIdentifier
+    ApiResponseEntityReverseOperationFeeResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ReverseOperationFeeResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityReverseOperationFeeResponse
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    NotFoundErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    ApiResponseEntityCreateOperationBonusResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateOperationBonusResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateOperationBonusResponse
+    ApiResponseEntityResetBalanceResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Issuer response entity
+          allOf:
+          - $ref: '#/components/schemas/ResetBalanceResponse'
+      title: ApiResponseEntityResetBalanceResponse
+    ApiResponseEntityReverseOperationPaymentResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ReverseOperationPaymentResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityReverseOperationPaymentResponse
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    ReverseOperationBalanceAdjustmentResponse:
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the balance adjustment reversal (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: ReverseOperationBalanceAdjustmentResponse
+    VirtualCardService:
+      type: object
+      properties:
+        virtualServiceCardExternalReference:
+          type: string
+          description: The external reference calculated for VCC by the Virtual Card Engine (VCE)
+        issuerCompanyExternalReference:
+          type: string
+          description: This attribute will represent a unique identifier of company (the corporate customer of the Issuer)
+        virtualServiceCardNumber:
+          type: string
+          description: Virtual Service Card Number of the operation (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
+        maskedVirtualServiceCardNumber:
+          type: string
+          description: Masked Virtual Service Card Number. This is the VCC (Virtula Credit Card) PAN in masked format
+        virtualServicesFields:
+          type: object
+          description: 'This attribute will return specific informative fields related to VCC (Virtual Credit Card) that the Virtual Card Engine will provide to the Issuing Back Office system,
+
+            List of external data (label:value), separated by a "|''", related to a virtual card that can be provided by e.g. the issuer for information or for usage by other systems.
+
+            Example : label1:value|label2:value
+
+            Those provided data have no impact on our system business processes.'
+          additionalProperties:
+            type: string
+      title: VirtualCardService
+    TravelDetail:
+      type: object
+      properties:
+        flightNumber:
+          type: string
+          description: flightNumber (customer travel details)
+        originCity:
+          type: string
+          description: originCity (customer travel details)
+        destinationCity:
+          type: string
+          description: 'destinationCity (customer travel details) '
+      title: TravelDetail
+    ApiResponseEntityCreateOperationPaymentResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateOperationPaymentResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateOperationPaymentResponse
     CreateOperationReimbursementRequest:
       type: object
       required:
@@ -5155,72 +5730,7 @@ components:
           additionalProperties:
             type: string
       title: CreateOperationReimbursementRequest
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    ReverseOperationFeeRequest:
-      type: object
-      required:
-      - reversalReason
-      - externalMatchingOperationReference
-      - externalMatchingOperationDate
-      - externalMatchingOperationServicePoster
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      properties:
-        reversalReason:
-          type: string
-          description: 'The reason why the reversal has been created.
-
-            Possible value:
-
-            REVERSAL_ON_DEMAND'
-        description:
-          type: string
-          description: 'Textual description of the operation
-
-            Can contain a free text that can be used when the operation is presented to the Customer.'
-        externalMatchingOperationReference:
-          type: string
-          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed. \nThe field contains the value of externalOperationReference of the original operation to be reversed."
-        externalMatchingOperationDate:
-          format: date-time
-          type: string
-          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationDate of the original operation to be reversed."
-        externalMatchingOperationServicePoster:
-          type: string
-          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationServicePoster of the original operation to be reversed."
-        referenceAmount:
-          description: 'The amount of the operation is requested for partial reversal (amount/exponent/currency values).
-
-            If not provided, the total amount of the original amount is reversed.'
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        externalOperationReference:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation to be created.'
-        externalOperationDate:
-          format: date-time
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided).'
-        externalOperationServicePoster:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text).'
-      title: ReverseOperationFeeRequest
-    ResponseMetadata:
+    ForbiddenResponseMetadata:
       type: object
       required:
       - correlationId
@@ -5231,29 +5741,29 @@ components:
         correlationId:
           type: string
           description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
         responseDateTime:
           type: string
           example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
           description: Timestamp when response date was generated
-        timeTakenMs:
+        statusCode:
           type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     Operation:
       type: object
       required:
@@ -5725,150 +6235,6 @@ components:
           type: string
           description: Identifier of the original operation in our system
       title: Operation
-    InquireOperationRequest:
-      type: object
-      required:
-      - externalOperationReference
-      - externalOperationServicePoster
-      - externalOperationDate
-      properties:
-        externalOperationReference:
-          description: "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\n The External reference of the operation must be provided."
-          type: string
-        externalOperationServicePoster:
-          description: "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\n The identifier of the external system must be provided."
-          type: string
-        externalOperationDate:
-          description: "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\n The date the operation must be provided."
-          format: date-time
-          type: string
-      title: InquireOperationRequest
-    CreateOperationFeeResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the fee generation (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: CreateOperationFeeResponse
-    OperationIdentifier:
-      type: object
-      required:
-      - operationId
-      properties:
-        operationId:
-          type: string
-          description: Internal operation identifier. 16-digit incremental number
-      title: OperationIdentifier
-    ReverseOperationPaymentRequest:
-      type: object
-      required:
-      - reversalReason
-      - externalMatchingOperationReference
-      - externalMatchingOperationDate
-      - externalMatchingOperationServicePoster
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      properties:
-        reversalReason:
-          type: string
-          description: 'The reason why the reversal has been created.
-
-            Possible value:
-
-            REVERSAL_ON_DEMAND'
-        description:
-          type: string
-          description: 'Textual description of the operation
-
-            Can contain a free text that can be used when the operation is presented to the Customer.'
-        externalMatchingOperationReference:
-          type: string
-          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed. \nThe field contains the value of externalOperationReference of the original operation to be reversed."
-        externalMatchingOperationDate:
-          format: date-time
-          type: string
-          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationDate of the original operation to be reversed."
-        externalMatchingOperationServicePoster:
-          type: string
-          description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationServicePoster of the original operation to be reversed."
-        externalOperationReference:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation to be created.'
-        externalOperationDate:
-          format: date-time
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided)'
-        externalOperationServicePoster:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text).'
-        specificFields:
-          type: object
-          description: "The issuer can provide Specific Fields for the operation.\n It is a list of external data {\"label\":\"value\"} separated by a \",\" related to the operation (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} Those provided data have no impact on our system business processes."
-          additionalProperties:
-            type: string
-      title: ReverseOperationPaymentRequest
-    ApiResponseEntityInquireOperationResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/OperationDetails'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityInquireOperationResponse
-      description: Inquire Operation response
-    DisputeFolderIdentifier:
-      type: object
-      required:
-      - disputeFolderReference
-      properties:
-        disputeFolderReference:
-          type: string
-          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
-        issuerDisputeExternalReference:
-          type: string
-          description: The issuer Dispute External Reference, Present if provided in the request.
-      title: DisputeFolderIdentifier
-    VirtualCardService:
-      type: object
-      properties:
-        virtualServiceCardExternalReference:
-          type: string
-          description: The external reference calculated for VCC by the Virtual Card Engine (VCE)
-        issuerCompanyExternalReference:
-          type: string
-          description: This attribute will represent a unique identifier of company (the corporate customer of the Issuer)
-        virtualServiceCardNumber:
-          type: string
-          description: Virtual Service Card Number of the operation (returned only if the user is allowed to see the clear Virtual Service Card Number). Also referred as VCC PAN
-        maskedVirtualServiceCardNumber:
-          type: string
-          description: Masked Virtual Service Card Number. This is the VCC (Virtula Credit Card) PAN in masked format
-        virtualServicesFields:
-          type: object
-          description: 'This attribute will return specific informative fields related to VCC (Virtual Credit Card) that the Virtual Card Engine will provide to the Issuing Back Office system,
-
-            List of external data (label:value), separated by a "|''", related to a virtual card that can be provided by e.g. the issuer for information or for usage by other systems.
-
-            Example : label1:value|label2:value
-
-            Those provided data have no impact on our system business processes.'
-          additionalProperties:
-            type: string
-      title: VirtualCardService
     CreateOperationPaymentRequest:
       type: object
       required:
@@ -5938,155 +6304,53 @@ components:
           additionalProperties:
             type: string
       title: CreateOperationPaymentRequest
-    ReverseOperationBalanceAdjustmentResponse:
-      required:
-      - operationIdentifier
+    TravelDetailLeg:
+      type: object
       properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the balance adjustment reversal (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: ReverseOperationBalanceAdjustmentResponse
-    ApiResponseEntityReverseOperationBonusResponse:
-      x-wl-api-response: true
+        flightNumber:
+          type: string
+          description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
+        carrier:
+          type: string
+          description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
+        class:
+          type: string
+          description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
+        stopOver:
+          type: string
+          description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
+        destination:
+          type: string
+          description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
+        fareCode:
+          type: string
+          description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
+      title: TravelDetailLeg
+    InternalServerErrorResponseMetadata:
       type: object
       required:
-      - responseMetadata
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ReverseOperationBonusResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityReverseOperationBonusResponse
-    ApiResponseEntityReverseOperationInterestResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ReverseOperationInterestResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityReverseOperationInterestResponse
-    PointOfService:
-      type: object
-      properties:
-        entryModePan:
+        correlationId:
           type: string
-          description: VISA TCR0 PosEntryMode.
-        entryModePin:
+          description: Correlation Identifier
+        responseDateTime:
           type: string
-          description: VISA TCR0 CardholderIDMethod.
-        conditionCode:
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
           type: string
-          description: VISA. Field equals to "02" if PosEntryMode is populated, "00" if not populated.
-        posTerminalCapability:
-          type: string
-          description: VISA TCR0 PosTerminalCapability
-        cardDataInputCapability:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 1 indicates the set of methods supported by the terminal for the input of account number, card, or mobile device data.
-        cardholderAuthenticationCapability:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 2 describes the capability of the terminal device to support/accept authentication data.
-        cardCaptureCapability:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 3 indicates whether the terminal has card capture capabilities.
-        terminalOperatingEnvironment:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 4 indicates whether the card acceptor is attending the terminal and the location of the terminal.
-        cardholderPresentData:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 5 indicates whether the cardholder is present at the point of service and explains the condition if the cardholder is not present.
-        cardPresentData:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 6 indicates if the card is present at the point of service.
-        cardDataInputMode:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 7 indicates the method used for PAN entry to initiate a transaction.
-        cardholderAuthenticationMethod:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 8 indicates the method by which the cardholder’s identity was verified at the point of service.
-        cardholderAuthenticationEntity:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 9 indicates the entity through which the cardholder’s identity was verified at the point of service.
-        cardDataOutputCapability:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 10 indicates the ability of the terminal to write or output data to a card.
-        terminalDataOutputCapability:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 11 indicates the print and display capabilities of the terminal.
-        pinCaptureCapability:
-          type: string
-          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 12 indicates the maximum number of PIN characters that the POS terminal can capture.
-      title: PointOfService
-    ApiResponseEntityResetBalanceResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Issuer response entity
-          allOf:
-          - $ref: '#/components/schemas/ResetBalanceResponse'
-      title: ApiResponseEntityResetBalanceResponse
-    ApiResponseEntityOperationDetails:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/OperationDetails'
-      description: Issuer response entity
-      title: ApiResponseEntityOperationDetails
-    ReverseOperationBonusResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the Bonus reversal (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: ReverseOperationBonusResponse
-    TravelInformation:
-      type: object
-      properties:
-        passengerName:
-          type: string
-          description: 'passengerName (customer travel information) '
-        ticketNumber:
-          type: string
-          description: 'ticketNumber (customer travel information) '
-        travelDetailList:
-          type: array
-          description: 'List of TravelDetail '
-          items:
-            $ref: '#/components/schemas/TravelDetail'
-      title: TravelInformation
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
     AirItineraryInformation:
       type: object
       properties:
@@ -6181,15 +6445,442 @@ components:
           - $ref: '#/components/schemas/TravelDetailLeg'
           description: Description of fourth leg of trip
       title: AirItineraryInformation
-    ReverseOperationPaymentResponse:
+    OperationDetails:
+      type: object
+      required:
+      - debit
+      - status
+      - productIdentifier
+      allOf:
+      - $ref: '#/components/schemas/Operation'
+      - properties:
+          acquisitionMaterial:
+            type: string
+            description: 'Only for scheme transaction.
+
+              Type of material used to realize the operation.
+
+              Possible values:
+
+              ATM, POS, INTERNET, MANUAL, VOICE_PHONE, UNATTENDED_TERMINAL, MOBILE, UNKNOWN'
+          adjustment:
+            type: boolean
+            description: 'This flag indicates if this operation is an adjustment or not.
+
+              Value:
+
+              true : this operation adjusts already posted operation
+
+              false : this operation does not adjust the posted operation'
+          adjustmentReason:
+            type: string
+            description: "The reason why the adjustment has been created. (conditional)\nMandatory when adjustment is true.\n AdjustmentReasonType (DISPUTE_RESULT, COMMERCIAL_ADJUSTMENT, INVALID_OPERATION, ERROR_DURING_ACQUISITION, CONFIGURATION_REPROCESSING)"
+          alternativeIban:
+            type: string
+            description: Corresponds to PAN token received from the scheme
+          automaticPayment:
+            type: boolean
+            description: For credit cards, indicate if it is an automatic payment operation posted to an account in case of direct debit issued to repay an account (this account is automatically paid after N business days)
+          brand:
+            type: string
+            description: Brand associated to the Issuer Account Range (BIN) such as "MCC" (MasterCard) , "DMC" (Debit MasterCard), "MSI" (Maestro), "CIR" (Cirrus), "VIS" (VISA).
+          cardAcceptorIdCode:
+            type: string
+            description: 'Identifies the card acceptor ID assigned by the acquirer. This ID must represent a unique identifier for each merchant name/location within the acquiring BIN.
+
+              Card Acceptor (Merchant) Identifier associated to the transaction
+
+              - MCI : DE 042 - Card Acceptor ID Code
+
+              - VISA : TCR5 - Acquirer''s Business ID'
+          cardAcceptorZipCode:
+            type: string
+            description: 'Card Acceptor ZIP Code associated to the transaction
+
+
+              MCI : DE 043 s4 - Card Acceptor Postal (ZIP) Code
+
+              VISA : TCR0 - Merchant zip code'
+          cardTypeCode:
+            type: string
+            description: Scheme Product associated to the Issuer Account Range
+          cashAmount:
+            description: 'Additional Amount / Currency / Exponent for Cash Back transaction amount
+
+              * MCI : DE 054 s2 = 40 - Amount, Cash Back
+
+              * VISA : TCR1 pos. 158-166 Cashback'
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          cashAmountAccountCurrency:
+            description: Additional Amount / Currency / Exponent for Cash Back transaction amount converted in Cardholder Account Currency
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          dccIndicator:
+            type: string
+            description: 'This field must contain one of these values (optional):
+
+              1 = DCC performed
+
+              space = default, no DCC has been performed'
+          debit:
+            type: boolean
+            description: 'Sign associated to the transaction according to the Cardholder side
+
+              * D = Cardholder debited
+
+              * C = Cardholder credited'
+          destinationIban:
+            type: string
+            description: IBAN used for reimbursement operation
+          directDebitEndToEndId:
+            type: string
+            description: Identifier of the Direct Debit order linked to payment operation
+          entryMode:
+            type: string
+            description: 'Precise how the card information have been read. Conversion of the native fields.
+
+              Possible values :
+
+              UNKNOWN
+
+              OCR: Optical Character Reader
+
+              MANUAL
+
+              MAGSTRIPE: Magnetic Stripe read
+
+              CONTACTLESS: Contactless read (called proximity payment or Mobile Chip system)
+
+              CHIP: Chip read
+
+              BARCODE: Bar Code read'
+          externalMatchingOperationDate:
+            type: string
+            format: date-time
+            description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+              It is used for matching the current operation with the original operation.
+
+              Mandatory in case of reversal.
+
+              The field contains the value of externalOperationDate of the original operation (conditional).'
+          externalMatchingOperationReference:
+            type: string
+            description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+              It is used for matching the current operation with the original operation.
+
+              Mandatory in case of reversal.
+
+              The field contains the value of externalOperationReference of the original operation (conditional).'
+          externalMatchingOperationServicePoster:
+            type: string
+            description: 'The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system.
+
+              It is used for matching the current operation with the original operation.
+
+              Mandatory in case of reversal.
+
+              The field contains the value of externalOperationServicePoster of the original operation (conditional).'
+          gratuityAmount:
+            description: 'Additional Amount / Currency / Exponent for Gratuity transaction amount in the transaction currency
+
+              Only for MC'
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          gratuityAmountAccountCurrency:
+            description: 'Additional Amount / Currency / Exponent for Gratuity transaction amount converted by our system in Cardholder Account Currency '
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          interestCondition:
+            type: string
+            description: Free zone, used to store description like rates, algorithm and values calculated.
+          interestStartDate:
+            type: string
+            format: date-time
+            description: The starting date used to calculate interest. Present for information purpose.
+          interestEndDate:
+            type: string
+            format: date-time
+            description: The ending date used to calculate interest. Present for information purpose.
+          interestType:
+            type: string
+            description: 'Type of Interest for an interest operation : CREDIT / DEBIT'
+          operationDate:
+            type: string
+            format: date-time
+          originatingAccountNumber:
+            type: string
+            description: The account number of the current balance transfer in the previous institution. For information purpose.
+          originatingInstitution:
+            type: string
+            description: The information about the originating financial institution having this balance. For information purpose.
+          pan:
+            type: string
+            description: Refer to Card.pan
+          panExpiryDate:
+            type: string
+            description: Refer to Card.expiryDate
+          panSequenceNumber:
+            type: string
+            description: Refer to Card.panSequenceNumber
+          partialOperation:
+            type: boolean
+            description: Indicates whether this operation is partial or not.
+          paymentChannel:
+            type: string
+            description: 'Indicates the channel of incoming payment operation from an external system (e.g. bank)
+
+              Ex. CHEQUE, CASH, ONLINE_MONEY, NO_CHANNEL_PROVIDED, INSTALMENT, INCOMING_PAYMENT.
+
+              INSTALMENT - set for payments generated for CreditInstalmentContract'
+          poiAmount:
+            description: Additional Amount / Currency / Exponent for DCC (Dynamic Currency Conversion) transaction amount - Only for MC
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          poiAmountAccountCurrency:
+            description: POI Amount in the Cardholder account currency  - Only for MC
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          sepa:
+            type: boolean
+            description: Indicates if an operation (e.g. incoming payment received from the issuer) was in SEPA format (e.g. SEPA payment).
+          status:
+            type: string
+            description: "Status of the transaction \n* PROCESSED\n* IN_ERROR\n* CAS_IN_DISPUTE (when the transaction is disputed)\n* CAS_PENDING"
+          surchargeAmount:
+            description: Additional Amount / Currency / Exponent for surcharge transaction amount in Transaction Currency
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          surchargeAmountAccountCurrency:
+            description: Additional Amount / Currency / Exponent for Surcharge transaction amount converted in Cardholder Account Currency
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          validationMode:
+            type: string
+            description: 'Precise how the transaction has been validated. Conversion based on information of the original message
+
+              MC : DE 022
+
+              VISA : TCR0 POS Entry Mode /Cardholder ID Method/POS Terminal Capability
+
+              Possible values: PIN, SIGNATURE, UNKNOWN'
+          terminalId:
+            type: string
+            description: Code that identifies the card acceptor terminal or ATM.
+          parentOperation:
+            description: 'This field is expandable and if needed - shows the list of operations linked to parentOperationIdentifier
+
+              Ex: TRANSACTION_FEE linked to FP (Parent).
+
+              _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+            allOf:
+            - $ref: '#/components/schemas/Operation'
+          parentOperationIdentifier:
+            description: 'Internal identifier associated to the transaction to which one this transaction is linked. 16-digit incremental number (1000000000000001)
+
+              Ex: TRANSACTION_FEE linked to FP (Parent)'
+            allOf:
+            - $ref: '#/components/schemas/OperationIdentifier'
+          productIdentifier:
+            description: OPC product identifier code
+            allOf:
+            - $ref: '#/components/schemas/ProductIdentifier'
+          overPaymentAccountIdentifier:
+            description: 'The identifier of the account in overpayment '
+            allOf:
+            - $ref: '#/components/schemas/AccountIdentifier'
+          loyaltyPoint:
+            description: Used when the operation has loyalty points
+            allOf:
+            - $ref: '#/components/schemas/LoyaltyPoint'
+          rewardedOperationIdentifier:
+            description: Internal identifier associated to the transaction linked to a Bonus operation 16-digit incremental number (1000000000000001). Used only if a Bonus operation is related to.
+            allOf:
+            - $ref: '#/components/schemas/OperationIdentifier'
+          lodgingInformation:
+            description: 'The list of lodging information parameters from the clearing file.
+
+              _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+            allOf:
+            - $ref: '#/components/schemas/LodgingInformation'
+          carRentalInformation:
+            description: 'The list of car rental information parameters from the clearing file.
+
+              _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+            allOf:
+            - $ref: '#/components/schemas/CarRentalInformation'
+          airItineraryInformation:
+            description: 'The list of air itinerary parameters from the clearing file.
+
+              _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+            allOf:
+            - $ref: '#/components/schemas/AirItineraryInformation'
+          subOperationIdentifiers:
+            type: array
+            description: List of suboperation identifiers for the parent operation
+            items:
+              $ref: '#/components/schemas/OperationIdentifier'
+          correction:
+            type: boolean
+            description: Represents weather the operation is a correction or not
+          intermediateAmount:
+            description: Calculated Cardholder Amount after potential Currency Conversion but before adding the Conversion Charge
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          billingAmount:
+            description: 'Cardholder Billing amount
+
+              MCI only - DE6 Amount, Cardholder Billing'
+            allOf:
+            - $ref: '#/components/schemas/Amount'
+          overallExhangeRate:
+            type: number
+            format: double
+            description: Currency Rate shows the rate of the complete conversion from Transaction Amount to Posted Cardholder Amount
+      title: OperationDetails
+    ResetBalanceRequest:
+      type: object
+      required:
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      properties:
+        description:
+          type: string
+          description: 'Textual description of the operation to be generated during the account balance reset
+
+            Can contain a free text that can be used when the operation is presented to the Customer'
+        externalOperationReference:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation to be created.'
+        externalOperationDate:
+          format: date-time
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided)'
+        externalOperationServicePoster:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text)'
+        externalOperationCode:
+          type: string
+          description: The external operation code of the balance reset can be provided to identify the operation type in the issuer system.
+      title: ResetBalanceRequest
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    DetailedFeeAmount:
+      type: object
+      properties:
+        percentage:
+          type: string
+          description: Percentage used for amount calculation of the covered risk
+        name:
+          type: string
+          description: Name of the covered risk
+        feeAmount:
+          description: Amount / Currency / Exponent of the covered risk
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        externalOperationCode:
+          type: string
+          description: External operation code the covered risk
+        includeInOtherDetailFeeAmount:
+          type: boolean
+          description: Indicates if the detail fee amount is part of another detail fee amount
+      title: DetailedFeeAmount
+    CreateOperationUnloadResponse:
+      type: object
       required:
       - operationIdentifier
       properties:
         operationIdentifier:
-          description: Identifier of the operation created during the payment reversal (generated by our system)
+          description: Identifier of the operation created during the account unloading (generated by our system)
           allOf:
           - $ref: '#/components/schemas/OperationIdentifier'
-      title: ReverseOperationPaymentResponse
+      title: CreateOperationUnloadResponse
+    InquireOperationRequest:
+      type: object
+      required:
+      - externalOperationReference
+      - externalOperationServicePoster
+      - externalOperationDate
+      properties:
+        externalOperationReference:
+          description: "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\n The External reference of the operation must be provided."
+          type: string
+        externalOperationServicePoster:
+          description: "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\n The identifier of the external system must be provided."
+          type: string
+        externalOperationDate:
+          description: "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\n The date the operation must be provided."
+          format: date-time
+          type: string
+      title: InquireOperationRequest
+    ApiResponseEntityCreateOperationLoadResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateOperationLoadResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateOperationLoadResponse
+    CreateOperationBalanceAdjustmentResponse:
+      type: object
+      required:
+      - operationIdentifier
+      properties:
+        operationIdentifier:
+          description: Identifier of the operation created during the balance adjustment (generated by our system)
+          allOf:
+          - $ref: '#/components/schemas/OperationIdentifier'
+      title: CreateOperationBalanceAdjustmentResponse
+    ApiResponseEntityListOperation:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          type: array
+          description: Response data
+          items:
+            $ref: '#/components/schemas/Operation'
+      description: Issuer response entity
+      title: ApiResponseEntityListOperation
     CreateOperationBonusRequest:
       type: object
       required:
@@ -6274,726 +6965,7 @@ components:
             Identifier of the external system of the operation to be rewarded.'
           type: string
       title: CreateOperationBonusRequest
-    TravelDetail:
-      type: object
-      properties:
-        flightNumber:
-          type: string
-          description: flightNumber (customer travel details)
-        originCity:
-          type: string
-          description: originCity (customer travel details)
-        destinationCity:
-          type: string
-          description: 'destinationCity (customer travel details) '
-      title: TravelDetail
-    DetailedFeeAmount:
-      type: object
-      properties:
-        percentage:
-          type: string
-          description: Percentage used for amount calculation of the covered risk
-        name:
-          type: string
-          description: Name of the covered risk
-        feeAmount:
-          description: Amount / Currency / Exponent of the covered risk
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        externalOperationCode:
-          type: string
-          description: External operation code the covered risk
-        includeInOtherDetailFeeAmount:
-          type: boolean
-          description: Indicates if the detail fee amount is part of another detail fee amount
-      title: DetailedFeeAmount
-    ApiResponseEntityCreateOperationBalanceAdjustmentResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateOperationBalanceAdjustmentResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateOperationBalanceAdjustmentResponse
-    AuthorizationBusinessCaseIdentifier:
-      type: object
-      required:
-      - businessCaseId
-      properties:
-        businessCaseId:
-          type: string
-          description: 'Business case to which the transaction belongs.
-
-            The provided information reflects its status after transaction completion.
-
-            A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)'
-      title: AuthorizationBusinessCaseIdentifier
-    LoyaltyPoint:
-      type: object
-      properties:
-        unit:
-          type: string
-          description: ' Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional).'
-        cumulatedValue:
-          type: integer
-          format: int64
-          description: Total number of loyalty points (optional).
-      title: LoyaltyPoint
-    CreateOperationUnloadResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the account unloading (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: CreateOperationUnloadResponse
-    CreateOperationBalanceAdjustmentResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the balance adjustment (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: CreateOperationBalanceAdjustmentResponse
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    CardIdentifier:
-      type: object
-      description: Identification of the card either by Issuer card external reference or by card reference
-      properties:
-        cardReference:
-          type: string
-          description: 'Reference of the card generated by our system, unique per platform.
-
-            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
-        issuerCardExternalReference:
-          type: string
-          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
-
-            This reference is unique per issuer and may be used to carry out research and find information.'
-      title: CardIdentifier
-    ApiResponseEntityCreateOperationUnloadResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateOperationUnloadResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateOperationUnloadResponse
-    PanTokenIdentifier:
-      type: object
-      required:
-      - panTokenReference
-      properties:
-        panTokenReference:
-          type: string
-          description: Pan Token Reference
-      title: PanTokenIdentifier
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    CreateOperationPaymentResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the payment (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: CreateOperationPaymentResponse
-    AccountIdentifier:
-      type: object
-      properties:
-        accountReference:
-          type: string
-          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-        issuerAccountExternalReference:
-          type: string
-          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-      title: AccountIdentifier
-    ApiResponseEntityListOperation:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          type: array
-          description: Response data
-          items:
-            $ref: '#/components/schemas/Operation'
-      description: Issuer response entity
-      title: ApiResponseEntityListOperation
-    OperationAuthorization:
-      type: object
-      properties:
-        transactionDate:
-          type: string
-          format: date-time
-          description: The date and time on which the transaction was approved. Data is retrieved from the matched authorization transaction.
-      title: OperationAuthorization
-    ResetBalanceRequest:
-      type: object
-      required:
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      properties:
-        description:
-          type: string
-          description: 'Textual description of the operation to be generated during the account balance reset
-
-            Can contain a free text that can be used when the operation is presented to the Customer'
-        externalOperationReference:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation to be created.'
-        externalOperationDate:
-          format: date-time
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided)'
-        externalOperationServicePoster:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text)'
-        externalOperationCode:
-          type: string
-          description: The external operation code of the balance reset can be provided to identify the operation type in the issuer system.
-      title: ResetBalanceRequest
-    CreateOperationLoadRequest:
-      type: object
-      required:
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      - referenceAmount
-      properties:
-        description:
-          type: string
-          description: 'Textual description of the operation
-
-            Can contain a free text that can be used when the operation is presented to the Customer.'
-        externalOperationReference:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation to be created.'
-        externalOperationDate:
-          format: date-time
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided).'
-        externalOperationServicePoster:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text).'
-        externalOperationCode:
-          type: string
-          description: The external operation code of the load operation can be provided to identify the operation type in the issuer system.
-        referenceAmount:
-          description: The amount of the operation (amount/exponent/currency values)
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        paymentChannel:
-          type: string
-          description: 'The channel by which the payment is performed.
-
-            The possible values are:
-
-            DIRECT_DEBIT
-
-            CHEQUE
-
-            CASH
-
-            ONLINE_MONEY
-
-            NO_CHANNEL_PROVIDED
-
-            INCOMING_PAYMENT
-
-            Note that NO_CHANNEL_PROVIDED will be set by default if the paymentChannel is not provided'
-        sepa:
-          type: boolean
-          description: "Indicates whether the payment is performed in SEPA format. \nBy default, the value is false."
-      title: CreateOperationLoadRequest
-    Amount:
-      type: object
-      required:
-      - value
-      - exponent
-      - isoCode
-      properties:
-        value:
-          type: integer
-          format: int64
-          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-        exponent:
-          type: integer
-          format: int32
-          description: Exponent of Amount. Number of decimal digits.
-        isoCode:
-          type: string
-          description: 'Currency code of amount
-
-            The currency in ISO4217 alphabetic format.
-
-            Example: EUR for Euro'
-      title: Amount
-    ReverseOperationReimbursementResponse:
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the balance adjustment reversal (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: ReverseOperationReimbursementResponse
-    ApiResponseEntityReverseOperationPaymentResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ReverseOperationPaymentResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityReverseOperationPaymentResponse
-    ReverseOperationInterestResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the interest reversal (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: ReverseOperationInterestResponse
-    ApiResponseEntityReverseOperationFeeResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ReverseOperationFeeResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityReverseOperationFeeResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    CreateOperationFeeRequest:
-      type: object
-      required:
-      - adjustment
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      - feeType
-      - referenceAmount
-      properties:
-        description:
-          type: string
-          description: 'Textual description of the operation
-
-            Can contain a free text that can be used when the operation is presented to the Customer.'
-        adjustment:
-          type: boolean
-          description: This flag indicates if this operation is an adjustment or not.
-        'adjustmentReason ':
-          type: string
-          description: The reason why the adjustment fee is requested. Mandatory when adjustement is true. Possible values:ERROR_DURING_ACQUISITION, INVALID_OPERATION, COMMERCIAL_ADJUSTMENT, DISPUTE_RESULT, CONFIGURATION_REPROCESSING
-        externalOperationReference:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation to be created.'
-        externalOperationDate:
-          format: date-time
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided).'
-        externalOperationServicePoster:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text).'
-        externalOperationCode:
-          type: string
-          description: The external operation code of the fee operation can be provided to identify the operation type in the issuer system.
-        feeType:
-          type: string
-          description: "The type of fee used to create the current operation. \nPossible values (additional types can be configured for the issuer) : MARKUP_FEE, TRANSACTION_FEE, PERIODIC_FEE, VOLUME_FEE, INSURANCE_FEE, MANUAL_FEE, STATEMENT_FEE, EVENT_FEE, RMESSAGE_FEE, CARD_FEE, ACCOUNT_SETUP_FEE, MEMBERSHIP_FEE, ADDON_SERVICE_FEE"
-        referenceAmount:
-          description: The amount of the operation (amount/exponent/currency values)
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        valueDate:
-          type: string
-          format: date-time
-          description: 'The date when the operation impacts balances or counters.
-
-            If not provided, the value date is set to the external operation date if the external operation date is not in the past, otherwise the value date is set to the current date.'
-        subFeeType:
-          description: Refer to Operation.subFeeType
-          type: string
-        frequency:
-          description: Refer to Operation.frequency
-          type: string
-      title: CreateOperationFeeRequest
-    ApiResponseEntityCreateOperationBonusResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateOperationBonusResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateOperationBonusResponse
-    LodgingInformation:
-      type: object
-      properties:
-        businessFormatCode:
-          type: string
-          description: 'The fields represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Business Format Code (Value: CA); POS: 17-18.'
-        noShowIndicator:
-          type: string
-          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging No-Show Indicator; POS 27.
-
-            MCI mapping is the following: PDS 0690. PDS 0690 (No Show Indicator) provides an indicator noting that the individual did not show up after making a reservation for a vehicle or lodging.'
-        extraCharges:
-          type: string
-          description: 'The fields represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Extra Charges; POS 28–33.'
-        checkInDate:
-          type: string
-          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Lodging Check-in Date (YYMMDD); POS 38-43.
-
-            MCI mapping is the following: PDS 0574. PDS 0574 (Arrival Date) contains the cardholder check-in date (YYMMDD).'
-        dailyRoomRate:
-          type: string
-          description: 'The fields represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Daily Room Rate; POS 44-55.
-
-            MCI mapping is the following: PDS 0580. PDS 0580 (Room Rate) contains the daily room charges exclusive of taxes and fees. This PDS consists of two subfields:
-
-            1. Room Rate Amount; POS: 1-12
-
-            2. Room Rate Exponent; POS: 13'
-        totalTax:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Tax; POS 56-67.
-
-            MCI mapping is the following: PDS 0597. PDS 0597 (Total Tax Amount) contains the total amount of sales tax or value added tax (VAT) on the total purchase amount.'
-        prepaidExpenses:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Prepaid Expenses; POS 68-79.
-
-            MCI mapping is the following: PDS 0704. PDS 0704 (Prepaid Expenses) provides the amount of deposit or other prepaid amounts for the lodging stay.'
-        foodBeverageCharge:
-          type: string
-          description: 'The field represents additional data from VISA clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Food/Beverage Charges; POS 80-91.'
-        folioCashAdvances:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Folio Cash Advances; POS 92-103.
-
-            MCI mapping is the following: PDS 0706. PDS 0706 (Cash Advances) provides the amount of cash received during the lodging stay.'
-        totalRoomNights:
-          type: string
-          description: 'The field represents additional data from VISA and MCI clearing file addendum.
-
-            VISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Room Nights; POS 104-105.
-
-            MCI mapping is the following: PDS 0703. PDS 0703 (Total Room Nights) provides the total number of nights for which a room was contracted during a lodging stay.'
-        totalRoomTax:
-          type: string
-          description: "The field represents additional data from VISA and MCI clearing file addendum.\nVISA mapping is the following: TC05, TCR3 - INDUSTRY-SPECIFIC DATA - LODGING; Field: Total Room Tax; POS 106-117.\nMCI mapping is the following: PDS 0581. PDS 0581 (Total Room Tax) contains tax amount information such as the daily room tax, occupancy tax, energy tax, and tourist tax amounts. This PDS consists of three subfields:\n1. Total Room Tax Amount; POS: 1-12\n2. Total Room Tax Exponent; POS: 13\n 3. Total Room Tax Sign; POS: 14"
-      title: LodgingInformation
-    TravelDetailLeg:
-      type: object
-      properties:
-        flightNumber:
-          type: string
-          description: Number of the airline flight to be taken. The mapping to each leg from VISA  and MCI file is present in general specification document
-        carrier:
-          type: string
-          description: Code indicating name of carrier. The mapping to each leg from VISA  and MCI file is present in general specification document
-        class:
-          type: string
-          description: Indicates service class (first class, business class, etc.). The mapping to each leg from VISA  and MCI file is present in general specification document
-        stopOver:
-          type: string
-          description: Indicates whether a stopover is allowed on this ticket. The mapping to each leg from VISA  and MCI file is present in general specification document
-        destination:
-          type: string
-          description: Indicates destination city's airport code. The mapping to each leg from VISA  and MCI file is present in general specification document
-        fareCode:
-          type: string
-          description: Fare basis code used for the trip. The mapping to each leg from VISA  and MCI file is present in general specification document
-      title: TravelDetailLeg
-    CreateOperationBonusResponse:
-      type: object
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the Bonus generation (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: CreateOperationBonusResponse
-    CreateOperationInterestRequest:
-      type: object
-      required:
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      - interestType
-      - referenceAmount
-      properties:
-        description:
-          description: 'Textual description of the operation
-
-            Can contain a free text that can be used when the operation is presented to the Customer'
-          type: string
-        externalOperationReference:
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation in the caller system to be created.'
-          type: string
-        externalOperationDate:
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided).'
-          type: string
-          format: date-time
-        externalOperationServicePoster:
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text)'
-          type: string
-        externalOperationCode:
-          description: The external operation code of the interest operation can be provided to identify the operation type in the issuer system.
-          type: string
-        interestType:
-          description: 'The issuer must provide the type of Interest for an interest operation
-
-            Possible values: CREDIT / DEBIT'
-          type: string
-        referenceAmount:
-          description: 'The reference amount has to be provided (amount/exponent/currency values)
-
-            If a debit operation is posted, the operation amount has to be positive.
-
-            If a credit operation is posted, the operation amount has to be negative.
-
-            The currency must be the same as the posting account.'
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-      title: CreateOperationInterestRequest
-    CreateOperationUnloadRequest:
-      type: object
-      required:
-      - externalOperationReference
-      - externalOperationDate
-      - externalOperationServicePoster
-      - referenceAmount
-      properties:
-        description:
-          type: string
-          description: 'Textual description of the  operation
-
-            Can contain a free text that can be used when the operation is presented to the Customer.'
-        externalOperationReference:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            External reference of the operation to be created.'
-        externalOperationDate:
-          format: date-time
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The date the operation is performed (in general, the current date should be provided).'
-        externalOperationServicePoster:
-          type: string
-          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
-
-            The identifier of the external system which provides the operation to be posted (free text).'
-        externalOperationCode:
-          type: string
-          description: The external operation code of the unload can be provided to identify the operation type in the issuer system.
-        referenceAmount:
-          description: The amount of the operation (amount/exponent/currency values)
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-      title: CreateOperationUnloadRequest
-    ApiResponseEntityReverseOperationReimbursementResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ReverseOperationReimbursementResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityReverseOperationReimbursementResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    ReverseOperationReimbursementRequest:
+    ReverseOperationFeeRequest:
       type: object
       required:
       - reversalReason
@@ -7006,7 +6978,11 @@ components:
       properties:
         reversalReason:
           type: string
-          description: "The reason why the reversal has been created. \nPossible value:\nREVERSAL_ON_DEMAND"
+          description: 'The reason why the reversal has been created.
+
+            Possible value:
+
+            REVERSAL_ON_DEMAND'
         description:
           type: string
           description: 'Textual description of the operation
@@ -7022,6 +6998,12 @@ components:
         externalMatchingOperationServicePoster:
           type: string
           description: "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationServicePoster of the original operation to be reversed."
+        referenceAmount:
+          description: 'The amount of the operation is requested for partial reversal (amount/exponent/currency values).
+
+            If not provided, the total amount of the original amount is reversed.'
+          allOf:
+          - $ref: '#/components/schemas/Amount'
         externalOperationReference:
           type: string
           description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
@@ -7032,19 +7014,121 @@ components:
           type: string
           description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
 
-            The date the operation is performed (in general, the current date should be provided)'
+            The date the operation is performed (in general, the current date should be provided).'
         externalOperationServicePoster:
           type: string
           description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
 
             The identifier of the external system which provides the operation to be posted (free text).'
+      title: ReverseOperationFeeRequest
+    CreateOperationBalanceAdjustmentRequest:
+      type: object
+      required:
+      - 'balanceAdjustmentReason '
+      - externalOperationReference
+      - externalOperationDate
+      - externalOperationServicePoster
+      - referenceAmount
+      properties:
+        'balanceAdjustmentReason ':
+          type: string
+          description: 'The reason why the balance adjustment is requested
+
+            Allowed value list depends on the issuer configuration'
+          example: DISPUTE_ADJUSTMENT
+        description:
+          type: string
+          description: 'Textual description of the operation
+
+            Can contain a free text that can be used when the operation is presented to the Customer'
+        externalOperationReference:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            External reference of the operation to be created.'
+        externalOperationDate:
+          format: date-time
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The date the operation is performed (in general, the current date should be provided).'
+        externalOperationServicePoster:
+          type: string
+          description: 'The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.
+
+            The identifier of the external system which provides the operation to be posted (free text)'
+        externalOperationCode:
+          type: string
+          description: The external operation code of the balance adjustment operation can be provided to identify the operation type in the issuer system.
+        referenceAmount:
+          description: The amount of the operation (amount/exponent/currency values)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        valueDate:
+          type: string
+          format: date-time
+          description: 'The date when the operation impacts balances or counters.
+
+            If not provided, the value date is set to the external operation date if the external operation date is not in the past, otherwise the value date is set to the current date.'
         specificFields:
           type: object
           description: "The issuer can provide Specific Fields for the operation.\n It is a list of external data {\"label\":\"value\"} separated by a \",\" related to the operation (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} Those provided data have no impact on our system business processes."
           additionalProperties:
             type: string
-      title: ReverseOperationReimbursementRequest
-    ApiResponseEntityCreateOperationReimbursementResponse:
+      title: CreateOperationBalanceAdjustmentRequest
+    PointOfService:
+      type: object
+      properties:
+        entryModePan:
+          type: string
+          description: VISA TCR0 PosEntryMode.
+        entryModePin:
+          type: string
+          description: VISA TCR0 CardholderIDMethod.
+        conditionCode:
+          type: string
+          description: VISA. Field equals to "02" if PosEntryMode is populated, "00" if not populated.
+        posTerminalCapability:
+          type: string
+          description: VISA TCR0 PosTerminalCapability
+        cardDataInputCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 1 indicates the set of methods supported by the terminal for the input of account number, card, or mobile device data.
+        cardholderAuthenticationCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 2 describes the capability of the terminal device to support/accept authentication data.
+        cardCaptureCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 3 indicates whether the terminal has card capture capabilities.
+        terminalOperatingEnvironment:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 4 indicates whether the card acceptor is attending the terminal and the location of the terminal.
+        cardholderPresentData:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 5 indicates whether the cardholder is present at the point of service and explains the condition if the cardholder is not present.
+        cardPresentData:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 6 indicates if the card is present at the point of service.
+        cardDataInputMode:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 7 indicates the method used for PAN entry to initiate a transaction.
+        cardholderAuthenticationMethod:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 8 indicates the method by which the cardholder’s identity was verified at the point of service.
+        cardholderAuthenticationEntity:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 9 indicates the entity through which the cardholder’s identity was verified at the point of service.
+        cardDataOutputCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 10 indicates the ability of the terminal to write or output data to a card.
+        terminalDataOutputCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 11 indicates the print and display capabilities of the terminal.
+        pinCaptureCapability:
+          type: string
+          description: MCI DE 22 (Point of Service [POS] Entry Mode), subfield 12 indicates the maximum number of PIN characters that the POS terminal can capture.
+      title: PointOfService
+    ApiResponseEntityReverseOperationInterestResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -7057,93 +7141,9 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/CreateOperationReimbursementResponse'
+          - $ref: '#/components/schemas/ReverseOperationInterestResponse'
       description: Issuer response entity
-      title: ApiResponseEntityCreateOperationReimbursementResponse
-    ReverseOperationFeeResponse:
-      required:
-      - operationIdentifier
-      properties:
-        operationIdentifier:
-          description: Identifier of the operation created during the fee reversal (generated by our system)
-          allOf:
-          - $ref: '#/components/schemas/OperationIdentifier'
-      title: ReverseOperationFeeResponse
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ApiResponseEntityCreateOperationLoadResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateOperationLoadResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateOperationLoadResponse
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
+      title: ApiResponseEntityReverseOperationInterestResponse
   securitySchemes:
     basic:
       type: oauth2

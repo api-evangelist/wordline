@@ -58,93 +58,7 @@ paths:
         503:
           $ref: '#/components/responses/503'
 components:
-  parameters:
-    X-Request-ID:
-      name: X-Request-ID
-      in: header
-      description: 'UUID for unique request identification.
-
-        '
-      required: true
-      schema:
-        maxLength: 36
-        minLength: 1
-        type: string
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
-    MessageCreateDateTime:
-      name: MessageCreateDateTime
-      in: header
-      description: 'The message create date time.
-
-
-        ISO 8601 DateTime.
-
-        '
-      required: true
-      schema:
-        type: string
-        format: date-time
-      example: '2020-09-25T08:15:00.856Z'
   schemas:
-    EstimatedTotalAmount:
-      type: object
-      additionalProperties: false
-      required:
-      - Currency
-      - Amount
-      properties:
-        Currency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'A code allocated to a currency by a Maintenance Agency under
-
-            an international identification scheme, as described in the latest edition
-
-            of the international standard ISO 4217 "Codes for the representation of
-
-            currencies and funds".
-
-            '
-        Amount:
-          pattern: ^\d{1,13}\.\d{1,2}$
-          type: string
-          description: 'Amount
-
-            '
-      description: 'Estimated Total Amount.
-
-        '
-    CurrencyConversionFee:
-      type: object
-      additionalProperties: false
-      required:
-      - Currency
-      - Amount
-      - Rate
-      properties:
-        Currency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'A code allocated to a currency by a Maintenance Agency under
-
-            an international identification scheme, as described in the latest edition
-
-            of the international standard ISO 4217 "Codes for the representation of
-
-            currencies and funds".
-
-            '
-        Amount:
-          pattern: ^\d{1,13}\.\d{1,2}$
-          type: string
-          description: 'Amount of the fees.
-
-            '
-        Rate:
-          type: number
-      description: 'Currency Conversion Fee
-
-        '
     ExchangeRateRequest:
       type: object
       additionalProperties: false
@@ -174,32 +88,6 @@ components:
       - Amount
       - TargetCurrency
       - UnitCurrency
-    ExchangeRateResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        ExchangeRateReferences:
-          $ref: '#/components/schemas/ExchangeRateReferences'
-        ExchangeRateInformation:
-          $ref: '#/components/schemas/ExchangeRateInformation'
-        CurrencyConversionFee:
-          $ref: '#/components/schemas/CurrencyConversionFee'
-        EstimatedTotalAmount:
-          $ref: '#/components/schemas/EstimatedTotalAmount'
-        ValidUntil:
-          type: string
-          description: 'This exchange rate is valid until the next run of the scheduled batch to get new exchange rate details. ISO 8601 DateTime.
-
-            '
-          format: date-time
-      description: 'ExchangeRateResponse
-
-        '
-      required:
-      - ExchangeRateInformation
-      - CurrencyConversionFee
-      - EstimatedTotalAmount
-      - ValidUntil
     ExchangeRateReferences:
       type: object
       additionalProperties: false
@@ -253,17 +141,92 @@ components:
             '
           enum:
           - Spot
-  headers:
-    X-Request-ID:
-      required: true
-      description: 'UUID for unique request identification
+    EstimatedTotalAmount:
+      type: object
+      additionalProperties: false
+      required:
+      - Currency
+      - Amount
+      properties:
+        Currency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
+
+            '
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,2}$
+          type: string
+          description: 'Amount
+
+            '
+      description: 'Estimated Total Amount.
 
         '
-      schema:
-        type: string
-        maxLength: 36
-        minLength: 1
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    ExchangeRateResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        ExchangeRateReferences:
+          $ref: '#/components/schemas/ExchangeRateReferences'
+        ExchangeRateInformation:
+          $ref: '#/components/schemas/ExchangeRateInformation'
+        CurrencyConversionFee:
+          $ref: '#/components/schemas/CurrencyConversionFee'
+        EstimatedTotalAmount:
+          $ref: '#/components/schemas/EstimatedTotalAmount'
+        ValidUntil:
+          type: string
+          description: 'This exchange rate is valid until the next run of the scheduled batch to get new exchange rate details. ISO 8601 DateTime.
+
+            '
+          format: date-time
+      description: 'ExchangeRateResponse
+
+        '
+      required:
+      - ExchangeRateInformation
+      - CurrencyConversionFee
+      - EstimatedTotalAmount
+      - ValidUntil
+    CurrencyConversionFee:
+      type: object
+      additionalProperties: false
+      required:
+      - Currency
+      - Amount
+      - Rate
+      properties:
+        Currency:
+          pattern: '[A-Z]{3,3}'
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
+
+            '
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,2}$
+          type: string
+          description: 'Amount of the fees.
+
+            '
+        Rate:
+          type: number
+      description: 'Currency Conversion Fee
+
+        '
+  headers:
     MessageCreateDateTime:
       required: true
       schema:
@@ -276,6 +239,43 @@ components:
 
         '
       example: '2020-09-25T08:15:00.856Z'
+    X-Request-ID:
+      required: true
+      description: 'UUID for unique request identification
+
+        '
+      schema:
+        type: string
+        maxLength: 36
+        minLength: 1
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+  parameters:
+    MessageCreateDateTime:
+      name: MessageCreateDateTime
+      in: header
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2020-09-25T08:15:00.856Z'
+    X-Request-ID:
+      name: X-Request-ID
+      in: header
+      description: 'UUID for unique request identification.
+
+        '
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 1
+        type: string
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
   securitySchemes:
     Authorization:
       type: http

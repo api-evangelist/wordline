@@ -315,343 +315,6 @@ paths:
               $ref: '#/components/schemas/CancelCreditTransferRequest'
 components:
   schemas:
-    CreditTransferStatusHistory:
-      type: object
-      properties:
-        status:
-          type: string
-          description: 'Status of the credit transfer on the particular status date '
-        statusDate:
-          type: string
-          format: date-time
-          description: Date of the credit transfer status change
-        username:
-          type: string
-          description: Name of the user who requested to create or cancel the credit transfer
-        origin:
-          type: string
-          description: Origin used when the credit tranfer was requested or cancelled.
-      title: CreditTransferStatusHistory
-    Amount:
-      type: object
-      required:
-      - value
-      - exponent
-      - isoCode
-      properties:
-        value:
-          type: integer
-          format: int64
-          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-        exponent:
-          type: integer
-          format: int32
-          description: Exponent of Amount. Number of decimal digits.
-        isoCode:
-          type: string
-          description: 'Currency code of amount
-
-            The currency in ISO4217 alphabetic format.
-
-            Example: EUR for Euro'
-      title: Amount
-    CancelCreditTransferResponse:
-      type: object
-      required:
-      - creditTransferIdentifier
-      - status
-      - cancellationDate
-      properties:
-        creditTransferIdentifier:
-          description: Credit transfer identifier
-          allOf:
-          - $ref: '#/components/schemas/CreditTransferIdentifier'
-        status:
-          type: string
-          description: Credit transfer status
-        cancellationDate:
-          type: string
-          format: date-time
-          description: The date when the OCT order was canceled
-      title: CancelCreditTransferResponse
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    ApiResponseEntityCancelCreditTransferResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CancelCreditTransferResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCancelCreditTransferResponse
-    CancelCreditTransferRequest:
-      type: object
-      properties:
-        rejectionReason:
-          type: string
-          description: Reason for cancelling the credit transfer (free text)
-      title: CancelCreditTransferRequest
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    CreditTransferIdentifier:
-      type: object
-      properties:
-        endToEndId:
-          type: string
-          description: Credit transfer identifier
-      title: CreditTransferIdentifier
-    ApiResponseEntityCreditTransfer:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreditTransfer'
-      description: Issuer response entity
-      title: ApiResponseEntityCreditTransfer
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    ApiResponseEntityCreateCreditTransferResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateCreditTransferResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateCreditTransferResponse
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    CreateCreditTransferResponse:
-      type: object
-      required:
-      - directDebitIdentifier
-      - status
-      properties:
-        creditTransferIdentifier:
-          description: Credit transfer identifier
-          allOf:
-          - $ref: '#/components/schemas/CreditTransferIdentifier'
-        status:
-          type: string
-          description: Credit transfer status
-      title: CreateCreditTransferResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
     InternalServerErrorResponseMetadata:
       type: object
       required:
@@ -677,6 +340,210 @@ components:
           example: Internal server error
           description: Executed REST API status message
       title: InternalServerErrorResponseMetadata
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
+
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    ApiResponseEntityCancelCreditTransferResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CancelCreditTransferResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCancelCreditTransferResponse
+    CancelCreditTransferResponse:
+      type: object
+      required:
+      - creditTransferIdentifier
+      - status
+      - cancellationDate
+      properties:
+        creditTransferIdentifier:
+          description: Credit transfer identifier
+          allOf:
+          - $ref: '#/components/schemas/CreditTransferIdentifier'
+        status:
+          type: string
+          description: Credit transfer status
+        cancellationDate:
+          type: string
+          format: date-time
+          description: The date when the OCT order was canceled
+      title: CancelCreditTransferResponse
+    CancelCreditTransferRequest:
+      type: object
+      properties:
+        rejectionReason:
+          type: string
+          description: Reason for cancelling the credit transfer (free text)
+      title: CancelCreditTransferRequest
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    CreateCreditTransferResponse:
+      type: object
+      required:
+      - directDebitIdentifier
+      - status
+      properties:
+        creditTransferIdentifier:
+          description: Credit transfer identifier
+          allOf:
+          - $ref: '#/components/schemas/CreditTransferIdentifier'
+        status:
+          type: string
+          description: Credit transfer status
+      title: CreateCreditTransferResponse
     CreateCreditTransferRequest:
       type: object
       required:
@@ -715,7 +582,7 @@ components:
 
             The list of possible reimbursement reasons is configurable per issuer.'
       title: CreateCreditTransferRequest
-    NotFoundResponseMetadata:
+    ForbiddenResponseMetadata:
       type: object
       required:
       - correlationId
@@ -733,13 +600,22 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 404
+          example: 403
           description: HTTP status code
         statusMessage:
           type: string
-          example: Not found
+          example: Forbidden
           description: Executed REST API status message
-      title: NotFoundResponseMetadata
+      title: ForbiddenResponseMetadata
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     CreditTransfer:
       type: object
       properties:
@@ -817,6 +693,105 @@ components:
           type: string
           description: "Reason why the reimbursement is triggered \nThe list of possible reimbursement reasons is configurable per issuer."
       title: CreditTransfer
+    CreditTransferStatusHistory:
+      type: object
+      properties:
+        status:
+          type: string
+          description: 'Status of the credit transfer on the particular status date '
+        statusDate:
+          type: string
+          format: date-time
+          description: Date of the credit transfer status change
+        username:
+          type: string
+          description: Name of the user who requested to create or cancel the credit transfer
+        origin:
+          type: string
+          description: Origin used when the credit tranfer was requested or cancelled.
+      title: CreditTransferStatusHistory
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ApiResponseEntityCreditTransfer:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreditTransfer'
+      description: Issuer response entity
+      title: ApiResponseEntityCreditTransfer
+    CreditTransferIdentifier:
+      type: object
+      properties:
+        endToEndId:
+          type: string
+          description: Credit transfer identifier
+      title: CreditTransferIdentifier
     AccountIdentifier:
       type: object
       properties:
@@ -827,6 +802,31 @@ components:
           type: string
           description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
       title: AccountIdentifier
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    ApiResponseEntityCreateCreditTransferResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateCreditTransferResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateCreditTransferResponse
   securitySchemes:
     basic:
       type: oauth2

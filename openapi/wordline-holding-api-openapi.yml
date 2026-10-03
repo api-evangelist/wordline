@@ -469,58 +469,31 @@ paths:
           content: {}
 components:
   schemas:
-    HoldingListData:
+    ErrorResponse:
       type: object
       properties:
-        contractIdentification:
-          type: object
-          properties:
-            acquirerId:
-              type: string
-              description: Unique identification of the acquirer, determined by equensWorldline
-              example: '315000001'
-        holdingId:
-          type: integer
-          description: Unique identification of the holding, determined by equensWorldline
-          format: int32
-          example: 200
-        holdingName:
-          type: string
-          description: Name of the holding
-          example: Event Payment Solutions
-        status:
-          type: string
-          description: The status of this entity. Values [Active]
-          example: Active
-        address:
-          $ref: '#/components/schemas/Address'
-        holdingDetailsURI:
-          type: string
-          description: URI to get the holding details
-          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX
-    HoldingBasic:
-      type: object
-      properties:
-        acquirerName:
-          type: string
-          description: Name of the acquirer
-        holdingName:
-          type: string
-          description: Name of the holding
-    HoldingContractIdentification:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-        holdingId:
-          type: string
-          description: Unique identification of the holding, determined by equensWorldline
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorData'
     PostHolding:
       type: object
       properties:
         basic:
           $ref: '#/components/schemas/PostHoldingBasic'
+    HoldingData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/HoldingContractIdentification'
+        basic:
+          $ref: '#/components/schemas/HoldingBasic'
+        status:
+          $ref: '#/components/schemas/HoldingStatus'
+        addressDetailsURI:
+          type: string
+          description: URI to get the holding address details
+          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX/addresses
     Operation:
       type: object
       properties:
@@ -547,15 +520,6 @@ components:
         from:
           type: string
           description: Not elevant for currently supported operations
-    HoldingAddressData:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/HoldingContractIdentification'
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AddressDetails'
     MerchantIdentificationResponse:
       type: object
       properties:
@@ -582,6 +546,31 @@ components:
         terminalId:
           type: string
           description: Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
+    CorrelationResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Unique ID that was generated for the specific change
+          format: uuid
+    HoldingContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        holdingId:
+          type: string
+          description: Unique identification of the holding, determined by equensWorldline
+    HoldingAddressData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/HoldingContractIdentification'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
     AddressDetails:
       required:
       - addressType
@@ -655,6 +644,68 @@ components:
           description: Preferred communication type of the contact person registered with the address. Values [1 = Post, 2 = Fax, 3 = E-mail]
           format: int32
           example: 3
+    HoldingBasic:
+      type: object
+      properties:
+        acquirerName:
+          type: string
+          description: Name of the acquirer
+        holdingName:
+          type: string
+          description: Name of the holding
+    HoldingStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the holding. Values [Active]
+        commencementDate:
+          type: string
+          description: Date at which the holding was registered
+    PostHoldingResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          format: uuid
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantIdentificationResponse'
+    PostHoldingBasic:
+      type: object
+      properties:
+        holdingName:
+          type: string
+          description: Name of the holding
+          example: Event Payment Solutions
+    HoldingListData:
+      type: object
+      properties:
+        contractIdentification:
+          type: object
+          properties:
+            acquirerId:
+              type: string
+              description: Unique identification of the acquirer, determined by equensWorldline
+              example: '315000001'
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        holdingName:
+          type: string
+          description: Name of the holding
+          example: Event Payment Solutions
+        status:
+          type: string
+          description: The status of this entity. Values [Active]
+          example: Active
+        address:
+          $ref: '#/components/schemas/Address'
+        holdingDetailsURI:
+          type: string
+          description: URI to get the holding details
+          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX
     ErrorData:
       type: object
       properties:
@@ -667,26 +718,6 @@ components:
         errorMessage:
           type: string
           description: Message explaining the error
-    CorrelationResponse:
-      type: object
-      properties:
-        correlationId:
-          type: string
-          description: Unique ID that was generated for the specific change
-          format: uuid
-    HoldingData:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/HoldingContractIdentification'
-        basic:
-          $ref: '#/components/schemas/HoldingBasic'
-        status:
-          $ref: '#/components/schemas/HoldingStatus'
-        addressDetailsURI:
-          type: string
-          description: URI to get the holding address details
-          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX/addresses
     Address:
       type: object
       properties:
@@ -731,34 +762,3 @@ components:
           type: string
           description: E-mail address of the contact person registered with the address
           example: M.Scott@eventpaymentsolutions.com
-    ErrorResponse:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorData'
-    HoldingStatus:
-      type: object
-      properties:
-        status:
-          type: string
-          description: The status of the holding. Values [Active]
-        commencementDate:
-          type: string
-          description: Date at which the holding was registered
-    PostHoldingBasic:
-      type: object
-      properties:
-        holdingName:
-          type: string
-          description: Name of the holding
-          example: Event Payment Solutions
-    PostHoldingResponse:
-      type: object
-      properties:
-        correlationId:
-          type: string
-          format: uuid
-        contractIdentification:
-          $ref: '#/components/schemas/MerchantIdentificationResponse'

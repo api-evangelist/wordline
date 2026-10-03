@@ -668,17 +668,23 @@ components:
           $ref: '#/components/schemas/Amount'
         serviceBasedFeesTotalAmount:
           $ref: '#/components/schemas/Amount'
-    PaymentIdentification:
+    Amount:
       type: object
       properties:
-        paymentId:
+        amount:
           type: string
-          description: Unique identification of the payment in which this transaction has been paid out
-          example: SO-000000017036619028
-        paymentReference:
+          format: unlimited size decimal
+          description: 'Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          example: '3.00'
+        currency:
           type: string
-          description: Merchant payment identification information
-          example: 12530776666
+          description: Currency of the amount
+          example: EUR
     ContractIdentification:
       type: object
       properties:
@@ -699,20 +705,14 @@ components:
           type: string
           description: Unique identification of the contract, determined by the acquirer
           example: '12872'
-    Amount:
+    PaymentIdentification:
       type: object
       properties:
-        amount:
+        paymentId:
           type: string
-          format: unlimited size decimal
-          description: 'Amount in the major units of the currency according to ISO 4217.
-
-
-            In case of euro, "3.10" (is 3.10 euro)
-
-            '
-          example: '3.00'
-        currency:
+          description: Unique identification of the payment in which this transaction has been paid out
+          example: SO-000000017036619028
+        paymentReference:
           type: string
-          description: Currency of the amount
-          example: EUR
+          description: Merchant payment identification information
+          example: 12530776666

@@ -126,6 +126,23 @@ paths:
           content: {}
 components:
   schemas:
+    Amount:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: 'Amount in the major units of the currency according to ISO 4217.
+
+
+            In case of euro, "3.10" (is 3.10 euro)
+
+            '
+          format: unlimited size decimal
+          example: '3.00'
+        currency:
+          type: string
+          description: Currency of the amount
+          example: EUR
     Lifecycle:
       type: object
       properties:
@@ -270,6 +287,42 @@ components:
           $ref: '#/components/schemas/Amount'
         merchantTransactionAmount:
           $ref: '#/components/schemas/Amount'
+    ContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+          example: '671234567'
+        pspId:
+          type: string
+          description: Psp Id
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1280300'
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '12872'
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the cardAcceptor within the contract
+          example: '30010'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+          example: 30010
+        terminalId:
+          type: string
+          description: Unique code identifying the terminal at the Card acceptor location
+          example: 20YT45
     TransactionIdentification:
       type: object
       properties:
@@ -312,59 +365,10 @@ components:
           description: Systems Trace Audit Number
           format: int32
           example: 12752
-    ContractIdentification:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-          example: '671234567'
-        pspId:
-          type: string
-          description: Psp Id
-        holdingId:
-          type: integer
-          description: Unique identification of the holding, determined by equensWorldline
-          format: int32
-          example: 200
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-          example: '1280300'
-        contractId:
-          type: string
-          description: Unique identification of the contract, determined by the acquirer
-          example: '12872'
-        cardAcceptorId:
-          type: string
-          description: Unique identification of the cardAcceptor within the contract
-          example: '30010'
-        siteId:
-          type: integer
-          description: Unique identification of the site within the contract
-          format: int32
-          example: 30010
-        terminalId:
-          type: string
-          description: Unique code identifying the terminal at the Card acceptor location
-          example: 20YT45
-    Amount:
-      type: object
-      properties:
-        amount:
-          type: string
-          description: 'Amount in the major units of the currency according to ISO 4217.
-
-
-            In case of euro, "3.10" (is 3.10 euro)
-
-            '
-          format: unlimited size decimal
-          example: '3.00'
-        currency:
-          type: string
-          description: Currency of the amount
-          example: EUR
+    PaymentInfo:
+      type: array
+      items:
+        $ref: '#/components/schemas/PaymentData'
     PaymentData:
       type: object
       properties:
@@ -388,7 +392,3 @@ components:
           type: string
           description: URI to the MerchantApiPayment to get the payment that belongs to this transaction. Only available if there is a payment date.
           example: acquiring/payment/v2.0/payments/acquirers/XXX/payment/XXX?paymentDate=YYYY-MM-DD
-    PaymentInfo:
-      type: array
-      items:
-        $ref: '#/components/schemas/PaymentData'

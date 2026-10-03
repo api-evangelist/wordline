@@ -396,40 +396,7 @@ paths:
         required: true
 components:
   schemas:
-    ApiResponseEntityEventStoreList:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventStore'
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityEventStoreList
-      description: Event store list response entity
-    CreateEventStoreEventRequest:
-      type: object
-      properties:
-        correlationId:
-          type: string
-        origin:
-          type: string
-        eventDate:
-          type: string
-          format: date-time
-        userId:
-          type: string
-        eventType:
-          type: string
-        payload:
-          type: string
-        eventSubType:
-          type: string
-    ForbiddenResponseMetadata:
+    InternalServerErrorResponseMetadata:
       type: object
       required:
       - correlationId
@@ -447,13 +414,108 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 403
+          example: 500
           description: HTTP status code
         statusMessage:
           type: string
-          example: Forbidden
+          example: Internal server error
           description: Executed REST API status message
-      title: ForbiddenResponseMetadata
+      title: InternalServerErrorResponseMetadata
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    BusinessRefTypeValues:
+      type: object
+      properties:
+        businessRefType:
+          type: string
+          description: 'Business reference type to be pushed.
+
+            Example: CONTRACT, CARD_CONTRACT, CARD, ACCOUNT, CUSTOMER, etc'
+        businessRefValues:
+          type: array
+          items:
+            type: string
+            description: 'Business reference values for a corresponding business reference type.
+
+              Examples of values : card reference, customer reference, account number.'
+      required:
+      - businessRefType
+      - businessRefValues
     BadGatewayResponseMetadata:
       type: object
       required:
@@ -479,24 +541,95 @@ components:
           example: Bad Gateway
           description: Executed REST API status message
       title: BadGatewayResponseMetadata
-    UnauthorizedErrorApiResponse:
+    BadRequestErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    ForbiddenErrorApiResponse:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    CreateEventStoreEventRequest:
       type: object
-      required:
-      - responseMetadata
       properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
+        correlationId:
+          type: string
+        origin:
+          type: string
+        eventDate:
+          type: string
+          format: date-time
+        userId:
+          type: string
+        eventType:
+          type: string
+        payload:
+          type: string
+        eventSubType:
+          type: string
+    CreateEventStoreEventResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    EventStore:
+      type: object
+      properties:
+        businessRefType:
+          type: string
+          description: 'Business reference type to be pushed.
+
+            Example: CONTRACT, CARD_CONTRACT, CARD, ACCOUNT, CUSTOMER, etc'
+        businessRefValue:
+          type: string
+          description: 'Business reference value for a business reference type.
+
+            Examples of values : card reference, customer reference, account number.'
+        correlationId:
+          type: string
+        eventDate:
+          type: string
+          description: Date when the event was created or modified in publisher system or the comment date
+          format: date-time
+        eventSubType:
+          type: string
+          description: 'optional - for certain applications, sub-events can be defined.
+
+            Example for customer service GUI:  COMMENT, Complaint, PGUI (eventType, eventSubType, origin)
+
+            Possible values: "Inbound call", "complaint …"'
+        eventType:
+          type: string
+          description: 'Event type
+
+            Typically for CARD business Reference Type, event types relative to card status modification event can be CARD_ISSUE, FIRST_ACTIVATION, CARD_BLOCKING,..
+
+            In order to retrieve the comments , use COMMENT event-type.
+
+            The list of event types are shared during the design phase.'
+        issuerId:
+          type: integer
+          description: Issuer ID of the business event
+          format: int64
+        origin:
+          type: string
+          description: 'The system that has published the event or comment.
+
+            Example : "IBO" for CMS,  "PGUI" for Customer Service GUI, "WLP FO" for authorization server.'
+        payload:
+          type: string
+          description: 'Additional information pushed by the application with the event.
+
+            Different formats can be found :
+
+            - free text
+
+            - Display payload with "Old" and "New" value The "Old" value is optional and if not provided only the new value will be displayed.)'
+        userId:
+          type: string
+          description: User in the publisher system that triggers the event
+      title: EventStore
     Links:
       type: object
       required:
@@ -511,24 +644,40 @@ components:
           example: /x/{x}?page[offset]=2
           description: URL pagination query parameter next page
       title: Links
-    BusinessRefTypeValues:
+    ForbiddenResponseMetadata:
       type: object
-      properties:
-        businessRefType:
-          type: string
-          description: 'Business reference type to be pushed.
-
-            Example: CONTRACT, CARD_CONTRACT, CARD, ACCOUNT, CUSTOMER, etc'
-        businessRefValues:
-          type: array
-          items:
-            type: string
-            description: 'Business reference values for a corresponding business reference type.
-
-              Examples of values : card reference, customer reference, account number.'
       required:
-      - businessRefType
-      - businessRefValues
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     BadRequestResponseMetadata:
       type: object
       required:
@@ -588,179 +737,30 @@ components:
           example: 12
           description: Wall clock time required from service to generate the response
       title: ResponseMetadata
-    EventStore:
+    ApiResponseEntityEventStoreList:
       type: object
+      required:
+      - responseMetadata
       properties:
-        businessRefType:
-          type: string
-          description: 'Business reference type to be pushed.
-
-            Example: CONTRACT, CARD_CONTRACT, CARD, ACCOUNT, CUSTOMER, etc'
-        businessRefValue:
-          type: string
-          description: 'Business reference value for a business reference type.
-
-            Examples of values : card reference, customer reference, account number.'
-        correlationId:
-          type: string
-        eventDate:
-          type: string
-          description: Date when the event was created or modified in publisher system or the comment date
-          format: date-time
-        eventSubType:
-          type: string
-          description: 'optional - for certain applications, sub-events can be defined.
-
-            Example for customer service GUI:  COMMENT, Complaint, PGUI (eventType, eventSubType, origin)
-
-            Possible values: "Inbound call", "complaint …"'
-        eventType:
-          type: string
-          description: 'Event type
-
-            Typically for CARD business Reference Type, event types relative to card status modification event can be CARD_ISSUE, FIRST_ACTIVATION, CARD_BLOCKING,..
-
-            In order to retrieve the comments , use COMMENT event-type.
-
-            The list of event types are shared during the design phase.'
-        issuerId:
-          type: integer
-          description: Issuer ID of the business event
-          format: int64
-        origin:
-          type: string
-          description: 'The system that has published the event or comment.
-
-            Example : "IBO" for CMS,  "PGUI" for Customer Service GUI, "WLP FO" for authorization server.'
-        payload:
-          type: string
-          description: 'Additional information pushed by the application with the event.
-
-            Different formats can be found :
-
-            - free text
-
-            - Display payload with "Old" and "New" value The "Old" value is optional and if not provided only the new value will be displayed.)'
-        userId:
-          type: string
-          description: User in the publisher system that triggers the event
-      title: EventStore
-    CreateEventStoreEventResponse:
-      type: object
-      properties:
-        message:
-          type: string
-    NotFoundErrorApiResponse:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventStore'
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityEventStoreList
+      description: Event store list response entity
+    UnauthorizedErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
       title: UnauthorizedResponseMetadata
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

@@ -1238,6 +1238,31 @@ paths:
       deprecated: false
 components:
   schemas:
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
     PrefilledLetterTemplate:
       type: object
       required:
@@ -1276,537 +1301,6 @@ components:
           type: string
           description: "The transformer type defines the format of the template and so technologies that will be used to generate the letter. Possible values are:\n•\tJASPER\n•\tXSLT"
       title: PrefilledLetterTemplate
-    LetterTemplateValueItem:
-      type: object
-      properties:
-        subParameters:
-          type: array
-          description: List of subparameters values associated to the letter parameter
-          items:
-            $ref: '#/components/schemas/LetterTemplateSubParameterValue'
-      title: LetterTemplateValueItem
-    LetterIdentifier:
-      type: object
-      properties:
-        letterId:
-          type: string
-          description: Unique ID of the letter, generated in the system
-      title: LetterIdentifier
-    LetterTemplate:
-      type: object
-      properties:
-        issuerId:
-          type: string
-          description: Issuer identifier (unique per platform)
-        letterTemplateIdentifier:
-          allOf:
-          - $ref: '#/components/schemas/LetterTemplateIdentifier'
-          description: Identifier of the letter template
-        parameters:
-          type: array
-          items:
-            $ref: '#/components/schemas/LetterTemplateParameter'
-          description: 'List of the parameters related to the template, containing template parameter properties fetched from the Letter Generation Service configuration file.
-
-            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
-        description:
-          type: string
-          description: Description of the letter template. Free text field
-        structure:
-          type: string
-          description: Used for Jasper letters. Defines the structure of the Jasper template
-        outputFormat:
-          type: string
-          description: "Output format of the template to define the output format. Possible values are:\n•\tPDF\n•\tXML\n•\tWORD"
-        category:
-          type: string
-          description: "Category of the template.Examples:\n-\t CARD \n- DISPUTE \n- FRAUD"
-        transformerType:
-          type: string
-          description: "The transformer type defines the format of the template and so technologies that will be used to generate the letter. Possible values are:\n•\tJASPER\n•\tXSLT"
-      title: LetterTemplate
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    ApiResponseEntityValidateCardLetterResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ValidateCardLetterResponse'
-      description: Validate Card Letter Response
-      title: ApiResponseEntityValidateCardLetterResponse
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    LetterTemplateSubParameterValue:
-      type: object
-      properties:
-        subParameterName:
-          type: string
-          description: sub parameter name
-        value:
-          type: string
-          description: sub parameter value
-      title: LetterTemplateSubParameterValue
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    ValidateCardLetterResponse:
-      type: object
-      required:
-      - letterIdentifier
-      - validationStatus
-      properties:
-        letterIdentifier:
-          description: Refer to Letter.letterIdentifier
-          allOf:
-          - $ref: '#/components/schemas/LetterIdentifier'
-        validationStatus:
-          type: string
-          description: Refer to Letter.validationStatus
-      title: ValidateCardLetterResponse
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    GenerateCardLetterRequest:
-      type: object
-      required:
-      - letterTemplateIdentifier
-      properties:
-        letterTemplateIdentifier:
-          description: Identifier of letter template which will be used to generate the letter
-          allOf:
-          - $ref: '#/components/schemas/LetterTemplateIdentifier'
-        letterTemplateParameterValues:
-          type: array
-          items:
-            $ref: '#/components/schemas/LetterTemplateParameterValue'
-          description: The values assigned to the parameters of the letter
-        validationNeeded:
-          type: boolean
-          description: In case the parameter is set to True, than the letter must be validated afterwards
-      title: GenerateCardLetterRequest
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    LetterTemplateIdentifier:
-      type: object
-      properties:
-        letterTemplateReference:
-          type: string
-          description: Reference of the letter template
-      title: LetterTemplateIdentifier
-    ApiResponseEntityRetrieveLetterTemplates:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          type: array
-          items:
-            $ref: '#/components/schemas/LetterTemplate'
-      description: Retrieve Letter Templates response entity
-      title: ApiResponseEntityRetrieveLetterTemplates
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ApiResponseEntityGenerateCardLetterResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/GenerateCardLetterResponse'
-      description: Generate Card Letter Response
-      title: ApiResponseEntityGenerateCardLetterResponse
-    DeleteCardLetterResponse:
-      type: object
-      required:
-      - letterIdentifier
-      properties:
-        letterIdentifier:
-          description: Refer to Letter.letterIdentifier
-          allOf:
-          - $ref: '#/components/schemas/LetterIdentifier'
-      title: DeleteCardLetterResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    GenerateCardLetterResponse:
-      type: object
-      required:
-      - letterIdentifier
-      - name
-      - generationDate
-      properties:
-        letterIdentifier:
-          description: Refer to Letter.letterIdentifier
-          allOf:
-          - $ref: '#/components/schemas/LetterIdentifier'
-        name:
-          type: string
-          description: Refer to Letter.name
-        generationDate:
-          type: string
-          format: date-time
-          description: Refer to Letter.generationDate
-      title: GenerateCardLetterResponse
-    LetterTemplateParameterValue:
-      type: object
-      properties:
-        value:
-          type: string
-          description: Template parameter value prefilled
-        parameterName:
-          type: string
-          description: Template parameter name
-        valueList:
-          type: array
-          description: List of the parameters values which have been prefilled from business object data
-          items:
-            $ref: '#/components/schemas/LetterTemplateValueItem'
-      title: LetterTemplateParameterValue
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    ApiResponseEntityRetrieveLetter:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/Letter'
-      description: Retrieve Card Letter response entity
-      title: ApiResponseEntityRetrieveLetter
-    Letter:
-      type: object
-      properties:
-        issuerId:
-          type: string
-          description: Issuer identifier (unique per platform)
-        letterIdentifier:
-          allOf:
-          - $ref: '#/components/schemas/LetterIdentifier'
-          description: Unique identifier of the letter
-        name:
-          type: string
-          description: Name of the letter template, used to generate the letter
-        description:
-          type: string
-          description: Description of the letter. Free text field
-        content:
-          type: string
-          description: Content of the generated letter in Base64 format
-        outputFormat:
-          type: string
-          description: "Output format of the template used to generate a letter. Possible values are:\n•\tPDF\n•\tXML\n•\tWORD"
-        category:
-          type: string
-          description: Category of the letter template used to generate the letter
-        owner:
-          type: string
-          description: The owner of the letter (from the generate letter request)
-        validationStatus:
-          type: string
-          description: 'Validation status of the letter. Possible values are:
-
-            •VALIDATION_NEEDED
-
-            •VALIDATED'
-        generationDate:
-          type: string
-          format: date-time
-          description: Date of the letter generation
-      title: Letter
-    ApiResponseEntityPrefilledLetterTemplatesResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/PrefilledLetterTemplate'
-      description: Prefilled Letter Template  Response
-      title: ApiResponseEntityPrefilledLetterTemplatesResponse
-    ApiResponseEntityDeleteCardLetterResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/DeleteCardLetterResponse'
-      description: Delete Card Letter response entity
-      title: ApiResponseEntityDeleteCardLetterResponse
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
     LetterTemplateParameter:
       type: object
       properties:
@@ -1857,6 +1351,57 @@ components:
           items:
             $ref: '#/components/schemas/LetterTemplateParameter'
       title: LetterTemplateParameter
+    LetterTemplateSubParameterValue:
+      type: object
+      properties:
+        subParameterName:
+          type: string
+          description: sub parameter name
+        value:
+          type: string
+          description: sub parameter value
+      title: LetterTemplateSubParameterValue
+    ApiResponseEntityGenerateCardLetterResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/GenerateCardLetterResponse'
+      description: Generate Card Letter Response
+      title: ApiResponseEntityGenerateCardLetterResponse
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
     ApiResponseEntityRetrieveLetterTemplate:
       x-wl-api-response: true
       type: object
@@ -1873,6 +1418,461 @@ components:
           - $ref: '#/components/schemas/LetterTemplate'
       description: Retrieve Letter Template response entity
       title: ApiResponseEntityRetrieveLetterTemplate
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    GenerateCardLetterRequest:
+      type: object
+      required:
+      - letterTemplateIdentifier
+      properties:
+        letterTemplateIdentifier:
+          description: Identifier of letter template which will be used to generate the letter
+          allOf:
+          - $ref: '#/components/schemas/LetterTemplateIdentifier'
+        letterTemplateParameterValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/LetterTemplateParameterValue'
+          description: The values assigned to the parameters of the letter
+        validationNeeded:
+          type: boolean
+          description: In case the parameter is set to True, than the letter must be validated afterwards
+      title: GenerateCardLetterRequest
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    LetterTemplateParameterValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: Template parameter value prefilled
+        parameterName:
+          type: string
+          description: Template parameter name
+        valueList:
+          type: array
+          description: List of the parameters values which have been prefilled from business object data
+          items:
+            $ref: '#/components/schemas/LetterTemplateValueItem'
+      title: LetterTemplateParameterValue
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    LetterTemplate:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        letterTemplateIdentifier:
+          allOf:
+          - $ref: '#/components/schemas/LetterTemplateIdentifier'
+          description: Identifier of the letter template
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/LetterTemplateParameter'
+          description: 'List of the parameters related to the template, containing template parameter properties fetched from the Letter Generation Service configuration file.
+
+            _Embedded property, only filled when available for the endpoint and explicitly requested in the ''embed'' query parameter._'
+        description:
+          type: string
+          description: Description of the letter template. Free text field
+        structure:
+          type: string
+          description: Used for Jasper letters. Defines the structure of the Jasper template
+        outputFormat:
+          type: string
+          description: "Output format of the template to define the output format. Possible values are:\n•\tPDF\n•\tXML\n•\tWORD"
+        category:
+          type: string
+          description: "Category of the template.Examples:\n-\t CARD \n- DISPUTE \n- FRAUD"
+        transformerType:
+          type: string
+          description: "The transformer type defines the format of the template and so technologies that will be used to generate the letter. Possible values are:\n•\tJASPER\n•\tXSLT"
+      title: LetterTemplate
+    LetterTemplateIdentifier:
+      type: object
+      properties:
+        letterTemplateReference:
+          type: string
+          description: Reference of the letter template
+      title: LetterTemplateIdentifier
+    ApiResponseEntityPrefilledLetterTemplatesResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/PrefilledLetterTemplate'
+      description: Prefilled Letter Template  Response
+      title: ApiResponseEntityPrefilledLetterTemplatesResponse
+    Letter:
+      type: object
+      properties:
+        issuerId:
+          type: string
+          description: Issuer identifier (unique per platform)
+        letterIdentifier:
+          allOf:
+          - $ref: '#/components/schemas/LetterIdentifier'
+          description: Unique identifier of the letter
+        name:
+          type: string
+          description: Name of the letter template, used to generate the letter
+        description:
+          type: string
+          description: Description of the letter. Free text field
+        content:
+          type: string
+          description: Content of the generated letter in Base64 format
+        outputFormat:
+          type: string
+          description: "Output format of the template used to generate a letter. Possible values are:\n•\tPDF\n•\tXML\n•\tWORD"
+        category:
+          type: string
+          description: Category of the letter template used to generate the letter
+        owner:
+          type: string
+          description: The owner of the letter (from the generate letter request)
+        validationStatus:
+          type: string
+          description: 'Validation status of the letter. Possible values are:
+
+            •VALIDATION_NEEDED
+
+            •VALIDATED'
+        generationDate:
+          type: string
+          format: date-time
+          description: Date of the letter generation
+      title: Letter
+    LetterIdentifier:
+      type: object
+      properties:
+        letterId:
+          type: string
+          description: Unique ID of the letter, generated in the system
+      title: LetterIdentifier
+    LetterTemplateValueItem:
+      type: object
+      properties:
+        subParameters:
+          type: array
+          description: List of subparameters values associated to the letter parameter
+          items:
+            $ref: '#/components/schemas/LetterTemplateSubParameterValue'
+      title: LetterTemplateValueItem
+    ApiResponseEntityDeleteCardLetterResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/DeleteCardLetterResponse'
+      description: Delete Card Letter response entity
+      title: ApiResponseEntityDeleteCardLetterResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    ValidateCardLetterResponse:
+      type: object
+      required:
+      - letterIdentifier
+      - validationStatus
+      properties:
+        letterIdentifier:
+          description: Refer to Letter.letterIdentifier
+          allOf:
+          - $ref: '#/components/schemas/LetterIdentifier'
+        validationStatus:
+          type: string
+          description: Refer to Letter.validationStatus
+      title: ValidateCardLetterResponse
+    GenerateCardLetterResponse:
+      type: object
+      required:
+      - letterIdentifier
+      - name
+      - generationDate
+      properties:
+        letterIdentifier:
+          description: Refer to Letter.letterIdentifier
+          allOf:
+          - $ref: '#/components/schemas/LetterIdentifier'
+        name:
+          type: string
+          description: Refer to Letter.name
+        generationDate:
+          type: string
+          format: date-time
+          description: Refer to Letter.generationDate
+      title: GenerateCardLetterResponse
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    DeleteCardLetterResponse:
+      type: object
+      required:
+      - letterIdentifier
+      properties:
+        letterIdentifier:
+          description: Refer to Letter.letterIdentifier
+          allOf:
+          - $ref: '#/components/schemas/LetterIdentifier'
+      title: DeleteCardLetterResponse
+    ApiResponseEntityValidateCardLetterResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ValidateCardLetterResponse'
+      description: Validate Card Letter Response
+      title: ApiResponseEntityValidateCardLetterResponse
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    ApiResponseEntityRetrieveLetterTemplates:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          type: array
+          items:
+            $ref: '#/components/schemas/LetterTemplate'
+      description: Retrieve Letter Templates response entity
+      title: ApiResponseEntityRetrieveLetterTemplates
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    ApiResponseEntityRetrieveLetter:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/Letter'
+      description: Retrieve Card Letter response entity
+      title: ApiResponseEntityRetrieveLetter
   securitySchemes:
     basic:
       type: oauth2

@@ -78,21 +78,7 @@ paths:
       - basic: []
 components:
   schemas:
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    UnauthorizedResponseMetadata:
+    InternalServerErrorResponseMetadata:
       type: object
       required:
       - correlationId
@@ -110,13 +96,51 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 401
+          example: 500
           description: HTTP status code
         statusMessage:
           type: string
-          example: Unauthorized
+          example: Internal server error
           description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
+      title: InternalServerErrorResponseMetadata
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    VelocityLimitIdentifier:
+      type: object
+      properties:
+        velocityLimitReference:
+          type: string
+          description: 'minLength: 1
+
+            maxLength: 60
+
+            Identifies the velocity check.'
+      title: VelocityLimitIdentifier
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     ResponseMetadata:
       type: object
       required:
@@ -151,148 +175,6 @@ components:
           example: 12
           description: Wall clock time required from service to generate the response
       title: ResponseMetadata
-    MonetaryAmountAlphaCurrency:
-      type: object
-      properties:
-        exponent:
-          type: integer
-          format: int32
-          example: 2
-          description: 'Exponent of amount currency. Number of decimal digits. Example: 2 for Euro.'
-        isoCode:
-          type: string
-          example: EUR
-          description: 'Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro.'
-        value:
-          type: integer
-          format: int64
-          description: 'Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents).'
-      title: MonetaryAmountAlphaCurrency
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ApiResponseEntityEnquireVelocityChecks:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/VelocityCheck'
-        responseMetadata:
-          description: Response metadata
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityEnquireVelocityChecks
-      description: Enquire Velocity Checks response entity
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
     BadRequestResponseMetadata:
       type: object
       required:
@@ -318,6 +200,87 @@ components:
           example: Bad request
           description: Executed REST API status message
       title: BadRequestResponseMetadata
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    MonetaryAmountAlphaCurrency:
+      type: object
+      properties:
+        exponent:
+          type: integer
+          format: int32
+          example: 2
+          description: 'Exponent of amount currency. Number of decimal digits. Example: 2 for Euro.'
+        isoCode:
+          type: string
+          example: EUR
+          description: 'Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro.'
+        value:
+          type: integer
+          format: int64
+          description: 'Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents).'
+      title: MonetaryAmountAlphaCurrency
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
     BadRequestErrorApiResponse:
       type: object
       required:
@@ -352,17 +315,45 @@ components:
           example: Forbidden
           description: Executed REST API status message
       title: ForbiddenResponseMetadata
-    VelocityLimitIdentifier:
+    NotFoundResponseMetadata:
       type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        velocityLimitReference:
+        correlationId:
           type: string
-          description: 'minLength: 1
-
-            maxLength: 60
-
-            Identifies the velocity check.'
-      title: VelocityLimitIdentifier
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    ApiResponseEntityEnquireVelocityChecks:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VelocityCheck'
+        responseMetadata:
+          description: Response metadata
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityEnquireVelocityChecks
+      description: Enquire Velocity Checks response entity
     VelocityCheck:
       type: object
       properties:
@@ -382,6 +373,15 @@ components:
         velocityLimitName:
           type: string
       title: VelocityCheck
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
   securitySchemes:
     basic:
       type: oauth2
