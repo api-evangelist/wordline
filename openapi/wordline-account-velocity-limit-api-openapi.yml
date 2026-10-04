@@ -1414,104 +1414,41 @@ paths:
       - basic: []
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    VelocityLimitHistory:
-      type: object
-      required:
-      - changeTime
-      - changeType
-      - maximumAmount
-      properties:
-        activationEndTime:
-          type: string
-          description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately.
-
-            Date Time format:  DD/MM/YYYY'
-        activationStartTime:
-          type: string
-          description: "First point in time at which the override will be considered. If not provided the override will be taken into account immediately.\nDate Time format:  DD/MM/YYYY \n"
-        changeTime:
-          type: string
-          description: "Time when the modification has been performed. UTC time zone.\nDate Time format: yyyy-MM-dd’T’HH:mm:ssZ \n"
-        changeType:
-          type: string
-          description: "Indicates which kind of modification has been performed on the velocity check override. Possible values are:\n-\tDelete (no attributes are provided at all)\n-\tReplace (all attributes are provided and not only the changed ones)\n"
-        maximumAmount:
-          description: Overrides what is configured on higher levels for the corresponding velocity check attribute
-          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        maximumAmountCheck:
-          type: boolean
-        maximumCount:
-          type: integer
-          format: int32
-          description: Overrides what is configured on higher levels for the corresponding velocity check attribute
-        maximumCountCheck:
-          type: boolean
-        minimumAmount:
-          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        minimumAmountCheck:
-          type: boolean
-        priority:
-          type: integer
-          format: int32
-        requestorReference:
-          type: string
-          description: Identifies the caller which has generated or triggered the modification.
-        userReference:
-          type: string
-      title: VelocityLimitHistory
-    VelocityLimitOverride:
+    VelocityLimit:
       type: object
       properties:
-        activationEndTime:
-          type: string
-          description: Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever.
-        activationStartTime:
-          type: string
-          description: First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately.
-        defaultVelocityLimitReference:
-          $ref: '#/components/schemas/VelocityLimitIdentifier'
-        deleted:
-          type: boolean
-          description: Indicates whether the override is still taken into account or has been deleted.
+        amount:
+          description: "Cumulated authorization amount in period. Debits have a positive sign whereas credits have a negative one. \nThe returned value is the one being effective at operation execution time."
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        count:
+          type: integer
+          format: int32
+          description: "minimum: 0\nmaximum: 999999999\nCurrent number of transactions in period. \nThe returned value is the one being effective at operation execution time."
         issuerId:
           type: string
-          description: Not used, to be removed
+          description: Not used, will be removed.
         maximumAmount:
-          description: 'minimum: -1000000000000000000
-
-            maximum: 1000000000000000000
-
-            Maximum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be positive. The returned value is the one being effective at operation execution time. Only present in case MaximumAmountCheck is true.'
+          description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMaximum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be positive. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MaximumAmountCheck is true."
           allOf:
           - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
         maximumAmountCheck:
           type: boolean
-          description: Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. The returned value is the one being effective at operation execution time.
+          description: "Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time."
+        maximumAmountCheckOrigin:
+          type: string
+          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+            Indicates from which entity MaximumAmountCheck has been taken.'
+        maximumAmountOrigin:
+          type: string
+          description: 'Indicates from which level MaximumAmountCheck has been taken
+
+            Only present in case MaximumAmount is present.
+
+            Enum:
+
+            [ Default, Exception, Override, Other ]'
         maximumCount:
           type: integer
           format: int32
@@ -1519,221 +1456,66 @@ components:
 
             maximum: 999999999
 
-            Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true.'
+            Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true. '
         maximumCountCheck:
           type: boolean
-          description: Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. The returned value is the one being effective at operation execution time.
+          description: "Indicates whether the number of transactions in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time. "
+        maximumCountCheckOrigin:
+          type: string
+          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+            Indicates from which entity MaximumCountCheck has been taken.'
+        maximumCountOrigin:
+          type: string
+          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
+
+            Indicates from which entity MaximumCount has been taken.
+
+            Only present if the maximum count check has been performed.'
         minimumAmount:
-          description: 'minimum: -1000000000000000000
-
-            maximum: 1000000000000000000
-
-            Minimum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be negative. The returned value is the one being effective at operation execution time. Only present in case MinimumAmountCheck is true.'
+          description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMinimum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be negative. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MinimumAmountCheck is true."
           allOf:
           - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
         minimumAmountCheck:
           type: boolean
-          description: Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. The returned value is the one being effective at operation execution time.
-        priority:
+          description: "Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. \nThe returned value is the one being effective at operation execution time."
+        minimumAmountCheckOrigin:
           type: string
-          description: 'minimum: 0
+          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
 
-            maximum: 9999
+            Indicates from which entity MinimumAmountCheck has been taken.'
+        minimumAmountOrigin:
+          type: string
+          description: "Indicates from which level MinimumAmountCheck has been taken.  \nPossible values: Default, Exception, Override, Other.\nOnly present in case MinimumAmount is present."
+        name:
+          type: string
+          description: 'minLength: 1
 
-            In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a velocity check and an account. Required field when inserting.'
-        velocityLimitOverrideIdentifier:
-          $ref: '#/components/schemas/VelocityLimitOverrideIdentifier'
-      title: VelocityLimitOverride
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
+            Descriptive text for the velocity limit, e.g. DAILY CASH'
+        velocityLimitIdentifier:
+          $ref: '#/components/schemas/VelocityLimitIdentifier'
+        velocityLimitOverrideReference:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    ModifyVelocityLimitOverrideRequest:
-      type: object
-      properties:
-        activationEndTime:
+        velocityLimitOverrideStartdate:
           type: string
           format: date-time
-          description: "Last point in time at which the override will be considered. If not provided the override will be taken into account forever. UTC time zone. \nFormat: yyyy-MM-dd'T'HH:mm:ssZ"
-        activationStartTime:
+        velocityLimitOverrideEnddate:
           type: string
           format: date-time
-          description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately
-
-            Format: yyyy-MM-dd''T''HH:mm:ssZ'
-        maximumAmount:
-          description: Maximum amount
-          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        maximumAmountCheck:
-          type: boolean
-          description: Maximum amount check
-        maximumCount:
-          type: integer
-          format: int32
-          description: Maximum count
-        maximumCountCheck:
-          type: boolean
-          description: Maximum count check
-        minimumAmount:
-          description: Minimum amount
-          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        minimumAmountCheck:
-          type: boolean
-          description: Minimum amount check
-        periodLength:
-          type: integer
-          format: int32
-          description: Period Length
-        periodStart:
-          type: integer
-          format: int32
-          description: Period Start
-        periodType:
-          type: string
-          example: Day
-          description: Period Type
-          enum:
-          - Day
-          - Month
-          - Week
-        priority:
-          type: integer
-          format: int32
-          description: Priority
-      title: ModifyVelocityLimitOverrideRequest
-    ApiResponseEntityGetVelocityLimit:
+      title: VelocityLimit
+    ApiResponseEntityCreateVelocityLimitOverride:
       type: object
       required:
       - responseMetadata
       properties:
         data:
           allOf:
-          - $ref: '#/components/schemas/GetVelocityLimitResponse'
+          - $ref: '#/components/schemas/VelocityLimitOverrideIdentifier'
         responseMetadata:
           allOf:
           - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetVelocityLimit
-      description: 'Response to: Retrieve a Velocity Limit'
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    ApiResponseEntityGetVelocityOverride:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/GetVelocityOverrideResponse'
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetVelocityOverride
-      description: 'Response to: Retrieve a Velocity Limit Override'
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
+      title: ApiResponseEntityCreateVelocityLimitOverride
+      description: 'Response to: Create a Velocity Limit Override'
     ApiResponseEntityDeleteVelocityLimitOverride:
       type: object
       required:
@@ -1747,6 +1529,20 @@ components:
           - $ref: '#/components/schemas/ResponseMetadata'
       title: ApiResponseEntityDeleteVelocityLimitOverride
       description: 'Response to: Delete a Velocity Limit Override'
+    ApiResponseEntityGetVelocityLimitOverrideHistoryResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VelocityLimitHistory'
+        responseMetadata:
+          description: Response metadata
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetVelocityLimitOverrideHistoryResponse
+      description: Issuer response entity
     ApiResponseEntityGetVelocityOverrides:
       type: object
       required:
@@ -1869,221 +1665,86 @@ components:
           type: string
           format: date-time
       title: GetVelocityLimitResponse
-    ApiResponseEntityGetVelocityLimitOverrideHistoryResponse:
+    VelocityLimitOverrideIdentifier:
+      type: object
+      properties:
+        velocityLimitOverrideReference:
+          type: string
+          description: 'minLength: 1
+
+            maxLength: 100
+
+            Identifies the velocity limit override which replaces the default velocity limit.'
+      title: VelocityLimitOverrideIdentifier
+    NotFoundErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/VelocityLimitHistory'
         responseMetadata:
-          description: Response metadata
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetVelocityLimitOverrideHistoryResponse
-      description: Issuer response entity
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    MonetaryAmountAlphaCurrency:
-      type: object
-      properties:
-        exponent:
-          type: integer
-          format: int32
-          example: 2
-          description: 'Exponent of amount currency. Number of decimal digits. Example: 2 for Euro.'
-        isoCode:
-          type: string
-          example: EUR
-          description: 'Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro.'
-        value:
-          type: integer
-          format: int64
-          description: 'Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents).'
-      title: MonetaryAmountAlphaCurrency
-    CreateVelocityLimitOverrideRequest:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    VelocityLimitOverride:
       type: object
       properties:
         activationEndTime:
           type: string
-          format: date-time
-          description: "Last point in time at which the override will be considered. If not provided the override will be taken into account forever. UTC time zone. \nFormat: yyyy-MM-dd'T'HH:mm:ssZ"
+          description: Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever.
         activationStartTime:
           type: string
-          format: date-time
-          description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately
-
-            Format: yyyy-MM-dd''T''HH:mm:ssZ'
+          description: First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately.
+        defaultVelocityLimitReference:
+          $ref: '#/components/schemas/VelocityLimitIdentifier'
+        deleted:
+          type: boolean
+          description: Indicates whether the override is still taken into account or has been deleted.
+        issuerId:
+          type: string
+          description: Not used, to be removed
         maximumAmount:
-          description: Maximum amount
-          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+          description: 'minimum: -1000000000000000000
+
+            maximum: 1000000000000000000
+
+            Maximum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be positive. The returned value is the one being effective at operation execution time. Only present in case MaximumAmountCheck is true.'
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
         maximumAmountCheck:
           type: boolean
-          description: Maximum amount check
+          description: Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. The returned value is the one being effective at operation execution time.
         maximumCount:
           type: integer
           format: int32
-          description: Maximum count
+          description: 'minimum: 0
+
+            maximum: 999999999
+
+            Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true.'
         maximumCountCheck:
           type: boolean
-          description: Maximum count check
+          description: Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. The returned value is the one being effective at operation execution time.
         minimumAmount:
-          description: Minimum amount
-          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+          description: 'minimum: -1000000000000000000
+
+            maximum: 1000000000000000000
+
+            Minimum threshold for the cumulated authorization amount in period. In most of the cases the value given here will be negative. The returned value is the one being effective at operation execution time. Only present in case MinimumAmountCheck is true.'
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
         minimumAmountCheck:
           type: boolean
-          description: Minimum amount check
-        periodLength:
-          type: integer
-          format: int32
-          description: Period Length
-        periodStart:
-          type: integer
-          format: int32
-          description: Period Start
-        periodType:
-          type: string
-          example: Day
-          description: Period Type
-          enum:
-          - Day
-          - Month
-          - Week
+          description: Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. The returned value is the one being effective at operation execution time.
         priority:
-          type: integer
-          format: int32
-          description: Priority of the override
-      title: CreateVelocityLimitOverrideRequest
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    VelocityLimitIdentifier:
-      type: object
-      properties:
-        velocityLimitReference:
-          type: string
-          description: 'minLength: 1
+          description: 'minimum: 0
 
-            maxLength: 60
+            maximum: 9999
 
-            Identifies the velocity check.'
-      title: VelocityLimitIdentifier
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    ApiResponseEntityCreateVelocityLimitOverride:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/VelocityLimitOverrideIdentifier'
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityCreateVelocityLimitOverride
-      description: 'Response to: Create a Velocity Limit Override'
+            In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a velocity check and an account. Required field when inserting.'
+        velocityLimitOverrideIdentifier:
+          $ref: '#/components/schemas/VelocityLimitOverrideIdentifier'
+      title: VelocityLimitOverride
     ApiResponseEntityModifyVelocityLimitOverride:
       type: object
       required:
@@ -2097,95 +1758,51 @@ components:
           - $ref: '#/components/schemas/ResponseMetadata'
       title: ApiResponseEntityModifyVelocityLimitOverride
       description: 'Response to: Update a Velocity Limit Override'
-    VelocityLimit:
+    VelocityLimitHistory:
       type: object
+      required:
+      - changeTime
+      - changeType
+      - maximumAmount
       properties:
-        amount:
-          description: "Cumulated authorization amount in period. Debits have a positive sign whereas credits have a negative one. \nThe returned value is the one being effective at operation execution time."
-          allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
-        count:
-          type: integer
-          format: int32
-          description: "minimum: 0\nmaximum: 999999999\nCurrent number of transactions in period. \nThe returned value is the one being effective at operation execution time."
-        issuerId:
+        activationEndTime:
           type: string
-          description: Not used, will be removed.
+          description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately.
+
+            Date Time format:  DD/MM/YYYY'
+        activationStartTime:
+          type: string
+          description: "First point in time at which the override will be considered. If not provided the override will be taken into account immediately.\nDate Time format:  DD/MM/YYYY \n"
+        changeTime:
+          type: string
+          description: "Time when the modification has been performed. UTC time zone.\nDate Time format: yyyy-MM-dd’T’HH:mm:ssZ \n"
+        changeType:
+          type: string
+          description: "Indicates which kind of modification has been performed on the velocity check override. Possible values are:\n-\tDelete (no attributes are provided at all)\n-\tReplace (all attributes are provided and not only the changed ones)\n"
         maximumAmount:
-          description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMaximum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be positive. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MaximumAmountCheck is true."
-          allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+          description: Overrides what is configured on higher levels for the corresponding velocity check attribute
+          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
         maximumAmountCheck:
           type: boolean
-          description: "Indicates whether the cumulated authorization amount in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time."
-        maximumAmountCheckOrigin:
-          type: string
-          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
-
-            Indicates from which entity MaximumAmountCheck has been taken.'
-        maximumAmountOrigin:
-          type: string
-          description: 'Indicates from which level MaximumAmountCheck has been taken
-
-            Only present in case MaximumAmount is present.
-
-            Enum:
-
-            [ Default, Exception, Override, Other ]'
         maximumCount:
           type: integer
           format: int32
-          description: 'minimum: 0
-
-            maximum: 999999999
-
-            Maximum threshold for the number of transactions in period. The returned value is the one being effective at operation execution time. Only present in case MaximumCountCheck is true. '
+          description: Overrides what is configured on higher levels for the corresponding velocity check attribute
         maximumCountCheck:
           type: boolean
-          description: "Indicates whether the number of transactions in period is compared with a maximum threshold or not. \nThe returned value is the one being effective at operation execution time. "
-        maximumCountCheckOrigin:
-          type: string
-          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
-
-            Indicates from which entity MaximumCountCheck has been taken.'
-        maximumCountOrigin:
-          type: string
-          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
-
-            Indicates from which entity MaximumCount has been taken.
-
-            Only present if the maximum count check has been performed.'
         minimumAmount:
-          description: "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nMinimum threshold for the cumulated authorization amount in period. \nIn most of the cases the value given here will be negative. \nThe returned value is the one being effective at operation execution time. \nOnly present in case MinimumAmountCheck is true."
-          allOf:
-          - $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
         minimumAmountCheck:
           type: boolean
-          description: "Indicates whether the cumulated authorization amount in period is compared with a minimum threshold or not. \nThe returned value is the one being effective at operation execution time."
-        minimumAmountCheckOrigin:
+        priority:
+          type: integer
+          format: int32
+        requestorReference:
           type: string
-          description: 'Examples: List [ "Default", "Exception", "Override", "Other" ]
-
-            Indicates from which entity MinimumAmountCheck has been taken.'
-        minimumAmountOrigin:
+          description: Identifies the caller which has generated or triggered the modification.
+        userReference:
           type: string
-          description: "Indicates from which level MinimumAmountCheck has been taken.  \nPossible values: Default, Exception, Override, Other.\nOnly present in case MinimumAmount is present."
-        name:
-          type: string
-          description: 'minLength: 1
-
-            Descriptive text for the velocity limit, e.g. DAILY CASH'
-        velocityLimitIdentifier:
-          $ref: '#/components/schemas/VelocityLimitIdentifier'
-        velocityLimitOverrideReference:
-          type: string
-        velocityLimitOverrideStartdate:
-          type: string
-          format: date-time
-        velocityLimitOverrideEnddate:
-          type: string
-          format: date-time
-      title: VelocityLimit
+      title: VelocityLimitHistory
     GetVelocityOverrideResponse:
       type: object
       properties:
@@ -2245,26 +1862,222 @@ components:
         velocityLimitOverrideIdentifier:
           $ref: '#/components/schemas/VelocityLimitOverrideIdentifier'
       title: GetVelocityOverrideResponse
-    UnauthorizedErrorApiResponse:
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    MonetaryAmountAlphaCurrency:
+      type: object
+      properties:
+        exponent:
+          type: integer
+          format: int32
+          example: 2
+          description: 'Exponent of amount currency. Number of decimal digits. Example: 2 for Euro.'
+        isoCode:
+          type: string
+          example: EUR
+          description: 'Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro.'
+        value:
+          type: integer
+          format: int64
+          description: 'Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents).'
+      title: MonetaryAmountAlphaCurrency
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    VelocityLimitIdentifier:
+      type: object
+      properties:
+        velocityLimitReference:
+          type: string
+          description: 'minLength: 1
+
+            maxLength: 60
+
+            Identifies the velocity check.'
+      title: VelocityLimitIdentifier
+    ForbiddenErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    VelocityLimitOverrideIdentifier:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    BadGatewayResponseMetadata:
       type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        velocityLimitOverrideReference:
+        correlationId:
           type: string
-          description: 'minLength: 1
-
-            maxLength: 100
-
-            Identifies the velocity limit override which replaces the default velocity limit.'
-      title: VelocityLimitOverrideIdentifier
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    ApiResponseEntityGetVelocityOverride:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/GetVelocityOverrideResponse'
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetVelocityOverride
+      description: 'Response to: Retrieve a Velocity Limit Override'
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
     ApiResponseEntityGetVelocityLimits:
       type: object
       required:
@@ -2279,6 +2092,193 @@ components:
           - $ref: '#/components/schemas/ResponseMetadata'
       title: ApiResponseEntityGetVelocityLimits
       description: 'Response to: List the Velocity Limits'
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    ModifyVelocityLimitOverrideRequest:
+      type: object
+      properties:
+        activationEndTime:
+          type: string
+          format: date-time
+          description: "Last point in time at which the override will be considered. If not provided the override will be taken into account forever. UTC time zone. \nFormat: yyyy-MM-dd'T'HH:mm:ssZ"
+        activationStartTime:
+          type: string
+          format: date-time
+          description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately
+
+            Format: yyyy-MM-dd''T''HH:mm:ssZ'
+        maximumAmount:
+          description: Maximum amount
+          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        maximumAmountCheck:
+          type: boolean
+          description: Maximum amount check
+        maximumCount:
+          type: integer
+          format: int32
+          description: Maximum count
+        maximumCountCheck:
+          type: boolean
+          description: Maximum count check
+        minimumAmount:
+          description: Minimum amount
+          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        minimumAmountCheck:
+          type: boolean
+          description: Minimum amount check
+        periodLength:
+          type: integer
+          format: int32
+          description: Period Length
+        periodStart:
+          type: integer
+          format: int32
+          description: Period Start
+        periodType:
+          type: string
+          example: Day
+          description: Period Type
+          enum:
+          - Day
+          - Month
+          - Week
+        priority:
+          type: integer
+          format: int32
+          description: Priority
+      title: ModifyVelocityLimitOverrideRequest
+    CreateVelocityLimitOverrideRequest:
+      type: object
+      properties:
+        activationEndTime:
+          type: string
+          format: date-time
+          description: "Last point in time at which the override will be considered. If not provided the override will be taken into account forever. UTC time zone. \nFormat: yyyy-MM-dd'T'HH:mm:ssZ"
+        activationStartTime:
+          type: string
+          format: date-time
+          description: 'First point in time at which the override will be considered. If not provided the override will be taken into account immediately
+
+            Format: yyyy-MM-dd''T''HH:mm:ssZ'
+        maximumAmount:
+          description: Maximum amount
+          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        maximumAmountCheck:
+          type: boolean
+          description: Maximum amount check
+        maximumCount:
+          type: integer
+          format: int32
+          description: Maximum count
+        maximumCountCheck:
+          type: boolean
+          description: Maximum count check
+        minimumAmount:
+          description: Minimum amount
+          $ref: '#/components/schemas/MonetaryAmountAlphaCurrency'
+        minimumAmountCheck:
+          type: boolean
+          description: Minimum amount check
+        periodLength:
+          type: integer
+          format: int32
+          description: Period Length
+        periodStart:
+          type: integer
+          format: int32
+          description: Period Start
+        periodType:
+          type: string
+          example: Day
+          description: Period Type
+          enum:
+          - Day
+          - Month
+          - Week
+        priority:
+          type: integer
+          format: int32
+          description: Priority of the override
+      title: CreateVelocityLimitOverrideRequest
+    ApiResponseEntityGetVelocityLimit:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/GetVelocityLimitResponse'
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetVelocityLimit
+      description: 'Response to: Retrieve a Velocity Limit'
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

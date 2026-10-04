@@ -361,67 +361,57 @@ paths:
                 $ref: '#/components/schemas/BadGatewayErrorApiResponse'
 components:
   schemas:
-    SubscriptionParameter:
+    NotFoundErrorApiResponse:
       type: object
       required:
-      - criteria
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    SubscriptionServiceIdentifier:
+      type: object
+      properties:
+        subscriptionServiceReference:
+          type: string
+      title: SubscriptionServiceIdentifier
+    ApiResponseEntitySearchSubscription:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntitySearchSubscription
+      description: Issuer response entity
+    SubscriptionContact:
+      type: object
+      required:
+      - type
       - value
       properties:
-        criteria:
+        pushDeviceType:
           type: string
+          description: Type of (mobile) device (required if type is PUSH)
+          enum:
+          - ANDROID
+          - IOS
+        type:
+          type: string
+          example: MSISDN
+          enum:
+          - MSISDN
+          - EMAIL
+          - PUSH
         value:
           type: string
-      title: SubscriptionParameter
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
+          example: '+49171000000001'
+      title: SubscriptionContact
     ApiResponseEntityCreateSubscription:
       type: object
       required:
@@ -458,151 +448,19 @@ components:
           example: Unauthorized
           description: Executed REST API status message
       title: UnauthorizedResponseMetadata
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
     SubscriptionResponse:
       type: object
       properties:
         subscriptionIdentifier:
           $ref: '#/components/schemas/SubscriptionIdentifier'
       title: SubscriptionResponse
-    Subscription:
-      type: object
-      required:
-      - cardContractReference
-      - services
-      properties:
-        cardContractReference:
-          type: string
-          example: 9.9999e+20
-        customerInfo:
-          type: object
-          example:
-            additionalKey1: some-value
-            additionalKey2: another-value
-          description: Key/value object, entries will be part of each notification for this subscription (max. length of the keys is 32 characters)
-          additionalProperties:
-            type: string
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionService'
-        subscriptionIdentifier:
-          $ref: '#/components/schemas/SubscriptionIdentifier'
-      title: Subscription
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    ApiResponseEntityModifySubscription:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/SubscriptionResponse'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityModifySubscription
-      description: Issuer response entity
-    ApiResponseEntitySubscription:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/Subscription'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntitySubscription
-      description: Issuer response entity
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
     SubscriptionIdentifier:
       type: object
       properties:
         subscriptionReference:
           type: string
       title: SubscriptionIdentifier
-    ApiResponseEntityDeleteSubscription:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          $ref: '#/components/schemas/SubscriptionResponse'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityDeleteSubscription
-      description: Issuer response entity
-    ForbiddenResponseMetadata:
+    NotFoundResponseMetadata:
       type: object
       required:
       - correlationId
@@ -620,41 +478,13 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 403
+          example: 404
           description: HTTP status code
         statusMessage:
           type: string
-          example: Forbidden
+          example: Not found
           description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    SubscriptionEventIdentifier:
-      type: object
-      properties:
-        subscriptionEventReference:
-          type: string
-      title: SubscriptionEventIdentifier
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    ApiResponseEntitySearchSubscription:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntitySearchSubscription
-      description: Issuer response entity
+      title: NotFoundResponseMetadata
     ResponseMetadata:
       type: object
       required:
@@ -689,6 +519,97 @@ components:
           example: 12
           description: Wall clock time required from service to generate the response
       title: ResponseMetadata
+    SubscriptionEvent:
+      type: object
+      required:
+      - eventName
+      properties:
+        eventName:
+          type: string
+          example: XX_Approve_FO
+        externalReference:
+          type: string
+          description: Optional external event identifier
+        parameters:
+          type: array
+          description: Optional list of parameters to customize the criteria values for events
+          items:
+            $ref: '#/components/schemas/SubscriptionParameter'
+        subscriptionEventIdentifier:
+          $ref: '#/components/schemas/SubscriptionEventIdentifier'
+      title: SubscriptionEvent
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    SubscriptionEventIdentifier:
+      type: object
+      properties:
+        subscriptionEventReference:
+          type: string
+      title: SubscriptionEventIdentifier
     BadRequestResponseMetadata:
       type: object
       required:
@@ -714,6 +635,66 @@ components:
           example: Bad request
           description: Executed REST API status message
       title: BadRequestResponseMetadata
+    Subscription:
+      type: object
+      required:
+      - cardContractReference
+      - services
+      properties:
+        cardContractReference:
+          type: string
+          example: 9.9999e+20
+        customerInfo:
+          type: object
+          example:
+            additionalKey1: some-value
+            additionalKey2: another-value
+          description: Key/value object, entries will be part of each notification for this subscription (max. length of the keys is 32 characters)
+          additionalProperties:
+            type: string
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionService'
+        subscriptionIdentifier:
+          $ref: '#/components/schemas/SubscriptionIdentifier'
+      title: Subscription
+    SubscriptionParameter:
+      type: object
+      required:
+      - criteria
+      - value
+      properties:
+        criteria:
+          type: string
+        value:
+          type: string
+      title: SubscriptionParameter
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
     SubscriptionService:
       type: object
       required:
@@ -742,54 +723,73 @@ components:
         subscriptionServiceIdentifier:
           $ref: '#/components/schemas/SubscriptionServiceIdentifier'
       title: SubscriptionService
-    SubscriptionEvent:
+    ApiResponseEntitySubscription:
       type: object
       required:
-      - eventName
+      - responseMetadata
       properties:
-        eventName:
-          type: string
-          example: XX_Approve_FO
-        externalReference:
-          type: string
-          description: Optional external event identifier
-        parameters:
-          type: array
-          description: Optional list of parameters to customize the criteria values for events
-          items:
-            $ref: '#/components/schemas/SubscriptionParameter'
-        subscriptionEventIdentifier:
-          $ref: '#/components/schemas/SubscriptionEventIdentifier'
-      title: SubscriptionEvent
-    SubscriptionServiceIdentifier:
-      type: object
-      properties:
-        subscriptionServiceReference:
-          type: string
-      title: SubscriptionServiceIdentifier
-    SubscriptionContact:
+        data:
+          $ref: '#/components/schemas/Subscription'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntitySubscription
+      description: Issuer response entity
+    ApiResponseEntityDeleteSubscription:
       type: object
       required:
-      - type
-      - value
+      - responseMetadata
       properties:
-        pushDeviceType:
+        data:
+          $ref: '#/components/schemas/SubscriptionResponse'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityDeleteSubscription
+      description: Issuer response entity
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    ApiResponseEntityModifySubscription:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          $ref: '#/components/schemas/SubscriptionResponse'
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityModifySubscription
+      description: Issuer response entity
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
           type: string
-          description: Type of (mobile) device (required if type is PUSH)
-          enum:
-          - ANDROID
-          - IOS
-        type:
+          description: Correlation Identifier
+        responseDateTime:
           type: string
-          example: MSISDN
-          enum:
-          - MSISDN
-          - EMAIL
-          - PUSH
-        value:
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
           type: string
-          example: '+49171000000001'
-      title: SubscriptionContact
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

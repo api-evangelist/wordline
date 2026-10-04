@@ -469,31 +469,51 @@ paths:
           content: {}
 components:
   schemas:
-    ErrorResponse:
+    HoldingListData:
       type: object
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorData'
-    PostHolding:
+        contractIdentification:
+          type: object
+          properties:
+            acquirerId:
+              type: string
+              description: Unique identification of the acquirer, determined by equensWorldline
+              example: '315000001'
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        holdingName:
+          type: string
+          description: Name of the holding
+          example: Event Payment Solutions
+        status:
+          type: string
+          description: The status of this entity. Values [Active]
+          example: Active
+        address:
+          $ref: '#/components/schemas/Address'
+        holdingDetailsURI:
+          type: string
+          description: URI to get the holding details
+          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX
+    PostHoldingBasic:
       type: object
       properties:
-        basic:
-          $ref: '#/components/schemas/PostHoldingBasic'
-    HoldingData:
+        holdingName:
+          type: string
+          description: Name of the holding
+          example: Event Payment Solutions
+    HoldingAddressData:
       type: object
       properties:
         contractIdentification:
           $ref: '#/components/schemas/HoldingContractIdentification'
-        basic:
-          $ref: '#/components/schemas/HoldingBasic'
-        status:
-          $ref: '#/components/schemas/HoldingStatus'
-        addressDetailsURI:
-          type: string
-          description: URI to get the holding address details
-          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX/addresses
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
     Operation:
       type: object
       properties:
@@ -520,39 +540,69 @@ components:
         from:
           type: string
           description: Not elevant for currently supported operations
-    MerchantIdentificationResponse:
+    ErrorResponse:
       type: object
       properties:
-        acquirerId:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorData'
+    ErrorData:
+      type: object
+      properties:
+        code:
           type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-        holdingId:
+          description: Unique code of the error as returned by the system handling the request
+        keyword:
           type: string
-          description: Unique identification of the holding, determined by equensWorldline
-        merchantId:
+          description: JSON keyword from the request message that triggered the error
+        errorMessage:
           type: string
-          description: Unique identification of the merchant, determined by the acquirer
-        contractId:
+          description: Message explaining the error
+    Address:
+      type: object
+      properties:
+        streetName:
           type: string
-          description: Unique identification of the contract, determined by the acquirer
-          example: '10011'
-        siteId:
+          description: Street name and house number of the address. In case of a Dutch address only Street name
+          example: Stootblok
+        houseNumber:
           type: integer
-          description: Unique identification of the site within the contract
-          format: int64
-        cardAcceptorId:
+          description: House number. Only used for Dutch addresses
+          format: int32
+          example: 14
+        houseAddition:
           type: string
-          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
-        terminalId:
+          description: House number addition. Only used for Dutch addresses
+          example: bis
+        postalCode:
           type: string
-          description: Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
-    CorrelationResponse:
-      type: object
-      properties:
-        correlationId:
+          description: Postal code of the address
+          example: 3071AP
+        city:
           type: string
-          description: Unique ID that was generated for the specific change
-          format: uuid
+          description: City of the address
+          example: Rotterdam
+        region:
+          type: string
+          description: Region of the address. Only applicable for specific countries
+          example: Zuid-Holland
+        countryCode:
+          type: string
+          description: Country of the address according to ISO 3166-1 (numeric-3)
+          example: '528'
+        contactPersonName:
+          type: string
+          description: Name of the contact person registered with the address
+          example: M. Scott
+        telephoneNumber:
+          type: string
+          description: Telephone number of contact person registered with the address
+          example: 0883855111
+        email:
+          type: string
+          description: E-mail address of the contact person registered with the address
+          example: M.Scott@eventpaymentsolutions.com
     HoldingContractIdentification:
       type: object
       properties:
@@ -562,15 +612,52 @@ components:
         holdingId:
           type: string
           description: Unique identification of the holding, determined by equensWorldline
-    HoldingAddressData:
+    CorrelationResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Unique ID that was generated for the specific change
+          format: uuid
+    HoldingData:
       type: object
       properties:
         contractIdentification:
           $ref: '#/components/schemas/HoldingContractIdentification'
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AddressDetails'
+        basic:
+          $ref: '#/components/schemas/HoldingBasic'
+        status:
+          $ref: '#/components/schemas/HoldingStatus'
+        addressDetailsURI:
+          type: string
+          description: URI to get the holding address details
+          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX/addresses
+    HoldingStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the holding. Values [Active]
+        commencementDate:
+          type: string
+          description: Date at which the holding was registered
+    HoldingBasic:
+      type: object
+      properties:
+        acquirerName:
+          type: string
+          description: Name of the acquirer
+        holdingName:
+          type: string
+          description: Name of the holding
+    PostHoldingResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          format: uuid
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantIdentificationResponse'
     AddressDetails:
       required:
       - addressType
@@ -644,121 +731,34 @@ components:
           description: Preferred communication type of the contact person registered with the address. Values [1 = Post, 2 = Fax, 3 = E-mail]
           format: int32
           example: 3
-    HoldingBasic:
+    PostHolding:
       type: object
       properties:
-        acquirerName:
-          type: string
-          description: Name of the acquirer
-        holdingName:
-          type: string
-          description: Name of the holding
-    HoldingStatus:
+        basic:
+          $ref: '#/components/schemas/PostHoldingBasic'
+    MerchantIdentificationResponse:
       type: object
       properties:
-        status:
+        acquirerId:
           type: string
-          description: The status of the holding. Values [Active]
-        commencementDate:
-          type: string
-          description: Date at which the holding was registered
-    PostHoldingResponse:
-      type: object
-      properties:
-        correlationId:
-          type: string
-          format: uuid
-        contractIdentification:
-          $ref: '#/components/schemas/MerchantIdentificationResponse'
-    PostHoldingBasic:
-      type: object
-      properties:
-        holdingName:
-          type: string
-          description: Name of the holding
-          example: Event Payment Solutions
-    HoldingListData:
-      type: object
-      properties:
-        contractIdentification:
-          type: object
-          properties:
-            acquirerId:
-              type: string
-              description: Unique identification of the acquirer, determined by equensWorldline
-              example: '315000001'
+          description: Unique identification of the acquirer, determined by equensWorldline
         holdingId:
-          type: integer
+          type: string
           description: Unique identification of the holding, determined by equensWorldline
-          format: int32
-          example: 200
-        holdingName:
+        merchantId:
           type: string
-          description: Name of the holding
-          example: Event Payment Solutions
-        status:
+          description: Unique identification of the merchant, determined by the acquirer
+        contractId:
           type: string
-          description: The status of this entity. Values [Active]
-          example: Active
-        address:
-          $ref: '#/components/schemas/Address'
-        holdingDetailsURI:
-          type: string
-          description: URI to get the holding details
-          example: acquiring/contract/v2.0/acquirers/XXX/holdings/XXX
-    ErrorData:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Unique code of the error as returned by the system handling the request
-        keyword:
-          type: string
-          description: JSON keyword from the request message that triggered the error
-        errorMessage:
-          type: string
-          description: Message explaining the error
-    Address:
-      type: object
-      properties:
-        streetName:
-          type: string
-          description: Street name and house number of the address. In case of a Dutch address only Street name
-          example: Stootblok
-        houseNumber:
+          description: Unique identification of the contract, determined by the acquirer
+          example: '10011'
+        siteId:
           type: integer
-          description: House number. Only used for Dutch addresses
-          format: int32
-          example: 14
-        houseAddition:
+          description: Unique identification of the site within the contract
+          format: int64
+        cardAcceptorId:
           type: string
-          description: House number addition. Only used for Dutch addresses
-          example: bis
-        postalCode:
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+        terminalId:
           type: string
-          description: Postal code of the address
-          example: 3071AP
-        city:
-          type: string
-          description: City of the address
-          example: Rotterdam
-        region:
-          type: string
-          description: Region of the address. Only applicable for specific countries
-          example: Zuid-Holland
-        countryCode:
-          type: string
-          description: Country of the address according to ISO 3166-1 (numeric-3)
-          example: '528'
-        contactPersonName:
-          type: string
-          description: Name of the contact person registered with the address
-          example: M. Scott
-        telephoneNumber:
-          type: string
-          description: Telephone number of contact person registered with the address
-          example: 0883855111
-        email:
-          type: string
-          description: E-mail address of the contact person registered with the address
-          example: M.Scott@eventpaymentsolutions.com
+          description: Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)

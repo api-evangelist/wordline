@@ -59,6 +59,24 @@ paths:
           $ref: '#/components/responses/503'
 components:
   schemas:
+    ExchangeRateReferences:
+      type: object
+      additionalProperties: false
+      properties:
+        SourceCurrencyReferenceId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'This should be used to refer to this exchange rate details for currency conversion from the new exchange rate table.
+
+            '
+        TargetCurrencyReferenceId:
+          maxLength: 35
+          minLength: 1
+          type: string
+          description: 'This should be used to reference the second entry ID in the exchange rate table row when cross-currency conversion is required, and two entries are selected for calculation.
+
+            '
     ExchangeRateRequest:
       type: object
       additionalProperties: false
@@ -88,24 +106,34 @@ components:
       - Amount
       - TargetCurrency
       - UnitCurrency
-    ExchangeRateReferences:
+    EstimatedTotalAmount:
       type: object
       additionalProperties: false
+      required:
+      - Currency
+      - Amount
       properties:
-        SourceCurrencyReferenceId:
-          maxLength: 35
-          minLength: 1
+        Currency:
+          pattern: '[A-Z]{3,3}'
           type: string
-          description: 'This should be used to refer to this exchange rate details for currency conversion from the new exchange rate table.
+          description: 'A code allocated to a currency by a Maintenance Agency under
+
+            an international identification scheme, as described in the latest edition
+
+            of the international standard ISO 4217 "Codes for the representation of
+
+            currencies and funds".
 
             '
-        TargetCurrencyReferenceId:
-          maxLength: 35
-          minLength: 1
+        Amount:
+          pattern: ^\d{1,13}\.\d{1,2}$
           type: string
-          description: 'This should be used to reference the second entry ID in the exchange rate table row when cross-currency conversion is required, and two entries are selected for calculation.
+          description: 'Amount
 
             '
+      description: 'Estimated Total Amount.
+
+        '
     ExchangeRateInformation:
       type: object
       additionalProperties: false
@@ -141,60 +169,6 @@ components:
             '
           enum:
           - Spot
-    EstimatedTotalAmount:
-      type: object
-      additionalProperties: false
-      required:
-      - Currency
-      - Amount
-      properties:
-        Currency:
-          pattern: '[A-Z]{3,3}'
-          type: string
-          description: 'A code allocated to a currency by a Maintenance Agency under
-
-            an international identification scheme, as described in the latest edition
-
-            of the international standard ISO 4217 "Codes for the representation of
-
-            currencies and funds".
-
-            '
-        Amount:
-          pattern: ^\d{1,13}\.\d{1,2}$
-          type: string
-          description: 'Amount
-
-            '
-      description: 'Estimated Total Amount.
-
-        '
-    ExchangeRateResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        ExchangeRateReferences:
-          $ref: '#/components/schemas/ExchangeRateReferences'
-        ExchangeRateInformation:
-          $ref: '#/components/schemas/ExchangeRateInformation'
-        CurrencyConversionFee:
-          $ref: '#/components/schemas/CurrencyConversionFee'
-        EstimatedTotalAmount:
-          $ref: '#/components/schemas/EstimatedTotalAmount'
-        ValidUntil:
-          type: string
-          description: 'This exchange rate is valid until the next run of the scheduled batch to get new exchange rate details. ISO 8601 DateTime.
-
-            '
-          format: date-time
-      description: 'ExchangeRateResponse
-
-        '
-      required:
-      - ExchangeRateInformation
-      - CurrencyConversionFee
-      - EstimatedTotalAmount
-      - ValidUntil
     CurrencyConversionFee:
       type: object
       additionalProperties: false
@@ -226,6 +200,59 @@ components:
       description: 'Currency Conversion Fee
 
         '
+    ExchangeRateResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        ExchangeRateReferences:
+          $ref: '#/components/schemas/ExchangeRateReferences'
+        ExchangeRateInformation:
+          $ref: '#/components/schemas/ExchangeRateInformation'
+        CurrencyConversionFee:
+          $ref: '#/components/schemas/CurrencyConversionFee'
+        EstimatedTotalAmount:
+          $ref: '#/components/schemas/EstimatedTotalAmount'
+        ValidUntil:
+          type: string
+          description: 'This exchange rate is valid until the next run of the scheduled batch to get new exchange rate details. ISO 8601 DateTime.
+
+            '
+          format: date-time
+      description: 'ExchangeRateResponse
+
+        '
+      required:
+      - ExchangeRateInformation
+      - CurrencyConversionFee
+      - EstimatedTotalAmount
+      - ValidUntil
+  parameters:
+    X-Request-ID:
+      name: X-Request-ID
+      in: header
+      description: 'UUID for unique request identification.
+
+        '
+      required: true
+      schema:
+        maxLength: 36
+        minLength: 1
+        type: string
+      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
+    MessageCreateDateTime:
+      name: MessageCreateDateTime
+      in: header
+      description: 'The message create date time.
+
+
+        ISO 8601 DateTime.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: date-time
+      example: '2020-09-25T08:15:00.856Z'
   headers:
     MessageCreateDateTime:
       required: true
@@ -248,33 +275,6 @@ components:
         type: string
         maxLength: 36
         minLength: 1
-      example: abcdef2e-3000-4000-88cc-ae40e3b113d7
-  parameters:
-    MessageCreateDateTime:
-      name: MessageCreateDateTime
-      in: header
-      description: 'The message create date time.
-
-
-        ISO 8601 DateTime.
-
-        '
-      required: true
-      schema:
-        type: string
-        format: date-time
-      example: '2020-09-25T08:15:00.856Z'
-    X-Request-ID:
-      name: X-Request-ID
-      in: header
-      description: 'UUID for unique request identification.
-
-        '
-      required: true
-      schema:
-        maxLength: 36
-        minLength: 1
-        type: string
       example: abcdef2e-3000-4000-88cc-ae40e3b113d7
   securitySchemes:
     Authorization:

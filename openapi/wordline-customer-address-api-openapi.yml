@@ -4250,44 +4250,7 @@ paths:
       deprecated: false
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    DeleteAddressUsageResponse:
-      type: object
-      required:
-      - addressUsageName
-      - serviceCode
-      properties:
-        addressUsages:
-          type: array
-          description: List of deleted address usages
-          items:
-            $ref: '#/components/schemas/DeleteAddressUsageResponseAddressUsage'
-      title: DeleteAddressUsageResponse
-    CreateAddressRequestPhoneNumber:
+    ModifyAddressRequestPhoneNumber:
       type: object
       required:
       - localPhoneNumber
@@ -4298,7 +4261,60 @@ components:
         localPhoneNumber:
           type: string
           description: 'Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level.'
-      title: CreateAddressRequest.PhoneNumber
+      title: ModifyAddressRequest.PhoneNumber
+    ApiResponseEntityDeactivateAddressResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/DeactivateAddressResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityDeactivateAddressResponse
+    DeleteAddressUsageResponseAddressUsage:
+      type: object
+      required:
+      - addressUsageName
+      - serviceCode
+      properties:
+        addressUsageName:
+          type: string
+          example: STATEMENT_SENDING
+          description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
+        entityReference:
+          type: string
+          description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
+
+            It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
+        serviceCode:
+          type: string
+          example: ACCOUNT_SERVICE
+          description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
+      title: DeleteAddressUsageResponseAddressUsage
+    ModifyAddressResponse:
+      type: object
+      properties:
+        addressIdentifier:
+          description: Identification of the customer address either by Issuer address external reference or by address reference
+          allOf:
+          - $ref: '#/components/schemas/AddressIdentifier'
+      title: ModifyAddressResponse
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
     ApiResponseEntityAddressVersions:
       x-wl-api-response: true
       type: object
@@ -4316,6 +4332,48 @@ components:
           description: Response data
       description: Retrieve address versions response entity
       title: ApiResponseEntityAddressVersions
+    ApiResponseEntityCreateAddressUsageResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateAddressUsageResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateAddressUsageResponse
+    DeleteAddressResponse:
+      type: object
+      required:
+      - addressIdentifier
+      - addressVersionIdentifier
+      properties:
+        addressIdentifier:
+          description: Identification of the customer address either by Issuer address external reference or by address reference
+          allOf:
+          - $ref: '#/components/schemas/AddressIdentifier'
+        addressVersionIdentifier:
+          description: Identification of the address version by address version reference
+          allOf:
+          - $ref: '#/components/schemas/AddressVersionIdentifier'
+      title: DeleteAddressResponse
+    DeactivateAddressResponse:
+      type: object
+      properties:
+        addressIdentifier:
+          description: Identification of the customer address either by Issuer address external reference or by address reference
+          allOf:
+          - $ref: '#/components/schemas/AddressIdentifier'
+        status:
+          type: string
+          description: Status of the address (INACTIVE)
+      title: DeactivateAddressResponse
     ModifyAddressRequestMailAddress:
       type: object
       required:
@@ -4364,7 +4422,27 @@ components:
           type: string
           description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
       title: ModifyAddressRequest.MailAddress
-    ApiResponseEntityActivateAddressResponse:
+    InvalidAddressResponse:
+      type: object
+      properties:
+        addressIdentifier:
+          description: Identification of the customer address either by Issuer address external reference or by address reference
+          allOf:
+          - $ref: '#/components/schemas/AddressIdentifier'
+        invalid:
+          type: boolean
+          description: Indicates the address becomes invalid
+      title: InvalidAddressResponse
+    AddressVersionIdentifier:
+      type: object
+      properties:
+        addressVersionReference:
+          type: string
+          description: 'Identifies the version of the address
+
+            A new version of the address is created when a change is done on the address.'
+      title: AddressVersionIdentifier
+    ApiResponseEntityCreateAddressResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -4377,73 +4455,22 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/ActivateAddressResponse'
+          - $ref: '#/components/schemas/CreateAddressResponse'
       description: Issuer response entity
-      title: ApiResponseEntityActivateAddressResponse
-    CreateAddressRequestMailAddress:
+      title: ApiResponseEntityCreateAddressResponse
+    DeleteAddressUsageResponse:
       type: object
       required:
-      - country
+      - addressUsageName
+      - serviceCode
       properties:
-        typeCode:
-          type: string
-          description: DEPRECATED
-        courtesyTitle:
-          type: string
-          description: Courtesy title of the address. Free text
-        line1:
-          type: string
-          description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        line2:
-          type: string
-          description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        line3:
-          type: string
-          description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        line4:
-          type: string
-          description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        line5:
-          type: string
-          description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        buildingNumber:
-          type: string
-          description: Building number of the address (optional)
-        boxNumber:
-          type: string
-          description: Box number of the address (optional)
-        streetName:
-          type: string
-          description: Street name of the address (optional)
-        postCode:
-          type: string
-          description: zip code of the address (optional)
-        townName:
-          type: string
-          description: City corresponding to the address
-        countrySubdivision:
-          type: string
-          description: Subdivision of the country (optional)
-        country:
-          type: string
-          description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
-      title: CreateAddressRequest.MailAddress
-    PhoneNumber:
-      type: object
-      required:
-      - localPhoneNumber
-      properties:
-        countryCode:
-          type: string
-          description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
-        localPhoneNumber:
-          type: string
-          description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
-        internationalPhoneNumber:
-          type: string
-          description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
-      title: PhoneNumber
-    NotFoundResponseMetadata:
+        addressUsages:
+          type: array
+          description: List of deleted address usages
+          items:
+            $ref: '#/components/schemas/DeleteAddressUsageResponseAddressUsage'
+      title: DeleteAddressUsageResponse
+    ForbiddenResponseMetadata:
       type: object
       required:
       - correlationId
@@ -4461,30 +4488,14 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 404
+          example: 403
           description: HTTP status code
         statusMessage:
           type: string
-          example: Not found
+          example: Forbidden
           description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    ApiResponseEntityInvalidateAddressResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/InvalidAddressResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityInvalidateAddressResponse
-    DeleteAddressUsageResponseAddressUsage:
+      title: ForbiddenResponseMetadata
+    AddressUsage:
       type: object
       required:
       - addressUsageName
@@ -4503,15 +4514,7 @@ components:
           type: string
           example: ACCOUNT_SERVICE
           description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
-      title: DeleteAddressUsageResponseAddressUsage
-    CreateAddressResponse:
-      type: object
-      properties:
-        addressIdentifier:
-          description: Identification of the customer address either by Issuer address external reference or by address reference
-          allOf:
-          - $ref: '#/components/schemas/AddressIdentifier'
-      title: CreateAddressResponse
+      title: AddressUsage
     UnauthorizedResponseMetadata:
       type: object
       required:
@@ -4537,34 +4540,7 @@ components:
           example: Unauthorized
           description: Executed REST API status message
       title: UnauthorizedResponseMetadata
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ApiResponseEntityDeactivateAddressResponse:
+    ApiResponseEntityDeleteAddressUsageResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -4577,60 +4553,135 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/DeactivateAddressResponse'
+          - $ref: '#/components/schemas/DeleteAddressUsageResponse'
       description: Issuer response entity
-      title: ApiResponseEntityDeactivateAddressResponse
-    MailAddress:
+      title: ApiResponseEntityDeleteAddressUsageResponse
+    NotFoundResponseMetadata:
       type: object
       required:
-      - country
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        typeCode:
+        correlationId:
           type: string
-          description: Deprecated field
-        line1:
+          description: Correlation Identifier
+        responseDateTime:
           type: string
-          description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        line2:
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
           type: string
-          description: Address line 2 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        line3:
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    ActivateAddressResponse:
+      type: object
+      properties:
+        addressIdentifier:
+          description: Identification of the customer address either by Issuer address external reference or by address reference
+          allOf:
+          - $ref: '#/components/schemas/AddressIdentifier'
+        status:
           type: string
-          description: Address line 3 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        line4:
+          description: Status of the address (ACTIVE)
+      title: ActivateAddressResponse
+    PhoneNumber:
+      type: object
+      required:
+      - localPhoneNumber
+      properties:
+        countryCode:
           type: string
-          description: Address line 4 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        line5:
+          description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
+        localPhoneNumber:
           type: string
-          description: Address line 5 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
-        buildingNumber:
+          description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
+        internationalPhoneNumber:
           type: string
-          description: Building number of the address (optional)
-        boxNumber:
+          description: "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code.\nEx : \n- country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ \n- country code = empty and localPhoneNumber = ‘+33622334455’\nThe value can be subject to a validation process if a specific rule has been configured at issuer level."
+      title: PhoneNumber
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
           type: string
-          description: Box number of the address (optional)
-        streetName:
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
           type: string
-          description: Street name of the address (optional)
-        postCode:
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
           type: string
-          description: Zip Code of the address (optional)
-        townName:
-          type: string
-          description: 'City corresponding to the address '
-        countrySubdivision:
-          type: string
-          description: Subdivision of the country (optional)
-        country:
-          type: string
-          description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
-        countryName:
-          type: string
-          description: Country Name of the address. Free text
-        courtesyTitle:
-          type: string
-          description: Courtesy title of the address. Free text
-      title: MailAddress
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    ApiResponseEntityDeleteAddress:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/DeleteAddressResponse'
+      description: Delete address response entity
+      title: ApiResponseEntityDeleteAddress
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    ApiResponseEntityActivateAddressResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ActivateAddressResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityActivateAddressResponse
     BadGatewayResponseMetadata:
       type: object
       required:
@@ -4656,50 +4707,6 @@ components:
           example: Bad Gateway
           description: Executed REST API status message
       title: BadGatewayResponseMetadata
-    DeactivateAddressResponse:
-      type: object
-      properties:
-        addressIdentifier:
-          description: Identification of the customer address either by Issuer address external reference or by address reference
-          allOf:
-          - $ref: '#/components/schemas/AddressIdentifier'
-        status:
-          type: string
-          description: Status of the address (INACTIVE)
-      title: DeactivateAddressResponse
-    BadRequestErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    ApiResponseEntityModifyAddressResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/ModifyAddressResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityModifyAddressResponse
-    ModifyAddressResponse:
-      type: object
-      properties:
-        addressIdentifier:
-          description: Identification of the customer address either by Issuer address external reference or by address reference
-          allOf:
-          - $ref: '#/components/schemas/AddressIdentifier'
-      title: ModifyAddressResponse
     Address:
       type: object
       required:
@@ -4779,50 +4786,7 @@ components:
             In case of a temporary address, the end date is mandatory.'
           default: false
       title: Address
-    ModifyAddressRequest:
-      type: object
-      required:
-      - addressLabel
-      - addressType
-      properties:
-        issuerAddressExternalReference:
-          type: string
-          description: Deprecated field - not to be used
-        addressLabel:
-          type: string
-          example: MAIN_POSTAL_ADDRESS
-          description: Indicate the class of the address amongst a list of possible values such as MAIN_POSTAL_ADDRESS, SECOND_POSTAL_ADDRESS, HOME_PHONE_NUMBER, PRIVATE_MOBILE_PHONE, PERSONAL_EMAIL. This list of values is shared between WL and the issuer during issuer configuration.Every label corresponds to a unique type of address. A customer (person) has at least one MAIN_POSTAL_ADDRESS (mandatory) and a company has at least one HEAD_OFFICE.
-        addressType:
-          type: string
-          example: POSTAL_MAIL
-          description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
-          enum:
-          - PHONE
-          - POSTAL_MAIL
-          - E_MAIL
-        postalAddress:
-          description: Customer Postal Address. This field is mandatory only if AddressType is POSTAL_MAIL.Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information.
-          allOf:
-          - $ref: '#/components/schemas/ModifyAddressRequestMailAddress'
-        emailAddress:
-          description: Customer Email. This field is mandatory only if AddressType is E_MAIL.
-          allOf:
-          - $ref: '#/components/schemas/EmailAddress'
-        phone:
-          description: 'Customer Phone details. This field is mandatory only if AddressType is PHONE. '
-          allOf:
-          - $ref: '#/components/schemas/ModifyAddressRequestPhoneNumber'
-        addressUsages:
-          type: array
-          description: List of the usages linked to the address if any exists
-          items:
-            $ref: '#/components/schemas/AddressUsage'
-        invalid:
-          type: boolean
-          default: false
-          description: Deprecated
-      title: ModifyAddressRequest
-    ApiResponseEntityCreateAddressUsageResponse:
+    ApiResponseEntityInvalidateAddressResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -4835,10 +4799,215 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/CreateAddressUsageResponse'
+          - $ref: '#/components/schemas/InvalidAddressResponse'
       description: Issuer response entity
-      title: ApiResponseEntityCreateAddressUsageResponse
-    AddressUsage:
+      title: ApiResponseEntityInvalidateAddressResponse
+    CreateAddressRequestPhoneNumber:
+      type: object
+      required:
+      - localPhoneNumber
+      properties:
+        countryCode:
+          type: string
+          description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
+        localPhoneNumber:
+          type: string
+          description: 'Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level.'
+      title: CreateAddressRequest.PhoneNumber
+    CreateAddressRequestMailAddress:
+      type: object
+      required:
+      - country
+      properties:
+        typeCode:
+          type: string
+          description: DEPRECATED
+        courtesyTitle:
+          type: string
+          description: Courtesy title of the address. Free text
+        line1:
+          type: string
+          description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line2:
+          type: string
+          description: Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line3:
+          type: string
+          description: Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line4:
+          type: string
+          description: Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line5:
+          type: string
+          description: Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        buildingNumber:
+          type: string
+          description: Building number of the address (optional)
+        boxNumber:
+          type: string
+          description: Box number of the address (optional)
+        streetName:
+          type: string
+          description: Street name of the address (optional)
+        postCode:
+          type: string
+          description: zip code of the address (optional)
+        townName:
+          type: string
+          description: City corresponding to the address
+        countrySubdivision:
+          type: string
+          description: Subdivision of the country (optional)
+        country:
+          type: string
+          description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+      title: CreateAddressRequest.MailAddress
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    EmailAddress:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          description: 'Email address of the Customer (mandatory). The email address should have the following format: aaa@bbb.ccc
+
+            aaa, bbb, ccc are character string.'
+      title: EmailAddress
+    AddressIdentifier:
+      type: object
+      properties:
+        addressReference:
+          type: string
+          description: Unique internal identifier computed with a specific algorithm (mandatory)
+        issuerAddressExternalReference:
+          type: string
+          description: Unique external identifier provided by the issuer (optional)
+      title: AddressIdentifier
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    MailAddress:
+      type: object
+      required:
+      - country
+      properties:
+        typeCode:
+          type: string
+          description: Deprecated field
+        line1:
+          type: string
+          description: Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line2:
+          type: string
+          description: Address line 2 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line3:
+          type: string
+          description: Address line 3 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line4:
+          type: string
+          description: Address line 4 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        line5:
+          type: string
+          description: Address line 5 (optional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction).
+        buildingNumber:
+          type: string
+          description: Building number of the address (optional)
+        boxNumber:
+          type: string
+          description: Box number of the address (optional)
+        streetName:
+          type: string
+          description: Street name of the address (optional)
+        postCode:
+          type: string
+          description: Zip Code of the address (optional)
+        townName:
+          type: string
+          description: 'City corresponding to the address '
+        countrySubdivision:
+          type: string
+          description: Subdivision of the country (optional)
+        country:
+          type: string
+          description: Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured.
+        countryName:
+          type: string
+          description: Country Name of the address. Free text
+        courtesyTitle:
+          type: string
+          description: Courtesy title of the address. Free text
+      title: MailAddress
+    BadRequestResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 400
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad request
+          description: Executed REST API status message
+      title: BadRequestResponseMetadata
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    ApiResponseEntityModifyAddressResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/ModifyAddressResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityModifyAddressResponse
+    CreateAddressUsageResponse:
       type: object
       required:
       - addressUsageName
@@ -4857,7 +5026,40 @@ components:
           type: string
           example: ACCOUNT_SERVICE
           description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
-      title: AddressUsage
+      title: CreateAddressUsageResponse
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    CreateAddressResponse:
+      type: object
+      properties:
+        addressIdentifier:
+          description: Identification of the customer address either by Issuer address external reference or by address reference
+          allOf:
+          - $ref: '#/components/schemas/AddressIdentifier'
+      title: CreateAddressResponse
     CreateAddressRequest:
       type: object
       required:
@@ -4914,51 +5116,15 @@ components:
           description: The flag indicates if the address is permanent (by default, false) or temporary (flag = true)
           format: date-time
       title: CreateAddressRequest
-    CreateAddressUsageResponse:
+    BadGatewayErrorApiResponse:
       type: object
       required:
-      - addressUsageName
-      - serviceCode
+      - responseMetadata
       properties:
-        addressUsageName:
-          type: string
-          example: STATEMENT_SENDING
-          description: The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY.
-        entityReference:
-          type: string
-          description: 'This corresponds to the application domain of the address. It can be eg a card contract reference, card account reference. It is an optional field.
-
-            It enables to have the same usage address for the same customer applied to different addresses (one cardholder with 2 card contracts: card delivery address usage is assigned to main postal address for contract A and card delivery address usage is also assigned to office postal address for contract B.'
-        serviceCode:
-          type: string
-          example: ACCOUNT_SERVICE
-          description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
-      title: CreateAddressUsageResponse
-    InvalidAddressResponse:
-      type: object
-      properties:
-        addressIdentifier:
-          description: Identification of the customer address either by Issuer address external reference or by address reference
+        responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/AddressIdentifier'
-        invalid:
-          type: boolean
-          description: Indicates the address becomes invalid
-      title: InvalidAddressResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
     CreateAddressUsageRequest:
       type: object
       required:
@@ -4979,40 +5145,58 @@ components:
           example: ACCOUNT_SERVICE
           description: 'The Service for which the address usage is defined : CARD_SERVICE, ACCOUNT_SERVICE, …'
       title: CreateAddressUsageRequest
-    ForbiddenResponseMetadata:
+    ModifyAddressRequest:
       type: object
       required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
+      - addressLabel
+      - addressType
       properties:
-        correlationId:
+        issuerAddressExternalReference:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
+          description: Deprecated field - not to be used
+        addressLabel:
           type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
+          example: MAIN_POSTAL_ADDRESS
+          description: Indicate the class of the address amongst a list of possible values such as MAIN_POSTAL_ADDRESS, SECOND_POSTAL_ADDRESS, HOME_PHONE_NUMBER, PRIVATE_MOBILE_PHONE, PERSONAL_EMAIL. This list of values is shared between WL and the issuer during issuer configuration.Every label corresponds to a unique type of address. A customer (person) has at least one MAIN_POSTAL_ADDRESS (mandatory) and a company has at least one HEAD_OFFICE.
+        addressType:
           type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    BadGatewayErrorApiResponse:
+          example: POSTAL_MAIL
+          description: The type of an address is POSTAL_MAIL, PHONE or E_MAIL
+          enum:
+          - PHONE
+          - POSTAL_MAIL
+          - E_MAIL
+        postalAddress:
+          description: Customer Postal Address. This field is mandatory only if AddressType is POSTAL_MAIL.Depending on countries, the address format (mainly for line1, line 2, line3, line4 and line5) can have specific conditions such as length restriction. The customer should contact WL to check the address format and have more information.
+          allOf:
+          - $ref: '#/components/schemas/ModifyAddressRequestMailAddress'
+        emailAddress:
+          description: Customer Email. This field is mandatory only if AddressType is E_MAIL.
+          allOf:
+          - $ref: '#/components/schemas/EmailAddress'
+        phone:
+          description: 'Customer Phone details. This field is mandatory only if AddressType is PHONE. '
+          allOf:
+          - $ref: '#/components/schemas/ModifyAddressRequestPhoneNumber'
+        addressUsages:
+          type: array
+          description: List of the usages linked to the address if any exists
+          items:
+            $ref: '#/components/schemas/AddressUsage'
+        invalid:
+          type: boolean
+          default: false
+          description: Deprecated
+      title: ModifyAddressRequest
+    InternalServerErrorErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
     ApiResponseEntityAddress:
       x-wl-api-response: true
       type: object
@@ -5029,190 +5213,6 @@ components:
           - $ref: '#/components/schemas/Address'
       description: Issuer response entity
       title: ApiResponseEntityAddress
-    ApiResponseEntityDeleteAddressUsageResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/DeleteAddressUsageResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityDeleteAddressUsageResponse
-    EmailAddress:
-      type: object
-      required:
-      - email
-      properties:
-        email:
-          type: string
-          description: 'Email address of the Customer (mandatory). The email address should have the following format: aaa@bbb.ccc
-
-            aaa, bbb, ccc are character string.'
-      title: EmailAddress
-    ModifyAddressRequestPhoneNumber:
-      type: object
-      required:
-      - localPhoneNumber
-      properties:
-        countryCode:
-          type: string
-          description: Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49).
-        localPhoneNumber:
-          type: string
-          description: 'Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level.'
-      title: ModifyAddressRequest.PhoneNumber
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    AddressVersionIdentifier:
-      type: object
-      properties:
-        addressVersionReference:
-          type: string
-          description: 'Identifies the version of the address
-
-            A new version of the address is created when a change is done on the address.'
-      title: AddressVersionIdentifier
-    DeleteAddressResponse:
-      type: object
-      required:
-      - addressIdentifier
-      - addressVersionIdentifier
-      properties:
-        addressIdentifier:
-          description: Identification of the customer address either by Issuer address external reference or by address reference
-          allOf:
-          - $ref: '#/components/schemas/AddressIdentifier'
-        addressVersionIdentifier:
-          description: Identification of the address version by address version reference
-          allOf:
-          - $ref: '#/components/schemas/AddressVersionIdentifier'
-      title: DeleteAddressResponse
-    BadRequestResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 400
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad request
-          description: Executed REST API status message
-      title: BadRequestResponseMetadata
-    ApiResponseEntityDeleteAddress:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/DeleteAddressResponse'
-      description: Delete address response entity
-      title: ApiResponseEntityDeleteAddress
-    AddressIdentifier:
-      type: object
-      properties:
-        addressReference:
-          type: string
-          description: Unique internal identifier computed with a specific algorithm (mandatory)
-        issuerAddressExternalReference:
-          type: string
-          description: Unique external identifier provided by the issuer (optional)
-      title: AddressIdentifier
-    ActivateAddressResponse:
-      type: object
-      properties:
-        addressIdentifier:
-          description: Identification of the customer address either by Issuer address external reference or by address reference
-          allOf:
-          - $ref: '#/components/schemas/AddressIdentifier'
-        status:
-          type: string
-          description: Status of the address (ACTIVE)
-      title: ActivateAddressResponse
-    ApiResponseEntityCreateAddressResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateAddressResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateAddressResponse
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

@@ -436,172 +436,6 @@ paths:
       deprecated: false
 components:
   schemas:
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    ApiResponseEntityDeleteTemporaryCreditLimitResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/DeleteTemporaryCreditLimitResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityDeleteTemporaryCreditLimitResponse
-    Amount:
-      type: object
-      required:
-      - value
-      - exponent
-      - isoCode
-      properties:
-        value:
-          type: integer
-          format: int64
-          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-        exponent:
-          type: integer
-          format: int32
-          description: Exponent of Amount. Number of decimal digits.
-        isoCode:
-          type: string
-          description: 'Currency code of amount
-
-            The currency in ISO4217 alphabetic format.
-
-            Example: EUR for Euro'
-      title: Amount
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
     CreateTemporaryCreditLimitResponse:
       type: object
       required:
@@ -641,64 +475,22 @@ components:
           items:
             $ref: '#/components/schemas/RelatedTemporaryCreditLimit'
       title: CreateTemporaryCreditLimitResponse
-    RelatedTemporaryCreditLimit:
-      type: object
-      required:
-      - accountIdentifier
-      - root
-      - temporaryCreditLimitIdentifier
-      properties:
-        accountIdentifier:
-          description: Reference of the account involved by the temporary credit limit
-          allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        root:
-          type: boolean
-          description: Indicates if the account is a root account (true) or not (false).
-        temporaryCreditLimitIdentifier:
-          description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
-          allOf:
-          - $ref: '#/components/schemas/TemporaryCreditLimitIdentifier'
-      title: RelatedTemporaryCreditLimit
-    BadRequestErrorApiResponse:
+    NotFoundErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    ApiResponseEntityCreateTemporaryCreditLimitResponse:
-      x-wl-api-response: true
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    TemporaryCreditLimitIdentifier:
       type: object
-      required:
-      - responseMetadata
       properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateTemporaryCreditLimitResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateTemporaryCreditLimitResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
+        temporaryCreditLimitReference:
           type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
+          description: Reference of the temporary credit limitt.
+      title: TemporaryCreditLimitIdentifier
     CreateTemporaryCreditLimitRequest:
       type: object
       required:
@@ -722,7 +514,17 @@ components:
           default: false
           description: 'The parameter has the following possible values: TRUE/FALSE. In case it is set to ''TRUE'', and there is overlap of future dates between two and more temporary credit limits, then the most recent one will be prioritized and the previous ones'' dates will be adjusted accordingly. In case it is set to ''FALSE'' and a creation of new temporary credit limit is requested, the dates of which overlap with an existing one, then the new request will be rejected. The default value of the parameter is set to ''FALSE'''
       title: CreateTemporaryCreditLimitRequest
-    ForbiddenResponseMetadata:
+    AccountIdentifier:
+      type: object
+      properties:
+        accountReference:
+          type: string
+          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
+        issuerAccountExternalReference:
+          type: string
+          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
+      title: AccountIdentifier
+    UnauthorizedResponseMetadata:
       type: object
       required:
       - correlationId
@@ -740,22 +542,38 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 403
+          example: 401
           description: HTTP status code
         statusMessage:
           type: string
-          example: Forbidden
+          example: Unauthorized
           description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    BadGatewayErrorApiResponse:
+      title: UnauthorizedResponseMetadata
+    NotFoundResponseMetadata:
       type: object
       required:
-      - responseMetadata
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
     ResponseMetadata:
       type: object
       required:
@@ -790,6 +608,170 @@ components:
           example: 12
           description: Wall clock time required from service to generate the response
       title: ResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
+
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    ApiResponseEntityCreateTemporaryCreditLimitResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateTemporaryCreditLimitResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateTemporaryCreditLimitResponse
+    DeleteTemporaryCreditLimitResponse:
+      type: object
+      required:
+      - accountIdentifier
+      - root
+      - temporaryCreditLimitIdentifier
+      properties:
+        accountIdentifier:
+          description: Account references provided in the request
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        root:
+          type: boolean
+          description: Indicates if the account is a root account (true) or not (false).
+        temporaryCreditLimitIdentifier:
+          description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
+          allOf:
+          - $ref: '#/components/schemas/TemporaryCreditLimitIdentifier'
+        relatedTemporaryCreditLimits:
+          type: array
+          description: List of other accounts involved by the temporary credit limit
+          items:
+            $ref: '#/components/schemas/RelatedTemporaryCreditLimit'
+      title: DeleteTemporaryCreditLimitResponse
+    RelatedTemporaryCreditLimit:
+      type: object
+      required:
+      - accountIdentifier
+      - root
+      - temporaryCreditLimitIdentifier
+      properties:
+        accountIdentifier:
+          description: Reference of the account involved by the temporary credit limit
+          allOf:
+          - $ref: '#/components/schemas/AccountIdentifier'
+        root:
+          type: boolean
+          description: Indicates if the account is a root account (true) or not (false).
+        temporaryCreditLimitIdentifier:
+          description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
+          allOf:
+          - $ref: '#/components/schemas/TemporaryCreditLimitIdentifier'
+      title: RelatedTemporaryCreditLimit
+    ApiResponseEntityDeleteTemporaryCreditLimitResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/DeleteTemporaryCreditLimitResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityDeleteTemporaryCreditLimitResponse
     BadRequestResponseMetadata:
       type: object
       required:
@@ -815,23 +797,6 @@ components:
           example: Bad request
           description: Executed REST API status message
       title: BadRequestResponseMetadata
-    AccountIdentifier:
-      type: object
-      properties:
-        accountReference:
-          type: string
-          description: Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used.
-        issuerAccountExternalReference:
-          type: string
-          description: Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm.
-      title: AccountIdentifier
-    TemporaryCreditLimitIdentifier:
-      type: object
-      properties:
-        temporaryCreditLimitReference:
-          type: string
-          description: Reference of the temporary credit limitt.
-      title: TemporaryCreditLimitIdentifier
     UnauthorizedErrorApiResponse:
       type: object
       required:
@@ -841,30 +806,65 @@ components:
           allOf:
           - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
       title: UnauthorizedResponseMetadata
-    DeleteTemporaryCreditLimitResponse:
+    InternalServerErrorResponseMetadata:
       type: object
       required:
-      - accountIdentifier
-      - root
-      - temporaryCreditLimitIdentifier
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
       properties:
-        accountIdentifier:
-          description: Account references provided in the request
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/AccountIdentifier'
-        root:
-          type: boolean
-          description: Indicates if the account is a root account (true) or not (false).
-        temporaryCreditLimitIdentifier:
-          description: Refer to TemporaryCreditLimit.temporaryCreditLimitIdentifier
-          allOf:
-          - $ref: '#/components/schemas/TemporaryCreditLimitIdentifier'
-        relatedTemporaryCreditLimits:
-          type: array
-          description: List of other accounts involved by the temporary credit limit
-          items:
-            $ref: '#/components/schemas/RelatedTemporaryCreditLimit'
-      title: DeleteTemporaryCreditLimitResponse
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
   securitySchemes:
     basic:
       type: oauth2
