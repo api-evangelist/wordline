@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-authorization-restriction-override-request-schema.json",
+  "title": "CreateAuthorizationRestrictionOverrideRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-authorization-restriction-api-openapi.yml#/components/schemas/CreateAuthorizationRestrictionOverrideRequest",
+  "type": "object",
+  "properties": {
+    "activationEndTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last point in time at which the override will be considered. Has to be later than ActivationStartTime. Can be present without ActivationStartTime. If not provided the override will be taken into account forever."
+    },
+    "activationStartTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "First point in time at which the override will be considered. Has to be before ActivationEndTime. Can be present without ActivationEndTime. If not provided the override will be taken into account immediately."
+    },
+    "conditionCheck": {
+      "type": "boolean",
+      "description": "Overrides the default configured for the corresponding restriction attribute. In case JSON null is provided then the default becomes effective."
+    },
+    "conditionParameters": {
+      "type": "array",
+      "description": "Overrides the default configured for the corresponding restriction attribute (see configuration entity explanations). An item must not have leading or trailing spaces. Moreover it must not contain any comma. In case JSON null is provided then the default becomes effective.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "priority": {
+      "type": "integer",
+      "description": "In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique accross all overrides with overlapping activation timespans, which are associated with the same restriction and the same account. That means, two overrides for the same account and same restriction can have the same priority, if they are not active at the same time. If they are active at the same time, unique priorities must be given. If the field is not set in the request, it will be set to 0"
+    }
+  }
+}

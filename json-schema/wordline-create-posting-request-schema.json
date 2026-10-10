@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-posting-request-schema.json",
+  "title": "CreatePostingRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-dispute-api-openapi.yml#/components/schemas/CreatePostingRequest",
+  "type": "object",
+  "required": [
+    "postingAmount",
+    "postingTypeReference"
+  ],
+  "properties": {
+    "postingAmount": {
+      "description": "Mandatory parameter specifying the posting amount. The posting amount can be negative amount (- sign in the beginning of the amount digits)",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Amount"
+        }
+      ]
+    },
+    "message": {
+      "type": "string",
+      "description": "Description message that will associated to the posted operation in the statement"
+    },
+    "immediateReimbursement": {
+      "type": "boolean",
+      "description": "Optional parameter for impacting card holder account immediately"
+    },
+    "postingTypeReference": {
+      "type": "string",
+      "description": "The issuer must provide the identifier of the external reference of the posting. The list of values are configured by issuer:\nThree family of postings type:\n- Cardholder: For impacting the cardholder account, possible values can be: 'Cardholder Account', 'POST TO OTHER ACCOUNT'\n- Issuer: Write off: possible values can be 'ISSUER_ACCOUNT', 'PROFIT AND LOSS', 'FRAUD'\n- Foreign exchange fee ('FOREIGN_EXCHANGE_FEE'), Financial Advice Exchange Rate Difference ('ADVANCE_EXCHANGE_RATE_DIFFERENCE'):  the dispute officer can manually create a dispute posting amount to this account"
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    }
+  }
+}

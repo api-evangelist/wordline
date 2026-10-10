@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-cancel-credit-transfer-response-schema.json",
+  "title": "ApiResponseEntityCancelCreditTransferResponse",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-credit-transfer-api-openapi.yml#/components/schemas/ApiResponseEntityCancelCreditTransferResponse",
+  "x-wl-api-response": true,
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    },
+    "data": {
+      "description": "Response data",
+      "allOf": [
+        {
+          "$ref": "#/$defs/CancelCreditTransferResponse"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "CancelCreditTransferResponse": {
+      "type": "object",
+      "required": [
+        "creditTransferIdentifier",
+        "status",
+        "cancellationDate"
+      ],
+      "properties": {
+        "creditTransferIdentifier": {
+          "description": "Credit transfer identifier",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CreditTransferIdentifier"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "description": "Credit transfer status"
+        },
+        "cancellationDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date when the OCT order was canceled"
+        }
+      },
+      "title": "CancelCreditTransferResponse"
+    },
+    "CreditTransferIdentifier": {
+      "type": "object",
+      "properties": {
+        "endToEndId": {
+          "type": "string",
+          "description": "Credit transfer identifier"
+        }
+      },
+      "title": "CreditTransferIdentifier"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

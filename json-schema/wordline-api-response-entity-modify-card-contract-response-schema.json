@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-modify-card-contract-response-schema.json",
+  "title": "ApiResponseEntityModifyCardContractResponse",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-contract-api-openapi.yml#/components/schemas/ApiResponseEntityModifyCardContractResponse",
+  "x-wl-api-response": true,
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    },
+    "data": {
+      "description": "Response data",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ModifyCardContractResponse"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "CardContractIdentifier": {
+      "type": "object",
+      "description": "Identification of the card contract either by Issuer card contract external reference or by card contract reference",
+      "properties": {
+        "cardContractReference": {
+          "type": "string",
+          "description": "The reference of the card contract in our system, unique per platform\nThis reference is calculated from an algorithm (currently a unique algorithm 'DefaultCardContractReferenceAlgorithm' referenced in the card profile version).\nThe reference is composed of the issuerId + a sequence number of 16 digits (e;g; 100042000000000095003, where 10004 is the issuerId)"
+        },
+        "issuerCardContractExternalReference": {
+          "type": "string",
+          "description": "The external reference of the card contract provided by the issuer\nThis reference is unique per issuer and may be used to carry out research and find information."
+        }
+      },
+      "title": "CardContractIdentifier"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ModifyCardContractResponse": {
+      "type": "object",
+      "properties": {
+        "cardContractIdentifier": {
+          "description": "Refer to CardContract.cardContractIdentifier",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CardContractIdentifier"
+            }
+          ]
+        }
+      },
+      "title": "ModifyCardContractResponse"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

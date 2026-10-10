@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-modify-credit-limit-response-schema.json",
+  "title": "ApiResponseEntityModifyCreditLimitResponse",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-api-openapi.yml#/components/schemas/ApiResponseEntityModifyCreditLimitResponse",
+  "x-wl-api-response": true,
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    },
+    "data": {
+      "description": "Response data",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ModifyCreditLimitResponse"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ModifyCreditLimitResponse": {
+      "type": "object",
+      "required": [
+        "creditLimitAmount"
+      ],
+      "properties": {
+        "creditLimitAmount": {
+          "description": "Permanent credit limit amount allowed by the issuer",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        }
+      },
+      "title": "ModifyCreditLimitResponse"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

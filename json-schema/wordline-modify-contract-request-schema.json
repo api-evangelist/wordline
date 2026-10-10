@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-modify-contract-request-schema.json",
+  "title": "ModifyContractRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-contract-api-openapi.yml#/components/schemas/ModifyContractRequest",
+  "type": "object",
+  "x-wl-patch-request": true,
+  "properties": {
+    "advertisementFlags": {
+      "description": "Advertisement channels can be updated.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/AdvertisementFlags"
+        }
+      ]
+    },
+    "issuerBranchCode": {
+      "type": "string",
+      "description": "Issuer branch code to be modified"
+    },
+    "dataAnalysisFlags": {
+      "description": "Data analysis flags to update",
+      "allOf": [
+        {
+          "$ref": "#/$defs/DataAnalysisFlags"
+        }
+      ]
+    },
+    "deliveryChannel": {
+      "description": "Specify the channel for letter delivery to update",
+      "allOf": [
+        {
+          "$ref": "#/$defs/DeliveryChannel"
+        }
+      ]
+    },
+    "feeReimbursementAtCardContractClosing": {
+      "type": "boolean",
+      "description": "Parameter used to specify if the related membership/account setup fees must be partially reimbursed in case of closing contract or suspension."
+    },
+    "numberOfFreeCardsMembershipFee": {
+      "type": "integer",
+      "format": "int32",
+      "description": "The issuer can provide or modify the number of cards for which membership fee is not generated (free cards).\nIf not provided, the default value will be used if defined at product level."
+    },
+    "numberOfFreeCardsAccountSetupFee": {
+      "type": "integer",
+      "format": "int32",
+      "description": "The issuer can provide or modify the number of cards for which account setup fee is not generated  (free cards).\nIf not provided, the default value will be used if defined at product level."
+    },
+    "numberOfFreeCardsPrimaryCardImpacted": {
+      "type": "boolean",
+      "default": false,
+      "description": "The issuer can indicate if the primary card is always the first card to be considered as free and then the additional cards if any will be considered  (true) or if only additional cards can be free (false)\n\nE.g. Number of cards for which membership fee is not generated = 2\nIf the flag is True, the Primary card and only 1 additional card have no membership fee.\nIf the flag is False, membership fee is generated for the primary card and only 2 additional cards have no membership fee. \n"
+    },
+    "specificFields": {
+      "type": "object",
+      "description": "The issuer can update Specific Fields for the consumer contract. \nIt is a list of external data {\"label\":\"value\"} separated by a \",\" related to the contract (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems.\nA new data can be added or an existing data can be updated {\"label1\":\"newValue\"} or removed {\"label2\":\"null\"}.\nAny existing data that is not present in this list is not updated in the contract.\nThose provided data have no impact on our system business processes.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "waiveFee": {
+      "type": "boolean",
+      "description": "whether contract fees (membership and account setup) are both waived during contract fee calculation (at contract creation, anniversary date, etc)"
+    },
+    "membershipFeeAnniversaryDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Anniversary date of the membership fee can be changed when the fee frequency is Yearly"
+    },
+    "partnerContractExternalReference": {
+      "type": "string",
+      "description": "The issuer can provide another external reference for the contract, known as partner contract external reference. If fed, no checking is done on its unicity, it is a free reference"
+    }
+  },
+  "$defs": {
+    "AdvertisementFlags": {
+      "type": "object",
+      "properties": {
+        "general": {
+          "type": "boolean",
+          "description": "General advertisement flag. By default, value is false.\nIf this flag is false, other flags are ignored (email, letter, phone, statement, sms flags)."
+        },
+        "email": {
+          "type": "boolean",
+          "description": "Indicates if the email advertisement is enabled (true) or not (false). By default, value is false."
+        },
+        "letter": {
+          "type": "boolean",
+          "description": "Indicates if the letter advertisement is enabled (true) or not (false). By default, value is false."
+        },
+        "phone": {
+          "type": "boolean",
+          "description": "Indicates if the phone advertisement is enabled (true) or not (false). By default, value is false."
+        },
+        "statement": {
+          "type": "boolean",
+          "description": "Indicates if the statement advertisement is enabled (true) or not (false). By default, value is false."
+        },
+        "sms": {
+          "type": "boolean",
+          "description": "Indicates if the sms advertisement is enabled (true) or not (false). By default, value is false."
+        }
+      },
+      "description": "Specify possible channels used to provide advertisements",
+      "title": "AdvertisementFlags"
+    },
+    "DataAnalysisFlags": {
+      "type": "object",
+      "properties": {
+        "person": {
+          "type": "boolean",
+          "description": "Flag indicating person data related to the contract can be used for person data analysis (true) or not (false). Default value is false.",
+          "default": false
+        },
+        "paymentTransaction": {
+          "type": "boolean",
+          "description": "Flag indicating if payment transactions related to the contract can be used for payment transactions data analysis (true) or not (false). Default value is false.",
+          "default": false
+        },
+        "exchangeThirdParties": {
+          "type": "boolean",
+          "description": "Flag indicating if contract data can be exchanged between third parties (true) or not (false). Default value is false.",
+          "default": false
+        }
+      },
+      "description": "Specify which data analysis flags are enabled (person, paymentTransaction, exchangeThirdParties, etc.)",
+      "title": "DataAnalysisFlags"
+    },
+    "DeliveryChannel": {
+      "type": "object",
+      "properties": {
+        "contractLetterType": {
+          "type": "string",
+          "description": "Delivery channel used for card contract letters (optional) \nPossible values: EMAIL, WEB, LETTER, LETTER_AND_WEB, PUSH and MOBILE_APP",
+          "enum": [
+            "EMAIL",
+            "WEB",
+            "LETTER",
+            "LETTER_AND_WEB",
+            "PUSH",
+            "MOBILE_APP"
+          ]
+        },
+        "disputeLetterType": {
+          "type": "string",
+          "description": "Delivery channel used for dispute letters (optional) \nPossible values: EMAIL, WEB, LETTER, LETTER_AND_WEB, PUSH and MOBILE_APP",
+          "enum": [
+            "EMAIL",
+            "WEB",
+            "LETTER",
+            "LETTER_AND_WEB",
+            "PUSH",
+            "MOBILE_APP"
+          ]
+        },
+        "statementType": {
+          "type": "string",
+          "description": "Delivery channel used for statements (optional) \nPossible values: EMAIL, WEB, LETTER, LETTER_AND_WEB, PUSH and MOBILE_APP",
+          "enum": [
+            "EMAIL",
+            "WEB",
+            "LETTER",
+            "LETTER_AND_WEB",
+            "PUSH",
+            "MOBILE_APP"
+          ]
+        }
+      },
+      "description": "Specify the channel for letter delivery used for this contract",
+      "title": "DeliveryChannel"
+    }
+  }
+}

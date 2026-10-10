@@ -1,0 +1,1280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-list-account-schema.json",
+  "title": "ApiResponseEntityListAccount",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-customer-related-api-openapi.yml#/components/schemas/ApiResponseEntityListAccount",
+  "x-wl-api-response": true,
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    },
+    "data": {
+      "type": "array",
+      "description": "Response data",
+      "items": {
+        "$ref": "#/$defs/Account"
+      }
+    }
+  },
+  "$defs": {
+    "Account": {
+      "type": "object",
+      "required": [
+        "accountHierarchyReference",
+        "accountProfileReference",
+        "iban",
+        "root",
+        "status",
+        "statusDate",
+        "workingCurrencyCode",
+        "workingMode",
+        "accountOwnerIdentifier",
+        "contractIdentifier",
+        "rootAccountIdentifier",
+        "accountTemplateReference"
+      ],
+      "properties": {
+        "issuerId": {
+          "type": "string",
+          "description": "Issuer identifier (unique per platform)"
+        },
+        "accountIdentifier": {
+          "description": "Account references known in the system",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        },
+        "root": {
+          "type": "boolean",
+          "description": "Indicates if the account is a root account (true) or not (false)."
+        },
+        "accountBalance": {
+          "description": "Current account balance",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "accountClosingType": {
+          "type": "string",
+          "description": "Specified closing type for account. Possible values are SCHEDULED_CLOSING and FORCED_CLOSING."
+        },
+        "bic": {
+          "type": "string",
+          "description": "BIC or Bank Identification Code (optional)"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the account\nPossible values:\nAWAITING_SIGNATURE: The first status when an account is created (contract is also in AWAITING_SIGNATURE status). No operation can be processed on an account when in this state\nACTIVE: The account has been activated and is ACTIVE. Operation processing can be done in this state\nBEING-CLOSED:  The closing process is started, the account will be permanently closed depending on certain rules, such as after xx days, no ongoing disputes.\nCLOSED: The account is permanently closed (final status), no possible activity (e.g. operations posting)"
+        },
+        "statusDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date when the status of an account has been changed for the last time"
+        },
+        "statusHistory": {
+          "type": "array",
+          "description": "Refer to AccountStatusHistory data subresource\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._",
+          "items": {
+            "$ref": "#/$defs/AccountStatusHistory"
+          }
+        },
+        "closingDueDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "DEPRECATED"
+        },
+        "exclusiveCurrency": {
+          "type": "boolean",
+          "description": "Defines if the working currency is exclusive or not (conditional). If the account currency is exclusive then only operation with the account currency can be posted on the account. Otherwise currency conversion is performed to post the amount (ex. account currency is USD and exclusive, the operation in EUR cannot be posted on the account, and in the opposite, the account currency is USD and not exclusive, the operation in EUR can be posted on the account after conversion). "
+        },
+        "activationDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date on which Account is activated"
+        },
+        "finalClosingDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date at which the status of the account is changed to CLOSED"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number of the customer (debtor). E.g Can be used for repayment via Direct Debit."
+        },
+        "secondIban": {
+          "type": "string",
+          "description": "Debtor second IBAN (can be used for specific business processes if needed)"
+        },
+        "ibanOwnerName": {
+          "type": "string",
+          "description": "Iban owner’s name, can be different from the account owner’s name"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the account provided by the issuer at creation time or by default, the account template reference which was used to create the account"
+        },
+        "paymentMode": {
+          "type": "string",
+          "description": "The payment mode the customer uses (mandatory, pay later). \nThe values are:\n- CARDHOLDER_DETERMINED: customer repays its debt by itself (fund transfer to the issuer)\n- AUTOPAYMENT: customer repays its debt via Direct Debit (issued by issuer and paid automatically after X days)\n- DIRECTDEBIT_WITH_CONFIRMATION : customer repays its debt via Direct Debit but payment is confirmed by issuer"
+        },
+        "scheduledClosingDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date at which account should be set to BEING_CLOSED status (conditional). Mandatory when scheduledClosingDateType Is MANUAL."
+        },
+        "scheduledClosingDateType": {
+          "type": "string",
+          "description": "Type of scheduled Closing Date (conditional) Mandatory for SCHEDULED_CLOSING:\nValue =\n- MANUAL\n- NEXT_CYCLIC_CLOSURE_DATE\n- ANNUAL_FEE_DUE_DATE\n- NOW_DATE"
+        },
+        "workingCurrencyCode": {
+          "type": "string",
+          "description": "The Currency Code fixed in the current account (EUR for Euro, USD for dollar...)"
+        },
+        "originalWorkingMode": {
+          "type": "string",
+          "description": "not used – deprecated"
+        },
+        "workingMode": {
+          "type": "string",
+          "description": "It is the working mode of the account (Pay before/Pay later/Pay now) "
+        },
+        "subscriptionSwitch": {
+          "type": "boolean",
+          "description": "Not used – deprecated"
+        },
+        "toBeSwitched": {
+          "type": "boolean",
+          "description": "Not used – deprecated"
+        },
+        "lastSubscriptionFeeDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date of the previous charge for subscription"
+        },
+        "nextSubscriptionFeeDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date of the next charge for subscription"
+        },
+        "accountHierarchyReference": {
+          "type": "string",
+          "description": "Identifier of Account Hierarchy"
+        },
+        "structureType": {
+          "type": "string",
+          "description": "The issuer can provide this field for e.g. the root account, for information only (no check, no related business process), to indicate if the contract contains a single card only or can have several cards.\nPossible values are:\nFAMILY : the contract can have 1 or several cards\nREGULAR : the contract can have a single card only"
+        },
+        "dunningCaseStatus": {
+          "type": "string",
+          "description": "Status of the Dunning Case (optional, pay later):\n- ACTIVE\n- CLOSED"
+        },
+        "collectionCaseStatus": {
+          "type": "string",
+          "description": "Status of the Collection Case (optional, pay later):\n- ACTIVE\n- CLOSED"
+        },
+        "sepaIndicator": {
+          "type": "boolean",
+          "description": "Indicates whether the payment processing channel is SEPA for direct debit and credit transfer"
+        },
+        "sepaCreditorId": {
+          "type": "string",
+          "description": "SEPA Creditor Identifier (conditional). Mandatory if sepaMandate=True (pay later)"
+        },
+        "sepaMandate": {
+          "type": "boolean",
+          "description": "Indicates whether SEPA mandate exists (mandatory, pay later). If true then sepaCreditorId, sepaMandateUir, sepaMandateUmr and sepaMandateStatus attributes are mandatory."
+        },
+        "sepaMandateUmr": {
+          "type": "string",
+          "description": "SEPA Unique Mandate Reference (conditional, pay later). Mandatory if sepaMandate=True"
+        },
+        "sepaMandateUir": {
+          "type": "string",
+          "description": "SEPA Unique Internal Reference (conditional, pay later). Mandatory if sepaMandate=True"
+        },
+        "sepaMandateStatus": {
+          "type": "string",
+          "description": "SEPA Mandate Status (conditional, pay later). Mandatory if sepaMandate=True"
+        },
+        "originalPaymentMode": {
+          "type": "string",
+          "description": "Previous paymentMode when paymentMode has been modified (optional, pay later)"
+        },
+        "accountMembershipNumber1": {
+          "type": "string",
+          "description": "1st membership number"
+        },
+        "accountMembershipNumber2": {
+          "type": "string",
+          "description": "2nd membership number"
+        },
+        "amountDueMinAmount": {
+          "description": "Minimum amount due defined at paying account level that overrides the default value defined in the accountAmountDue model when the amount due algorithm of the model is \"Amount due percentage\"  (optional, pay later account)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "amountDueFixedAmount": {
+          "description": "Fixed amount due applied at paying account level that overrides the default value defined in the accountAmountDue model when the amount due algorithm of the model is “Amount Due fixed amount” (optional, pay later account)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "greaterOrLesserAmountDue": {
+          "type": "string",
+          "description": "Possible values : \n- GREATER (the highest amount between the amount due calculated and the minimum amount due defined is considered)\n- LESSER (the lowest amount is considered between the amount due calculated and the minimum amount due defined)\nUseful for credit cards and partial payer"
+        },
+        "directDebitAlgorithmReference": {
+          "type": "string",
+          "description": "DEPRECATED\nReplaced by DirectDebitAmountDue model."
+        },
+        "directDebitFixedAmount": {
+          "description": "Used to calculate the Direct Debit Amount (conditional, pay later). Mandatory if Direct Debit Algorithm requires Fixed Amount. If directDebitAlgorithm= DirectDebit Fixed Amount Standard, DirectDebit Fixed Amount Debit. Only, DirectDebit Fixed Amount in the Direct debit Amount Model",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "directDebitPercentage": {
+          "type": "string",
+          "description": "Used to calculate the Direct Debit Amount (conditional, pay later). In case if the Direct Debit Algorithm is selected, the percentage is used to calculate direct debit amount instead of the amount due conditions (eg. amount due = 30% of the statement balance, and for direct debit algorithm, the direct debit percentage is 70%)."
+        },
+        "creditInstalmentBalance": {
+          "description": "The current balance of the credit instalment on the account (optional)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "gracePeriodType": {
+          "type": "string",
+          "description": "The type of grace period for debit interest calculation (optional, pay later)\nPossible values:\nNEXT_CYCLE_GRACE_DATE\nNO_GRACE_PERIOD_USED"
+        },
+        "noGraceOnTheFirstCycle": {
+          "type": "boolean",
+          "description": "Indicates if no grace period is set for the first cycle (optional, pay later)"
+        },
+        "accountAmountDueAlgorithmName": {
+          "type": "string",
+          "description": "DEPRECATED\nReplaced by Account amount due model."
+        },
+        "amountDuePercentage": {
+          "type": "string",
+          "description": "Percentage of the balance to be claimed defined at paying account level that overrides the default value defined in the accountAmountDue model when the amount due algorithm of the model is \"Amount due percentage\" (optional, pay later account)."
+        },
+        "amountDueCalculationLevel": {
+          "type": "string",
+          "description": "DEPRECATED\nShows the level on which the amount due is calculated (optional, pay later). Values: \nACCOUNT_LEVEL, \nCOMPONENT_LEVEL "
+        },
+        "creditBureauContractFlag": {
+          "type": "boolean",
+          "description": "This information specifies if the Credit Bureau part of the contract has been signed by the credit card owner (optional, pay later)"
+        },
+        "loyaltyPoints": {
+          "type": "array",
+          "description": "When the account has loyalty points, value of the balance in point at the end of the closure cycle (optional).\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._",
+          "items": {
+            "$ref": "#/$defs/LoyaltyPoint"
+          }
+        },
+        "insuranceContracts": {
+          "type": "array",
+          "description": "List of insurance contracts linked to an account (optional, pay later)\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._",
+          "items": {
+            "$ref": "#/$defs/InsuranceContract"
+          }
+        },
+        "specificFields": {
+          "type": "object",
+          "description": "List of external data {\"label\":\"value\"} separated by a \",\" related to an account that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} Those provided data have no impact on our system business processes.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "accountHierarchySpecificFields": {
+          "type": "object",
+          "description": "List of external data {\"label\":\"value\"} separated by a \",\" related to an account hierarchy that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} like {\"costCenter\":\"445475\",\"brand\":\"VIS\",\"acc_struct\":\"PRIV\",\"statement_type\":\"ST1\",\"paymentCode\":\"01\",\"statementMailingCode\":\"ORD\"} Those provided data have no impact on our system business processes.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "productIdentifier": {
+          "description": "Identifier of the product used to create the contract to which the account is belonging. It corresponds also to the identifier of the product used to create the account if the account is created from the product directly.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ProductIdentifier"
+            }
+          ]
+        },
+        "productExtensionIdentifier": {
+          "description": "Identifier of the product extension used to create the account. \nRelevant if the account is created from a product extension.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ProductExtensionIdentifier"
+            }
+          ]
+        },
+        "selectedModels": {
+          "type": "array",
+          "description": "The models depends on the account type.\n\nFor a PayNow account\nEvent Fee Model: Defines fees which are triggered by Account events (ex: balance enquiry fee, statement fee, fee for returned payment)\nTransaction Fee Model: Defines fees which apply to particular transactions at the moment they are processed\nMarkup Fee Model: Defines fees which apply to particular transactions at the moment they are processed (used more particurlarly for foreign transactions)\n\nPayLater account\nEvent Fee Model: Defines fees which are triggered by Account events (ex: balance enquiry fee, statement fee, fee for returned payment)\nTransaction Fee Model: Defines fees which apply to particular transactions at the moment they are processed\nMarkup Fee Model: Defines fees which apply to particular transactions at the moment they are processed (used more particurlarly for foreign transactions)\nRestriction Model: Used to manage the credit limit \nStatement Model: Used to define the kind of statement\nDebit Interest Model: Used to define the algorithm and conditions for the calcul of debit interests\nInterest Model: Used to define the algorithm and conditions for the calcul of credit interests\nAccount Amount Due Model: Used to define the algorithm at account level for the amount due calculation (part of issuer terms and conditions)\nDirect Debit Amount Model: Used to define the algorithm for the direct debit amount calculation (part of customer terms and conditions)\nReimbursement Model - Used to configure and apply OCT different features in case of credit balance (per account hierarchy)\nRetrocession Rule Model: Used to configure different rules based on which there will be a sender and received operations cretaed, for the transactions meeting the rule criteria\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._",
+          "items": {
+            "$ref": "#/$defs/AccountModel"
+          }
+        },
+        "accountProfileReference": {
+          "type": "string",
+          "description": "Reference to the Account profile which stores allowed configuration elements (e.g. list of available closure calendar)"
+        },
+        "accountTemplateReference": {
+          "type": "string",
+          "description": "Reference of the account template used to instantiate this account"
+        },
+        "closureCalendar": {
+          "type": "string",
+          "description": "External reference of the closure calendar linked to the account (contains all dates of Issuer's cycle, used to realize its processing) (mandatory)."
+        },
+        "overlimitContribution": {
+          "type": "string",
+          "description": "DEPRECATED"
+        },
+        "spareChangeSaving": {
+          "type": "boolean",
+          "description": "Indicates if the function Spare Change Savings  (Keep the change) is applied on the account. (credit account only)"
+        },
+        "childrenAccountIdentifiers": {
+          "type": "array",
+          "description": "Identifier of children accounts (if exist). Reference to accountIdentifier\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._",
+          "items": {
+            "$ref": "#/$defs/AccountIdentifier"
+          }
+        },
+        "rootAccountIdentifier": {
+          "description": "The AccountIdentifier data type consist of two parameters:\n1. accountReference - Account number is to identify the Account on which reimbursement is made.\n2. issuerAccountExternalReference - External issuer account reference is to identify the Account. \n\nThe root account is either the account number or the issuerAccountExternalReference, or, if both are provided then only the account number is used. The account should exist and it should be a pay Later Account.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        },
+        "rootAccount": {
+          "description": "Root account data only if the account is not the root account (i.e. flag root is false, otherwise root account data are not returned)\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Account"
+            }
+          ]
+        },
+        "parentAccountIdentifier": {
+          "description": "Account reference and issuer account external reference (optional) of the parent account. Is empty if it is a root account. Mandatory if not root account",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        },
+        "payingAccountIdentifier": {
+          "description": "The account reference of paying account",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        },
+        "accountOwnerIdentifier": {
+          "description": "Account owner reference",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CustomerIdentifier"
+            }
+          ]
+        },
+        "accountGuarantorIdentifier": {
+          "description": "Guarantor of an account",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CustomerIdentifier"
+            }
+          ]
+        },
+        "contractIdentifier": {
+          "description": "OPC contract Identifier",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ContractIdentifier"
+            }
+          ]
+        },
+        "delinquent": {
+          "type": "boolean",
+          "description": "Indicates if the account is delinquent (true) or not (false) (optional, only used for pay later)"
+        },
+        "originalAccountIdentifier": {
+          "description": "In case the account was created from a product change, account number of original account\nIn case the account was created from a product change or employee reallocation, account number of original account.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        },
+        "changedAccountIdentifier": {
+          "description": "in case the account had a product change, account number of new account created\nIn case the account had a product change or employee reallocation took place, account number of new account created",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        },
+        "payingAccountType": {
+          "type": "string",
+          "description": "Indicates for corporate contract only if the account is paid by the root account, a parent entity account or the account itself\nPossible values:\nROOT_PAYS\nENTITY_PAYS\nITSELF_PAYS\n\nE.g. A corporate contract can have cards paid by the company (ROOT_PAYS, usually the root account is the company account), and/or paid by the intermediate entities (ENTITY_PAYS), and/or paid by cardholders them-selves (ITSELF_PAYS).",
+          "enum": [
+            "ROOT_PAYS",
+            "ITSELF_PAYS",
+            "ENTITY_PAYS"
+          ]
+        },
+        "companyEntityExternalReference": {
+          "type": "string",
+          "description": "This is the reference of an entity (e.g. cost center, department, division, country) in the company organization. This is required for reporting, etc so that the company can identify the entity in its own system."
+        },
+        "noOtbCheck": {
+          "type": "boolean",
+          "description": "Indicates if for this account (credit only) the Open-to-buy should be checked or not when an operation is posted during both authorizations and transactions processing.\nE.g. A contract with 2 prepaid cards having 1 card account per prepaid card and the root account: OTB check is disabled for both card accounts so when an operation is posted to card account 1 the OTB of its root account is checked only - this allows having shared loaded amount on root account for both cards."
+        },
+        "noParentNotification": {
+          "type": "boolean",
+          "description": "Indicates if operations (authorizations and transactions) should be posted to the parent account during the authorization and the transaction processing (e.g. incoming purchase authorization, first presentment, transaction fee, membership fee).\nE.g. this enables the issuer to stop the authorization/transaction processing to the entry account (card account), or at upper level (e.g. for corporate cards authorization/transaction amount can be checked against card account and Department account Open-to-buy only and not propagated to upper levels such as division, country, company accounts)."
+        },
+        "contractType": {
+          "type": "string",
+          "description": "Contract type. \nPossible values: CORPORATE, CONSUMER",
+          "enum": [
+            "CORPORATE",
+            "CONSUMER"
+          ]
+        },
+        "resetCreditLimit": {
+          "type": "boolean",
+          "description": "Indicates if the Open-to-buy should be reset to its maximum Credit limit at Authorization system side as soon as a cycle is closed. Of course the amount due (minimum payment amount) is considered as to be repaid by the customer by our solution.\nThe value of this flag overrides the value of the \"defaultResetCreditLimit\" flag."
+        },
+        "liabilityType": {
+          "type": "string",
+          "description": "Indicates the liability type of the account (free text provided by the issuer). This liability type can be different for each issuer and is stored in our solution for information purpose (e.g. can be used for reporting), not used by any business process."
+        },
+        "hierarchyDebitOrderDueDateDelay": {
+          "type": "integer",
+          "description": "The issuer can provide the debit order due date delay at hierarchy level (number of days). This delay is used to calculate the Direct Debit payment date for each cycle of repayment (Optional). This value overrides the one from the closure calendar."
+        },
+        "accountDebitOrderDueDateDelay": {
+          "type": "integer",
+          "description": "The issuer can provide the debit order due date delay for the account (number of days). This delay is used to calculate the Direct Debit payment date for each cycle of repayment. (Optional). This value overrides the one from the closure calendar and the hierarchy."
+        },
+        "hierarchyOutgoingCreditTransferFeature": {
+          "description": "Description of OCT features at account hierarchy level if different from the configuration",
+          "allOf": [
+            {
+              "$ref": "#/$defs/HierarchyOutgoingCreditTransferFeature"
+            }
+          ]
+        },
+        "accountOutgoingCreditTransferFeature": {
+          "description": "Description of OCT features at account level if different from the configuration or definition at account hierarchy level",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountOutgoingCreditTransferFeature"
+            }
+          ]
+        },
+        "preDelinquent ": {
+          "type": "boolean",
+          "description": "Indicates if the account is pre-delinquent (true) or not (false) (optional, pay later)\nRelevant only if account is not delinquent, a returned debit note with specific reason is received and total due amount is greater than 0.\nAn account is either delinquent or pre-delinquent (can’t be both at the same time)."
+        },
+        "externalRestrictions": {
+          "type": "array",
+          "description": "Derprecated - Replaced by externalVelocityLimits.",
+          "items": {
+            "$ref": "#/$defs/ExternalRestriction"
+          }
+        },
+        "externalVelocityLimits": {
+          "type": "array",
+          "description": "List of external velocity limits which can be provided by issuers at account creation time (mainly when creating a contract and the first card, when adding new card and card account) in order to update the corresponding velocity limits on the authorization system.",
+          "items": {
+            "$ref": "#/$defs/ExternalVelocityLimit"
+          }
+        },
+        "defaultResetCreditLimit": {
+          "type": "string",
+          "description": "Corresponds to the reset credit limit flag defined at contract level and which is the default value for the account in case nothing is configured in its resetCreditLimit flag. \nWhen the value is true, by default, the remaining due amount is not considered in the Open-To-Buy except if the flag \"resetCreditLimit\" is false\nWhen the value is false, the remaining due amount is considered in the Open-To-Buy except if the flag \"resetCreditLimit\" is true."
+        },
+        "lastImpactDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date at which the account balance was last impacted by an operation"
+        },
+        "coBrander": {
+          "type": "string",
+          "description": "CoBrander inherited from the consumer contract."
+        },
+        "resetLimitBalance": {
+          "description": "Will be fed only in case reset credit is active for the account, and that contain in this case the application of the reset limit which means it will contain account balance” – “remaining amount due of that individual account.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "hierarchyPayingAccountType": {
+          "type": "string",
+          "description": "Indicates for corporate contract only if each account in the hierarchy is paid by the root account or the account itself\nPossible values:\nROOT_PAYS\nITSELF_PAYS"
+        },
+        "hierarchyBonusProgramReferences": {
+          "type": "array",
+          "description": "Reference of the Bonus/loyalty programs linked to the account hierarchy",
+          "items": {
+            "type": "string"
+          }
+        },
+        "openCycleInformation": {
+          "$ref": "#/$defs/CycleInformation"
+        },
+        "isChangeOfPayerAtNextCycle": {
+          "type": "boolean",
+          "description": "The attribute is showing whether there is scheduled change of paying account type at the cycle closure date or not"
+        },
+        "hierarchySelectedModels": {
+          "type": "array",
+          "description": "The models depends on the account type.\n\nCurrently only Reimbursement Model: used to configure and apply OCT different features in case of credit balance (per account hierarchy)",
+          "items": {
+            "$ref": "#/$defs/AccountHierarchyModel"
+          }
+        },
+        "originalAccountIdentifierType": {
+          "type": "string",
+          "description": "\"PRODUCT_CHANGE\" in case the account was created from a product change\n\"CARD_REALLOCATION\" in case the account was created from an employee reallocation."
+        },
+        "changedAccountIdentifierType": {
+          "type": "string",
+          "description": "\"PRODUCT_CHANGE\" in case the account was created from a product change\n\"CARD_REALLOCATION\" in case the account was created from an employee reallocation."
+        },
+        "hierarchyOperationStatus": {
+          "description": "The issuer can update blocking information for the account hierarchy.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/HierarchyOperationStatus"
+            }
+          ]
+        },
+        "hierarchyOperationStatusHistory": {
+          "type": "array",
+          "description": "The operation status change history information can be checked in this object.\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._",
+          "items": {
+            "$ref": "#/$defs/HierarchyOperationStatusHistory"
+          }
+        }
+      },
+      "title": "Account"
+    },
+    "AccountHierarchyModel": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Model type of the account hierarchy\nPossible value:\n• reimbursementModel."
+        },
+        "reference": {
+          "type": "string",
+          "description": "Reference to the particular model that has been selected in hierarchySelectedModels."
+        }
+      },
+      "title": "AccountHierarchyModel"
+    },
+    "AccountIdentifier": {
+      "type": "object",
+      "properties": {
+        "accountReference": {
+          "type": "string",
+          "description": "Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used."
+        },
+        "issuerAccountExternalReference": {
+          "type": "string",
+          "description": "Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm."
+        }
+      },
+      "title": "AccountIdentifier"
+    },
+    "AccountModel": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of an account model\nPossible values:\n•\teventFeeModel\n•\ttransactionFeeModel\n•\tmarkupFeeModel\n•\trestrictionModel\n•\tdebitInterestModel\n•\tinterestModel\n•\tdirectDebitAmountModel\n•\taccountAmountDueModel \n•\tstatementModel"
+        },
+        "reference": {
+          "type": "string",
+          "description": "Reference to the particular model that has been selected in selectedModels"
+        },
+        "originalModelReference": {
+          "type": "string",
+          "description": "DEPRECATED"
+        }
+      },
+      "title": "AccountModel"
+    },
+    "AccountOutgoingCreditTransferFeature": {
+      "type": "object",
+      "properties": {
+        "periodicOctAllowed": {
+          "type": "boolean",
+          "description": "This field indicates if the issuer can override  the  periodic OCT option. \nTo override the option, the reimbursement model attached to the contract must be configured to accept the change of the default choice."
+        },
+        "periodicOctType": {
+          "type": "string",
+          "description": "This field indicates the periodic OCT type \nPossibles values:\n- DAILY (OCT can be triggered on a daily basis if account is in credit position)\n- CYCLIC (OCT can be triggered at cycle closure date if account is in credit position).\nIt can be overridden if the reimbursement model accepts the change of the default choice.",
+          "enum": [
+            "DAILY",
+            "CYCLIC"
+          ]
+        },
+        "periodicMaxThreshold": {
+          "description": "Threshold amount used for generating the periodic OCT. When the account balance is greater than the threshold, the OCT amount will be equal to the (account credit balance - threshold amount). Ex: threshold is 10.000€ and credit balance is : 15.000€: the OCT amount is 5.000€.\nThe threshold amount can be overridden if the reimbursement model accepts the change of the default threshold.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "octOnContractTerminationAllowed": {
+          "type": "boolean",
+          "description": "This field indicates the \"OCT on contract termination\" option\nThe option can be modified if it is allowed within the reimbursement model to change the default choice."
+        },
+        "octOnAccountTerminationAllowed": {
+          "type": "boolean",
+          "description": "This field indicates the option to generate an OCT when card account is closed.\nThe option can be modified if it is allowed within the reimbursement model to change the default choice."
+        },
+        "octOnContractSuspensionAllowed": {
+          "type": "boolean",
+          "description": "This field indicates if an Outgoing Credit Transfer is required or not when the contract is suspended.\nThe value is initialized from the product and can be overridden if this is allowed by the product (in reimbursement model)."
+        },
+        "octOnDemandAllowed": {
+          "type": "boolean",
+          "description": "This field indicates the \"OCT on demand\" option. \nThe option can be modifed if it is allowed within the reimbursement model to change the default choice."
+        },
+        "octOnDemandLimitType": {
+          "type": "string",
+          "description": "This field indicates the limit type of the \"OCT on demand\" option.\nPossible values:\n- BALANCE (= a customer can only request an OCT in case of account in credit position)\n- OTB (open-to-buy) (=a customer can request an OCT from its current Open-to-buy (so from its credit limit allowed by the issuer)\nThe limit type can be modified if it is allowed within the reimbursement model.",
+          "enum": [
+            "OTB",
+            "BALANCE"
+          ]
+        },
+        "octOnContractTerminationType": {
+          "type": "string",
+          "enum": [
+            "CONTRACT_TERMINATION",
+            "ACCOUNT_CLOSING"
+          ]
+        }
+      },
+      "description": "Specify OctFeature (periodicOct, periodicOctType, periodicOctMaxThreshold, etc.)",
+      "title": "AccountOutgoingCreditTransferFeature"
+    },
+    "AccountStatusHistory": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Status of the account on the particular statusDate (optional)"
+        },
+        "statusDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of the account status change (optional)"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason the status has been set (optional)"
+        }
+      },
+      "title": "AccountStatusHistory"
+    },
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    },
+    "ContractIdentifier": {
+      "type": "object",
+      "description": "Identification of thecorporate contract either by Issuer contract external reference or by contract reference",
+      "properties": {
+        "contractReference": {
+          "type": "string",
+          "description": "The unique reference of the contract in our system, unique per platform\nThis reference is an UUID (universally unique identifier) on 36 digits (e.g.196c2215-9a80-4b8b-868c-18beb8c8c9)."
+        },
+        "issuerContractExternalReference": {
+          "type": "string",
+          "description": "The external reference of the contract provided by the issuer\nThis reference is unique per issuer and may be used to carry out research and find information."
+        }
+      },
+      "title": "ContractIdentifier"
+    },
+    "CustomerIdentifier": {
+      "type": "object",
+      "description": "Identification of the updated customer either by Issuer customer external reference or by customer reference",
+      "properties": {
+        "customerReference": {
+          "type": "string",
+          "description": "Reference computed internally by our system"
+        },
+        "issuerCustomerExternalReference": {
+          "type": "string",
+          "description": "Reference provided by the Issuer"
+        }
+      },
+      "title": "CustomerIdentifier"
+    },
+    "CycleInformation": {
+      "type": "object",
+      "description": "Dates related to the closure calendar for the open closure cycle",
+      "properties": {
+        "cycleStartDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the cycle is opened"
+        },
+        "cycleClosureDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the open cycle is closed"
+        },
+        "statementGenerationDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the statement is produced for the cycle"
+        },
+        "directDebitIssuingDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Direct debit issuing date of the cycle"
+        },
+        "directDebitDueDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Direct debit due date of the cycle"
+        },
+        "gracePeriodEndDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Grace period end date of the cycle"
+        },
+        "dueDateForSelfPayer": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Due date for self payer of the cycle"
+        },
+        "cycleDueDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Due date of the cycle, used for monitoring process (delinquency)"
+        },
+        "statementEffectiveStartDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Effective start date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
+        },
+        "statementEffectiveEndDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Effective end date of the statement period.\n\t\t\t\t\tExample :\n\t\tCycle closure is on 28th of each month at 20.00 PM\n\t\tIf closure on 28/08,\n\t\t- For August Statement:  statementEffectiveStartDate = 29/07/2025 and statementEffectiveEndDate = 28/08/2025]\n\t\t- For September Statement : statementEffectiveStartDate = 29/08/2025 and statementEffectiveEndDate = 28/09/2025"
+        }
+      },
+      "title": "CycleInformation"
+    },
+    "ExternalRestriction": {
+      "type": "object",
+      "required": [
+        "externalRestrictionIdentifier"
+      ],
+      "properties": {
+        "externalRestrictionIdentifier": {
+          "description": "Reference value for external restriction (Velocity limit) (mandatory)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ExternalRestrictionIdentifier"
+            }
+          ]
+        },
+        "maximumAmount": {
+          "description": "Maximum amount of provided velocity limit (optional)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "minimumAmount": {
+          "description": "Minimum amount of provided velocity limit (optional)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "maximumCount": {
+          "type": "integer",
+          "description": "Maximum count of transaction to be done using velocity limit"
+        },
+        "priority": {
+          "type": "string",
+          "description": "In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a velocity check and an account"
+        }
+      },
+      "title": "ExternalRestriction"
+    },
+    "ExternalRestrictionIdentifier": {
+      "type": "object",
+      "properties": {
+        "externalRestrictionReference": {
+          "type": "string"
+        }
+      },
+      "title": "ExternalRestrictionIdentifier"
+    },
+    "ExternalVelocityLimit": {
+      "type": "object",
+      "required": [
+        "externalVelocityLimitIdentifier"
+      ],
+      "properties": {
+        "externalVelocityLimitIdentifier": {
+          "description": "Unique reference of the external velocity limit",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ExternalVelocityLimitIdentifier"
+            }
+          ]
+        },
+        "maximumAmount": {
+          "description": "Maximum amount of provided velocity limit (optional)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "minimumAmount": {
+          "description": "Minimum amount of provided velocity limit (optional)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "maximumCount": {
+          "type": "integer",
+          "description": "Maximum count of transaction to be done using velocity limit"
+        },
+        "priority": {
+          "type": "string",
+          "description": "In case multiple overrides with overlapping activation times are existing this information is used to resolve this situation by applying the overrides one by one starting with the one with lowest priority. The priority needs to be unique across all overrides associated with a velocity check and an account"
+        },
+        "activationStartTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date time the velocity limit is active"
+        },
+        "activationEndTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date time the velocity limit finished if present"
+        }
+      },
+      "title": "ExternalVelocityLimit"
+    },
+    "ExternalVelocityLimitIdentifier": {
+      "type": "object",
+      "properties": {
+        "externalVelocityLimitReference": {
+          "description": "Reference value for external Velocity limit (mandatory)",
+          "type": "string"
+        }
+      },
+      "title": "ExternalVelocityLimitIdentifier"
+    },
+    "HierarchyOperationStatus": {
+      "type": "object",
+      "properties": {
+        "paymentsBlocking": {
+          "type": "boolean",
+          "description": "Indicates if the online payments are blocked for the account hierarchy (true) or not (false).By default, value is false."
+        },
+        "reimbursementsBlocking": {
+          "type": "boolean",
+          "description": "Indicates if the online reimbursements are blocked for the account hierarchy (true) or not (false).By default, value is false."
+        },
+        "authorizationsBlocking": {
+          "type": "boolean",
+          "description": "Indicates if the authorizations are blocked for the account hierarchy (true) or not (false).By default, value is false."
+        },
+        "statusDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of the last change."
+        }
+      },
+      "title": "HierarchyOperationStatus"
+    },
+    "HierarchyOperationStatusHistory": {
+      "type": "object",
+      "properties": {
+        "paymentsBlocking": {
+          "type": "boolean",
+          "description": "Indicates if the online payments are blocked for the account hierarchy (true) or not (false).By default, value is false."
+        },
+        "reimbursementsBlocking": {
+          "type": "boolean",
+          "description": "Indicates if the online reimbursements are blocked for the account hierarchy (true) or not (false).By default, value is false."
+        },
+        "authorizationsBlocking": {
+          "type": "boolean",
+          "description": "Indicates if the authorizations are blocked for the account hierarchy (true) or not (false).By default, value is false."
+        },
+        "statusDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of the change."
+        },
+        "blockingReason": {
+          "type": "string",
+          "description": "Reason why the operations are blocked."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Comment for blocking operations Free text."
+        }
+      },
+      "title": "HierarchyOperationStatusHistory"
+    },
+    "HierarchyOutgoingCreditTransferFeature": {
+      "type": "object",
+      "properties": {
+        "periodicOct": {
+          "type": "boolean",
+          "description": "This field indicates if the issuer can override  the  periodic OCT option. \nTo override the option, the reimbursement model attached to the contract must be configured to accept the change of the default choice.\n"
+        },
+        "periodicOctType": {
+          "type": "string",
+          "description": "This field indicates the periodic OCT type \nPossibles values:\n- DAILY (OCT can be triggered on a daily basis if account is in credit position)\n- CYCLIC (OCT can be triggered at cycle closure date if account is in credit position).\nIt can be overridden if the reimbursement model accepts the change of the default choice.",
+          "enum": [
+            "DAILY",
+            "CYCLIC"
+          ]
+        },
+        "periodicMaxThreshold": {
+          "description": "Threshold amount used for generating the periodic OCT. When the account balance is greater than the threshold, the OCT amount will be equal to the (account credit balance - threshold amount). Ex: threshold is 10.000€ and credit balance is : 15.000€: the OCT amount is 5.000€.\nThe threshold amount can be overridden if the reimbursement model accepts the change of the default threshold.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "octOnContractTerminationAllowed": {
+          "type": "boolean",
+          "description": "This field indicates the \"OCT on contract termination\" option\nThe option can be modified if it is allowed within the reimbursement model to change the default choice."
+        },
+        "octOnAccountTerminationAllowed": {
+          "type": "boolean",
+          "description": "This field indicates the option to generate an OCT when card account is closed\nThe option can be modified if it is allowed within the reimbursement model to change the default choice."
+        },
+        "octOnContractSuspensionAllowed": {
+          "type": "boolean",
+          "description": "This field indicates if an Outgoing Credit Transfer is required or not when the contract is suspended.\nThe value is initialized from the product and can be overridden if this is allowed by the product (in reimbursement model)."
+        },
+        "octOnDemandAllowed": {
+          "type": "boolean",
+          "description": "This field indicates the \"OCT on demand\" option. \nThe option can be modified if it is allowed within the reimbursement model to change the default choice."
+        },
+        "octOnDemandLimitType": {
+          "type": "string",
+          "description": "This field indicates the limit type of the \"OCT on demand\" option.\nPossible values:\n- BALANCE (= a customer can only request an OCT in case of account in credit position)\n- OTB (open-to-buy) (=a customer can request an OCT from its current Open-to-buy (so from its credit limit allowed by the issuer)\nThe limit type can be modified if it is allowed within the reimbursement model.",
+          "enum": [
+            "OTB",
+            "BALANCE"
+          ]
+        },
+        "octOnContractTerminationType": {
+          "type": "string",
+          "enum": [
+            "CONTRACT_TERMINATION",
+            "ACCOUNT_CLOSING"
+          ]
+        }
+      },
+      "description": "Specify OctFeature (periodicOct, periodicOctType, periodicOctMaxThreshold, etc.)",
+      "title": "HierarchyOutgoingCreditTransferFeature"
+    },
+    "InsuranceContract": {
+      "type": "object",
+      "properties": {
+        "issuerId": {
+          "type": "string",
+          "description": "Issuer identifier (unique per platform)"
+        },
+        "insuranceContractIdentifier": {
+          "description": "Unique identifier of the insurance contract",
+          "allOf": [
+            {
+              "$ref": "#/$defs/InsuranceContractIdentifier"
+            }
+          ]
+        },
+        "accountIdentifier": {
+          "description": "The account linked to the insurance contract",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        },
+        "lastInsuranceEventCode": {
+          "type": "string",
+          "description": "Last insurance event code"
+        },
+        "lastInsuranceEventDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last event date"
+        },
+        "insuranceEvents": {
+          "type": "array",
+          "description": "The list of insurance events linked to this contract.\n_Embedded property, only filled when available for the endpoint and explicitly requested in the 'embed' query parameter._",
+          "items": {
+            "$ref": "#/$defs/InsuranceEvent"
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of insurance contract"
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date-time",
+          "description": "From when the contract is valid"
+        },
+        "accountOwnerBirthDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Owner's birth date"
+        },
+        "insurancePackage": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/InsuranceContractPackage"
+            }
+          ]
+        }
+      },
+      "title": "InsuranceContract"
+    },
+    "InsuranceContractIdentifier": {
+      "type": "object",
+      "description": "The insurance package which is linked to this contract ",
+      "properties": {
+        "insurancePackageReference": {
+          "type": "string",
+          "description": "Reference of the insurance contract"
+        }
+      },
+      "title": "InsuranceContractIdentifier"
+    },
+    "InsuranceContractPackage": {
+      "type": "object",
+      "properties": {
+        "issuerId": {
+          "type": "string",
+          "description": "Issuer identifier of the insurance package"
+        },
+        "insurancePackageIdentifier": {
+          "description": "Unique identifier of the insurance contract package",
+          "allOf": [
+            {
+              "$ref": "#/$defs/InsurancePackageIdentifier"
+            }
+          ]
+        }
+      },
+      "title": "InsuranceContractPackage"
+    },
+    "InsuranceEvent": {
+      "type": "object",
+      "properties": {
+        "insuranceEventCode": {
+          "type": "string",
+          "description": "Insurance event code"
+        },
+        "insuranceEventDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of insurance event"
+        },
+        "insuranceEventDescription": {
+          "type": "string",
+          "description": "Description of the insurance event"
+        }
+      },
+      "title": "InsuranceEvent"
+    },
+    "InsurancePackageIdentifier": {
+      "type": "object",
+      "description": "Unique identifier of the insurance contract package",
+      "properties": {
+        "insurancePackageReference": {
+          "type": "string",
+          "description": "Reference of the insurance package"
+        }
+      },
+      "title": "InsurancePackageIdentifier"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "LoyaltyPoint": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "string",
+          "description": " Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional)."
+        },
+        "cumulatedValue": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total number of loyalty points (optional)."
+        }
+      },
+      "title": "LoyaltyPoint"
+    },
+    "ProductExtensionIdentifier": {
+      "properties": {
+        "issuerProductExtensionExternalReference": {
+          "description": "External reference of the product extension provided by the issuer and defined for a product (e.g. it can be used when adding cards and accounts to a contract )",
+          "type": "string"
+        }
+      },
+      "title": "ProductExtensionIdentifier",
+      "type": "object"
+    },
+    "ProductIdentifier": {
+      "type": "object",
+      "properties": {
+        "issuerProductExternalReference": {
+          "type": "string",
+          "description": "Product External Reference provided by the issuer"
+        },
+        "productReference": {
+          "type": "string",
+          "description": "Reference of the product in our system, unique per platform"
+        }
+      },
+      "title": "ProductIdentifier"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

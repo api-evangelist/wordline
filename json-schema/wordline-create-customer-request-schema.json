@@ -1,0 +1,405 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-customer-request-schema.json",
+  "title": "CreateCustomerRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-customer-api-openapi.yml#/components/schemas/CreateCustomerRequest",
+  "type": "object",
+  "required": [
+    "firstName",
+    "lastName",
+    "addresses"
+  ],
+  "properties": {
+    "issuerCustomerExternalReference": {
+      "type": "string",
+      "description": "Reference provided by the Issuer"
+    },
+    "courtesyTitle": {
+      "type": "string",
+      "description": "Courtesy Title of Person Customer (optional). Free text. If present, the value can be subject to a validation process if a specific rule has been configured at issuer level."
+    },
+    "firstName": {
+      "type": "string",
+      "description": "First Name of Person Customer (mandatory)"
+    },
+    "lastName": {
+      "type": "string",
+      "description": "Last Name of Person Customer (mandatory)"
+    },
+    "secondFirstName": {
+      "type": "string",
+      "description": "Second First Name of Person Customer (optional)"
+    },
+    "sex": {
+      "type": "string",
+      "description": "Gender of Person Customer (optional). Free text. If present, the value can be subject to a validation process if a specific rule has been configured at issuer level."
+    },
+    "maidenName": {
+      "type": "string",
+      "description": "Maiden Name of Person Customer (optional)"
+    },
+    "offlineRiskCategory": {
+      "type": "string",
+      "description": "Categorizes the person for offline risk management. List of possible values is defined per Issuer  (eg.Business, Student, Teenager, Standard). "
+    },
+    "onlineRiskCategory": {
+      "type": "string",
+      "description": "Categorizes the person for online risk management. List of possible values is defined per Issuer (eg.Business, Student, Teenager, Standard) "
+    },
+    "maritalStatus": {
+      "type": "string",
+      "description": "Marital Status of Person Customer. Free text (optional)"
+    },
+    "birthDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Birth date of Person Customer (optional). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level."
+    },
+    "birthPlace": {
+      "type": "string",
+      "description": "Birth Place of Person Customer (optional) Free text "
+    },
+    "nationality": {
+      "type": "string",
+      "description": "Nationality of Person Customer(optional). Free text."
+    },
+    "profession": {
+      "type": "string",
+      "description": "Profession of Person Customer. Free text (optional)"
+    },
+    "employerName": {
+      "type": "string",
+      "description": "Employer's Name of Person Customer. (optional) Free text"
+    },
+    "employerAddress": {
+      "type": "string",
+      "description": "Employer's Address of Person Customer (optional) Free text"
+    },
+    "monthlySalary": {
+      "type": "string",
+      "description": "Average monthly salary of Person Customer (optional)"
+    },
+    "picture": {
+      "type": "string",
+      "description": "Picture reference of the Person Customer (eg url, filename). Free text. (optional)"
+    },
+    "url1": {
+      "type": "string",
+      "description": "First URL of the Person Customer (optional)"
+    },
+    "url2": {
+      "type": "string",
+      "description": "Second URL of the Person Customer (optional)"
+    },
+    "secretQuestion": {
+      "type": "string",
+      "description": "Secret Question for security (optional)"
+    },
+    "secretAnswer": {
+      "type": "string",
+      "description": "Answer to Secret Question for security (optional)"
+    },
+    "commercialStatus": {
+      "type": "string",
+      "description": "Defines the commercial status of a Person Customer among a list of possible values configured per issuer. One of the possible values can be set as default value (eg. Normal, Address Only, Bankruptcy, Active Customer). (mandatory)"
+    },
+    "preferredCorrespondenceLanguage": {
+      "type": "string",
+      "description": "Preferred correspondence language of the Person Customer (optional). Free text but ISO639-1 code is recommended (e.g. ‘nl’,’fr’,’de’,’en’). If present, the value can be subject to a validation process if a specific rule has been configured at issuer level."
+    },
+    "vatNumber": {
+      "type": "string",
+      "description": "Tax number. Useful if Person is indeed a company (optional)"
+    },
+    "vatCountry": {
+      "type": "string",
+      "description": "Tax country. Useful if Person is indeed a company (optional)"
+    },
+    "employee": {
+      "type": "boolean",
+      "description": "Flag indicating if the Person Customer is an employee of the issuer. If not provided, value is NULL(optional)"
+    },
+    "partnerExternalReference": {
+      "type": "string",
+      "description": "External Reference provided by the issuer (optional)"
+    },
+    "specificFields": {
+      "type": "object",
+      "description": "The issuer can provide Specific Fields for the new customer. \nIt is a list of external data {\"label\":\"value\"} separated by a \",\" related to the customer (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems.\nExample : {\"label1\":\"value1\",\"label2\":\"value2\"}\nThose provided data have no impact on our system business processes.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "doNotContact": {
+      "type": "boolean",
+      "description": "if the Person Customer does not want to be contacted by the issuer set to 'true' otherwise to be set to 'false'. If not provided, value is NULL(optional)"
+    },
+    "vulnerabilities": {
+      "description": "List of vulnerabilities applicable to the customer.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Vulnerability"
+      }
+    },
+    "vulnerabilityIndicator": {
+      "type": "boolean",
+      "description": "Indicates if the client is vulnerable or not"
+    },
+    "vulnerabilityNote": {
+      "type": "string",
+      "description": "note about the client's vulnerability (free text)"
+    },
+    "correspondenceName": {
+      "type": "string",
+      "description": "Correspondence Name of Person Customer (optional)"
+    },
+    "addresses": {
+      "type": "array",
+      "description": "List of active addresses whatever their type (MAIL, EMAIL, PHONE). See the Address's datatype for the detail list of the attributes",
+      "items": {
+        "$ref": "#/$defs/CreateCustomerRequestAddress"
+      }
+    },
+    "contacts": {
+      "type": "array",
+      "description": "List of contacts of the customer.",
+      "items": {
+        "$ref": "#/$defs/CreateContactRequest"
+      }
+    }
+  },
+  "$defs": {
+    "CreateAddressRequestMailAddress": {
+      "type": "object",
+      "required": [
+        "country"
+      ],
+      "properties": {
+        "typeCode": {
+          "type": "string",
+          "description": "DEPRECATED"
+        },
+        "courtesyTitle": {
+          "type": "string",
+          "description": "Courtesy title of the address. Free text"
+        },
+        "line1": {
+          "type": "string",
+          "description": "Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line2": {
+          "type": "string",
+          "description": "Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line3": {
+          "type": "string",
+          "description": "Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line4": {
+          "type": "string",
+          "description": "Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line5": {
+          "type": "string",
+          "description": "Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "buildingNumber": {
+          "type": "string",
+          "description": "Building number of the address (optional)"
+        },
+        "boxNumber": {
+          "type": "string",
+          "description": "Box number of the address (optional)"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name of the address (optional)"
+        },
+        "postCode": {
+          "type": "string",
+          "description": "zip code of the address (optional)"
+        },
+        "townName": {
+          "type": "string",
+          "description": "City corresponding to the address"
+        },
+        "countrySubdivision": {
+          "type": "string",
+          "description": "Subdivision of the country (optional)"
+        },
+        "country": {
+          "type": "string",
+          "description": "Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured."
+        }
+      },
+      "title": "CreateAddressRequest.MailAddress"
+    },
+    "CreateAddressRequestPhoneNumber": {
+      "type": "object",
+      "required": [
+        "localPhoneNumber"
+      ],
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49)."
+        },
+        "localPhoneNumber": {
+          "type": "string",
+          "description": "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level."
+        }
+      },
+      "title": "CreateAddressRequest.PhoneNumber"
+    },
+    "CreateContactRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the contact. Mandatory if the departmentName attribute is not provided."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the contact"
+        },
+        "departmentName": {
+          "type": "string",
+          "description": "Department name to which the contact is attached. Free text. Mandatory if the contact name is not provided"
+        },
+        "sex": {
+          "type": "string",
+          "description": "Gender of the contact"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the role of the contact within the company (e.g. 'sales manager'). Free text"
+        },
+        "courtesyTitle": {
+          "type": "string",
+          "description": "Title of the contact. Free text"
+        },
+        "type": {
+          "type": "string",
+          "description": "The contact type (e.g. Power of Attorney, Legal Representative)"
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The contact's date of birth"
+        },
+        "postalAddress": {
+          "description": "The postal adress of the contact",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CreateAddressRequestMailAddress"
+            }
+          ]
+        }
+      },
+      "title": "CreateContactRequest"
+    },
+    "CreateCustomerRequestAddress": {
+      "type": "object",
+      "required": [
+        "addressLabel",
+        "addressType"
+      ],
+      "properties": {
+        "addressLabel": {
+          "type": "string",
+          "description": "Refer to Address.addressLabel"
+        },
+        "addressType": {
+          "type": "string",
+          "description": "Refer to Address.addressType"
+        },
+        "postalAddress": {
+          "$ref": "#/$defs/CreateAddressRequestMailAddress"
+        },
+        "emailAddress": {
+          "$ref": "#/$defs/EmailAddress"
+        },
+        "phone": {
+          "$ref": "#/$defs/CreateAddressRequestPhoneNumber"
+        },
+        "addressUsages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CreateCustomerRequestAddressUsage"
+          }
+        },
+        "issuerAddressExternalReference": {
+          "type": "string",
+          "description": "Unique external identifier provided by the issuer (optional)"
+        }
+      },
+      "title": "CreateCustomerRequest.Address"
+    },
+    "CreateCustomerRequestAddressUsage": {
+      "type": "object",
+      "required": [
+        "addressUsageName",
+        "serviceCode"
+      ],
+      "properties": {
+        "addressUsageName": {
+          "type": "string",
+          "description": "The business process for which the address usage is defined such as CARD_DELIVERY, PIN_MAILER_DELIVERY, STATEMENT_DELIVERY."
+        },
+        "entityReference": {
+          "type": "string",
+          "description": "This field is filled by the User while adding the usage to a particular Address of the Customer. It can be eg a card contract reference, card account reference. It is an optional field."
+        },
+        "serviceCode": {
+          "type": "string",
+          "description": "The Service for which the address usage is defined : CARD_SERVICE (IBO CMS), ACCOUNT_SERVICE (IBO CAS), …"
+        },
+        "entityRequestCorrelationId": {
+          "type": "string",
+          "description": "The issuer can provide the correlation id of the new entity (card contract or account) which linked to the address usage (account defined in the data block CreateConsumerContractRequest.Account and card contract defined in the data block CreateConsumerContractRequest.CardContract)."
+        },
+        "entityType": {
+          "type": "string",
+          "description": "If a correlation id is filled for an entity reference, the entity type must be provided to indicate if the entity is related to a card contract or to an account.\nPossible values:\n- CARD_CONTRACT\n- ACCOUNT",
+          "enum": [
+            "ACCOUNT",
+            "CARD_CONTRACT"
+          ]
+        }
+      },
+      "title": "CreateCustomerRequest.AddressUsage"
+    },
+    "EmailAddress": {
+      "type": "object",
+      "required": [
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email address of the Customer (mandatory). The email address should have the following format: aaa@bbb.ccc\naaa, bbb, ccc are character string."
+        }
+      },
+      "title": "EmailAddress"
+    },
+    "Vulnerability": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of vulnerability applicable to the customer (free text)."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Details about the vulnerability of the customer (free text)."
+        }
+      }
+    }
+  }
+}

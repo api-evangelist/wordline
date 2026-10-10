@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-remind-pinrequest-schema.json",
+  "title": "RemindPINRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-api-openapi.yml#/components/schemas/RemindPINRequest",
+  "type": "object",
+  "required": [
+    "sendingMode"
+  ],
+  "properties": {
+    "sendingMode": {
+      "type": "string",
+      "description": "The issuer must provide a sending mode among ones allowed."
+    },
+    "deliveryType": {
+      "type": "string",
+      "description": "Indicates whether the delivery of the PIN mailer should be to branch or customer (instead of the one from the distribution rule of the card product)\nPossible values are: CUSTOMER, BRANCH\nTo override the delivery address, the card delivery type must not be provided and only one of these fields must be provided: customDeliveryAddress, customDeliveryEmail or customDeliveryPhone."
+    },
+    "deliveryBranchCode": {
+      "type": "string",
+      "description": "The issuer must provide the card delivery branch code If the delivery type is provided and is BRANCH.\nNot to be provided if the delivery type is different from BRANCH (ignored if provided and not needed)."
+    },
+    "customDeliveryAddressee": {
+      "type": "string",
+      "description": "Can be provided in case of customised delivery address.\nWhen the customDeliveryAddress is provided, the field must also be provided."
+    },
+    "customDeliveryAddress": {
+      "description": "Custom postal address to send the PIN mailer.\nWhen the customDeliveryAddressee is provided, the field must also be provided.\nTo be provided when delivery type is empty, but not in combination with Email for PIN and/or Phone for PIN.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/CreateAddressRequestMailAddress"
+        }
+      ]
+    },
+    "customDeliveryEmail": {
+      "description": "Custom email address to send the PIN mailer\nTo be provided when delivery type is empty, but not in combination with Phone for PIN and/or Postal address for PIN.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/EmailAddress"
+        }
+      ]
+    },
+    "customDeliveryPhone": {
+      "description": "Custom phone number to send the PIN mailer\nTo be provided when delivery type is empty, but not in combination with Email for PIN and/or Postal address for PIN.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/CreateAddressRequestPhoneNumber"
+        }
+      ]
+    },
+    "specificFields": {
+      "type": "object",
+      "description": "The issuer can update Specific Fields for the order during the PIN reminding.\nIt is a list of external data {\"label\":\"value\"} separated by a \",\" related to the order (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems.\nA new data can be added or an existing data can be updated {\"label1\":\"newValue\"} or removed {\"label2\":\"null\"}.\nAny existing data that is not present in this list is not updated in the order. Those provided data have no impact on our system business processes.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "resetPinTryCounter": {
+      "type": "boolean",
+      "description": "A reset of the PIN try counter can be requested (message is sent to the Front Office to reset the PIN).",
+      "default": false
+    },
+    "waiveFee": {
+      "type": "boolean",
+      "description": "Indicates if the configured fee (if any) is waived (true) or not (false) while reminding PIN. By default is false.",
+      "default": false
+    }
+  },
+  "$defs": {
+    "CreateAddressRequestMailAddress": {
+      "type": "object",
+      "required": [
+        "country"
+      ],
+      "properties": {
+        "typeCode": {
+          "type": "string",
+          "description": "DEPRECATED"
+        },
+        "courtesyTitle": {
+          "type": "string",
+          "description": "Courtesy title of the address. Free text"
+        },
+        "line1": {
+          "type": "string",
+          "description": "Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line2": {
+          "type": "string",
+          "description": "Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line3": {
+          "type": "string",
+          "description": "Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line4": {
+          "type": "string",
+          "description": "Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line5": {
+          "type": "string",
+          "description": "Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "buildingNumber": {
+          "type": "string",
+          "description": "Building number of the address (optional)"
+        },
+        "boxNumber": {
+          "type": "string",
+          "description": "Box number of the address (optional)"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name of the address (optional)"
+        },
+        "postCode": {
+          "type": "string",
+          "description": "zip code of the address (optional)"
+        },
+        "townName": {
+          "type": "string",
+          "description": "City corresponding to the address"
+        },
+        "countrySubdivision": {
+          "type": "string",
+          "description": "Subdivision of the country (optional)"
+        },
+        "country": {
+          "type": "string",
+          "description": "Code of the country (mandatory). Free text. The value can be subject to a validation process if a specific rule has been configured at issuer level. The value can be optional if a specific rule has been configured."
+        }
+      },
+      "title": "CreateAddressRequest.MailAddress"
+    },
+    "CreateAddressRequestPhoneNumber": {
+      "type": "object",
+      "required": [
+        "localPhoneNumber"
+      ],
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "Country dialing code (optional). Free text. It is recommended to provide a region dialing code (e.g. +33, +49)."
+        },
+        "localPhoneNumber": {
+          "type": "string",
+          "description": "Free text (mandatory). It’s recommended to provide an international phone number in accordance with the value provided in the country code Ex : - country code = ‘+’33’ and localPhoneNumber = ‘0622334455’ - country code = empty and localPhoneNumber = ‘+33622334455’             The value can be subject to a validation process if a specific rule has been configured at issuer level."
+        }
+      },
+      "title": "CreateAddressRequest.PhoneNumber"
+    },
+    "EmailAddress": {
+      "type": "object",
+      "required": [
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email address of the Customer (mandatory). The email address should have the following format: aaa@bbb.ccc\naaa, bbb, ccc are character string."
+        }
+      },
+      "title": "EmailAddress"
+    }
+  }
+}

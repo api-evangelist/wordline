@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-get-account-states-schema.json",
+  "title": "ApiResponseEntityGetAccountStates",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-accountstate-api-openapi.yml#/components/schemas/ApiResponseEntityGetAccountStates",
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AccountState"
+      }
+    },
+    "responseMetadata": {
+      "description": "Response metadata",
+      "$ref": "#/$defs/ResponseMetadata"
+    }
+  },
+  "$defs": {
+    "AccountState": {
+      "type": "object",
+      "properties": {
+        "accountNumber": {
+          "type": "string",
+          "description": "The account number."
+        },
+        "accountProfileName": {
+          "type": "string",
+          "description": "Descriptive text for the account profile."
+        },
+        "accountProfileReference": {
+          "type": "string",
+          "description": "Identifies the profile to which the account belongs."
+        },
+        "accountReference": {
+          "type": "string",
+          "description": "Account reference is to identify the Account calculated by the system."
+        },
+        "maximumPinTryCounter": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The maximum amount of failed PIN tries which the cardholder can do."
+        },
+        "pinTryCounter": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of failed PIN entries."
+        },
+        "rank": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Level assigned to the account profile of the account."
+        },
+        "whiteListEnd": {
+          "type": "string",
+          "format": "date-time",
+          "description": "End of period in which the result of the fraud dectection system (FDS) call will not impact the authorization decision for transactions in context of the account."
+        },
+        "whiteListStart": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start of period in which the result of the fraud dectection system (FDS) call will not impact the authorization decision for transactions in context of the account."
+        }
+      },
+      "title": "AccountState"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

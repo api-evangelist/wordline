@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-generate-card-letter-request-schema.json",
+  "title": "GenerateCardLetterRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-letter-api-openapi.yml#/components/schemas/GenerateCardLetterRequest",
+  "type": "object",
+  "required": [
+    "letterTemplateIdentifier"
+  ],
+  "properties": {
+    "letterTemplateIdentifier": {
+      "description": "Identifier of letter template which will be used to generate the letter",
+      "allOf": [
+        {
+          "$ref": "#/$defs/LetterTemplateIdentifier"
+        }
+      ]
+    },
+    "letterTemplateParameterValues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LetterTemplateParameterValue"
+      },
+      "description": "The values assigned to the parameters of the letter"
+    },
+    "validationNeeded": {
+      "type": "boolean",
+      "description": "In case the parameter is set to True, than the letter must be validated afterwards"
+    }
+  },
+  "$defs": {
+    "LetterTemplateIdentifier": {
+      "type": "object",
+      "properties": {
+        "letterTemplateReference": {
+          "type": "string",
+          "description": "Reference of the letter template"
+        }
+      },
+      "title": "LetterTemplateIdentifier"
+    },
+    "LetterTemplateParameterValue": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Template parameter value prefilled"
+        },
+        "parameterName": {
+          "type": "string",
+          "description": "Template parameter name"
+        },
+        "valueList": {
+          "type": "array",
+          "description": "List of the parameters values which have been prefilled from business object data",
+          "items": {
+            "$ref": "#/$defs/LetterTemplateValueItem"
+          }
+        }
+      },
+      "title": "LetterTemplateParameterValue"
+    },
+    "LetterTemplateSubParameterValue": {
+      "type": "object",
+      "properties": {
+        "subParameterName": {
+          "type": "string",
+          "description": "sub parameter name"
+        },
+        "value": {
+          "type": "string",
+          "description": "sub parameter value"
+        }
+      },
+      "title": "LetterTemplateSubParameterValue"
+    },
+    "LetterTemplateValueItem": {
+      "type": "object",
+      "properties": {
+        "subParameters": {
+          "type": "array",
+          "description": "List of subparameters values associated to the letter parameter",
+          "items": {
+            "$ref": "#/$defs/LetterTemplateSubParameterValue"
+          }
+        }
+      },
+      "title": "LetterTemplateValueItem"
+    }
+  }
+}

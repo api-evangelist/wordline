@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-reverse-operation-reimbursement-request-schema.json",
+  "title": "ReverseOperationReimbursementRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-operation-api-openapi.yml#/components/schemas/ReverseOperationReimbursementRequest",
+  "type": "object",
+  "required": [
+    "reversalReason",
+    "externalMatchingOperationReference",
+    "externalMatchingOperationDate",
+    "externalMatchingOperationServicePoster",
+    "externalOperationReference",
+    "externalOperationDate",
+    "externalOperationServicePoster"
+  ],
+  "properties": {
+    "reversalReason": {
+      "type": "string",
+      "description": "The reason why the reversal has been created. \nPossible value:\nREVERSAL_ON_DEMAND"
+    },
+    "description": {
+      "type": "string",
+      "description": "Textual description of the operation\nCan contain a free text that can be used when the operation is presented to the Customer."
+    },
+    "externalMatchingOperationReference": {
+      "type": "string",
+      "description": "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed. \nThe field contains the value of externalOperationReference of the original operation to be reversed."
+    },
+    "externalMatchingOperationDate": {
+      "format": "date-time",
+      "type": "string",
+      "description": "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationDate of the original operation to be reversed."
+    },
+    "externalMatchingOperationServicePoster": {
+      "type": "string",
+      "description": "The triplet (externalMatchingOperationDate, externalMatchingOperationReference, externalMatchingOperationServicePoster) uniquely identifies the original operation in our system. \nIt is used for retrieving the operation to be reversed.\nThe field contains the value of externalOperationServicePoster of the original operation to be reversed."
+    },
+    "externalOperationReference": {
+      "type": "string",
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nExternal reference of the operation to be created."
+    },
+    "externalOperationDate": {
+      "format": "date-time",
+      "type": "string",
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nThe date the operation is performed (in general, the current date should be provided)"
+    },
+    "externalOperationServicePoster": {
+      "type": "string",
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nThe identifier of the external system which provides the operation to be posted (free text)."
+    },
+    "specificFields": {
+      "type": "object",
+      "description": "The issuer can provide Specific Fields for the operation.\n It is a list of external data {\"label\":\"value\"} separated by a \",\" related to the operation (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} Those provided data have no impact on our system business processes.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

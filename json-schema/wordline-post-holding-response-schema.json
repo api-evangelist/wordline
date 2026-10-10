@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-post-holding-response-schema.json",
+  "title": "PostHoldingResponse",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-holding-api-openapi.yml#/components/schemas/PostHoldingResponse",
+  "type": "object",
+  "properties": {
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "contractIdentification": {
+      "$ref": "#/$defs/MerchantIdentificationResponse"
+    }
+  },
+  "$defs": {
+    "MerchantIdentificationResponse": {
+      "type": "object",
+      "properties": {
+        "acquirerId": {
+          "type": "string",
+          "description": "Unique identification of the acquirer, determined by equensWorldline"
+        },
+        "holdingId": {
+          "type": "string",
+          "description": "Unique identification of the holding, determined by equensWorldline"
+        },
+        "merchantId": {
+          "type": "string",
+          "description": "Unique identification of the merchant, determined by the acquirer"
+        },
+        "contractId": {
+          "type": "string",
+          "description": "Unique identification of the contract, determined by the acquirer"
+        },
+        "siteId": {
+          "type": "integer",
+          "description": "Unique identification of the site within the contract",
+          "format": "int64"
+        },
+        "cardAcceptorId": {
+          "type": "string",
+          "description": "Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID"
+        },
+        "terminalId": {
+          "type": "string",
+          "description": "Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)"
+        }
+      }
+    }
+  }
+}

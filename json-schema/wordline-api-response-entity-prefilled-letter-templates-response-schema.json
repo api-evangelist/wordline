@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-prefilled-letter-templates-response-schema.json",
+  "title": "ApiResponseEntityPrefilledLetterTemplatesResponse",
+  "description": "Prefilled Letter Template  Response",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-letter-api-openapi.yml#/components/schemas/ApiResponseEntityPrefilledLetterTemplatesResponse",
+  "x-wl-api-response": true,
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    },
+    "data": {
+      "description": "Response data",
+      "allOf": [
+        {
+          "$ref": "#/$defs/PrefilledLetterTemplate"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "LetterTemplateIdentifier": {
+      "type": "object",
+      "properties": {
+        "letterTemplateReference": {
+          "type": "string",
+          "description": "Reference of the letter template"
+        }
+      },
+      "title": "LetterTemplateIdentifier"
+    },
+    "LetterTemplateParameter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the template parameter"
+        },
+        "displayType": {
+          "type": "string",
+          "description": "Indicates how the template parameter should be displayed in an UI. Possible values:\n- \"text\" for text fields\n- \"list\" for drop down lists\n- \"date\" for date fields\n- \"no_display\" when field should not be displayed"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source of the template parameter. Indicates how the field is populated. Can be a fixed value or a list of fixed values for a static variable, or a property of a business object for a dynamic variable. The Prefill parameters for the defined letter templates API should be used to return dynamic values."
+        },
+        "sourceType": {
+          "type": "string",
+          "description": "Type of the source Possible values: \n- \"date\" when the source is a date\n- \"list\" when the source is a list\n- \"collection\" when the source is a collection and contains sub parameters (Note : list of parameters of the collection is currently not returned)"
+        },
+        "defined": {
+          "type": "boolean",
+          "description": "Indicates if the template parameter is defined in the configuration (true) or not (false)"
+        },
+        "invalid": {
+          "type": "boolean",
+          "description": "Indicates if the template parameter is invalid (true) or not (false)"
+        },
+        "editable": {
+          "type": "boolean",
+          "description": "If true, the template parameter can be displayed as modifiable in an UI."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the template parameter"
+        },
+        "validation": {
+          "type": "string",
+          "description": "Regular expression used to validate the value of the template parameter (ex : length), either in an UI or during Generate a letter API call"
+        },
+        "format": {
+          "type": "string",
+          "description": "Format of the template parameter. Indicates how the value is formatted and will be displayed in an UI. Used for dates and amounts (ex : yyyy-mm-dd in case of date). Default format for date fields is dd/mm/yyyy"
+        },
+        "displayOrder": {
+          "type": "string",
+          "description": "Display order of the template parameter"
+        },
+        "subParameters": {
+          "description": "List of sub parameters of the letter template",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LetterTemplateParameter"
+          }
+        }
+      },
+      "title": "LetterTemplateParameter"
+    },
+    "LetterTemplateParameterValue": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Template parameter value prefilled"
+        },
+        "parameterName": {
+          "type": "string",
+          "description": "Template parameter name"
+        },
+        "valueList": {
+          "type": "array",
+          "description": "List of the parameters values which have been prefilled from business object data",
+          "items": {
+            "$ref": "#/$defs/LetterTemplateValueItem"
+          }
+        }
+      },
+      "title": "LetterTemplateParameterValue"
+    },
+    "LetterTemplateSubParameterValue": {
+      "type": "object",
+      "properties": {
+        "subParameterName": {
+          "type": "string",
+          "description": "sub parameter name"
+        },
+        "value": {
+          "type": "string",
+          "description": "sub parameter value"
+        }
+      },
+      "title": "LetterTemplateSubParameterValue"
+    },
+    "LetterTemplateValueItem": {
+      "type": "object",
+      "properties": {
+        "subParameters": {
+          "type": "array",
+          "description": "List of subparameters values associated to the letter parameter",
+          "items": {
+            "$ref": "#/$defs/LetterTemplateSubParameterValue"
+          }
+        }
+      },
+      "title": "LetterTemplateValueItem"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "PrefilledLetterTemplate": {
+      "type": "object",
+      "required": [
+        "letterTemplateIdentifier"
+      ],
+      "properties": {
+        "issuerId": {
+          "type": "string",
+          "description": "Issuer id"
+        },
+        "letterTemplateIdentifier": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/LetterTemplateIdentifier"
+            }
+          ],
+          "description": "Identifier of the letter template"
+        },
+        "parametersValues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LetterTemplateParameterValue"
+          },
+          "description": "List of the parameters used for letter template prefilling"
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LetterTemplateParameter"
+          },
+          "description": "List of the parameters related to the template, containing template parameter properties fetched from the LGS configuration file"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the letter template. Free text field"
+        },
+        "outputFormat": {
+          "type": "string",
+          "description": "Output format of the template to define the output format. Possible values are:\n•\tPDF\n•\tXML\n•\tWORD"
+        },
+        "structure": {
+          "type": "string",
+          "description": "Used for Jasper letters. Defines the structure of the Jasper template"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of the template.Examples:\n-\t CARD \n- DISPUTE \n- FRAUD"
+        },
+        "transformerType": {
+          "type": "string",
+          "description": "The transformer type defines the format of the template and so technologies that will be used to generate the letter. Possible values are:\n•\tJASPER\n•\tXSLT"
+        }
+      },
+      "title": "PrefilledLetterTemplate"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

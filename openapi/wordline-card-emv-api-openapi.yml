@@ -91,49 +91,15 @@ paths:
       - Card - EMV
 components:
   schemas:
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    BadRequestErrorApiResponse:
+    NotFoundErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
     InternalServerErrorResponseMetadata:
       type: object
       required:
@@ -159,7 +125,7 @@ components:
           example: Internal server error
           description: Executed REST API status message
       title: InternalServerErrorResponseMetadata
-    UnauthorizedResponseMetadata:
+    BadGatewayResponseMetadata:
       type: object
       required:
       - correlationId
@@ -177,13 +143,13 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 401
+          example: 502
           description: HTTP status code
         statusMessage:
           type: string
-          example: Unauthorized
+          example: Bad Gateway
           description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
+      title: BadGatewayResponseMetadata
     NotFoundResponseMetadata:
       type: object
       required:
@@ -209,56 +175,6 @@ components:
           example: Not found
           description: Executed REST API status message
       title: NotFoundResponseMetadata
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
-    EmvCommand:
-      properties:
-        cardReference:
-          type: string
-        counter:
-          format: int32
-          type: integer
-        creationTime:
-          format: date-time
-          type: string
-        description:
-          type: string
-        priority:
-          format: int32
-          type: integer
-        status:
-          type: string
-      type: object
     ResponseMetadata:
       type: object
       required:
@@ -293,24 +209,6 @@ components:
           example: 12
           description: Wall clock time required from service to generate the response
       title: ResponseMetadata
-    ApiResponseEntityEMVCommands:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/EmvCommand'
-          type: array
-        responseMetadata:
-          $ref: '#/components/schemas/ResponseMetadata'
-      type: object
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
     BadRequestResponseMetadata:
       type: object
       required:
@@ -336,16 +234,7 @@ components:
           example: Bad request
           description: Executed REST API status message
       title: BadRequestResponseMetadata
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    BadGatewayResponseMetadata:
+    ForbiddenResponseMetadata:
       type: object
       required:
       - correlationId
@@ -363,13 +252,124 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 502
+          example: 403
           description: HTTP status code
         statusMessage:
           type: string
-          example: Bad Gateway
+          example: Forbidden
           description: Executed REST API status message
-      title: BadGatewayResponseMetadata
+      title: ForbiddenResponseMetadata
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    ApiResponseEntityEMVCommands:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/EmvCommand'
+          type: array
+        responseMetadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+      type: object
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    EmvCommand:
+      properties:
+        cardReference:
+          type: string
+        counter:
+          format: int32
+          type: integer
+        creationTime:
+          format: date-time
+          type: string
+        description:
+          type: string
+        priority:
+          format: int32
+          type: integer
+        status:
+          type: string
+      type: object
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

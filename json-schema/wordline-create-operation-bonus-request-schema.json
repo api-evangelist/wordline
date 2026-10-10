@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-operation-bonus-request-schema.json",
+  "title": "CreateOperationBonusRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-operation-api-openapi.yml#/components/schemas/CreateOperationBonusRequest",
+  "type": "object",
+  "required": [
+    "bonusProgramReference",
+    "externalOperationReference",
+    "externalOperationDate",
+    "externalOperationServicePoster"
+  ],
+  "properties": {
+    "description": {
+      "description": "Textual description of the operation\nCan contain a free text that can be used when the operation is presented to the Customer",
+      "type": "string"
+    },
+    "bonusProgramReference": {
+      "description": "The issuer must provide the reference of the Bonus/Loyalty program for which the reward is applied.",
+      "type": "string"
+    },
+    "externalOperationReference": {
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nExternal reference of the operation to be created.",
+      "type": "string"
+    },
+    "externalOperationDate": {
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nThe date the operation is performed (in general, the current date should be provided).",
+      "type": "string",
+      "format": "date-time"
+    },
+    "externalOperationServicePoster": {
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nThe identifier of the external system which provides the operation to be posted (free text)",
+      "type": "string"
+    },
+    "externalOperationCode": {
+      "description": "The external operation code of the Bonus operation can be provided to identify the operation type in the issuer system.",
+      "type": "string"
+    },
+    "referenceAmount": {
+      "description": "The reference amount has to be provided for a monetary operation (amount/exponent/currency values)\nIf a debit operation is posted, the operation amount has to be positive.\nIf a credit operation is posted, the operation amount has to be negative.\nThe currency must be the same as the posting account.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Amount"
+        }
+      ]
+    },
+    "loyaltyPointAmount": {
+      "description": "The loyalty point amount has to be provided for a non-monetary operation (value/unit)\nIf a debit operation is posted, the operation amount has to be positive.\nIf a credit operation is posted, the operation amount has to be negative.\nThe loyalty point unit must be defined by the Bonus/Loyalty program.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/LoyaltyPoint"
+        }
+      ]
+    },
+    "rewardedOperationIdentifier": {
+      "description": "The issuer can provide the identifier of the operation to be rewarded, if any.\nIf provided, the triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) has not to be provided.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/OperationIdentifier"
+        }
+      ]
+    },
+    "rewardedExternalMatchingOperationReference": {
+      "description": "The issuer can provide the triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) of the operation to be rewarded if any.\nIf the triplet is provided, the identifier of the operation to be rewarded has not to be provided.\nExternal reference of the operation to be rewarded.",
+      "type": "string"
+    },
+    "rewardedExternalMatchingOperationDate": {
+      "description": "The issuer can provide the triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) of the operation to be rewarded if any.\nIf the triplet is provided, the identifier of the operation to be rewarded has not to be provided.\nOperation date of the operation to be rewarded.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "rewardedExternalMatchingOperationServicePoster": {
+      "description": "The issuer can provide the triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) of the operation to be rewarded if any.\nIf the triplet is provided, the identifier of the operation to be rewarded has not to be provided.\nIdentifier of the external system of the operation to be rewarded.",
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    },
+    "LoyaltyPoint": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "string",
+          "description": " Unit in which the loyalty points are expressed. Defined by Bonus/Loyalty program (can be currency, points...) (optional)."
+        },
+        "cumulatedValue": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total number of loyalty points (optional)."
+        }
+      },
+      "title": "LoyaltyPoint"
+    },
+    "OperationIdentifier": {
+      "type": "object",
+      "required": [
+        "operationId"
+      ],
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "description": "Internal operation identifier. 16-digit incremental number"
+        }
+      },
+      "title": "OperationIdentifier"
+    }
+  }
+}

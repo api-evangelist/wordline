@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-super-folder-request-schema.json",
+  "title": "CreateSuperFolderRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-dispute-api-openapi.yml#/components/schemas/CreateSuperFolderRequest",
+  "type": "object",
+  "required": [
+    "disputeFolderIdentifiers"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The issuer can provide the name of the super folder to be created.Free Text."
+    },
+    "disputeFolderIdentifiers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DisputeFolderIdentifier"
+      },
+      "description": "The issuer must provide the list of dispute folder identifiers to be attached to the super folder.The dispute folder references must exist in our system and be associated to the same PAN otherwise the super folder will not be created."
+    }
+  },
+  "$defs": {
+    "DisputeFolderIdentifier": {
+      "type": "object",
+      "required": [
+        "disputeFolderReference"
+      ],
+      "properties": {
+        "disputeFolderReference": {
+          "type": "string",
+          "description": "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
+        },
+        "issuerDisputeExternalReference": {
+          "type": "string",
+          "description": "The issuer Dispute External Reference, Present if provided in the request."
+        }
+      },
+      "title": "DisputeFolderIdentifier"
+    }
+  }
+}

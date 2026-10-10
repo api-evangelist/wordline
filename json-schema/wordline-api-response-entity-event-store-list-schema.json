@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-event-store-list-schema.json",
+  "title": "ApiResponseEntityEventStoreList",
+  "description": "Event store list response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-event-store-api-openapi.yml#/components/schemas/ApiResponseEntityEventStoreList",
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EventStore"
+      }
+    },
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "EventStore": {
+      "type": "object",
+      "properties": {
+        "businessRefType": {
+          "type": "string",
+          "description": "Business reference type to be pushed.\nExample: CONTRACT, CARD_CONTRACT, CARD, ACCOUNT, CUSTOMER, etc"
+        },
+        "businessRefValue": {
+          "type": "string",
+          "description": "Business reference value for a business reference type.\nExamples of values : card reference, customer reference, account number."
+        },
+        "correlationId": {
+          "type": "string"
+        },
+        "eventDate": {
+          "type": "string",
+          "description": "Date when the event was created or modified in publisher system or the comment date",
+          "format": "date-time"
+        },
+        "eventSubType": {
+          "type": "string",
+          "description": "optional - for certain applications, sub-events can be defined.\nExample for customer service GUI:  COMMENT, Complaint, PGUI (eventType, eventSubType, origin)\nPossible values: \"Inbound call\", \"complaint …\""
+        },
+        "eventType": {
+          "type": "string",
+          "description": "Event type\nTypically for CARD business Reference Type, event types relative to card status modification event can be CARD_ISSUE, FIRST_ACTIVATION, CARD_BLOCKING,..\nIn order to retrieve the comments , use COMMENT event-type.\nThe list of event types are shared during the design phase."
+        },
+        "issuerId": {
+          "type": "integer",
+          "description": "Issuer ID of the business event",
+          "format": "int64"
+        },
+        "origin": {
+          "type": "string",
+          "description": "The system that has published the event or comment.\nExample : \"IBO\" for CMS,  \"PGUI\" for Customer Service GUI, \"WLP FO\" for authorization server."
+        },
+        "payload": {
+          "type": "string",
+          "description": "Additional information pushed by the application with the event.\nDifferent formats can be found :\n- free text\n- Display payload with \"Old\" and \"New\" value The \"Old\" value is optional and if not provided only the new value will be displayed.)"
+        },
+        "userId": {
+          "type": "string",
+          "description": "User in the publisher system that triggers the event"
+        }
+      },
+      "title": "EventStore"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

@@ -1864,107 +1864,6 @@ paths:
           content: {}
 components:
   schemas:
-    BrandParameters:
-      type: object
-      properties:
-        offlineManualEntryAllowed:
-          type: boolean
-          description: Indicates whether manual entry of card data (PAN, expiry date) is allowed for transactions which are processed offline
-        magstripeTransactionProcessingOptions:
-          type: integer
-          description: Used to select the cardholder verification method for magnetic stripe based transactions. Values [1 = PIN required, 2 = Signature required, 3 = PIN or signature required based on card service code]
-          format: int32
-        amounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Amount'
-        offlineMaximumTipPercentage:
-          type: integer
-          description: The maximum tip amount, represented as a percentage of the transaction amount, that is allowed as extra
-          format: int32
-        noCvmAllowed:
-          type: boolean
-          description: Indicates whether transactions (chip with contacts) without cardholder verification (No-CVM) are allowed beneath the maximum amount set by the scheme
-        maximumDailyTransactionNumber:
-          type: integer
-          description: The maximum number of online transactions for a site per day
-          format: int32
-        maxDailyVoiceAuthorizationNumber:
-          type: integer
-          description: The maximum number of voice authorizations for a site per day
-          format: int32
-        tokenization:
-          type: boolean
-          description: Indicates whether C-TAP tokenization is allowed on the terminal
-        dynamicDescriptor:
-          type: boolean
-          description: Card brand parameter which indicates towards the front office, whether a terminal or website is allowed to use Dynamic Descriptors. Dynamic descriptors allow merchants to add relevant information (invoice number or some other details) about a transaction to the payment description so that it shows up on bank statements of consumers. The dynamic descriptor data is sent both in authorization and clearing messages
-        preAuthorizationPanClipping:
-          type: boolean
-          description: Indicates whether the PAN must be clipped or not on merchant’s ticket for pre-authorization
-        offlineBackupModeAllowed:
-          type: boolean
-          description: The backup mode allows the merchant to let the terminal approve offline transactions, which normally require going online, when it is temporarily unable to go online. It is an indicator telling if the backup mode can be activated or not by the terminal
-        allowedServices:
-          $ref: '#/components/schemas/AllowedServices'
-        manualEntryProcessingOptions:
-          $ref: '#/components/schemas/ManualEntryProcessingOptions'
-        cardEntryModes:
-          $ref: '#/components/schemas/CardEntryModes'
-        allowedServicesContactLess:
-          $ref: '#/components/schemas/AllowedServices'
-        rejectedProductTypes:
-          $ref: '#/components/schemas/RejectedProductTypes'
-    TerminalBalancebankAccount:
-      type: object
-      properties:
-        currency:
-          type: string
-          description: (Local) Payment Currency according to ISO 4217 (alphanumeric-3)
-        bankAccountType:
-          type: integer
-          description: Describes whether a bank account number is of the type IBAN or not (Other). In the latter case it can be for example an American or South-African bank account number. Values [1 = IBAN, 99 = Other]
-          format: int32
-        bic:
-          type: string
-          description: Bank Institution Code for merchant payment. A BIC needs to be registered for each payment currency of the merchant
-        iban:
-          type: string
-          description: International Bank Account Number for merchant payments. An IBAN needs to be registered for each payment currency of the merchant
-        threshold:
-          type: integer
-          description: Amount of the threshold. The acquirer can choose to hold an amount in reserve before paying the merchant. This is usually done for risk mitigation. The threshold is registered at balance 1. An amount can be registered for each payment currency of the merchant
-          format: int32
-    ErrorData:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Unique code of the error as returned by the system handling the request
-        keyword:
-          type: string
-          description: JSON keyword from the request message that triggered the error
-        errorMessage:
-          type: string
-          description: Message explaining the error
-    CardEntryModes:
-      type: object
-      properties:
-        manualEntry:
-          type: boolean
-          description: Indicates whether manual entry (keying) is allowed
-        magstripe:
-          type: boolean
-          description: Indicates whether the use of magnetic stripe is allowed
-        iccEmv:
-          type: boolean
-          description: Indicates whether the use of EMV chip is allowed
-        contactlessMagstripe:
-          type: boolean
-          description: Indicates whether the use of magnetic stripe for contactless transactions is allowed
-        contactlessIccEmv:
-          type: boolean
-          description: Indicates whether the use of EMV chip for contactless transactions is allowed
     AddressDetails:
       required:
       - addressType
@@ -2038,69 +1937,6 @@ components:
           description: Preferred communication type of the contact person registered with the address. Values [1 = Post, 2 = Fax, 3 = E-mail]
           format: int32
           example: 3
-    AllowedServices:
-      type: object
-      properties:
-        purchaseService:
-          type: boolean
-          description: Indicates whether purchase is allowed
-        cashAdvanceService:
-          type: boolean
-          description: Indicates whether cash advance is allowed
-        reservationService:
-          type: boolean
-          description: Indicates whether reservation is allowed
-        purchaseAfterReservationService:
-          type: boolean
-          description: Indicates whether purchase after reservation is allowed
-        cardValidityCheckService:
-          type: boolean
-          description: Indicates whether card validity check is allowed
-        refundService:
-          type: boolean
-          description: Indicates whether refund is allowed
-        deferredSaleService:
-          type: boolean
-          description: Indicates whether deferred sale is allowed
-        cancellationService:
-          type: boolean
-          description: Indicates whether cancellation of a purchase is allowed
-        saleWithCashback:
-          type: boolean
-          description: Indicates whether the sale with cashback is allowed
-        saleWithIncreasedAmount:
-          type: boolean
-          description: Indicates whether sale with increased amount is allowed
-        quasiCashSale:
-          type: boolean
-          description: Indicates whether quasi cash is allowed
-        cancellationOfSaleAfterReservation:
-          type: boolean
-          description: Indicates whether cancellation of a sale after reservation is allowed
-        cancellationOfCashAdvance:
-          type: boolean
-          description: Indicates whether cancellattion of cash advance is allowed
-        recurringSale:
-          type: boolean
-          description: Indicates whether recurring sale is allowed
-        cancellationOfReservation:
-          type: boolean
-          description: Indicates whether cancellation of a reservation is allowed
-        saleWithDcc:
-          type: boolean
-          description: Indicates whether sale with DCC is allowed
-        saleAfterReservationWithDcc:
-          type: boolean
-          description: Indicates whether sales after reservation with DCC is allowed
-        cashAdvanceWithDcc:
-          type: boolean
-          description: Indicates whether cash advance with DCC is allowed
-        refundWithDcc:
-          type: boolean
-          description: Indicates whether refund with DCC is allowed
-        reservationDcc:
-          type: boolean
-          description: Indicates whether reservation with DCC is allowed
     BrandData:
       type: object
       properties:
@@ -2112,23 +1948,25 @@ components:
           description: Name of the brand
         brandParameters:
           $ref: '#/components/schemas/BrandParameters'
-    SiteContractIdentification:
+    ErrorData:
       type: object
       properties:
-        acquirerId:
+        code:
           type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-        contractId:
+          description: Unique code of the error as returned by the system handling the request
+        keyword:
           type: string
-          description: Unique identification of the contract, determined by the acquirer
-          example: '10011'
-        siteId:
-          type: integer
-          description: Unique identification of the site within the contract
-          format: int32
-        cardAcceptorId:
+          description: JSON keyword from the request message that triggered the error
+        errorMessage:
           type: string
-          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+          description: Message explaining the error
+    CorrelationResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Unique ID that was generated for the specific change
+          format: uuid
     PostSiteContractIdentification:
       type: object
       properties:
@@ -2145,33 +1983,55 @@ components:
           type: string
           description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field for POS. In that case it contains the merchant ID. For channel eCommerce it is always mandatory
           example: '90100110'
-    ErrorResponse:
+    PostSiteBasic:
       type: object
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorData'
-    SiteBrandData:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/SiteContractIdentification'
-        brands:
-          type: array
-          items:
-            $ref: '#/components/schemas/BrandData'
-    ServiceProviders:
-      type: object
-      properties:
-        visaEnablerVerificationValue:
+        siteName:
           type: string
-          description: Visa Enabler Verification Value (EVV)
-    SiteAddressData:
+          description: Name of the site
+          example: EPS*Metal Festival
+        channel:
+          type: integer
+          description: Channel of the site. Values [1 = POS, 2 = eCommerce, 3 = MOTO]
+          format: int32
+          example: 1
+        terminalDomainId:
+          type: integer
+          description: A domain of merchants, acquirers, terminal vendors and terminals in which a common POS terminal protocol (e.g. C-TAP) is used and in which a certain authority (e.g. Acquiris, Nets) is responsible for identifiers of acquirers and processors. Values [1 = Dutch C-TAP / IFSF, 2 = Finnish EMV, 3 = International C-TAP]
+          format: int32
+          example: 1
+        subMerchantId:
+          type: string
+          description: Sub merchant ID, defined by a payment facilitator (merchant). Each merchant that is considered to be a payment facilitator by the payment schemes needs to uniquely identify all of its sites with a sub merchant ID
+          example: '110'
+        merchantCategoryCode:
+          type: string
+          description: The MCC is used to classify a business by the types of goods or services it provides, according to ISO 18245 for retail financial services
+          example: '7999'
+        transactionReference:
+          type: boolean
+          description: Indicates whether the merchant is allowed to add a reference to a C-TAP POS transaction
+          example: false
+    SiteBalanceData:
       type: object
       properties:
         contractIdentification:
           $ref: '#/components/schemas/SiteContractIdentification'
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+    PostSite:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/PostSiteContractIdentification'
+        basic:
+          $ref: '#/components/schemas/PostSiteBasic'
+        serviceProviders:
+          $ref: '#/components/schemas/ServiceProviders'
+        refundLimits:
+          $ref: '#/components/schemas/RefundLimits'
         addresses:
           type: array
           items:
@@ -2197,6 +2057,220 @@ components:
         luhnDigitCheckRequired:
           type: boolean
           description: Indicates whether Luhn check digit check is required
+    CardEntryModes:
+      type: object
+      properties:
+        manualEntry:
+          type: boolean
+          description: Indicates whether manual entry (keying) is allowed
+        magstripe:
+          type: boolean
+          description: Indicates whether the use of magnetic stripe is allowed
+        iccEmv:
+          type: boolean
+          description: Indicates whether the use of EMV chip is allowed
+        contactlessMagstripe:
+          type: boolean
+          description: Indicates whether the use of magnetic stripe for contactless transactions is allowed
+        contactlessIccEmv:
+          type: boolean
+          description: Indicates whether the use of EMV chip for contactless transactions is allowed
+    Status:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of this entity. Values [Active, Blocked (Trx & Pmts), Blocked (Trx), Blocked (Pmts), Terminated]
+        statusReasonId:
+          type: integer
+          description: Reason for blocking or terminating the contract, the site or the terminal. Values [1 = Bankrupt, 2 = Clean Up, 3 = Closed, 4 = Finance request, 5 = Suspected fraud, 6 = Legal request, 7 = To other acquirer, 8 = Incorrect bank Account, 9 = Negative balance, 10 = PCI non-compliance]
+          format: int32
+        commencementDate:
+          type: string
+          description: Date at which contract, site or terminal was registered
+        terminationDate:
+          type: string
+          description: Date at which the contract, site or terminal was terminated
+        transactionBlockDate:
+          type: string
+          description: Date at which the transactions for the contract or site were blocked
+        paymentBlockDate:
+          type: string
+          description: Date at which the payments for the contract or site were blocked
+    SiteListData:
+      type: object
+      properties:
+        contractIdentification:
+          type: object
+          properties:
+            acquirerId:
+              type: string
+              description: Unique identification of the acquirer, determined by equensWorldline
+              example: '315000001'
+            holdingId:
+              type: integer
+              description: Unique identification of the holding, determined by equensWorldline
+              format: int32
+              example: 200
+            merchantId:
+              type: string
+              description: Unique identification of the merchant, determined by the acquirer
+              example: '1001'
+            contractId:
+              type: string
+              description: Unique identification of the contract, determined by the acquirer
+              example: '10011'
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+          example: '90100110'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+          example: 100110
+        siteName:
+          type: string
+          description: Name of the site
+          example: EPS*Metal Festival
+        channel:
+          type: integer
+          description: Channel of the contract. Values [1 = POS, 2 = eCommerce, 3 = MOTO]
+          format: int32
+        startDateTime:
+          type: string
+          description: Start date of the entity (yyyy-mm-dd hh:mm:ss). FIELD DEPRECATED
+          format: date-time
+        commencementDate:
+          type: string
+          description: Date at which contract, site or terminal was registered
+        paymentBlockDate:
+          type: string
+          description: Date at which the payment for the contract or site has been blocked (yyyy-mm-dd)
+          format: date-time
+        transactionBlockDate:
+          type: string
+          description: Date at which the transactions for the contract or site has been blocked (yyyy-mm-dd)
+          format: date-time
+        status:
+          type: string
+          description: The status of this entity. Values [Active, Blocked (Trx & Pmts), Blocked (Trx), Blocked (Pmts)]
+          example: Active
+        address:
+          $ref: '#/components/schemas/Address'
+        siteDetailsURI:
+          type: string
+          description: URI to get the site details
+          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorData'
+    Balance:
+      type: object
+      properties:
+        balanceNumber:
+          type: integer
+          description: Number of the balance. Values [1, 2, 3]
+          format: int32
+        merchantReconciliationReference:
+          type: string
+          description: Reference the merchant wants to be part of the description lines of the payment on his bank statement
+        paymentLevel:
+          type: integer
+          description: Level of the merchant hierarchy at which the merchant is paid. Values [4 = Contract, 5 = Site, 6 = Terminal]
+          format: int32
+        paymentAggregation:
+          type: integer
+          description: Indicates whether the merchant is paid per brand, per scheme or totalized. Values [1 = Totalized payment, 2 = Payment per brand, 3 = Payment per scheme]
+          format: int32
+        paymentFrequency:
+          type: integer
+          description: Frequency in which the balance is settled with the merchant. Values [1 = Accounting period, 2 = Weekly, 3 = Monthly, 4 = Daily, 5 = Twice a month, 6 = Per external batch, 7 = Across batches, 8 = Merchant manual cut-off, 9 = Merchant automatic cut-off]
+          format: int32
+        paymentDay:
+          type: integer
+          description: Specific day of the week or month the merchant is paid. Values in case of weekly [1 to 7], values in case of monthly [1 to 31]
+          format: int32
+        paymentDelay:
+          type: integer
+          description: Payment delay in days. Values [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 30, 60, 90]
+          format: int32
+        terminalPeriodClosureLevel:
+          type: integer
+          description: The level on which the financial counter information for the transactions cut-off period are consulted, used by the merchant to align it with the used reconciliation period when the merchant has chosen to  manual cut-off the booking period of the transactions. Values [0 = Terminal, 1 = Site]
+          format: int32
+        terminalPeriodCutoffTime:
+          type: string
+          description: The fixed time (hours and minutes, without date and seconds) of the daily moment - defined by the merchant - when the cut-off of the financial counter information, used by the merchant to align it with the used reconciliation period when the merchant has chosen for automatically cut off the booking period of the transactions
+        bankAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TerminalBalancebankAccount'
+    Address:
+      type: object
+      properties:
+        streetName:
+          type: string
+          description: Street name and house number of the address. In case of a Dutch address only Street name
+          example: Stootblok
+        houseNumber:
+          type: integer
+          description: House number. Only used for Dutch addresses
+          format: int32
+          example: 14
+        houseAddition:
+          type: string
+          description: House number addition. Only used for Dutch addresses
+          example: bis
+        postalCode:
+          type: string
+          description: Postal code of the address
+          example: 3071AP
+        city:
+          type: string
+          description: City of the address
+          example: Rotterdam
+        region:
+          type: string
+          description: Region of the address. Only applicable for specific countries
+          example: Zuid-Holland
+        countryCode:
+          type: string
+          description: Country of the address according to ISO 3166-1 (numeric-3)
+          example: '528'
+        contactPersonName:
+          type: string
+          description: Name of the contact person registered with the address
+          example: M. Scott
+        telephoneNumber:
+          type: string
+          description: Telephone number of contact person registered with the address
+          example: 0883855111
+        email:
+          type: string
+          description: E-mail address of the contact person registered with the address
+          example: M.Scott@eventpaymentsolutions.com
+    SiteContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '10011'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int32
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
     Amount:
       type: object
       properties:
@@ -2332,72 +2406,6 @@ components:
         matCardholderVerificationLimit:
           type: string
           description: Restricts the amount of the contactless transaction without “Offline On Device Cardholder Verification” in the backup mode
-    Status:
-      type: object
-      properties:
-        status:
-          type: string
-          description: The status of this entity. Values [Active, Blocked (Trx & Pmts), Blocked (Trx), Blocked (Pmts), Terminated]
-        statusReasonId:
-          type: integer
-          description: Reason for blocking or terminating the contract, the site or the terminal. Values [1 = Bankrupt, 2 = Clean Up, 3 = Closed, 4 = Finance request, 5 = Suspected fraud, 6 = Legal request, 7 = To other acquirer, 8 = Incorrect bank Account, 9 = Negative balance, 10 = PCI non-compliance]
-          format: int32
-        commencementDate:
-          type: string
-          description: Date at which contract, site or terminal was registered
-        terminationDate:
-          type: string
-          description: Date at which the contract, site or terminal was terminated
-        transactionBlockDate:
-          type: string
-          description: Date at which the transactions for the contract or site were blocked
-        paymentBlockDate:
-          type: string
-          description: Date at which the payments for the contract or site were blocked
-    Address:
-      type: object
-      properties:
-        streetName:
-          type: string
-          description: Street name and house number of the address. In case of a Dutch address only Street name
-          example: Stootblok
-        houseNumber:
-          type: integer
-          description: House number. Only used for Dutch addresses
-          format: int32
-          example: 14
-        houseAddition:
-          type: string
-          description: House number addition. Only used for Dutch addresses
-          example: bis
-        postalCode:
-          type: string
-          description: Postal code of the address
-          example: 3071AP
-        city:
-          type: string
-          description: City of the address
-          example: Rotterdam
-        region:
-          type: string
-          description: Region of the address. Only applicable for specific countries
-          example: Zuid-Holland
-        countryCode:
-          type: string
-          description: Country of the address according to ISO 3166-1 (numeric-3)
-          example: '528'
-        contactPersonName:
-          type: string
-          description: Name of the contact person registered with the address
-          example: M. Scott
-        telephoneNumber:
-          type: string
-          description: Telephone number of contact person registered with the address
-          example: 0883855111
-        email:
-          type: string
-          description: E-mail address of the contact person registered with the address
-          example: M.Scott@eventpaymentsolutions.com
     Operation:
       type: object
       properties:
@@ -2424,93 +2432,107 @@ components:
         from:
           type: string
           description: Not elevant for currently supported operations
-    PostSite:
+    SiteAddressData:
       type: object
       properties:
         contractIdentification:
-          $ref: '#/components/schemas/PostSiteContractIdentification'
-        basic:
-          $ref: '#/components/schemas/PostSiteBasic'
-        serviceProviders:
-          $ref: '#/components/schemas/ServiceProviders'
-        refundLimits:
-          $ref: '#/components/schemas/RefundLimits'
+          $ref: '#/components/schemas/SiteContractIdentification'
         addresses:
           type: array
           items:
             $ref: '#/components/schemas/AddressDetails'
-    CorrelationResponse:
+    RejectedProductTypes:
       type: object
       properties:
-        correlationId:
-          type: string
-          description: Unique ID that was generated for the specific change
-          format: uuid
-    SiteListData:
+        eeaDebit:
+          type: boolean
+          description: Indicates whether transactions with the card product EEA Debit should be rejected by the terminal
+        eeaCredit:
+          type: boolean
+          description: Indicates whether transactions with the card product EEA Credit should be rejected by the terminal
+        eeaCommercial:
+          type: boolean
+          description: Indicates whether transactions with the card product EEA Commercial should be rejected by the terminal
+        eeaPrepaid:
+          type: boolean
+          description: Indicates whether transactions with the card product EEA Pre-paid should be rejected by the terminal
+    ServiceProviders:
       type: object
       properties:
-        contractIdentification:
-          type: object
-          properties:
-            acquirerId:
-              type: string
-              description: Unique identification of the acquirer, determined by equensWorldline
-              example: '315000001'
-            holdingId:
-              type: integer
-              description: Unique identification of the holding, determined by equensWorldline
-              format: int32
-              example: 200
-            merchantId:
-              type: string
-              description: Unique identification of the merchant, determined by the acquirer
-              example: '1001'
-            contractId:
-              type: string
-              description: Unique identification of the contract, determined by the acquirer
-              example: '10011'
-        cardAcceptorId:
+        visaEnablerVerificationValue:
           type: string
-          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
-          example: '90100110'
-        siteId:
+          description: Visa Enabler Verification Value (EVV)
+    BrandParameters:
+      type: object
+      properties:
+        offlineManualEntryAllowed:
+          type: boolean
+          description: Indicates whether manual entry of card data (PAN, expiry date) is allowed for transactions which are processed offline
+        magstripeTransactionProcessingOptions:
           type: integer
-          description: Unique identification of the site within the contract
+          description: Used to select the cardholder verification method for magnetic stripe based transactions. Values [1 = PIN required, 2 = Signature required, 3 = PIN or signature required based on card service code]
           format: int32
-          example: 100110
-        siteName:
-          type: string
-          description: Name of the site
-          example: EPS*Metal Festival
-        channel:
+        amounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Amount'
+        offlineMaximumTipPercentage:
           type: integer
-          description: Channel of the contract. Values [1 = POS, 2 = eCommerce, 3 = MOTO]
+          description: The maximum tip amount, represented as a percentage of the transaction amount, that is allowed as extra
           format: int32
-        startDateTime:
+        noCvmAllowed:
+          type: boolean
+          description: Indicates whether transactions (chip with contacts) without cardholder verification (No-CVM) are allowed beneath the maximum amount set by the scheme
+        maximumDailyTransactionNumber:
+          type: integer
+          description: The maximum number of online transactions for a site per day
+          format: int32
+        maxDailyVoiceAuthorizationNumber:
+          type: integer
+          description: The maximum number of voice authorizations for a site per day
+          format: int32
+        tokenization:
+          type: boolean
+          description: Indicates whether C-TAP tokenization is allowed on the terminal
+        dynamicDescriptor:
+          type: boolean
+          description: Card brand parameter which indicates towards the front office, whether a terminal or website is allowed to use Dynamic Descriptors. Dynamic descriptors allow merchants to add relevant information (invoice number or some other details) about a transaction to the payment description so that it shows up on bank statements of consumers. The dynamic descriptor data is sent both in authorization and clearing messages
+        preAuthorizationPanClipping:
+          type: boolean
+          description: Indicates whether the PAN must be clipped or not on merchant’s ticket for pre-authorization
+        offlineBackupModeAllowed:
+          type: boolean
+          description: The backup mode allows the merchant to let the terminal approve offline transactions, which normally require going online, when it is temporarily unable to go online. It is an indicator telling if the backup mode can be activated or not by the terminal
+        allowedServices:
+          $ref: '#/components/schemas/AllowedServices'
+        manualEntryProcessingOptions:
+          $ref: '#/components/schemas/ManualEntryProcessingOptions'
+        cardEntryModes:
+          $ref: '#/components/schemas/CardEntryModes'
+        allowedServicesContactLess:
+          $ref: '#/components/schemas/AllowedServices'
+        rejectedProductTypes:
+          $ref: '#/components/schemas/RejectedProductTypes'
+    TerminalBalancebankAccount:
+      type: object
+      properties:
+        currency:
           type: string
-          description: Start date of the entity (yyyy-mm-dd hh:mm:ss). FIELD DEPRECATED
-          format: date-time
-        commencementDate:
+          description: (Local) Payment Currency according to ISO 4217 (alphanumeric-3)
+        bankAccountType:
+          type: integer
+          description: Describes whether a bank account number is of the type IBAN or not (Other). In the latter case it can be for example an American or South-African bank account number. Values [1 = IBAN, 99 = Other]
+          format: int32
+        bic:
           type: string
-          description: Date at which contract, site or terminal was registered
-        paymentBlockDate:
+          description: Bank Institution Code for merchant payment. A BIC needs to be registered for each payment currency of the merchant
+        iban:
           type: string
-          description: Date at which the payment for the contract or site has been blocked (yyyy-mm-dd)
-          format: date-time
-        transactionBlockDate:
-          type: string
-          description: Date at which the transactions for the contract or site has been blocked (yyyy-mm-dd)
-          format: date-time
-        status:
-          type: string
-          description: The status of this entity. Values [Active, Blocked (Trx & Pmts), Blocked (Trx), Blocked (Pmts)]
-          example: Active
-        address:
-          $ref: '#/components/schemas/Address'
-        siteDetailsURI:
-          type: string
-          description: URI to get the site details
-          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX
+          description: International Bank Account Number for merchant payments. An IBAN needs to be registered for each payment currency of the merchant
+        threshold:
+          type: integer
+          description: Amount of the threshold. The acquirer can choose to hold an amount in reserve before paying the merchant. This is usually done for risk mitigation. The threshold is registered at balance 1. An amount can be registered for each payment currency of the merchant
+          format: int32
     SiteBasic:
       type: object
       properties:
@@ -2544,15 +2566,6 @@ components:
         transactionReference:
           type: boolean
           description: Indicates whether the merchant is allowed to add a reference to a C-TAP POS transaction
-    SiteBalanceData:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/SiteContractIdentification'
-        balances:
-          type: array
-          items:
-            $ref: '#/components/schemas/Balance'
     PostSiteResponse:
       type: object
       properties:
@@ -2562,6 +2575,40 @@ components:
           format: uuid
         contractIdentification:
           $ref: '#/components/schemas/SiteContractIdentification'
+    SiteData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/SiteContractIdentification'
+        basic:
+          $ref: '#/components/schemas/SiteBasic'
+        serviceProviders:
+          $ref: '#/components/schemas/SiteServiceProviders'
+        refundLimits:
+          $ref: '#/components/schemas/RefundLimits'
+        status:
+          $ref: '#/components/schemas/Status'
+        addressDetailsURI:
+          type: string
+          description: URI to get the site address details
+          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/addresses
+        balanceDataURI:
+          type: string
+          description: URI to get the site balance data
+          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/balances
+        brandDataURI:
+          type: string
+          description: URI to get the site brand data
+          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/brands
+    SiteServiceProviders:
+      type: object
+      properties:
+        networkServiceProviderName:
+          type: string
+          description: Name of the network service provider
+        visaEnablerVerificationValue:
+          type: string
+          description: Visa Enabler Verification Value (EVV)
     RefundLimits:
       type: object
       properties:
@@ -2589,122 +2636,75 @@ components:
           type: integer
           description: Maximum daily total number of refunds per site
           format: int32
-    SiteData:
+    SiteBrandData:
       type: object
       properties:
         contractIdentification:
           $ref: '#/components/schemas/SiteContractIdentification'
-        basic:
-          $ref: '#/components/schemas/SiteBasic'
-        serviceProviders:
-          $ref: '#/components/schemas/SiteServiceProviders'
-        refundLimits:
-          $ref: '#/components/schemas/RefundLimits'
-        status:
-          $ref: '#/components/schemas/Status'
-        addressDetailsURI:
-          type: string
-          description: URI to get the site address details
-          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/addresses
-        balanceDataURI:
-          type: string
-          description: URI to get the site balance data
-          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/balances
-        brandDataURI:
-          type: string
-          description: URI to get the site brand data
-          example: acquiring/contract/v2.0/acquirers/XXX/contracts/XXX/sites/XXX/brands
-    RejectedProductTypes:
-      type: object
-      properties:
-        eeaDebit:
-          type: boolean
-          description: Indicates whether transactions with the card product EEA Debit should be rejected by the terminal
-        eeaCredit:
-          type: boolean
-          description: Indicates whether transactions with the card product EEA Credit should be rejected by the terminal
-        eeaCommercial:
-          type: boolean
-          description: Indicates whether transactions with the card product EEA Commercial should be rejected by the terminal
-        eeaPrepaid:
-          type: boolean
-          description: Indicates whether transactions with the card product EEA Pre-paid should be rejected by the terminal
-    PostSiteBasic:
-      type: object
-      properties:
-        siteName:
-          type: string
-          description: Name of the site
-          example: EPS*Metal Festival
-        channel:
-          type: integer
-          description: Channel of the site. Values [1 = POS, 2 = eCommerce, 3 = MOTO]
-          format: int32
-          example: 1
-        terminalDomainId:
-          type: integer
-          description: A domain of merchants, acquirers, terminal vendors and terminals in which a common POS terminal protocol (e.g. C-TAP) is used and in which a certain authority (e.g. Acquiris, Nets) is responsible for identifiers of acquirers and processors. Values [1 = Dutch C-TAP / IFSF, 2 = Finnish EMV, 3 = International C-TAP]
-          format: int32
-          example: 1
-        subMerchantId:
-          type: string
-          description: Sub merchant ID, defined by a payment facilitator (merchant). Each merchant that is considered to be a payment facilitator by the payment schemes needs to uniquely identify all of its sites with a sub merchant ID
-          example: '110'
-        merchantCategoryCode:
-          type: string
-          description: The MCC is used to classify a business by the types of goods or services it provides, according to ISO 18245 for retail financial services
-          example: '7999'
-        transactionReference:
-          type: boolean
-          description: Indicates whether the merchant is allowed to add a reference to a C-TAP POS transaction
-          example: false
-    SiteServiceProviders:
-      type: object
-      properties:
-        networkServiceProviderName:
-          type: string
-          description: Name of the network service provider
-        visaEnablerVerificationValue:
-          type: string
-          description: Visa Enabler Verification Value (EVV)
-    Balance:
-      type: object
-      properties:
-        balanceNumber:
-          type: integer
-          description: Number of the balance. Values [1, 2, 3]
-          format: int32
-        merchantReconciliationReference:
-          type: string
-          description: Reference the merchant wants to be part of the description lines of the payment on his bank statement
-        paymentLevel:
-          type: integer
-          description: Level of the merchant hierarchy at which the merchant is paid. Values [4 = Contract, 5 = Site, 6 = Terminal]
-          format: int32
-        paymentAggregation:
-          type: integer
-          description: Indicates whether the merchant is paid per brand, per scheme or totalized. Values [1 = Totalized payment, 2 = Payment per brand, 3 = Payment per scheme]
-          format: int32
-        paymentFrequency:
-          type: integer
-          description: Frequency in which the balance is settled with the merchant. Values [1 = Accounting period, 2 = Weekly, 3 = Monthly, 4 = Daily, 5 = Twice a month, 6 = Per external batch, 7 = Across batches, 8 = Merchant manual cut-off, 9 = Merchant automatic cut-off]
-          format: int32
-        paymentDay:
-          type: integer
-          description: Specific day of the week or month the merchant is paid. Values in case of weekly [1 to 7], values in case of monthly [1 to 31]
-          format: int32
-        paymentDelay:
-          type: integer
-          description: Payment delay in days. Values [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 30, 60, 90]
-          format: int32
-        terminalPeriodClosureLevel:
-          type: integer
-          description: The level on which the financial counter information for the transactions cut-off period are consulted, used by the merchant to align it with the used reconciliation period when the merchant has chosen to  manual cut-off the booking period of the transactions. Values [0 = Terminal, 1 = Site]
-          format: int32
-        terminalPeriodCutoffTime:
-          type: string
-          description: The fixed time (hours and minutes, without date and seconds) of the daily moment - defined by the merchant - when the cut-off of the financial counter information, used by the merchant to align it with the used reconciliation period when the merchant has chosen for automatically cut off the booking period of the transactions
-        bankAccounts:
+        brands:
           type: array
           items:
-            $ref: '#/components/schemas/TerminalBalancebankAccount'
+            $ref: '#/components/schemas/BrandData'
+    AllowedServices:
+      type: object
+      properties:
+        purchaseService:
+          type: boolean
+          description: Indicates whether purchase is allowed
+        cashAdvanceService:
+          type: boolean
+          description: Indicates whether cash advance is allowed
+        reservationService:
+          type: boolean
+          description: Indicates whether reservation is allowed
+        purchaseAfterReservationService:
+          type: boolean
+          description: Indicates whether purchase after reservation is allowed
+        cardValidityCheckService:
+          type: boolean
+          description: Indicates whether card validity check is allowed
+        refundService:
+          type: boolean
+          description: Indicates whether refund is allowed
+        deferredSaleService:
+          type: boolean
+          description: Indicates whether deferred sale is allowed
+        cancellationService:
+          type: boolean
+          description: Indicates whether cancellation of a purchase is allowed
+        saleWithCashback:
+          type: boolean
+          description: Indicates whether the sale with cashback is allowed
+        saleWithIncreasedAmount:
+          type: boolean
+          description: Indicates whether sale with increased amount is allowed
+        quasiCashSale:
+          type: boolean
+          description: Indicates whether quasi cash is allowed
+        cancellationOfSaleAfterReservation:
+          type: boolean
+          description: Indicates whether cancellation of a sale after reservation is allowed
+        cancellationOfCashAdvance:
+          type: boolean
+          description: Indicates whether cancellattion of cash advance is allowed
+        recurringSale:
+          type: boolean
+          description: Indicates whether recurring sale is allowed
+        cancellationOfReservation:
+          type: boolean
+          description: Indicates whether cancellation of a reservation is allowed
+        saleWithDcc:
+          type: boolean
+          description: Indicates whether sale with DCC is allowed
+        saleAfterReservationWithDcc:
+          type: boolean
+          description: Indicates whether sales after reservation with DCC is allowed
+        cashAdvanceWithDcc:
+          type: boolean
+          description: Indicates whether cash advance with DCC is allowed
+        refundWithDcc:
+          type: boolean
+          description: Indicates whether refund with DCC is allowed
+        reservationDcc:
+          type: boolean
+          description: Indicates whether reservation with DCC is allowed

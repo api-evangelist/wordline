@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-mandate-request-schema.json",
+  "title": "CreateMandateRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-api-openapi.yml#/components/schemas/CreateMandateRequest",
+  "type": "object",
+  "properties": {
+    "debtorAddressType": {
+      "type": "string",
+      "description": "Deprecated field - not to be used"
+    },
+    "debtorEmail": {
+      "type": "string",
+      "description": "SEPA debtor e-mail "
+    },
+    "debtorId": {
+      "type": "string",
+      "description": "Deprecated field - not to be used"
+    },
+    "debtorName": {
+      "type": "string",
+      "description": "Deprecated field - not to be used"
+    },
+    "debtorPhoneNumber": {
+      "type": "string",
+      "description": "SEPA debtor phone number"
+    },
+    "debtorPostalAddress": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SepaMandateMailAddress"
+        }
+      ],
+      "description": "Address lines 1 and 2, street name, building number, post code, town name, country and country subdivision can be provided in certain cases - refer to SEPA rules when debtor's address is required."
+    },
+    "mandateContractId": {
+      "type": "string",
+      "description": "Mandate underlying contract identifier (external reference) used by the issuer. E.g., if the mandate is set up along with the contract creation, it may contain the application number, etc."
+    },
+    "mandateNatureType": {
+      "type": "string",
+      "description": "SEPA mandate nature type. PAPER_MANDATE is taken as a default.\nList of mandate possible nature types (for future usage only, not to be used):\nCOMPUTING_MIGRATION_NO_SIGNATURE, COMPUTING_MIGRATION_WITH_SIGNATURE, FR_MIGRATION_DOMESTIC_FILES, \nMANDATE_FROMDIGITALIZATION, e_MANDATE, SIGNATURE_MANDATE, MYBANK_e_MANDATE, IDEAL_e_MANDATE"
+    },
+    "mandateSignCity": {
+      "type": "string",
+      "description": "SEPA mandate city of signature"
+    },
+    "mandateSignDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The mandate signature date has to be provided except if the SEPA mandate UMR is provided (comes from another system)."
+    },
+    "sepaMandateUmr": {
+      "type": "string",
+      "description": "Unique reference to identify the SEPA mandate. Can be provided to our system if mandate is created explicitly by another system."
+    },
+    "sepaMandateUir": {
+      "type": "string",
+      "description": "Deprecated field - not to be used\nUnique internal reference of the given mandate. Not to be overridden, as there is a risk for an internal business process."
+    },
+    "sepaCreditorId": {
+      "type": "string",
+      "description": "Deprecated field - not to be used\nWill be retrieved from the product itself "
+    },
+    "debtorIban": {
+      "type": "string",
+      "description": "Deprecated field - not to be used\niban has been introduced instead."
+    },
+    "iban": {
+      "type": "string",
+      "description": "Customer (debtor) Iban used for the repayments via sepa direct debit.\nHas to be provided except if the SEPA mandate UMR is provided (comes from another system)."
+    },
+    "secondIban": {
+      "type": "string",
+      "description": "Deprecated field - not to be used"
+    },
+    "debtorBic": {
+      "type": "string",
+      "description": "Deprecated field - not to be used\nbic has been introduced instead."
+    },
+    "bic": {
+      "type": "string",
+      "description": "Customer (debtor) Bic used for the repayments via sepa direct debit."
+    },
+    "validateMandate": {
+      "type": "boolean",
+      "description": "Deprecated field - not to be used\nNot to be overridden, as there is a risk for an internal business process."
+    },
+    "ibanOwnerName": {
+      "type": "string",
+      "description": "Customer (debtor) Iban owner name used for the repayments via sepa direct debit.\nHas to be provided except if the SEPA mandate UMR is provided (comes from another system)."
+    }
+  },
+  "$defs": {
+    "SepaMandateMailAddress": {
+      "type": "object",
+      "properties": {
+        "typeCode": {
+          "type": "string",
+          "description": "DEPRECATED"
+        },
+        "line1": {
+          "type": "string",
+          "description": "Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line2": {
+          "type": "string",
+          "description": "Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line3": {
+          "type": "string",
+          "description": "Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line4": {
+          "type": "string",
+          "description": "Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line5": {
+          "type": "string",
+          "description": "Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "buildingNumber": {
+          "type": "string",
+          "description": "Building number of the address (optional)"
+        },
+        "boxNumber": {
+          "type": "string",
+          "description": "Box number of the address (optional)"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name of the address (optional)"
+        },
+        "postCode": {
+          "type": "string",
+          "description": "zip code of the address (optional)"
+        },
+        "townName": {
+          "type": "string",
+          "description": "City corresponding to the address"
+        },
+        "countrySubdivision": {
+          "type": "string",
+          "description": "Subdivision of the country (optional)"
+        },
+        "country": {
+          "type": "string",
+          "description": "Code of the country.Free text."
+        }
+      },
+      "title": "SepaMandateMailAddress"
+    }
+  }
+}

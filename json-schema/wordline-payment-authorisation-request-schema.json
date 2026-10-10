@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-payment-authorisation-request-schema.json",
+  "title": "PaymentAuthorisationRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-bulk-payment-initiation-service-extended-service-api-openapi.yml#/components/schemas/PaymentAuthorisationRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "PsuData": {
+      "$ref": "#/$defs/PsuDataIdentification"
+    },
+    "PsuCredentials": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PsuAuthCredentials"
+      }
+    }
+  },
+  "$defs": {
+    "PsuAuthCredentials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "CredentialId",
+        "CredentialValue"
+      ],
+      "properties": {
+        "CredentialId": {
+          "type": "string",
+          "description": "CredentialId as retrieved in the response of the previous request.\n"
+        },
+        "CredentialValue": {
+          "type": "string",
+          "description": "Value of the credential.\n"
+        }
+      }
+    },
+    "PsuDataIdentification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "AspspPsuId": {
+          "type": "string",
+          "description": "PSU’s Id at ASPSP. Allows the unique identification of the PSU at\nthe ASPSP.\n"
+        },
+        "AspspCustomerId": {
+          "type": "string",
+          "description": "PSU’s second Id at ASPSP. Required for some ASPSPs\n"
+        },
+        "AspspPsuIdType": {
+          "type": "string",
+          "description": "Type of the ASPSP PSU-ID, needed in scenarios where PSU's have\nseveral PSU-IDs as access possibility.\n"
+        },
+        "AspspPsuCorporateId": {
+          "type": "string",
+          "description": "Identification of a Corporate in the Online Channels.\n"
+        },
+        "AspspPsuCorporateIdType": {
+          "type": "string",
+          "description": "This is describing the type of the identification needed by the\nASPSP to identify the PSUCorporate-ID content.\n"
+        }
+      }
+    }
+  }
+}

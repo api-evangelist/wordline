@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-modify-card-contract-request-schema.json",
+  "title": "ModifyCardContractRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-contract-api-openapi.yml#/components/schemas/ModifyCardContractRequest",
+  "type": "object",
+  "x-wl-patch-request": true,
+  "properties": {
+    "artwork": {
+      "type": "string",
+      "description": "The issuer can provide another artwork among those allowed in the product configuration. It will be used when the card will be replaced or renewed."
+    },
+    "blockingRenewalReasonCode": {
+      "type": "string",
+      "description": "A blocking renewal reason code among those configured for the issuer must be provided if the card renewal process is blocked (NewCardRenewalAllowed is false)."
+    },
+    "blockingReplacementReasonCode": {
+      "type": "string",
+      "description": "A blocking replacement reason code among those configured for the issuer must be provided if the card replacement process is blocked (NewCardReplacementAllowed is false)."
+    },
+    "forcedEmbossingName": {
+      "type": "string",
+      "description": "The issuer can provide or modify the first line of the name embossed on the physical card. It will be used when the card will be replaced or renewed.\nThe character \"*\" is not allowed in the line 1 of the embossing name."
+    },
+    "forcedEmbossingName2ndLine": {
+      "type": "string",
+      "description": "The issuer can provide or modify the embossing name 2nd line of the card if the embossing name first line is provided and if allowed within card Technology and Application model.\nIt will be used when the card will be replaced or renewed.\nThe character \"*\" is not allowed in the line 2 of the embossing name.\nTo reset the embossing name 2nd line of the card, the value \"\" or null must be provided."
+    },
+    "schemeDeclarationOptOut": {
+      "type": "boolean",
+      "description": "DEPRECATED"
+    },
+    "schemeReportDeclarationBehavior": {
+      "type": "string",
+      "description": "The issuer can indicate if the card events are reported to the scheme. Relevant only if the ABU-VAU program is enabled. If the ABU-VAU program is disabled, the use of this attribute generates an error. Possible values are: OPT_IN: the card events are reported to the scheme, OPT_OUT: the card events are not reported to the scheme. If the ABU-VAU program is enabled and the attribute is empty, the default value set on card product is applied."
+    },
+    "newCardRenewalAllowed": {
+      "type": "boolean",
+      "description": "The card renewal process can be blocked (blocking renewal reason code must be provided) or not."
+    },
+    "newCardReplacementAllowed": {
+      "type": "boolean",
+      "description": "The card replacement process can be blocked (blocking replacement reason code must be provided) or not. "
+    },
+    "blockingPinReorderReasonCode": {
+      "type": "string",
+      "description": "A blocking pin reorder reason code among those configured for the issuer must be provided if the pin reorder process is blocked (newPinReorderAllowed is false)."
+    },
+    "newPinReorderAllowed": {
+      "type": "boolean",
+      "description": "The pin reorder process can be blocked (blocking pin reorder reason code must be provided) or not."
+    },
+    "blockingPinReminderReasonCode": {
+      "type": "string",
+      "description": "A blocking pin reminder reason code among those configured for the issuer must be provided if the pin reminder process is blocked (newPinReminderAllowed is false)."
+    },
+    "newPinReminderAllowed": {
+      "type": "boolean",
+      "description": "The pin reminder process can be blocked (blocking pin reminder reason code must be provided) or not."
+    },
+    "issuerBranchCode": {
+      "type": "string",
+      "description": "Refer to CardContract.issuerBranchCode"
+    },
+    "vipFlag": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indicates if the holder of the priority pass is a VIP or not. This information is used to determine the priority pass fees to apply.\nIf true, VIP fees are applied. \nIf false, standard fees are applied."
+    },
+    "specificFields": {
+      "type": "object",
+      "description": "The issuer can update Specific Fields for the card contract.\nIt is a list of external data {\"label\":\"value\"} separated by a \",\" related to the card contract (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems.\nA new data can be added or an existing data can be updated {\"label1\":\"newValue\"} or removed {\"label2\":\"null\"}.\nAny existing data that is not present in this list is not updated in the card contract.\nThose provided data have no impact on our system business processes.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "selectedModels": {
+      "type": "array",
+      "description": "The issuer can replace one or several models linked to the card contract by another one allowed in the product configuration.",
+      "items": {
+        "$ref": "#/$defs/CardContractModel"
+      }
+    },
+    "cardClass": {
+      "type": "string",
+      "description": "The issuer can provide another card class among those allowed in the product configuration. \nRefer to CardContract.cardClass"
+    },
+    "photoReference": {
+      "type": "string",
+      "description": "A new photo reference can be provided (used for next cards in case of renewal, replacement)."
+    },
+    "pictureReference": {
+      "type": "string",
+      "description": "A new picture reference can be provided (used for next cards in case of renewal, replacement)."
+    },
+    "logoReference": {
+      "type": "string",
+      "description": "A new logo reference can be provided for corporate card only (used for next cards in case of renewal, replacement)."
+    },
+    "deviceTokensNumber": {
+      "type": "integer",
+      "description": "The issuer can provide the number of device tokens on the card attached to the card contract"
+    },
+    "merchantTokensNumber": {
+      "type": "integer",
+      "description": "The issuer can provide the number of merchant tokens on the card attached to the card contract"
+    },
+    "authorizationDataValidation": {
+      "description": "The issuer can update cardholder data used by the Front Office for verification (AVS/ANI).",
+      "allOf": [
+        {
+          "$ref": "#/$defs/AuthorizationDataValidation"
+        }
+      ]
+    },
+    "clickToPayEnrollment": {
+      "type": "string",
+      "description": "Indicates if the card enrollment in Click to Pay service is requested or not. \nRelevant only if the Click to Pay feature is enabled. If the Click to Pay feature is disabled, the use of this attribute generates an error.\n\nPossible values are :\n- OPT_IN : enrollment of the card in Click to Pay service is requested.\n- OPT_OUT : enrollment of the card in Click to Pay service is not requested. \n\nIf the Click to Pay feature is enabled and the attribute is empty, the default value set on card product is applied.\n\nAs a result :\nIf OPT_IN, the enrollment of the new card in Click to Pay service is requested and will be effective through WL iTSP at card activation\nIf OPT_OUT, the enrollment of the new card in Click to Pay service is not requested."
+    }
+  },
+  "$defs": {
+    "AuthorizationDataValidation": {
+      "type": "object",
+      "description": "The issuer can update cardholder data used by the Front Office for verification (AVS/ANI).",
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "description": "First name of the cardholder"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the cardholder"
+        },
+        "secondFirstName": {
+          "type": "string",
+          "description": "Second first name of the cardholder"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name of the cardholder address"
+        },
+        "zipCode": {
+          "type": "string",
+          "description": "Zip code of the cardholder address"
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Birth date of the cardholder"
+        }
+      }
+    },
+    "CardContractModel": {
+      "type": "object",
+      "properties": {
+        "reference": {
+          "type": "string",
+          "description": "Reference of a card contract model"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of a card contract model\nPossible values: CARD_CREATION_MODEL, CARD_AUTONUMBERING_MODEL, TECHNOLOGY_AND_APPLICATION_MODEL, EVENT_FEE_MODEL, CARD_RENEWAL_MODEL, CARD_REPLACEMENT_MODEL, PIN_PRODUCTION_MODEL, DISTRIBUTION_MODEL"
+        }
+      },
+      "title": "CardContractModel"
+    }
+  }
+}

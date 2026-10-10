@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-generate-chargeback-request-schema.json",
+  "title": "GenerateChargebackRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-dispute-api-openapi.yml#/components/schemas/GenerateChargebackRequest",
+  "type": "object",
+  "required": [
+    "chargebackType"
+  ],
+  "properties": {
+    "chargebackType": {
+      "type": "string",
+      "description": "The issuer must provide the type of chargeback. Possible values are:\n- FULL :  Full Chargeback is performed using the transaction Reconciliation amount of the disputed transaction (the chargebackAmount if provided is ignored)\n- PARTIAL : a Partial Chargeback is performed using the provided chargebackAmount\n- HIGH : 2 times FULL reconciliation amount  this is in case for example : the merchant instead of refunding cardholder, he did another debit. In this case he should  reimburse cardholder  2 times (credit HIGH_AMOUNT)."
+    },
+    "chargebackAmount": {
+      "description": "The Amount to use in case of Partial Chargeback ( chargebackType = PARTIAL)",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Amount"
+        }
+      ]
+    },
+    "chargebackScenario": {
+      "type": "string",
+      "description": "Mandatory for VISA\nDefined values associated to specific scenario that allows WL dispute management service to recognize the template of the ChargeBack to generate :\nChargeBack scenario 1: 10-E-commerce fraud, Value = VISECOMFRAUD\nChargeBack scenario 2: 12.6 Duplicate Processing, Value = VISDUPLIC\nChargeBack scenario 3: 13.9 Non-Receipt of Cash, Value = VISNOCASH\nIf the value is not a known value, the request is rejected."
+    },
+    "reasonCode": {
+      "type": "string",
+      "description": "Mandatory for MCI : MCI chargeback reason code (possible values in MCI MPE file), for VISA this field is not provided.\nIf the value is not a known value , WL dispute management service rejects the ChargeBack generation.\nOne of the fields ChargebackScenario (VISA) or ReasonCode (MCI) should be present."
+    },
+    "chargebackDocument": {
+      "description": "Contains the document that has to be attached to the ChargeBack depending on the chargebackScenario ( VISA Scheme ) or ReasonCode (MCI Scheme)\nFor VISA Scheme : chargebackDocument is Mandatory when ChargebackScenario is VISECOMFRAUD or VISNOCASH\nFor MCI Scheme : see  scheme document Chargeback Guide ",
+      "allOf": [
+        {
+          "$ref": "#/$defs/DisputeDocument"
+        }
+      ]
+    },
+    "duplicatedTransactionIdentifier": {
+      "type": "string",
+      "description": "When the disputed transaction is for \"duplicate\", provide the \"Transaction Identifier\" value of the non disputed transaction\nIf chargebackScenario= VISDUPLIC, and the duplicatedTransactionIdentifier is not provided, WL dispute management service rejects the ChargeBack generation."
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    },
+    "DisputeDocument": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "description": "Contains the document (letter) attached to the Dispute Folder encoded in Base64"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the document attached to the Dispute Folder"
+        },
+        "label": {
+          "type": "string",
+          "description": "Label of the external document attached to the Dispute Folder"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "File name of the external document attached to the Dispute Folder"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of the external document creation attached to the Dispute Folder"
+        }
+      },
+      "title": "DisputeDocument"
+    }
+  }
+}

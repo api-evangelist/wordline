@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-get-authorization-restriction-override-history-schema.json",
+  "title": "ApiResponseEntityGetAuthorizationRestrictionOverrideHistory",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-authorization-restriction-api-openapi.yml#/components/schemas/ApiResponseEntityGetAuthorizationRestrictionOverrideHistory",
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AuthorizationRestrictionOverrideHistoryEntry"
+      }
+    },
+    "responseMetadata": {
+      "description": "Response metadata",
+      "$ref": "#/$defs/ResponseMetadata"
+    }
+  },
+  "$defs": {
+    "AuthorizationRestrictionOverrideHistoryEntry": {
+      "type": "object",
+      "required": [
+        "changeTime"
+      ],
+      "properties": {
+        "activationEndTime": {
+          "type": "string",
+          "description": "First point in time at which the override will be considered. If not provided the override will be taken into account immediately.\nDate Time format:  DD/MM/YYYY"
+        },
+        "activationStartTime": {
+          "type": "string",
+          "description": "First point in time at which the override will be considered. If not provided the override will be taken into account immediately.\nDate Time format:  DD/MM/YYYY \n"
+        },
+        "changeTime": {
+          "type": "string",
+          "description": "Time when the modification has been performed. UTC time zone.\nDate Time format: yyyy-MM-dd’T’HH:mm:ssZ \n"
+        },
+        "changeType": {
+          "type": "string"
+        },
+        "conditionCheck": {
+          "type": "boolean"
+        },
+        "conditionParameters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "AuthorizationRestrictionOverrideHistoryEntry"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

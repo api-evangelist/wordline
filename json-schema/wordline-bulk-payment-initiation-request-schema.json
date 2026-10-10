@@ -1,0 +1,709 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-bulk-payment-initiation-request-schema.json",
+  "title": "BulkPaymentInitiationRequest",
+  "description": "Bulk Payment Initiation Request\n",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-bulk-payment-initiation-service-extended-service-api-openapi.yml#/components/schemas/BulkPaymentInitiationRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "CommonPaymentData"
+  ],
+  "properties": {
+    "PaymentProduct": {
+      "type": "array",
+      "description": "Multiple PaymentProducts can only be supplied if `UseAuthorisationLandingPages` equals `TRUE`. These will then influence ASPSPs visible to the PSU on the Bank Selection Interface.\n",
+      "items": {
+        "$ref": "#/$defs/PaymentProductEnum"
+      }
+    },
+    "PaymentProductChangeable": {
+      "type": "boolean",
+      "default": false,
+      "description": "Allowing a PSU to change the pre-selected payment product if the ASPSP supports more than one from the list provided by the Initiating Party. Usable only if `UseAuthorisationLandingPages` equals `TRUE`. Otherwise will be ignored.\n"
+    },
+    "ProductSpecificMasterData": {
+      "type": "array",
+      "description": "The array is defined to mention the master data specific to selected payment product\n",
+      "items": {
+        "$ref": "#/$defs/ProductSpecificMasterData"
+      }
+    },
+    "PsuData": {
+      "$ref": "#/$defs/PsuData"
+    },
+    "CommonPaymentData": {
+      "$ref": "#/$defs/BulkPaymentInitiationRequestBasic"
+    }
+  },
+  "$defs": {
+    "AddressData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "FirstName": {
+          "type": "string",
+          "description": "The first name of the debtor\n",
+          "minLength": 1
+        },
+        "LastName": {
+          "type": "string",
+          "description": "The last name of the debtor\n",
+          "minLength": 1
+        },
+        "CompanyName": {
+          "type": "string",
+          "description": "The company name of the debtor\n",
+          "minLength": 1
+        },
+        "PostCode": {
+          "type": "string",
+          "description": "The postal code of the address without spaces\n",
+          "minLength": 1
+        },
+        "BuildingNumber": {
+          "type": "string",
+          "description": "The house number of the address\n",
+          "minLength": 1
+        },
+        "Floor": {
+          "type": "string",
+          "description": "The addition of the address\n",
+          "minLength": 1
+        },
+        "StreetName": {
+          "type": "string",
+          "description": "The street of the address\n",
+          "minLength": 1
+        },
+        "TownName": {
+          "type": "string",
+          "description": "The city of the address\n",
+          "minLength": 1
+        },
+        "Country": {
+          "type": "string",
+          "description": "The code of the coutry regarding ISO 3166 standard. For the IDEAL payments the country name will be provided\n",
+          "minLength": 1
+        },
+        "CountrySubDivision": {
+          "type": "string",
+          "description": "Country sub division.\n",
+          "maxLength": 35,
+          "minLength": 1
+        }
+      }
+    },
+    "Amount": {
+      "required": [
+        "Amount"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Type": {
+          "type": "string",
+          "deprecated": true,
+          "description": "* _Fixed_ - The amount defined by the merchant can not be changed by the user\n* _Change_ - The amount defined by the merchant can be changed by the user within the defined bounds. Currently can be used only for iDEAL Payments\n* _Define_ - The amount needs to be defined by the user. Currently can be used only for iDEAL Payments",
+          "enum": [
+            "Fixed",
+            "Change",
+            "Define"
+          ],
+          "default": "Fixed"
+        },
+        "Amount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string",
+          "description": "Amount of the payment. The decimal separator is a dot.\n"
+        },
+        "MaximumAmount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string",
+          "deprecated": true,
+          "description": "Conditionally used for amount type Change or Define.\nThe value in case of Change should be greater than or equal to the amount value.\nIn case of Fixed, this value will be ignored."
+        },
+        "MinimumAmount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string",
+          "deprecated": true,
+          "description": "Conditionally used for amount type Change or Define.\nThe value in case of Change should be less than or equal to the amount.\nIn case of Fixed, this value will be ignored."
+        },
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "Currency of the payment. ISO 4217 currency codes should be\nused. For iDEAL only EUR is possible\n",
+          "default": "EUR"
+        },
+        "AmountBreakdown": {
+          "$ref": "#/$defs/AmountBreakdown"
+        }
+      }
+    },
+    "AmountBreakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Breakdown of the transaction amount. The sum of all the fields within this breakdown must be equal to the transaction amount. Possible to use for iDEAL payments, only in the FastCheckout flow.",
+      "required": [
+        "OrderAmount",
+        "ShippingCost"
+      ],
+      "properties": {
+        "OrderAmount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string",
+          "description": "Order amount. Possible to use for iDEAL payments, only in the fast-checkout flow.\n"
+        },
+        "ShippingCost": {
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string",
+          "description": "Shipping cost. Possible to use for iDEAL payments, only in the fast-checkout flow.\n"
+        }
+      }
+    },
+    "BillingAddress": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SameAsShippingAddress": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates whether the billing addess is the same with shipping address. If true the information provided under `BillingAddressDetails` will be ignored\n"
+        },
+        "BillingAddressDetails": {
+          "$ref": "#/$defs/AddressData"
+        }
+      }
+    },
+    "BulkPaymentInitiationRequestBasic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Payments"
+      ],
+      "properties": {
+        "UsePreAuthentication": {
+          "type": "boolean",
+          "default": false,
+          "description": "This field is only applicable for ASPSP's which support pre-authentication. It can also be filled in payments toward other ASPSP's, but the value will then be ignored.\n* If set to true the Open Banking Service will store the pre-authentication token for use with future payments. This will only work if also a PsuId is provided which is stored in the Open Banking Service.\n* If set to false the pre-authentication token will only be used to finish one payment. After which it will be discarded.\n"
+        },
+        "InitiatingPartyReferenceId": {
+          "maxLength": 36,
+          "minLength": 1,
+          "type": "string",
+          "description": "Reference to the payment created by the Initiating Party.\nThis Id will not be visible to the Payment Service User.\nRequired for PSD2 payments\n"
+        },
+        "PreferredScaMethod": {
+          "type": "array",
+          "description": "Multiple preferred methods can be choosen. It is not guaranteed that the ASPSP will use the preferred method.\n",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Redirect",
+              "Decoupled",
+              "Embedded"
+            ]
+          }
+        },
+        "TransactionType": {
+          "type": "string",
+          "description": "Transaction type used in this transaction.\nONLINE - Used particularly for Online transactions, e.g. a webshop\nQR - Used for transactions from a QR. eg. Invoice\nINSTORE - Used for instore transactions for eg.- a POS device\nP2P - Used for peer-to-peer (customer-to-customer) transactions, e.g. a Transaction Request\n",
+          "enum": [
+            "Online",
+            "QR",
+            "Instore",
+            "P2P"
+          ],
+          "default": "Online"
+        },
+        "ExpirationPeriod": {
+          "type": "integer",
+          "description": "Time in seconds after which the transaction will expire. If not provided a default value will be used if the `PaymentProduct` equals `IDEAL`. For ONLINE - 1200 and for INSTORE - 120. Required for QR type transactions\n",
+          "minimum": 60,
+          "maximum": 3600
+        },
+        "DebtorInformation": {
+          "$ref": "#/$defs/DebtorInformation"
+        },
+        "ChargeBearer": {
+          "type": "string",
+          "description": "Charge bearer.\n\nNote - ISO20022 ChargeBearerType1Code.\n",
+          "enum": [
+            "DEBT",
+            "CRED",
+            "SHAR",
+            "SLEV"
+          ]
+        },
+        "CategoryPurpose": {
+          "$ref": "#/$defs/CategoryPurposeEnum"
+        },
+        "PaymentContext": {
+          "$ref": "#/$defs/RiskInformation"
+        },
+        "Payments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BulkPaymentsDetails"
+          }
+        }
+      },
+      "description": "Basic type for Bulk Payment Initiation Request\n"
+    },
+    "BulkPaymentsDetails": {
+      "required": [
+        "EndToEndId",
+        "Amount"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "properties": {
+        "EndToEndId": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "Unique identification, as assigned by the Initiating Party,\nto unambiguously identify the transaction. This\nidentification is passed on, unchanged, throughout the\nentire end-to-end chain. Usage: The end-to-end\nidentification can be used for reconciliation or to link\ntasks relating to the transaction. It can be included in\nseveral messages related to the transaction.\nRequired for PSD2 payments\n"
+        },
+        "Amount": {
+          "$ref": "#/$defs/Amount"
+        },
+        "CreditorInformation": {
+          "$ref": "#/$defs/CreditorInformation"
+        },
+        "PurposeCode": {
+          "type": "string",
+          "description": "Specifies the purpose code that resulted in a payment initiation.\nFill with a 4 characters code from the ExternalPurpose1Code list published\nby ISO20022 or use the values ‘Commerce’, ‘Carpark’, ‘Transport’.\n"
+        },
+        "CrossCurrencyPayments": {
+          "$ref": "#/$defs/CrossCurrencyPayment"
+        },
+        "RegulatoryReportingCodes": {
+          "maxItems": 10,
+          "minItems": 1,
+          "type": "array",
+          "description": "List of needed regulatory reporting codes for international payments\n",
+          "items": {
+            "$ref": "#/$defs/RegulatoryReportingCode"
+          },
+          "x-DefinitionType": "ISO20022"
+        },
+        "RemittanceInformation": {
+          "maxLength": 140,
+          "minLength": 1,
+          "type": "string",
+          "description": "Information supplied to enable the matching of an entry with\nthe items that the transfer is intended to settle. This information\nwill be visible to the Payment Service User.\n\n**Conditional validation:**\n* In case the PaymentProduct is set to IDEAL the maxLength is limited to 35\n"
+        },
+        "RemittanceInformationStructured": {
+          "$ref": "#/$defs/RemittanceInformationStructured"
+        }
+      }
+    },
+    "CategoryPurposeEnum": {
+      "type": "string",
+      "description": "Specifies the high level purpose of the instruction based on a set of pre-defined categories.\nThis is used by the initiating party to provide information concerning the processing of the payment. It is likely to trigger special processing by any of the agents involved in the payment chain.\nNot all of the given codes might be accepted by all banks. The standard for STET for example is limited to CASH, CORT, DVPM, INTC and TREA\n",
+      "enum": [
+        "CASH",
+        "CORT",
+        "DIVI",
+        "DVPM",
+        "INTC",
+        "INTE",
+        "PENS",
+        "SALA",
+        "SSBE",
+        "SUPP",
+        "TAXS",
+        "TREA"
+      ]
+    },
+    "CreditorAccount": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SecondaryIdentification": {
+          "type": "string",
+          "description": "Secondary identification of the Creditor Account, to which\na credit entry will be made as a result of the transaction. (Only Openbank\nUK)\n"
+        },
+        "SchemeName": {
+          "$ref": "#/$defs/IdentificationTypeEnum"
+        },
+        "Identification": {
+          "type": "string",
+          "description": "Identification of the Creditor Account. Can be given for P2P\npayments only.\n"
+        },
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        }
+      }
+    },
+    "CreditorDateAndPlaceOfBirth": {
+      "required": [
+        "BirthDate",
+        "CityOfBirth",
+        "CountryOfBirth"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "BirthDate": {
+          "type": "string",
+          "description": "Date on which a person is born.",
+          "format": "date"
+        },
+        "CityOfBirth": {
+          "maxLength": 35,
+          "type": "string",
+          "description": "City where a person was born."
+        },
+        "CountryOfBirth": {
+          "pattern": "^[A-Z]{2,2}$",
+          "type": "string",
+          "description": "Country where a person was born."
+        }
+      },
+      "description": "Date and place of birth of a person.\nThis information must be requested for detection of Fraud, Money-Laundering and Terrorism Financing in case of international payment.\n",
+      "x-DefinitionType": "ISO20022"
+    },
+    "CreditorInformation": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "All creditor relavant data\n",
+      "properties": {
+        "InitiatingPartySubId": {
+          "maxLength": 50,
+          "minLength": 1,
+          "type": "string",
+          "description": "External identification of the subsidiary initiating party.\n"
+        },
+        "Name": {
+          "type": "string",
+          "description": "The name of creditor. Can be given for P2P payments only.\n"
+        },
+        "Account": {
+          "$ref": "#/$defs/CreditorAccount"
+        },
+        "Agent": {
+          "pattern": "[A-Z0-9]{4,4}[A-Z]{2,2}[A-Z0-9]{2,2}([A-Z0-9]{3,3}){0,1}",
+          "type": "string",
+          "description": "BIC of the financial institution servicing an account for\nthe creditor.\n"
+        },
+        "UltimateCreditor": {
+          "maxLength": 140,
+          "type": "string",
+          "description": "Ultimate party to which an amount of money is due.\n"
+        },
+        "PostalAddress": {
+          "$ref": "#/$defs/AddressData"
+        },
+        "CreditorDateAndPlaceOfBirth": {
+          "$ref": "#/$defs/CreditorDateAndPlaceOfBirth"
+        },
+        "UltimateCreditorAccount": {
+          "$ref": "#/$defs/CreditorAccount"
+        }
+      }
+    },
+    "CrossCurrencyPayment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "CrossCurrencyTransaction"
+      ],
+      "properties": {
+        "CrossCurrencyTransaction": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set to true if a currency exchangeis required. If set to true the ExchangeRateInformation section can be used.\n"
+        },
+        "ExchangeRateInformation": {
+          "$ref": "#/$defs/ExchangeRateInformationRequest"
+        }
+      }
+    },
+    "DebtorAccount": {
+      "required": [
+        "Identification"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SchemeName": {
+          "$ref": "#/$defs/IdentificationTypeEnum"
+        },
+        "Identification": {
+          "type": "string",
+          "description": "Unambiguous identification of the account of the debtor to\nwhich a debit entry will be made as a result of the transaction.\n"
+        },
+        "SecondaryIdentification": {
+          "type": "string",
+          "description": "Secondary identification of the Debtor Account, to which a\ndebit entry will be made as a result of the transaction. (Only Openbank\nUK)\n"
+        },
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        }
+      }
+    },
+    "DebtorInformation": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "All debtor relavant data\n",
+      "properties": {
+        "Name": {
+          "maxLength": 140,
+          "type": "string",
+          "description": "The name of the debtor.\n"
+        },
+        "Agent": {
+          "type": "string",
+          "pattern": "[A-Z0-9]{4,4}[A-Z]{2,2}[A-Z0-9]{2,2}([A-Z0-9]{3,3}){0,1}",
+          "description": "BIC of the financial institution servicing an account for\nthe debtor.\n"
+        },
+        "Account": {
+          "$ref": "#/$defs/DebtorAccount"
+        },
+        "UltimateDebtor": {
+          "maxLength": 140,
+          "type": "string",
+          "description": "Ultimate party that owes an amount of money to the (ultimate)\ncreditor.\n"
+        },
+        "ShippingAddress": {
+          "$ref": "#/$defs/AddressData"
+        },
+        "BillingAddress": {
+          "$ref": "#/$defs/BillingAddress"
+        }
+      }
+    },
+    "ExchangeRateInformationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "UnitCurrency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "Currency in which the rate of exchange is expressed in a currency\nexchange. In the example 1GBP = xxxCUR, the unit currency is GBP.\n"
+        },
+        "ExchangeRate": {
+          "type": "number",
+          "description": "The factor used for conversion of an amount from one currency\nto another. This reflects the price at which one currency was bought with\nanother currency. Rate expressed as a decimal, for example, 0.7 is 7/10\nand 70%.\n"
+        },
+        "RateType": {
+          "type": "string",
+          "description": "Specifies the type used to complete the currency exchange.\n* Spot: Exchange rate applied is the spot rate.\n* Sale: Exchange rate applied is the market rate at the time of the sale.\n* Agreed: Exchange rate applied is the rate agreed between the parties.\n",
+          "enum": [
+            "Spot",
+            "Sale",
+            "Agreed"
+          ]
+        },
+        "ContractIdentification": {
+          "maxLength": 256,
+          "type": "string",
+          "description": "Unique and unambiguous reference to the foreign exchange contract\nagreed between the initiating party/creditor and the debtor agent.\n"
+        }
+      },
+      "description": "Provides details on the currency exchange rate and contract.\n"
+    },
+    "IdentificationTypeEnum": {
+      "type": "string",
+      "description": "Type of the account number.\n",
+      "enum": [
+        "IBAN",
+        "SortCodeAccountNumber"
+      ]
+    },
+    "PaymentProductEnum": {
+      "type": "string",
+      "default": "PSD2-SCT",
+      "description": "Indicates the requested payment method.\n",
+      "enum": [
+        "PSD2-SCT",
+        "PSD2-SCT-Inst",
+        "PSD2-Target2",
+        "PSD2-Domestic",
+        "PSD2-Domestic-Inst",
+        "IDEAL",
+        "WERO"
+      ]
+    },
+    "ProductSpecificMasterData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ParamName",
+        "ParamValue"
+      ],
+      "properties": {
+        "ParamName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250,
+          "description": "Name of the parameter exactly as required by the payment method.\n"
+        },
+        "ParamValue": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "description": "Actual value of the parameter.\n"
+        }
+      }
+    },
+    "PsuData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "AspspId": {
+          "minLength": 1,
+          "type": "string",
+          "description": "The Id of the ASPSP. The Open Banking Service needs this\ninformation for PSD2 payments to route the payment. It has to be either\nprovided in this field or by the PSU in the Bank Selection Interface.\n"
+        },
+        "AspspProductCode": {
+          "type": "string",
+          "description": "This is describing the ProductCode as defined by the ASPSP.\n"
+        },
+        "AspspPsuId": {
+          "type": "string",
+          "description": "PSU’s Id at ASPSP. Allows the unique identification of the PSU at\nthe ASPSP.\n"
+        },
+        "AspspCustomerId": {
+          "type": "string",
+          "description": "PSU’s second Id at ASPSP. Required for some ASPSPs\n"
+        },
+        "AspspPsuIdType": {
+          "type": "string",
+          "description": "Type of the ASPSP PSU-ID, needed in scenarios where PSU's have\nseveral PSU-IDs as access possibility.\n"
+        },
+        "AspspPsuCorporateId": {
+          "type": "string",
+          "description": "Identification of a Corporate in the Online Channels.\n"
+        },
+        "AspspPsuCorporateIdType": {
+          "type": "string",
+          "description": "This is describing the type of the identification needed by the\nASPSP to identify the PsuCorporate-ID content.\n"
+        },
+        "Country": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2,
+          "pattern": "[A-Z]{2,2}",
+          "description": "It is used to select a preferred country that is pre-selected on the bank selection page."
+        }
+      }
+    },
+    "RegulatoryReportingCode": {
+      "maxLength": 10,
+      "type": "string",
+      "description": "Information needed due to regulatory and statutory requirements.\nEconomical codes to be used are provided by the National Competent Authority\n",
+      "x-DefinitionType": "ISO20022"
+    },
+    "RemittanceInformationStructured": {
+      "required": [
+        "Reference"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Reference": {
+          "type": "string",
+          "pattern": "[a-zA-Z0-9]{1,35}",
+          "description": "The actual reference.\n"
+        },
+        "ReferenceType": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "Reference type.\n"
+        },
+        "ReferenceIssuer": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "Identification of the issuer of the ReferenceType.\n"
+        }
+      }
+    },
+    "RiskInformation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "PaymentContextCode": {
+          "type": "string",
+          "description": "Specifies the payment context. Payments for EcommerceGoods\nand EcommerceServices will be expected to have a MerchantCategoryCode\nand MerchantCustomerIdentification populated. Payments for EcommerceGoods\nwill also have the DeliveryAddress populated.\n",
+          "enum": [
+            "BillPayment",
+            "ContactlessTravel",
+            "EcommerceGoods",
+            "EcommerceServices",
+            "Kiosk",
+            "Parking",
+            "P2P",
+            "BillingGoodsAndServicesInAdvance",
+            "BillingGoodsAndServicesInArrears",
+            "PispPayee",
+            "EcommerceMerchantInitiatedPayment",
+            "FaceToFacePointOfSale",
+            "TransferToSelf",
+            "TransferToThirdParty"
+          ]
+        },
+        "MerchantCategoryCode": {
+          "maxLength": 4,
+          "minLength": 3,
+          "type": "string",
+          "description": "Category code conform to ISO 18245, related to the type of\nservices or goods the merchant provides for the transaction.\n"
+        },
+        "MerchantCustomerId": {
+          "maxLength": 70,
+          "minLength": 1,
+          "type": "string",
+          "description": "The unique customer identifier of the PSU with the merchant.\n"
+        },
+        "DeliveryAddress": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/AddressData"
+            }
+          ],
+          "deprecated": true,
+          "description": "The Object is deprecated and will be ignored in the current implementation.\nUse `DebtorInformation.ShippingAddress` from `CommonPaymentData` object instead\n"
+        },
+        "ChannelType": {
+          "type": "string",
+          "description": "Payment channel type.\n",
+          "enum": [
+            "ContactLess",
+            "PointOfSale",
+            "Ecommerce",
+            "UnattendedTerminal"
+          ]
+        },
+        "ChannelMetaData": {
+          "type": "string",
+          "description": "Additional information related to the channel.\n"
+        },
+        "AppliedAuthenticationApproach": {
+          "type": "string",
+          "description": "Indicates the Applied Authentication Approach\n",
+          "enum": [
+            "CA",
+            "SCA"
+          ]
+        },
+        "ReferencePaymentOrderId": {
+          "type": "string",
+          "description": "Indicates the Applied Authentication Approach\n",
+          "maxLength": 128
+        }
+      },
+      "description": "Information used for risk scoring by the ASPSP.\n"
+    }
+  }
+}

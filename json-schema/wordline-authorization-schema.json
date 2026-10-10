@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-authorization-schema.json",
+  "title": "Authorization",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-authorization-api-openapi.yml#/components/schemas/Authorization",
+  "type": "object",
+  "properties": {
+    "transactionIdentification": {
+      "$ref": "#/$defs/TransactionIdentification"
+    },
+    "contractIdentification": {
+      "$ref": "#/$defs/ContractIdentification"
+    },
+    "approvalCode": {
+      "type": "string",
+      "description": "Code assigned by the authorising institution indicating approval"
+    },
+    "authorizationDateTime": {
+      "type": "string",
+      "description": "authorisation date-time (RFC 3339)",
+      "format": "date-time"
+    },
+    "brand": {
+      "type": "string",
+      "description": "Brand"
+    },
+    "cardAcceptorNameLocation": {
+      "type": "string",
+      "description": "The name and place where the terminal is located. Note - A backslash is not valid json. So a backslash will be escaped (with a backslash)"
+    },
+    "cardExpiryDate": {
+      "type": "integer",
+      "description": "The year and month after which the card expires",
+      "format": "int32"
+    },
+    "cardSequenceNumber": {
+      "type": "integer",
+      "description": "card sequence number",
+      "format": "int32"
+    },
+    "cardValidationResult": {
+      "type": "string",
+      "description": "Contains the result of a CVC2/CVV2 validation or the (i)CVC/CVV validation"
+    },
+    "channel": {
+      "type": "integer",
+      "description": "Channel code (0 atm, 1 pos, 2 eCommerce, 3 moto)",
+      "format": "int32"
+    },
+    "contactlessIndicator": {
+      "type": "integer",
+      "description": "Indicates whether the transaction has been done contactless (0 no, 1 yes)",
+      "format": "int32"
+    },
+    "ecommerceIndicator": {
+      "type": "string",
+      "description": "Electronic Commerce Indicators"
+    },
+    "forwardingInstitutionId": {
+      "type": "string",
+      "description": "Code identifying the acquirer processor or card acceptor"
+    },
+    "iccDateFilled": {
+      "type": "string",
+      "description": "EMV data present. Y or N"
+    },
+    "merchantCategoryCode": {
+      "type": "integer",
+      "description": "Merchant Catogory Code",
+      "format": "int32"
+    },
+    "paymentFacilitatorId": {
+      "type": "string",
+      "description": "Identifier for a Payment Facilitator which allows anyone who wants to offer merchant services on a sub-merchant platform."
+    },
+    "pointOfServiceDataOnline": {
+      "type": "string",
+      "description": "A code used to indicate the local conditions at the point-of-service device, at the time a card payment transaction was initiated."
+    },
+    "pointOfServiceDataOffline": {
+      "type": "string",
+      "description": "A code used to identify terminal capability, terminal environment and presentation of security data."
+    },
+    "posEntryMode": {
+      "type": "string",
+      "description": "A code that identifies how the carddata was entered on the terminal and which PINentry capabilities the terminal possesses."
+    },
+    "processingCode": {
+      "type": "string",
+      "description": "Code which indicates the type of transaction being undertaken. Used in conjunction with the Account type code as part of the Processing code."
+    },
+    "responseCodeInternal": {
+      "type": "string",
+      "description": "response code internal"
+    },
+    "responseCodeExternal": {
+      "type": "string",
+      "description": "Response Code from the authorization response received from the brand gateway"
+    },
+    "retrievalReferenceNumber": {
+      "type": "string",
+      "description": "Retrieval Reference Number from the authorization request sent to Mastercard/Visa"
+    },
+    "serviceCode": {
+      "type": "string",
+      "description": "The service code from the track"
+    },
+    "subMerchantId": {
+      "type": "string",
+      "description": "Sub Merchant ID, defined by a Payment Facilitator (merchant). Each merchant that is considered to be a “Payment Facilitator” by MasterCard needs to uniquely identify all of its sites with a sub merchant ID"
+    },
+    "terminalBatchReference": {
+      "type": "string",
+      "description": "Reference of the terminal batch"
+    },
+    "terminalProtocol": {
+      "type": "string",
+      "description": "Terminal Protocol"
+    },
+    "truncatedPan": {
+      "type": "string",
+      "description": "truncated pan. Only the first 6 and last 3 digits are present. Values inbetween are zeros"
+    },
+    "cashBackAmount": {
+      "$ref": "#/$defs/Amount"
+    },
+    "originalAmountRequested": {
+      "$ref": "#/$defs/Amount"
+    },
+    "amountAuthorized": {
+      "$ref": "#/$defs/Amount"
+    },
+    "tipAmount": {
+      "$ref": "#/$defs/Amount"
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "description": "Amount in the major units of the currency according to ISO 4217.\n\nIn case of euro, \"3.10\" (is 3.10 euro)\n",
+          "format": "unlimited size decimal"
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency of the amount"
+        }
+      }
+    },
+    "ContractIdentification": {
+      "type": "object",
+      "properties": {
+        "acquirerId": {
+          "type": "string",
+          "description": "Unique identification of the acquirer, determined by equensWorldline"
+        },
+        "pspId": {
+          "type": "string",
+          "description": "Psp Id"
+        },
+        "holdingId": {
+          "type": "integer",
+          "description": "Unique identification of the holding, determined by equensWorldline",
+          "format": "int32"
+        },
+        "merchantId": {
+          "type": "string",
+          "description": "Unique identification of the merchant, determined by the acquirer"
+        },
+        "contractId": {
+          "type": "string",
+          "description": "Unique identification of the contract, determined by the acquirer"
+        },
+        "cardAcceptorId": {
+          "type": "string",
+          "description": "Unique identification of the cardAcceptor within the contract"
+        },
+        "siteId": {
+          "type": "integer",
+          "description": "Unique identification of the site within the contract",
+          "format": "int32"
+        },
+        "terminalId": {
+          "type": "string",
+          "description": "Unique code identifying the terminal at the Card acceptor location"
+        }
+      }
+    },
+    "TransactionIdentification": {
+      "type": "object",
+      "properties": {
+        "transactionId": {
+          "type": "string",
+          "description": "Unique identification for a Cardholder Initiated Transaction"
+        },
+        "actionId": {
+          "type": "string",
+          "description": "Action ID in UUID format"
+        },
+        "acquirerReferenceNumber": {
+          "type": "string",
+          "description": "Data supplied by an acquirer to assist in identifying a transaction, e.g. for researching retrievals and chargebacks"
+        },
+        "merchantReference": {
+          "type": "string",
+          "description": "Merchant Reference. This is a reference that the merchant can add to an authorization request towards the terminal by entering it via the keyboard of the merchant."
+        },
+        "merchantTransactionReference": {
+          "type": "string",
+          "description": "*** DEPRECATED*** (Not available in v2.1. please use merchantReference)\nMerchant Reference. This is a reference that the merchant can\nadd to an authorization request towards the terminal by entering it via\nthe keyboard of the merchant.\n"
+        },
+        "pspReference": {
+          "type": "string",
+          "description": "Additional information provided by the concentrator to return on his statement."
+        },
+        "retrievalReferenceNumber": {
+          "type": "string",
+          "description": "External retrieval reference number."
+        },
+        "stan": {
+          "type": "integer",
+          "description": "Systems Trace Audit Number",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

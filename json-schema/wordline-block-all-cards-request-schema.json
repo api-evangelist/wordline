@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-block-all-cards-request-schema.json",
+  "title": "BlockAllCardsRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-api-openapi.yml#/components/schemas/BlockAllCardsRequest",
+  "type": "object",
+  "properties": {
+    "pan": {
+      "type": "string",
+      "description": "The issuer can provide the PAN to block all the cards having this PAN.\nIf both PAN and PAN reference are provided, the cards blocking will be done only on the PAN and the PAN reference will be ignored."
+    },
+    "panReference": {
+      "type": "string",
+      "description": "The issuer can provide the PAN reference to block all the cards having this PAN reference.\nIf both PAN and PAN reference are provided, the cards blocking will be done only on the PAN and the PAN reference will be ignored."
+    },
+    "blockingReason": {
+      "type": "string",
+      "description": "The blocking reason must be provided if the card is not already blocked or temporary blocked with a scheduled information present on the card and without a new scheduled blocking request, otherwise it is optional."
+    },
+    "blockingReasonDetail": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.blockingReasonDetail"
+    },
+    "lostStolenDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "This date can be provided in addition to the blocking reason if the card is blocked in a context of loss/theft (usually mandatory as per issuer configuration). \nThe date will be ignored if the provided blocking reason is not requiring it."
+    },
+    "lossPlace": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.lossPlace"
+    },
+    "lastUsageDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Refer to CardBlockingInformation.lastUsageDate\nThe Last Usage Date must not be later than current date."
+    },
+    "lastUsagePlace": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.lastUsagePlace"
+    },
+    "lossCircumstances": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.lossCircumstances"
+    },
+    "lossReportedBy": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.lossReportedBy"
+    },
+    "lossReportedVia": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.lossReportedVia"
+    },
+    "fraudCode": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.fraudCode"
+    },
+    "lossCountry": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.lossCountry"
+    },
+    "contactData": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.contactData"
+    },
+    "pinCompromised": {
+      "type": "boolean",
+      "description": "Refer to CardBlockingInformation.pinCompromised"
+    },
+    "customerRequestingBlockDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Refer to CardBlockingInformation.customerRequestingBlockDate"
+    },
+    "transferEffectiveDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Refer to CardBlockingInformation.transferEffectiveDate"
+    },
+    "noReplacementReason": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.noReplacementReason"
+    },
+    "comment": {
+      "type": "string",
+      "description": "Refer to CardBlockingInformation.comment"
+    },
+    "waiveFee": {
+      "type": "boolean",
+      "description": "Indicates if the configured fee (if any) is waived (true) or not (false) while blocking card.\nBy default is false.",
+      "default": false
+    },
+    "cppFlag": {
+      "type": "boolean",
+      "description": "DEPRECATED",
+      "default": false
+    },
+    "fraudProcess": {
+      "type": "string",
+      "description": "Fraud process which leads to card blocking.\n\t\t\t\t\tPossible values : \n\t\t\t\t•CPP : the card is in CCP list\n\t\t\t\t•TFI : Fraud detected for a single card\n\t\t\t\t•MBA : Fraud detected for several cards (Mass action)"
+    },
+    "scheduledCardBlockingDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date when the permanent card blocking is scheduled"
+    },
+    "scheduledCardBlockingDelay": {
+      "type": "integer",
+      "description": "Delay in calendar days used to block the card in the future.\nIt has to be provided if a default delay is not configured or if the default delay is overridden.\nIf the card remains active, the scheduled permanent blocking reason is provided in blockingReason."
+    },
+    "scheduledCardBlockingReason": {
+      "type": "string",
+      "description": "Reason for scheduled permanent blocking\nValues =\nFRAUD_CPP or FRAUD_TFI (permanent blocking)\nPermanent blocking reasons used context of loss/theft are not allowed.\nDue to system logic, for current API the value of this field can be for permanent blocking only and can be set if the blockingReason attribute value is set to temporary blocking reason.\nIf the card remains active with a scheduled permanent blocking, this field is empty and the scheduled permanent blocking reason is provided in blockingReason."
+    },
+    "transactionId": {
+      "type": "string",
+      "description": "Relevant in the context of Fraud detection.\nIndicates the transactionId of the suspicious transaction that has triggered the card blocking."
+    },
+    "cancelScheduledCardBlocking": {
+      "type": "boolean",
+      "description": "If the card is ACTIVE or TEMPORARY BLOCKED and a scheduled information is already present on the card (scheduled permanent blocking):\n- a scheduled card blocking cancellation can be requested by providing the flag cancelScheduledCardBlocking to true.\nIn this case, the fields scheduledCardBlockingDelay, scheduledCardBlockingDate and scheduledCardBlockingReason must not be provided, otherwise the request is rejected\n- if a scheduled card blocking cancellation is not requested (the flag cancelScheduledCardBlocking is not provided or set to false).\nIn this case : \n* If a new scheduled permanent blocking is requested, the field scheduledCardBlockingDelay or scheduledCardBlockingDate must be provided if the delay is not yet reached. The field scheduledCardBlockingReason can optionally be provided if the card is temporary blocked.\n* If a new temporary blocking is requested, the field scheduledCardBlockingDelay,  scheduledCardBlockingDate, scheduledCardBlockingReason must not be provided.",
+      "default": false
+    }
+  }
+}

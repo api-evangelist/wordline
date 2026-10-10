@@ -82,73 +82,15 @@ paths:
       deprecated: false
 components:
   schemas:
-    License:
-      type: object
-      properties:
-        name:
-          type: string
-        url:
-          type: string
-      title: License
-    ApiResponseEntityInfo:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/Info'
-      description: Issuer response entity
-      title: ApiResponseEntityInfo
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    BadRequestErrorApiResponse:
+    NotFoundErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    UnauthorizedErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
     InternalServerErrorResponseMetadata:
       type: object
       required:
@@ -174,7 +116,23 @@ components:
           example: Internal server error
           description: Executed REST API status message
       title: InternalServerErrorResponseMetadata
-    UnauthorizedResponseMetadata:
+    ApiResponseEntityInfo:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/Info'
+      description: Issuer response entity
+      title: ApiResponseEntityInfo
+    BadGatewayResponseMetadata:
       type: object
       required:
       - correlationId
@@ -192,13 +150,13 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 401
+          example: 502
           description: HTTP status code
         statusMessage:
           type: string
-          example: Unauthorized
+          example: Bad Gateway
           description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
+      title: BadGatewayResponseMetadata
     NotFoundResponseMetadata:
       type: object
       required:
@@ -234,38 +192,30 @@ components:
         email:
           type: string
       title: SupportContact
-    NotFoundErrorApiResponse:
+    Info:
       type: object
-      required:
-      - responseMetadata
       properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
+        description:
           type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
+          description: Rest API Description
+        version:
           type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
+          description: Rest API Version
+        title:
+          type: string
+          description: Rest API Title
+        termsOfService:
+          type: string
+          description: Rest API Terms of Service
+        contact:
+          description: Rest API Support Contact
+          allOf:
+          - $ref: '#/components/schemas/SupportContact'
+        license:
+          description: Rest API License
+          allOf:
+          - $ref: '#/components/schemas/License'
+      title: Info
     ResponseMetadata:
       type: object
       required:
@@ -300,39 +250,14 @@ components:
           example: 12
           description: Wall clock time required from service to generate the response
       title: ResponseMetadata
-    Info:
+    License:
       type: object
       properties:
-        description:
+        name:
           type: string
-          description: Rest API Description
-        version:
+        url:
           type: string
-          description: Rest API Version
-        title:
-          type: string
-          description: Rest API Title
-        termsOfService:
-          type: string
-          description: Rest API Terms of Service
-        contact:
-          description: Rest API Support Contact
-          allOf:
-          - $ref: '#/components/schemas/SupportContact'
-        license:
-          description: Rest API License
-          allOf:
-          - $ref: '#/components/schemas/License'
-      title: Info
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
+      title: License
     BadRequestResponseMetadata:
       type: object
       required:
@@ -358,16 +283,7 @@ components:
           example: Bad request
           description: Executed REST API status message
       title: BadRequestResponseMetadata
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    BadGatewayResponseMetadata:
+    ForbiddenResponseMetadata:
       type: object
       required:
       - correlationId
@@ -385,13 +301,97 @@ components:
         statusCode:
           type: integer
           format: int32
-          example: 502
+          example: 403
           description: HTTP status code
         statusMessage:
           type: string
-          example: Bad Gateway
+          example: Forbidden
           description: Executed REST API status message
-      title: BadGatewayResponseMetadata
+      title: ForbiddenResponseMetadata
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

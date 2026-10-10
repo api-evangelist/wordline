@@ -1484,26 +1484,82 @@ paths:
         required: true
 components:
   schemas:
-    DisputeDocument:
+    CreatePostingRequest:
+      type: object
+      required:
+      - postingAmount
+      - postingTypeReference
+      properties:
+        postingAmount:
+          description: Mandatory parameter specifying the posting amount. The posting amount can be negative amount (- sign in the beginning of the amount digits)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        message:
+          type: string
+          description: Description message that will associated to the posted operation in the statement
+        immediateReimbursement:
+          type: boolean
+          description: Optional parameter for impacting card holder account immediately
+        postingTypeReference:
+          type: string
+          description: 'The issuer must provide the identifier of the external reference of the posting. The list of values are configured by issuer:
+
+            Three family of postings type:
+
+            - Cardholder: For impacting the cardholder account, possible values can be: ''Cardholder Account'', ''POST TO OTHER ACCOUNT''
+
+            - Issuer: Write off: possible values can be ''ISSUER_ACCOUNT'', ''PROFIT AND LOSS'', ''FRAUD''
+
+            - Foreign exchange fee (''FOREIGN_EXCHANGE_FEE''), Financial Advice Exchange Rate Difference (''ADVANCE_EXCHANGE_RATE_DIFFERENCE''):  the dispute officer can manually create a dispute posting amount to this account'
+      title: CreatePostingRequest
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    SuperFolderIdentifier:
       type: object
       properties:
+        superFolderReference:
+          type: string
+          description: The Dispute Super Folder external reference
+      title: SuperFolderIdentifier
+    ApiResponseEntityCreateDisputeResponse:
+      x-wl-api-response: true
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          description: Response metadata
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
         data:
-          type: string
-          description: Contains the document (letter) attached to the Dispute Folder encoded in Base64
-        type:
-          type: string
-          description: Type of the document attached to the Dispute Folder
-        label:
-          type: string
-          description: Label of the external document attached to the Dispute Folder
-        fileName:
-          type: string
-          description: File name of the external document attached to the Dispute Folder
-        creationDate:
-          type: string
-          format: date-time
-          description: Date of the external document creation attached to the Dispute Folder
-      title: DisputeDocument
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateDisputeResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateDisputeResponse
     CreateEventRequest:
       type: object
       required:
@@ -1518,85 +1574,6 @@ components:
           type: string
           description: Contains a free defined input that will be displayed in the eventMessage in the Dispute Folder
       title: CreateEventRequest
-    CreatePostingResponse:
-      type: object
-      required:
-      - postingAmount
-      - postingTypeReference
-      - creationDate
-      properties:
-        postingAmount:
-          description: Mandatory parameter specifying the posting amount
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        postingTypeReference:
-          type: string
-          description: Contains the identifier of the external reference of the posting
-        creationDate:
-          type: string
-          format: date-time
-          description: The effective date of creation of the posting
-      title: CreatePostingResponse
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
-    ApiResponseCreateSuperFolderResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateSuperFolderResponse'
-      description: Create Superfolder Response entity
-      title: ApiResponseCreateSuperFolderResponse
-    DisputePosting:
-      type: object
-      properties:
-        postingAmount:
-          description: Amount in Scheme Reconciliation Currency associated to the posting (message, write off, cardholder refund ...)
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        message:
-          type: string
-          description: Message information for the posting
-        immediateReimbursement:
-          type: boolean
-          description: Optional parameter for impacting cardholder account immediatly
-        postingTypeReference:
-          type: string
-          description: 'Identifier of the external reference of the posting. The list of values are configured by issuer:
-
-            Three family of postings type:
-
-            - Cardholder: For impacting the cardholder account, possible values can be: ''Cardholder Account'', ''POST TO OTHER ACCOUNT''
-
-            - Issuer: Write off: possible values can be ''ISSUER_ACCOUNT'', ''PROFIT AND LOSS'', ''FRAUD''
-
-            - Foreign exchange fee (''FOREIGN_EXCHANGE_FEE''), Financial Advice Exchange Rate Difference (''ADVANCE_EXCHANGE_RATE_DIFFERENCE''):  the dispute officer can manually create a dispute posting amount to this account'
-        operationReference:
-          type: string
-          description: Internal reference of a transaction in external service, is needed for posting to cardholder account.
-        disputeAdjustmentType:
-          type: string
-          description: Dispute adjustment type
-        creationDate:
-          type: string
-          format: date-time
-          description: Date of posting creation
-      title: DisputePosting
     CreateSuperFolderResponse:
       type: object
       required:
@@ -1610,221 +1587,15 @@ components:
           allOf:
           - $ref: '#/components/schemas/SuperFolderIdentifier'
       title: CreateSuperFolderResponse
-    CreateDocumentRequest:
+    ForbiddenErrorApiResponse:
       type: object
       required:
-      - data
-      - type
-      - fileName
+      - responseMetadata
       properties:
-        data:
-          type: string
-          description: 'The issuer must provide the data of the document in Base64 encoding format that has to be attached to the Dispute Folder.
-
-            The maximum size per document is:
-
-            - 10 Mo for PDF, TIFF or JPEG format (for Visa or Mastercard)
-
-            - 15 Mo for ZIP format (only for Mastercard)'
-        type:
-          type: string
-          description: 'The issuer must provide the document type,  Possible values:
-
-            - ''image/jpeg'':  data of attached document in JPEG format
-
-            - ''image/tiff'':  data of attached document in TIFF format
-
-            - ''application/pdf'':  data of attached document in PDF format
-
-            - ''application/zip'': data of attached document in ZIP format for Mastercard only'
-        label:
-          type: string
-          description: Contains optional label to be displayed on the event generated in the Dispute Folder
-        fileName:
-          type: string
-          description: 'Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder
-
-            Only for a Mastercard operation, the file name must have a maximum lenght of 16 with only alpha and numeric values (no constraint for a VISA operation)'
-        documentTypeId:
-          type: string
-          description: Contains optional document type Id
-      title: CreateDocumentRequest
-    CreateEventResponse:
-      type: object
-      required:
-      - type
-      - creationDate
-      properties:
-        type:
-          type: string
-          description: Contains the dispute Event Type label of the Event to post to the Dispute Folder.
-        creationDate:
-          type: string
-          format: date-time
-          description: The effective date of creation of the event
-      title: CreateEventResponse
-    ForbiddenResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 403
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Forbidden
-          description: Executed REST API status message
-      title: ForbiddenResponseMetadata
-    GenerateChargebackResponse:
-      type: object
-      properties:
-        creationDate:
-          type: string
-          format: date-time
-          description: The effective date of creation of the chargeback
-        schemeCaseId:
-          type: string
-          description: "The \"Scheme Case Id\" received from the Scheme VROL or MasterCom.\nMandatory in the following cases: \n- Present if CBK1 is created by the WS REQUEST in real time with VROL or MasterCom. \n- Present if CBK1 is accepted by VROL or MasterCom"
-      title: GenerateChargebackResponse
-    DisputeMessage:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Identifies the type de the message FIRST_PRESENTMENT, CHARGEBACK etc ... associated to the Dispute Folder
-        status:
-          type: string
-          description: Status of the message  associated to the Dispute Folder
-        creationDate:
-          type: string
-          format: date-time
-          description: Date of the message creation associated to the Dispute Folder
-        amount:
-          description: Amount in Scheme Reconciliation Currency of the message creation associated to the Dispute Folder
+        responseMetadata:
           allOf:
-          - $ref: '#/components/schemas/Amount'
-        reasonCode:
-          type: string
-          description: Reason Code of the message associated to the Dispute Folder
-        reasonCodeDescription:
-          type: string
-          description: Description of the Reason Code of the message associated to the Dispute Folder
-        reverseFlag:
-          type: boolean
-          description: Identifies if the message is reversed or not
-        schemeCaseId:
-          type: string
-          description: The Scheme Case Id received from the Scheme VROL or MasterCom related to a chargeback message
-      title: DisputeMessage
-    UnauthorizedResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 401
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Unauthorized
-          description: Executed REST API status message
-      title: UnauthorizedResponseMetadata
-    DisputeFolderIdentifier:
-      type: object
-      required:
-      - disputeFolderReference
-      properties:
-        disputeFolderReference:
-          type: string
-          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
-        issuerDisputeExternalReference:
-          type: string
-          description: The issuer Dispute External Reference, Present if provided in the request.
-      title: DisputeFolderIdentifier
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
     ApiResponseEntityCreatePostingResponse:
       x-wl-api-response: true
       type: object
@@ -1841,7 +1612,100 @@ components:
           - $ref: '#/components/schemas/CreatePostingResponse'
       description: Issuer response entity
       title: ApiResponseEntityCreatePostingResponse
-    ApiResponseEntityGenerateChargebackResponse:
+    GenerateChargebackRequest:
+      type: object
+      required:
+      - chargebackType
+      properties:
+        chargebackType:
+          type: string
+          description: 'The issuer must provide the type of chargeback. Possible values are:
+
+            - FULL :  Full Chargeback is performed using the transaction Reconciliation amount of the disputed transaction (the chargebackAmount if provided is ignored)
+
+            - PARTIAL : a Partial Chargeback is performed using the provided chargebackAmount
+
+            - HIGH : 2 times FULL reconciliation amount  this is in case for example : the merchant instead of refunding cardholder, he did another debit. In this case he should  reimburse cardholder  2 times (credit HIGH_AMOUNT).'
+        chargebackAmount:
+          description: The Amount to use in case of Partial Chargeback ( chargebackType = PARTIAL)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        chargebackScenario:
+          type: string
+          description: 'Mandatory for VISA
+
+            Defined values associated to specific scenario that allows WL dispute management service to recognize the template of the ChargeBack to generate :
+
+            ChargeBack scenario 1: 10-E-commerce fraud, Value = VISECOMFRAUD
+
+            ChargeBack scenario 2: 12.6 Duplicate Processing, Value = VISDUPLIC
+
+            ChargeBack scenario 3: 13.9 Non-Receipt of Cash, Value = VISNOCASH
+
+            If the value is not a known value, the request is rejected.'
+        reasonCode:
+          type: string
+          description: 'Mandatory for MCI : MCI chargeback reason code (possible values in MCI MPE file), for VISA this field is not provided.
+
+            If the value is not a known value , WL dispute management service rejects the ChargeBack generation.
+
+            One of the fields ChargebackScenario (VISA) or ReasonCode (MCI) should be present.'
+        chargebackDocument:
+          description: 'Contains the document that has to be attached to the ChargeBack depending on the chargebackScenario ( VISA Scheme ) or ReasonCode (MCI Scheme)
+
+            For VISA Scheme : chargebackDocument is Mandatory when ChargebackScenario is VISECOMFRAUD or VISNOCASH
+
+            For MCI Scheme : see  scheme document Chargeback Guide '
+          allOf:
+          - $ref: '#/components/schemas/DisputeDocument'
+        duplicatedTransactionIdentifier:
+          type: string
+          description: 'When the disputed transaction is for "duplicate", provide the "Transaction Identifier" value of the non disputed transaction
+
+            If chargebackScenario= VISDUPLIC, and the duplicatedTransactionIdentifier is not provided, WL dispute management service rejects the ChargeBack generation.'
+      title: GenerateChargebackRequest
+    BadRequestErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadRequestResponseMetadata'
+      title: BadRequestErrorApiResponse
+    BadGatewayErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
+      title: BadGatewayErrorApiResponse
+    Links:
+      type: object
+      required:
+      - self
+      properties:
+        self:
+          type: string
+          example: /x/{x}?x=x
+          description: Service method URL
+        next:
+          type: string
+          example: /x/{x}?page[offset]=2
+          description: URL pagination query parameter next page
+      title: Links
+    UnauthorizedErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
+      title: UnauthorizedResponseMetadata
+    ApiResponseEntityCreateDocumentResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -1854,83 +1718,9 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/GenerateChargebackResponse'
+          - $ref: '#/components/schemas/CreateDocumentResponse'
       description: Issuer response entity
-      title: ApiResponseEntityGenerateChargebackResponse
-    CreateDocumentResponse:
-      type: object
-      required:
-      - fileName
-      - creationDate
-      properties:
-        fileName:
-          type: string
-          description: Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder
-        creationDate:
-          type: string
-          format: date-time
-          description: The effective date of creation of the document
-        documentTypeId:
-          type: string
-          description: Contains Mandatory document Type Id of the document to be displayed on the event generated in the Dispute Folder
-      title: CreateDocumentResponse
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
-    Amount:
-      type: object
-      required:
-      - value
-      - exponent
-      - isoCode
-      properties:
-        value:
-          type: integer
-          format: int64
-          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
-        exponent:
-          type: integer
-          format: int32
-          description: Exponent of Amount. Number of decimal digits.
-        isoCode:
-          type: string
-          description: 'Currency code of amount
-
-            The currency in ISO4217 alphabetic format.
-
-            Example: EUR for Euro'
-      title: Amount
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
+      title: ApiResponseEntityCreateDocumentResponse
     Dispute:
       type: object
       properties:
@@ -2066,7 +1856,57 @@ components:
           format: date-time
           description: Optional parameter external Value Date
       title: Dispute
-    ApiResponseEntityCreateDisputeResponse:
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    UnauthorizedResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 401
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Unauthorized
+          description: Executed REST API status message
+      title: UnauthorizedResponseMetadata
+    ApiResponseEntityDispute:
       x-wl-api-response: true
       type: object
       required:
@@ -2079,25 +1919,10 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/CreateDisputeResponse'
+          - $ref: '#/components/schemas/Dispute'
       description: Issuer response entity
-      title: ApiResponseEntityCreateDisputeResponse
-    CardIdentifier:
-      type: object
-      description: Identification of the card either by Issuer card external reference or by card reference
-      properties:
-        cardReference:
-          type: string
-          description: 'Reference of the card generated by our system, unique per platform.
-
-            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
-        issuerCardExternalReference:
-          type: string
-          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
-
-            This reference is unique per issuer and may be used to carry out research and find information.'
-      title: CardIdentifier
-    ApiResponseEntityCreateDocumentResponse:
+      title: ApiResponseEntityDispute
+    ApiResponseEntityGenerateChargebackResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -2110,91 +1935,45 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/CreateDocumentResponse'
+          - $ref: '#/components/schemas/GenerateChargebackResponse'
       description: Issuer response entity
-      title: ApiResponseEntityCreateDocumentResponse
-    BadRequestErrorApiResponse:
+      title: ApiResponseEntityGenerateChargebackResponse
+    ApiResponseEntityCreateEventResponse:
+      x-wl-api-response: true
       type: object
       required:
       - responseMetadata
       properties:
         responseMetadata:
+          description: Response metadata
           allOf:
-          - $ref: '#/components/schemas/BadRequestResponseMetadata'
-      title: BadRequestErrorApiResponse
-    SuperFolderIdentifier:
+          - $ref: '#/components/schemas/ResponseMetadata'
+        data:
+          description: Response data
+          allOf:
+          - $ref: '#/components/schemas/CreateEventResponse'
+      description: Issuer response entity
+      title: ApiResponseEntityCreateEventResponse
+    DisputeDocument:
       type: object
       properties:
-        superFolderReference:
+        data:
           type: string
-          description: The Dispute Super Folder external reference
-      title: SuperFolderIdentifier
-    GenerateChargebackRequest:
-      type: object
-      required:
-      - chargebackType
-      properties:
-        chargebackType:
+          description: Contains the document (letter) attached to the Dispute Folder encoded in Base64
+        type:
           type: string
-          description: 'The issuer must provide the type of chargeback. Possible values are:
-
-            - FULL :  Full Chargeback is performed using the transaction Reconciliation amount of the disputed transaction (the chargebackAmount if provided is ignored)
-
-            - PARTIAL : a Partial Chargeback is performed using the provided chargebackAmount
-
-            - HIGH : 2 times FULL reconciliation amount  this is in case for example : the merchant instead of refunding cardholder, he did another debit. In this case he should  reimburse cardholder  2 times (credit HIGH_AMOUNT).'
-        chargebackAmount:
-          description: The Amount to use in case of Partial Chargeback ( chargebackType = PARTIAL)
-          allOf:
-          - $ref: '#/components/schemas/Amount'
-        chargebackScenario:
+          description: Type of the document attached to the Dispute Folder
+        label:
           type: string
-          description: 'Mandatory for VISA
-
-            Defined values associated to specific scenario that allows WL dispute management service to recognize the template of the ChargeBack to generate :
-
-            ChargeBack scenario 1: 10-E-commerce fraud, Value = VISECOMFRAUD
-
-            ChargeBack scenario 2: 12.6 Duplicate Processing, Value = VISDUPLIC
-
-            ChargeBack scenario 3: 13.9 Non-Receipt of Cash, Value = VISNOCASH
-
-            If the value is not a known value, the request is rejected.'
-        reasonCode:
+          description: Label of the external document attached to the Dispute Folder
+        fileName:
           type: string
-          description: 'Mandatory for MCI : MCI chargeback reason code (possible values in MCI MPE file), for VISA this field is not provided.
-
-            If the value is not a known value , WL dispute management service rejects the ChargeBack generation.
-
-            One of the fields ChargebackScenario (VISA) or ReasonCode (MCI) should be present.'
-        chargebackDocument:
-          description: 'Contains the document that has to be attached to the ChargeBack depending on the chargebackScenario ( VISA Scheme ) or ReasonCode (MCI Scheme)
-
-            For VISA Scheme : chargebackDocument is Mandatory when ChargebackScenario is VISECOMFRAUD or VISNOCASH
-
-            For MCI Scheme : see  scheme document Chargeback Guide '
-          allOf:
-          - $ref: '#/components/schemas/DisputeDocument'
-        duplicatedTransactionIdentifier:
+          description: File name of the external document attached to the Dispute Folder
+        creationDate:
           type: string
-          description: 'When the disputed transaction is for "duplicate", provide the "Transaction Identifier" value of the non disputed transaction
-
-            If chargebackScenario= VISDUPLIC, and the duplicatedTransactionIdentifier is not provided, WL dispute management service rejects the ChargeBack generation.'
-      title: GenerateChargebackRequest
-    Links:
-      type: object
-      required:
-      - self
-      properties:
-        self:
-          type: string
-          example: /x/{x}?x=x
-          description: Service method URL
-        next:
-          type: string
-          example: /x/{x}?page[offset]=2
-          description: URL pagination query parameter next page
-      title: Links
+          format: date-time
+          description: Date of the external document creation attached to the Dispute Folder
+      title: DisputeDocument
     BadRequestResponseMetadata:
       type: object
       required:
@@ -2220,7 +1999,150 @@ components:
           example: Bad request
           description: Executed REST API status message
       title: BadRequestResponseMetadata
-    ApiResponseEntityDispute:
+    DisputePosting:
+      type: object
+      properties:
+        postingAmount:
+          description: Amount in Scheme Reconciliation Currency associated to the posting (message, write off, cardholder refund ...)
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        message:
+          type: string
+          description: Message information for the posting
+        immediateReimbursement:
+          type: boolean
+          description: Optional parameter for impacting cardholder account immediatly
+        postingTypeReference:
+          type: string
+          description: 'Identifier of the external reference of the posting. The list of values are configured by issuer:
+
+            Three family of postings type:
+
+            - Cardholder: For impacting the cardholder account, possible values can be: ''Cardholder Account'', ''POST TO OTHER ACCOUNT''
+
+            - Issuer: Write off: possible values can be ''ISSUER_ACCOUNT'', ''PROFIT AND LOSS'', ''FRAUD''
+
+            - Foreign exchange fee (''FOREIGN_EXCHANGE_FEE''), Financial Advice Exchange Rate Difference (''ADVANCE_EXCHANGE_RATE_DIFFERENCE''):  the dispute officer can manually create a dispute posting amount to this account'
+        operationReference:
+          type: string
+          description: Internal reference of a transaction in external service, is needed for posting to cardholder account.
+        disputeAdjustmentType:
+          type: string
+          description: Dispute adjustment type
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of posting creation
+      title: DisputePosting
+    NotFoundErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    CreateDisputeResponse:
+      type: object
+      required:
+      - disputeFolderIdentifier
+      properties:
+        disputeFolderIdentifier:
+          description: Dispute Folder Identifier
+          allOf:
+          - $ref: '#/components/schemas/DisputeFolderIdentifier'
+        disputePostings:
+          type: array
+          description: 'Posting operation to perform on the created dispute folder, example:
+
+            - Do a refund towards the cardholder account
+
+            - Do a write-off towards an issuer account (Profit and Loss, Fraud,..)
+
+            - do a Foreign exchange fee, Financial Advice Exchange Rate Difference'
+          items:
+            $ref: '#/components/schemas/CreatePostingResponse'
+        disputeEvents:
+          type: array
+          description: Event to add to the created dispute folder.
+          items:
+            $ref: '#/components/schemas/CreateEventResponse'
+        disputeDocuments:
+          type: array
+          description: List of Documents to add to the created dispute folder
+          items:
+            $ref: '#/components/schemas/CreateDocumentResponse'
+        disputeFolderInternalId:
+          type: string
+          description: 'Dispute Folder ID '
+      title: CreateDisputeResponse
+    CreateDocumentResponse:
+      type: object
+      required:
+      - fileName
+      - creationDate
+      properties:
+        fileName:
+          type: string
+          description: Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder
+        creationDate:
+          type: string
+          format: date-time
+          description: The effective date of creation of the document
+        documentTypeId:
+          type: string
+          description: Contains Mandatory document Type Id of the document to be displayed on the event generated in the Dispute Folder
+      title: CreateDocumentResponse
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    Amount:
+      type: object
+      required:
+      - value
+      - exponent
+      - isoCode
+      properties:
+        value:
+          type: integer
+          format: int64
+          description: Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)
+        exponent:
+          type: integer
+          format: int32
+          description: Exponent of Amount. Number of decimal digits.
+        isoCode:
+          type: string
+          description: 'Currency code of amount
+
+            The currency in ISO4217 alphabetic format.
+
+            Example: EUR for Euro'
+      title: Amount
+    ApiResponseCreateSuperFolderResponse:
       x-wl-api-response: true
       type: object
       required:
@@ -2233,37 +2155,189 @@ components:
         data:
           description: Response data
           allOf:
-          - $ref: '#/components/schemas/Dispute'
-      description: Issuer response entity
-      title: ApiResponseEntityDispute
-    CreatePostingRequest:
+          - $ref: '#/components/schemas/CreateSuperFolderResponse'
+      description: Create Superfolder Response entity
+      title: ApiResponseCreateSuperFolderResponse
+    CardIdentifier:
+      type: object
+      description: Identification of the card either by Issuer card external reference or by card reference
+      properties:
+        cardReference:
+          type: string
+          description: 'Reference of the card generated by our system, unique per platform.
+
+            This reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013).'
+        issuerCardExternalReference:
+          type: string
+          description: 'External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.
+
+            This reference is unique per issuer and may be used to carry out research and find information.'
+      title: CardIdentifier
+    CreateSuperFolderRequest:
+      type: object
+      required:
+      - disputeFolderIdentifiers
+      properties:
+        name:
+          type: string
+          description: The issuer can provide the name of the super folder to be created.Free Text.
+        disputeFolderIdentifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisputeFolderIdentifier'
+          description: The issuer must provide the list of dispute folder identifiers to be attached to the super folder.The dispute folder references must exist in our system and be associated to the same PAN otherwise the super folder will not be created.
+      title: CreateSuperFolderRequest
+    DisputeEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Dispute Event Type  (values shared between WL and the issuer)
+        message:
+          type: string
+          description: Description of the event
+        external:
+          type: boolean
+          description: Indicates if the event is external (value true) or internal (value false)
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of the event creation
+      title: DisputeEvent
+    DisputeFolderIdentifier:
+      type: object
+      required:
+      - disputeFolderReference
+      properties:
+        disputeFolderReference:
+          type: string
+          description: "The Dispute Folder Reference \nPresent if \"Dispute Folder\" creation is successful. \nThe value of this field is constructed by algorithm. Example for IDM4Sempris, it is like this : D-V-6500-1234-1 (D = for Dispute / M = MCI , V= VISA / 6500 = issuerId / 1234 = YDDD = julien date / 1 = the sequence  is constructed under (D-scheme Id- Issuer Id))"
+        issuerDisputeExternalReference:
+          type: string
+          description: The issuer Dispute External Reference, Present if provided in the request.
+      title: DisputeFolderIdentifier
+    CreateEventResponse:
+      type: object
+      required:
+      - type
+      - creationDate
+      properties:
+        type:
+          type: string
+          description: Contains the dispute Event Type label of the Event to post to the Dispute Folder.
+        creationDate:
+          type: string
+          format: date-time
+          description: The effective date of creation of the event
+      title: CreateEventResponse
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
+    DisputeMessage:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Identifies the type de the message FIRST_PRESENTMENT, CHARGEBACK etc ... associated to the Dispute Folder
+        status:
+          type: string
+          description: Status of the message  associated to the Dispute Folder
+        creationDate:
+          type: string
+          format: date-time
+          description: Date of the message creation associated to the Dispute Folder
+        amount:
+          description: Amount in Scheme Reconciliation Currency of the message creation associated to the Dispute Folder
+          allOf:
+          - $ref: '#/components/schemas/Amount'
+        reasonCode:
+          type: string
+          description: Reason Code of the message associated to the Dispute Folder
+        reasonCodeDescription:
+          type: string
+          description: Description of the Reason Code of the message associated to the Dispute Folder
+        reverseFlag:
+          type: boolean
+          description: Identifies if the message is reversed or not
+        schemeCaseId:
+          type: string
+          description: The Scheme Case Id received from the Scheme VROL or MasterCom related to a chargeback message
+      title: DisputeMessage
+    ForbiddenResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 403
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Forbidden
+          description: Executed REST API status message
+      title: ForbiddenResponseMetadata
+    CreatePostingResponse:
       type: object
       required:
       - postingAmount
       - postingTypeReference
+      - creationDate
       properties:
         postingAmount:
-          description: Mandatory parameter specifying the posting amount. The posting amount can be negative amount (- sign in the beginning of the amount digits)
+          description: Mandatory parameter specifying the posting amount
           allOf:
           - $ref: '#/components/schemas/Amount'
-        message:
-          type: string
-          description: Description message that will associated to the posted operation in the statement
-        immediateReimbursement:
-          type: boolean
-          description: Optional parameter for impacting card holder account immediately
         postingTypeReference:
           type: string
-          description: 'The issuer must provide the identifier of the external reference of the posting. The list of values are configured by issuer:
-
-            Three family of postings type:
-
-            - Cardholder: For impacting the cardholder account, possible values can be: ''Cardholder Account'', ''POST TO OTHER ACCOUNT''
-
-            - Issuer: Write off: possible values can be ''ISSUER_ACCOUNT'', ''PROFIT AND LOSS'', ''FRAUD''
-
-            - Foreign exchange fee (''FOREIGN_EXCHANGE_FEE''), Financial Advice Exchange Rate Difference (''ADVANCE_EXCHANGE_RATE_DIFFERENCE''):  the dispute officer can manually create a dispute posting amount to this account'
-      title: CreatePostingRequest
+          description: Contains the identifier of the external reference of the posting
+        creationDate:
+          type: string
+          format: date-time
+          description: The effective date of creation of the posting
+      title: CreatePostingResponse
     CreateDisputeRequest:
       type: object
       properties:
@@ -2326,130 +2400,45 @@ components:
           type: string
           description: 'List of possible values: DISPUTE_REASON, automatically assigns the dispute to the user in charge based on the dispute reason.'
       title: CreateDisputeRequest
-    UnauthorizedErrorApiResponse:
+    CreateDocumentRequest:
       type: object
       required:
-      - responseMetadata
+      - data
+      - type
+      - fileName
       properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/UnauthorizedResponseMetadata'
-      title: UnauthorizedResponseMetadata
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
+        data:
           type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
-    CreateSuperFolderRequest:
-      type: object
-      required:
-      - disputeFolderIdentifiers
-      properties:
-        name:
-          type: string
-          description: The issuer can provide the name of the super folder to be created.Free Text.
-        disputeFolderIdentifiers:
-          type: array
-          items:
-            $ref: '#/components/schemas/DisputeFolderIdentifier'
-          description: The issuer must provide the list of dispute folder identifiers to be attached to the super folder.The dispute folder references must exist in our system and be associated to the same PAN otherwise the super folder will not be created.
-      title: CreateSuperFolderRequest
-    BadGatewayErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/BadGatewayResponseMetadata'
-      title: BadGatewayErrorApiResponse
-    DisputeEvent:
-      type: object
-      properties:
+          description: 'The issuer must provide the data of the document in Base64 encoding format that has to be attached to the Dispute Folder.
+
+            The maximum size per document is:
+
+            - 10 Mo for PDF, TIFF or JPEG format (for Visa or Mastercard)
+
+            - 15 Mo for ZIP format (only for Mastercard)'
         type:
           type: string
-          description: Dispute Event Type  (values shared between WL and the issuer)
-        message:
-          type: string
-          description: Description of the event
-        external:
-          type: boolean
-          description: Indicates if the event is external (value true) or internal (value false)
-        creationDate:
-          type: string
-          format: date-time
-          description: Date of the event creation
-      title: DisputeEvent
-    ApiResponseEntityCreateEventResponse:
-      x-wl-api-response: true
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          description: Response metadata
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-        data:
-          description: Response data
-          allOf:
-          - $ref: '#/components/schemas/CreateEventResponse'
-      description: Issuer response entity
-      title: ApiResponseEntityCreateEventResponse
-    CreateDisputeResponse:
-      type: object
-      required:
-      - disputeFolderIdentifier
-      properties:
-        disputeFolderIdentifier:
-          description: Dispute Folder Identifier
-          allOf:
-          - $ref: '#/components/schemas/DisputeFolderIdentifier'
-        disputePostings:
-          type: array
-          description: 'Posting operation to perform on the created dispute folder, example:
+          description: 'The issuer must provide the document type,  Possible values:
 
-            - Do a refund towards the cardholder account
+            - ''image/jpeg'':  data of attached document in JPEG format
 
-            - Do a write-off towards an issuer account (Profit and Loss, Fraud,..)
+            - ''image/tiff'':  data of attached document in TIFF format
 
-            - do a Foreign exchange fee, Financial Advice Exchange Rate Difference'
-          items:
-            $ref: '#/components/schemas/CreatePostingResponse'
-        disputeEvents:
-          type: array
-          description: Event to add to the created dispute folder.
-          items:
-            $ref: '#/components/schemas/CreateEventResponse'
-        disputeDocuments:
-          type: array
-          description: List of Documents to add to the created dispute folder
-          items:
-            $ref: '#/components/schemas/CreateDocumentResponse'
-        disputeFolderInternalId:
+            - ''application/pdf'':  data of attached document in PDF format
+
+            - ''application/zip'': data of attached document in ZIP format for Mastercard only'
+        label:
           type: string
-          description: 'Dispute Folder ID '
-      title: CreateDisputeResponse
+          description: Contains optional label to be displayed on the event generated in the Dispute Folder
+        fileName:
+          type: string
+          description: 'Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder
+
+            Only for a Mastercard operation, the file name must have a maximum lenght of 16 with only alpha and numeric values (no constraint for a VISA operation)'
+        documentTypeId:
+          type: string
+          description: Contains optional document type Id
+      title: CreateDocumentRequest
     InternalServerErrorErrorApiResponse:
       type: object
       required:
@@ -2459,6 +2448,17 @@ components:
           allOf:
           - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
       title: InternalServerErrorErrorApiResponse
+    GenerateChargebackResponse:
+      type: object
+      properties:
+        creationDate:
+          type: string
+          format: date-time
+          description: The effective date of creation of the chargeback
+        schemeCaseId:
+          type: string
+          description: "The \"Scheme Case Id\" received from the Scheme VROL or MasterCom.\nMandatory in the following cases: \n- Present if CBK1 is created by the WS REQUEST in real time with VROL or MasterCom. \n- Present if CBK1 is accepted by VROL or MasterCom"
+      title: GenerateChargebackResponse
   securitySchemes:
     basic:
       type: oauth2

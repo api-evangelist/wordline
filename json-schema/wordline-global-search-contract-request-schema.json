@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-global-search-contract-request-schema.json",
+  "title": "GlobalSearchContractRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-contract-global-search-api-openapi.yml#/components/schemas/GlobalSearchContractRequest",
+  "type": "object",
+  "properties": {
+    "issuerId": {
+      "type": "string",
+      "description": "The search is performed by default on all issuers allowed for the user (depending on its rights)\n- The user can limit the search to one issuer (optional).\n- If provided, the list of issuerIds must not be provided, otherwise the search is not performed (an error is generated)."
+    },
+    "includeSubIssuers": {
+      "type": "boolean",
+      "description": "The user can request to include in the search the sub issuers of an issuer, limited to issuers allowed for the user depending on its rights, only if an issuerId is provided.\nDefault value is false.",
+      "default": false
+    },
+    "issuerIds": {
+      "description": "The search is performed by default on all issuers allowed for the user (depending on its rights)\n- The user can limit the search to a list of issuers (optional)\n- If provided, the issuerId must not be provided, otherwise the search is not performed (an error is generated).\n- If at least one issuer is not allowed for this user among the provided list of issuers, the search is not performed (an error is generated).",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "account": {
+      "description": "If the search is based on account's criteria, the issuer must provide only one of the following data: \n- iban of the account \n- account reference \n- issuer account external reference \n- account membership number 1 \n- account membership number 2",
+      "allOf": [
+        {
+          "$ref": "#/$defs/GlobalSearchContractRequestAccount"
+        }
+      ]
+    },
+    "customer": {
+      "description": "If the search is based on customer's criteria, the issuer must provide : \n- either personal data (with at least the first name and last name of the customer)  or\n- customer identifier : customer reference or issuer customer external reference  \n- or partner external reference",
+      "allOf": [
+        {
+          "$ref": "#/$defs/GlobalSearchContractRequestCustomer"
+        }
+      ]
+    },
+    "card": {
+      "description": "If the search is based on card's criteria, the issuer must provide only one of the following data: \n-PAN of the card \n-card Contract Reference  \n-issuer Card Contract External Reference  \n-cardReference  \n-issuerCardExternalReference",
+      "allOf": [
+        {
+          "$ref": "#/$defs/GlobalSearchContractRequestCard"
+        }
+      ]
+    },
+    "retrieveParentAccount": {
+      "description": "Optional criteria to enrich the response. Can only be used if the search criteria refers to an account's criteria. \n If false (empty), only the account corresponding to the initial criteria will be returned. \n Else, the parent account in the hierarchy will be also returned (only the level n+1).\n Only applicable if the expendable params  ‘Accounts’ or ‘AccountIdentifiers’ are requested.\n- Customer data response : based on the account found, every customers, owner of one of these accounts are returned in the response.\n- Card data response : based on the accounts found, every card contracts and their cards associated to one of these accounts are returned.",
+      "type": "boolean"
+    },
+    "retrieveChildAccounts": {
+      "description": "Optional criteria to enrich the response. Can only be used if the search criteria refers to an account's criteria.  \n If false (empty), only the account corresponding to the initial criteria will be returned. \n Else, the children accounts in the hierarchy will be also returned (only the level n-1). \n Only applicable if the expendable params  ‘Accounts’ or ‘AccountIdentifiers’ are requested.\n- customer data response : based on the account found, every customers, owner of one of these accounts are returned in the response.\n- Card data response : based on the accounts found, every card contracts and their cards associated to one of these accounts are returned.",
+      "type": "boolean"
+    },
+    "retrievePreviousCards": {
+      "description": "Optional criteria to enrich the response. By default, the value is false. If true, all cards of the card contract will be retrieved in cardContracts.cards else only the latest card issued (by PAN) in card contract will be available in response (only used when embed field cardContracts.cards is requested)",
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "AccountIdentifier": {
+      "type": "object",
+      "properties": {
+        "accountReference": {
+          "type": "string",
+          "description": "Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used."
+        },
+        "issuerAccountExternalReference": {
+          "type": "string",
+          "description": "Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm."
+        }
+      },
+      "title": "AccountIdentifier"
+    },
+    "CardContractIdentifier": {
+      "type": "object",
+      "description": "Identification of the card contract either by Issuer card contract external reference or by card contract reference",
+      "properties": {
+        "cardContractReference": {
+          "type": "string",
+          "description": "The reference of the card contract in our system, unique per platform\nThis reference is calculated from an algorithm (currently a unique algorithm 'DefaultCardContractReferenceAlgorithm' referenced in the card profile version).\nThe reference is composed of the issuerId + a sequence number of 16 digits (e;g; 100042000000000095003, where 10004 is the issuerId)"
+        },
+        "issuerCardContractExternalReference": {
+          "type": "string",
+          "description": "The external reference of the card contract provided by the issuer\nThis reference is unique per issuer and may be used to carry out research and find information."
+        }
+      },
+      "title": "CardContractIdentifier"
+    },
+    "CardIdentifier": {
+      "type": "object",
+      "description": "Identification of the card either by Issuer card external reference or by card reference",
+      "properties": {
+        "cardReference": {
+          "type": "string",
+          "description": "Reference of the card generated by our system, unique per platform.\nThis reference is calculated sequentially by an internal algorithm on 16 digits (e.g. 2000000000096013)."
+        },
+        "issuerCardExternalReference": {
+          "type": "string",
+          "description": "External reference of the card provided by the issuer or calculated by the system if the external reference generation algorithm is configured for the issuer.\nThis reference is unique per issuer and may be used to carry out research and find information."
+        }
+      },
+      "title": "CardIdentifier"
+    },
+    "CustomerIdentifier": {
+      "type": "object",
+      "description": "Identification of the updated customer either by Issuer customer external reference or by customer reference",
+      "properties": {
+        "customerReference": {
+          "type": "string",
+          "description": "Reference computed internally by our system"
+        },
+        "issuerCustomerExternalReference": {
+          "type": "string",
+          "description": "Reference provided by the Issuer"
+        }
+      },
+      "title": "CustomerIdentifier"
+    },
+    "GlobalSearchContractRequestAccount": {
+      "type": "object",
+      "properties": {
+        "iban": {
+          "description": "IBAN of an account is a criteria that is exclusive when searching with account's criteria.",
+          "type": "string"
+        },
+        "accountMembershipNumber1": {
+          "description": "Account membership number 1 is a criteria that is exclusive when searching with account's criteria.",
+          "type": "string"
+        },
+        "accountMembershipNumber2": {
+          "description": "Account membership number 2 is a criteria that is exclusive when searching with account's criteria.",
+          "type": "string"
+        },
+        "accountIdentifier": {
+          "description": "Account reference or issuer account external reference is a criteria that is exclusive when searching with account's criteria.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        }
+      },
+      "title": "GlobalSearchContractRequest.Account"
+    },
+    "GlobalSearchContractRequestCard": {
+      "type": "object",
+      "properties": {
+        "pan": {
+          "description": "PAN of a card is a criteria that is exclusive when searching with card's criteria.",
+          "type": "string"
+        },
+        "cardIdentifier": {
+          "description": "Card reference or issuer card external reference is a criteria that is exclusive when searching with card's criteria.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CardIdentifier"
+            }
+          ]
+        },
+        "cardContractIdentifier": {
+          "description": "Card contract reference or issuer card contract external reference is a criteria that is exclusive when searching with card's criteria.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CardContractIdentifier"
+            }
+          ]
+        }
+      },
+      "title": "GlobalSearchContractRequest.Card"
+    },
+    "GlobalSearchContractRequestCustomer": {
+      "type": "object",
+      "properties": {
+        "customerCriteria": {
+          "description": "If Personal Data are used as customer's criteria, the issuer must provide : : \n- first name and last name of the customer  \n- and optionally birth date, postal address (postal code, street name and/or building number), phonetic criteria",
+          "allOf": [
+            {
+              "$ref": "#/$defs/GlobalSearchContractRequestPersonalData"
+            }
+          ]
+        },
+        "customerIdentifier": {
+          "description": "Customer reference or issuer external reference of the customer is a criteria that is exclusive when searching with customer's criteria.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CustomerIdentifier"
+            }
+          ]
+        },
+        "partnerExternalReference": {
+          "description": "Partner external reference is a criteria that is exclusive when searching with customer's criteria.",
+          "type": "string"
+        }
+      },
+      "title": "GlobalSearchContractRequest.Customer"
+    },
+    "GlobalSearchContractRequestPersonalData": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName"
+      ],
+      "properties": {
+        "postalAddress": {
+          "$ref": "#/$defs/GlobalSearchContractRequestPostalAddress"
+        },
+        "phoneticCriteria": {
+          "$ref": "#/$defs/GlobalSearchContractRequestPhoneticCriteria"
+        },
+        "firstName": {
+          "description": "First name of the customer ('%' allows to achieve a search with only a partial input, 'Phil%', '%urchill', 'Al%gang') is a mandatory criteria when searching customer with PersonalData.",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the customer ('%' allows to achieve a search with only a partial input, 'Phil%', '%urchill', 'Al%gang')  is a mandatory criteria when searching customer with PersonalData.",
+          "type": "string"
+        },
+        "birthDate": {
+          "description": "Birthdate of the customer ('%' allows to achieve a search with only a partial input, '12/%', '%1970', '12%80') is an optional criteria when searching customer with PersonalData.",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "GlobalSearchContractRequest.PersonalData"
+    },
+    "GlobalSearchContractRequestPhoneticCriteria": {
+      "type": "object",
+      "properties": {
+        "phoneticSearch": {
+          "description": "Can only be used if the search criteria refers to PersonalData. Indicate if a specific phonetic algorithm must be applied on first name and last name",
+          "type": "boolean"
+        },
+        "phoneticAlgorithm": {
+          "description": "Can only be used if the search criteria refers to PersonalData. The list of possible phonetic algorithms are determined for each issuer (configuration). If the indicator is set to true but no phonetic algorithm is provided then all configured phonetic algorithms are applied for the research.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "GlobalSearchContractRequest.PhoneticCriteria"
+    },
+    "GlobalSearchContractRequestPostalAddress": {
+      "type": "object",
+      "properties": {
+        "postCode": {
+          "description": "Postal code ('%' allows to achieve a search with only a partial input, '12/%', '%10', '01%0') is an optional criteria when searching customer with PersonalData.",
+          "type": "string"
+        },
+        "streetName": {
+          "description": "Street name of the postal address ('%' allows to achieve a search with only a partial input, 'Plat%', '%urchill', 'Al%gang') is an optional criteria when searching customer with PersonalData.",
+          "type": "string"
+        },
+        "buildingNumber": {
+          "description": "Building number of the postal address ('%' allows to achieve a search with only a partial input, '4b%', '%201', '17%a') is an optional criteria when searching customer with PersonalData.",
+          "type": "string"
+        }
+      },
+      "title": "GlobalSearchContractRequest.PostalAddress"
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-temporary-credit-limit-request-schema.json",
+  "title": "CreateTemporaryCreditLimitRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-temporary-credit-limit-api-openapi.yml#/components/schemas/CreateTemporaryCreditLimitRequest",
+  "type": "object",
+  "required": [
+    "activationEndTime",
+    "temporaryCreditLimitAmount"
+  ],
+  "properties": {
+    "temporaryCreditLimitAmount": {
+      "description": "Refer to TemporaryCreditLimit.temporaryCreditLimitAmount",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Amount"
+        }
+      ]
+    },
+    "activationStartTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Refer to TemporaryCreditLimit.activationStartTime"
+    },
+    "activationEndTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Refer to TemporaryCreditLimit.activationEndTime"
+    },
+    "manageOverlap": {
+      "type": "boolean",
+      "default": false,
+      "description": "The parameter has the following possible values: TRUE/FALSE. In case it is set to 'TRUE', and there is overlap of future dates between two and more temporary credit limits, then the most recent one will be prioritized and the previous ones' dates will be adjusted accordingly. In case it is set to 'FALSE' and a creation of new temporary credit limit is requested, the dates of which overlap with an existing one, then the new request will be rejected. The default value of the parameter is set to 'FALSE'"
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    }
+  }
+}

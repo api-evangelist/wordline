@@ -738,123 +738,6 @@ paths:
           content: {}
 components:
   schemas:
-    ExternalIds:
-      type: object
-      properties:
-        vatNumber:
-          type: string
-          description: VAT number of the merchant
-          example: NL123456789B01
-        chamberOfCommerce:
-          type: string
-          description: Chamber of commerce number of the merchant
-          example: '12345678'
-        socialSecurityNumber:
-          type: string
-          description: Social security number of the merchant (only allowed in specific countries)
-          example: '123456789'
-        branchOrganisationId:
-          type: string
-          description: Identification of the merchant by his branch organization
-          example: '1234'
-    MerchantContractIdentification:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-        holdingId:
-          type: string
-          description: Unique identification of the holding, determined by equensWorldline
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-    ErrorData:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Unique code of the error as returned by the system handling the request
-        keyword:
-          type: string
-          description: JSON keyword from the request message that triggered the error
-        errorMessage:
-          type: string
-          description: Message explaining the error
-    MerchantListData:
-      type: object
-      properties:
-        contractIdentification:
-          type: object
-          properties:
-            acquirerId:
-              type: string
-              description: Unique identification of the acquirer, determined by equensWorldline
-              example: '315000001'
-            holdingId:
-              type: integer
-              description: Unique identification of the holding, determined by equensWorldline
-              format: int32
-              example: 200
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-          example: '1001'
-        merchantName:
-          type: string
-          description: Name of the merchant
-          example: Event Payment Solutions 1
-        status:
-          type: string
-          description: The status of this entity. Values [Active]
-          example: Active
-        address:
-          $ref: '#/components/schemas/Address'
-        merchantDetailsURI:
-          type: string
-          description: URI to get the merchant details
-          example: acquiring/contract/v2.0/acquirers/XXX/merchants/XXX
-    PostMerchantAddresses:
-      required:
-      - addresses
-      type: object
-      properties:
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AddressDetails'
-    MerchantData:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/MerchantContractIdentification'
-        basic:
-          $ref: '#/components/schemas/MerchantBasic'
-        externalIds:
-          $ref: '#/components/schemas/ExternalIds'
-        refundLimits:
-          $ref: '#/components/schemas/MerchantRefundLimits'
-        clusters:
-          type: array
-          items:
-            $ref: '#/components/schemas/MerchantClusters'
-        status:
-          $ref: '#/components/schemas/MerchantStatus'
-        addressDetailsURI:
-          type: string
-          description: URI to get the merchant address details
-          example: acquiring/contract/v2.0/acquirers/XXX/merchants/XXX/addresses
-    PostMerchant:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/PostMerchantContractIdentification'
-        basic:
-          $ref: '#/components/schemas/PostMerchantBasic'
-        externalIds:
-          $ref: '#/components/schemas/ExternalIds'
-        refundLimits:
-          $ref: '#/components/schemas/MerchantRefundLimits'
     AddressDetails:
       required:
       - addressType
@@ -928,15 +811,78 @@ components:
           description: Preferred communication type of the contact person registered with the address. Values [1 = Post, 2 = Fax, 3 = E-mail]
           format: int32
           example: 3
-    MerchantClusters:
+    ErrorData:
       type: object
       properties:
-        type:
+        code:
           type: string
-          description: Type of the cluster
-        name:
+          description: Unique code of the error as returned by the system handling the request
+        keyword:
           type: string
-          description: Name of the cluster
+          description: JSON keyword from the request message that triggered the error
+        errorMessage:
+          type: string
+          description: Message explaining the error
+    CorrelationResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          description: Unique ID that was generated for the specific change
+          format: uuid
+    PostMerchant:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/PostMerchantContractIdentification'
+        basic:
+          $ref: '#/components/schemas/PostMerchantBasic'
+        externalIds:
+          $ref: '#/components/schemas/ExternalIds'
+        refundLimits:
+          $ref: '#/components/schemas/MerchantRefundLimits'
+    MerchantData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantContractIdentification'
+        basic:
+          $ref: '#/components/schemas/MerchantBasic'
+        externalIds:
+          $ref: '#/components/schemas/ExternalIds'
+        refundLimits:
+          $ref: '#/components/schemas/MerchantRefundLimits'
+        clusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/MerchantClusters'
+        status:
+          $ref: '#/components/schemas/MerchantStatus'
+        addressDetailsURI:
+          type: string
+          description: URI to get the merchant address details
+          example: acquiring/contract/v2.0/acquirers/XXX/merchants/XXX/addresses
+    MerchantContractIdentification:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        holdingId:
+          type: string
+          description: Unique identification of the holding, determined by equensWorldline
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+    MerchantStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the merchant. Values [Active]
+        commencementDate:
+          type: string
+          description: Date at which the merchant was registered
     MerchantBasic:
       type: object
       properties:
@@ -984,15 +930,84 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorData'
-    MerchantStatus:
+    ExternalIds:
       type: object
       properties:
+        vatNumber:
+          type: string
+          description: VAT number of the merchant
+          example: NL123456789B01
+        chamberOfCommerce:
+          type: string
+          description: Chamber of commerce number of the merchant
+          example: '12345678'
+        socialSecurityNumber:
+          type: string
+          description: Social security number of the merchant (only allowed in specific countries)
+          example: '123456789'
+        branchOrganisationId:
+          type: string
+          description: Identification of the merchant by his branch organization
+          example: '1234'
+    MerchantListData:
+      type: object
+      properties:
+        contractIdentification:
+          type: object
+          properties:
+            acquirerId:
+              type: string
+              description: Unique identification of the acquirer, determined by equensWorldline
+              example: '315000001'
+            holdingId:
+              type: integer
+              description: Unique identification of the holding, determined by equensWorldline
+              format: int32
+              example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1001'
+        merchantName:
+          type: string
+          description: Name of the merchant
+          example: Event Payment Solutions 1
         status:
           type: string
-          description: The status of the merchant. Values [Active]
-        commencementDate:
+          description: The status of this entity. Values [Active]
+          example: Active
+        address:
+          $ref: '#/components/schemas/Address'
+        merchantDetailsURI:
           type: string
-          description: Date at which the merchant was registered
+          description: URI to get the merchant details
+          example: acquiring/contract/v2.0/acquirers/XXX/merchants/XXX
+    MerchantIdentificationResponse:
+      type: object
+      properties:
+        acquirerId:
+          type: string
+          description: Unique identification of the acquirer, determined by equensWorldline
+        holdingId:
+          type: string
+          description: Unique identification of the holding, determined by equensWorldline
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+        contractId:
+          type: string
+          description: Unique identification of the contract, determined by the acquirer
+          example: '10011'
+        siteId:
+          type: integer
+          description: Unique identification of the site within the contract
+          format: int64
+        cardAcceptorId:
+          type: string
+          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
+        terminalId:
+          type: string
+          description: Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
     Address:
       type: object
       properties:
@@ -1037,32 +1052,6 @@ components:
           type: string
           description: E-mail address of the contact person registered with the address
           example: M.Scott@eventpaymentsolutions.com
-    MerchantIdentificationResponse:
-      type: object
-      properties:
-        acquirerId:
-          type: string
-          description: Unique identification of the acquirer, determined by equensWorldline
-        holdingId:
-          type: string
-          description: Unique identification of the holding, determined by equensWorldline
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-        contractId:
-          type: string
-          description: Unique identification of the contract, determined by the acquirer
-          example: '10011'
-        siteId:
-          type: integer
-          description: Unique identification of the site within the contract
-          format: int64
-        cardAcceptorId:
-          type: string
-          description: Unique identification of the site in accordance with payment scheme rules. Some Dutch acquirers have a waiver not to fill this field. In that case it contains the merchant ID
-        terminalId:
-          type: string
-          description: Identification of the terminal. Within the Dutch model a terminal ID uniquely identifies one specific physical device. Within other terminal models the terminal ID is only considered unique within the context of its own site (card acceptor ID)
     MerchantRefundLimits:
       type: object
       properties:
@@ -1070,6 +1059,15 @@ components:
           type: string
           description: Maximum daily total refund amount per merchant in Euro
           example: '200000.00'
+    PostMerchantAddresses:
+      required:
+      - addresses
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
     Operation:
       type: object
       properties:
@@ -1096,6 +1094,44 @@ components:
         from:
           type: string
           description: Not elevant for currently supported operations
+    PostMerchantResponse:
+      type: object
+      properties:
+        correlationId:
+          type: string
+          format: uuid
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantIdentificationResponse'
+    MerchantAddressData:
+      type: object
+      properties:
+        contractIdentification:
+          $ref: '#/components/schemas/MerchantContractIdentification'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDetails'
+    PostMerchantContractIdentification:
+      type: object
+      properties:
+        holdingId:
+          type: integer
+          description: Unique identification of the holding, determined by equensWorldline
+          format: int32
+          example: 200
+        merchantId:
+          type: string
+          description: Unique identification of the merchant, determined by the acquirer
+          example: '1001'
+    MerchantClusters:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of the cluster
+        name:
+          type: string
+          description: Name of the cluster
     PostMerchantBasic:
       type: object
       properties:
@@ -1136,39 +1172,3 @@ components:
           description: Country of origin (home country) of a merchant that is owned by or under control of a government
           format: int32
           example: 729
-    CorrelationResponse:
-      type: object
-      properties:
-        correlationId:
-          type: string
-          description: Unique ID that was generated for the specific change
-          format: uuid
-    MerchantAddressData:
-      type: object
-      properties:
-        contractIdentification:
-          $ref: '#/components/schemas/MerchantContractIdentification'
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AddressDetails'
-    PostMerchantResponse:
-      type: object
-      properties:
-        correlationId:
-          type: string
-          format: uuid
-        contractIdentification:
-          $ref: '#/components/schemas/MerchantIdentificationResponse'
-    PostMerchantContractIdentification:
-      type: object
-      properties:
-        holdingId:
-          type: integer
-          description: Unique identification of the holding, determined by equensWorldline
-          format: int32
-          example: 200
-        merchantId:
-          type: string
-          description: Unique identification of the merchant, determined by the acquirer
-          example: '1001'

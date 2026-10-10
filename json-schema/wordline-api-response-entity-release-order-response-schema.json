@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-release-order-response-schema.json",
+  "title": "ApiResponseEntityReleaseOrderResponse",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-order-api-openapi.yml#/components/schemas/ApiResponseEntityReleaseOrderResponse",
+  "x-wl-api-response": true,
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    },
+    "data": {
+      "description": "Response data",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ReleaseOrderResponse"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "OrderIdentifier": {
+      "type": "object",
+      "description": "Order reference calculated by our system",
+      "properties": {
+        "orderReference": {
+          "type": "string",
+          "description": "The reference of the order in our system, unique per platform\nThis reference is calculated from an algorithm configurable per issuer (currently a unique algorithm is defined).\nThe reference is composed of the  creation date of the order (YYYYMMDD) + a sequence number of 16 digits (e;g; 202203212000000000097002, where 20220321 is the date when the order is created)"
+        }
+      },
+      "title": "OrderIdentifier"
+    },
+    "ReleaseOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderIdentifier": {
+          "description": "Order Identifier",
+          "allOf": [
+            {
+              "$ref": "#/$defs/OrderIdentifier"
+            }
+          ]
+        },
+        "currentInternalStatus": {
+          "type": "string",
+          "description": "Current Internal Status"
+        },
+        "statusDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Current Internal Status Date"
+        }
+      },
+      "title": "ReleaseOrderResponse"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

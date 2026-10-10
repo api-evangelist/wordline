@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-dispute-request-schema.json",
+  "title": "CreateDisputeRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-dispute-api-openapi.yml#/components/schemas/CreateDisputeRequest",
+  "type": "object",
+  "properties": {
+    "disputeReason": {
+      "type": "string",
+      "description": "Indicates the dispute reason. Example of values are : UNKNOWN_CARD, HIGH_AMOUNT, DUPLICATE_TRANSACTION, LATE_PRESENTMENT , INVALID_PAYMENT, INACTIVE_CARD, CREATED_CARD, COUNTERFEIT_CARD, BLOCKED_CARD, ACTIVE_CARD_TED."
+    },
+    "refundRedebitIndicator": {
+      "type": "string",
+      "description": "Indicator to perform or not a Refund (for Debit transaction) / Redebit (for Credit transaction) on 'Cardholder Account' on the disputed transaction. Possible values:\n- FULL: Refund Redebit the full amount of the transaction.\n- PARTIAL : Refund Redebit a partial amount, the partial amount should be provided in the field Refund Redebit Amount\n- NONE : no refund redebit is requested, this is the default value"
+    },
+    "refundRedebitAmount": {
+      "description": "The issuer should provide the Amount to Refund or Redebit when Refund Redebit Indicator is PARTIAL. Otherwise it is not checked",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Amount"
+        }
+      ]
+    },
+    "declareFraudIndicator": {
+      "type": "boolean",
+      "description": "Indicator to perform a fraud declaration. Possible values:\ntrue: fraud declaration will be sent to the scheme.\nfalse: No fraud declaration, this is the default value."
+    },
+    "issuerDisputeExternalReference": {
+      "type": "string",
+      "description": "The issuer Dispute External Reference : should be unique by issuer, there is no constraint regarding the format, only  maximum length is 50 CHAR."
+    },
+    "originalValueDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional parameter external Value Date"
+    },
+    "disputePostings": {
+      "type": "array",
+      "description": "Issuer can provide a posting operation to perform on the created dispute folder, example:\n- Do a refund towards the cardholder account\n- Do a write-off towards an issuer account (Profit and Loss, Fraud,..)\n- do a Foreign exchange fee, Financial Advice Exchange Rate Difference",
+      "items": {
+        "$ref": "#/$defs/CreatePostingRequest"
+      }
+    },
+    "disputeEvents": {
+      "type": "array",
+      "description": "Issuer can provide an event to add to the created dispute folder.\nThis manual event will be added to events generated internally by our system.\nFor example, the issuer can add an event to indicate that there is a communication from/to cardholder.",
+      "items": {
+        "$ref": "#/$defs/CreateEventRequest"
+      }
+    },
+    "disputeDocuments": {
+      "type": "array",
+      "description": "Issuer can provide a list of Documents to add to the created dispute folder.",
+      "items": {
+        "$ref": "#/$defs/CreateDocumentRequest"
+      }
+    },
+    "autoAssignmentRule": {
+      "type": "string",
+      "description": "List of possible values: DISPUTE_REASON, automatically assigns the dispute to the user in charge based on the dispute reason."
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    },
+    "CreateDocumentRequest": {
+      "type": "object",
+      "required": [
+        "data",
+        "type",
+        "fileName"
+      ],
+      "properties": {
+        "data": {
+          "type": "string",
+          "description": "The issuer must provide the data of the document in Base64 encoding format that has to be attached to the Dispute Folder.\nThe maximum size per document is:\n- 10 Mo for PDF, TIFF or JPEG format (for Visa or Mastercard)\n- 15 Mo for ZIP format (only for Mastercard)"
+        },
+        "type": {
+          "type": "string",
+          "description": "The issuer must provide the document type,  Possible values:\n- 'image/jpeg':  data of attached document in JPEG format\n- 'image/tiff':  data of attached document in TIFF format\n- 'application/pdf':  data of attached document in PDF format\n- 'application/zip': data of attached document in ZIP format for Mastercard only"
+        },
+        "label": {
+          "type": "string",
+          "description": "Contains optional label to be displayed on the event generated in the Dispute Folder"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Contains Mandatory File Name of the document to be displayed on the event generated in the Dispute Folder\nOnly for a Mastercard operation, the file name must have a maximum lenght of 16 with only alpha and numeric values (no constraint for a VISA operation)"
+        },
+        "documentTypeId": {
+          "type": "string",
+          "description": "Contains optional document type Id"
+        }
+      },
+      "title": "CreateDocumentRequest"
+    },
+    "CreateEventRequest": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Contains the dispute Event Type label of the Event to post to the Dispute Folder.\nThe allowed event type list is configured per issuer in the platform. Type value generally used by issuers: 'Comment'"
+        },
+        "message": {
+          "type": "string",
+          "description": "Contains a free defined input that will be displayed in the eventMessage in the Dispute Folder"
+        }
+      },
+      "title": "CreateEventRequest"
+    },
+    "CreatePostingRequest": {
+      "type": "object",
+      "required": [
+        "postingAmount",
+        "postingTypeReference"
+      ],
+      "properties": {
+        "postingAmount": {
+          "description": "Mandatory parameter specifying the posting amount. The posting amount can be negative amount (- sign in the beginning of the amount digits)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "message": {
+          "type": "string",
+          "description": "Description message that will associated to the posted operation in the statement"
+        },
+        "immediateReimbursement": {
+          "type": "boolean",
+          "description": "Optional parameter for impacting card holder account immediately"
+        },
+        "postingTypeReference": {
+          "type": "string",
+          "description": "The issuer must provide the identifier of the external reference of the posting. The list of values are configured by issuer:\nThree family of postings type:\n- Cardholder: For impacting the cardholder account, possible values can be: 'Cardholder Account', 'POST TO OTHER ACCOUNT'\n- Issuer: Write off: possible values can be 'ISSUER_ACCOUNT', 'PROFIT AND LOSS', 'FRAUD'\n- Foreign exchange fee ('FOREIGN_EXCHANGE_FEE'), Financial Advice Exchange Rate Difference ('ADVANCE_EXCHANGE_RATE_DIFFERENCE'):  the dispute officer can manually create a dispute posting amount to this account"
+        }
+      },
+      "title": "CreatePostingRequest"
+    }
+  }
+}

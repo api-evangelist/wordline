@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-get-business-cases-schema.json",
+  "title": "ApiResponseEntityGetBusinessCases",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-authorization-api-openapi.yml#/components/schemas/ApiResponseEntityGetBusinessCases",
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/BusinessCase"
+      }
+    },
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "AuthorizationIdentifier": {
+      "type": "object",
+      "properties": {
+        "transactionId": {
+          "type": "string",
+          "description": "minLength: 18\nmaxLength: 18\nUnique identifier of notified transaction in WLP FO. "
+        },
+        "issuerExternalAuthorizationReference": {
+          "type": "string",
+          "description": "Issuer external authorization reference"
+        }
+      },
+      "title": "AuthorizationIdentifier"
+    },
+    "BusinessCase": {
+      "type": "object",
+      "properties": {
+        "accountReserveBillingAmount": {
+          "description": "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nFraction of ReserveBillingAmount which has not expired and has not been cancelled (i.e. no clearing and no manual intervention) so far and therefore still influences the open-to-buy via the account reserve (on top of the account balance). A positive value is a debit for the cardholder and a credit for the issuer. Whereas a negative value is a credit for the cardholder and a debit for the issuer.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/MonetaryAmountAlphaCurrency"
+            }
+          ]
+        },
+        "accountReserveStatus": {
+          "type": "string",
+          "description": "Indicates together with AccountReserveBillingAmount to what extend the business case influences the open-to-buy via the account reserve (on top of the account balance). Possible values are:\n- None (ReserveBillingAmount is and was never part of the account reserve; AccountReserveBillingAmount is absent)\n- Active (ReserveBillingAmount amount is fully or partially part of the account reserve; it can be cancelled or updated; it can expire; AccountReserveBillingAmount is greater than zero)\n- Expired (ReserveBillingAmount has expired and is no longer part of the account reserve; AccountReserveBillingAmount is zero)\n- Cancelled (ReserveBillingAmount has been entirely cancelled (due to clearing or manual intervention) and is no longer part of the account reserve; AccountReserveBillingAmount is zero)\n- Other\nCan only be present in case BusinessCaseType is FinancialRequest. Absent in case Cancelled is true or all associated authorizations have been declined. The caller must be prepared to receive new values in this field at any time."
+        },
+        "businessCaseIdentifier": {
+          "description": "Business case to which the transaction belongs. The provided information reflects its status after transaction completion. A business case is a group of transactions which logically belong together (e.g. original transaction and reversal of original transaction)",
+          "allOf": [
+            {
+              "$ref": "#/$defs/BusinessCaseIdentifier"
+            }
+          ]
+        },
+        "businessCaseType": {
+          "type": "string",
+          "description": "This value is the same for all transactions belonging to the same business case."
+        },
+        "cardAcceptorCity": {
+          "type": "string",
+          "description": "maxLength: 60\nCity the acceptor is resident (e.g. Frankfurt).Often exchanged with other applications via ISO 8583 field DE 43."
+        },
+        "cardAcceptorCountry": {
+          "type": "string",
+          "description": "Generic.AlphaNumericAcceptorCountryCode for the initial authorization."
+        },
+        "cardAcceptorName": {
+          "type": "string",
+          "description": "maxLength: 50\nThis field is not strictly defined and therefore variations are possible. Usually it is the merchant name as known to the cardholder. For ATMs it could be the location or the branch number. Often exchanged with other applications via ISO 8583 field DE 43."
+        },
+        "financialType": {
+          "type": "string",
+          "description": "Provides more details on the operation in case BusinessCaseType is FinancialRequest or FinancialVerification.This value is the same for all transactions belonging to the same financial business case."
+        },
+        "firstAuthorizationIdentifier": {
+          "$ref": "#/$defs/AuthorizationIdentifier"
+        },
+        "firstAuthorizationTransactionDate": {
+          "type": "string",
+          "description": "Time when the transaction referenced by FirstTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ."
+        },
+        "issuerId": {
+          "type": "string",
+          "description": "Not used, will be removed"
+        },
+        "lastAuthorizationIdentifier": {
+          "$ref": "#/$defs/AuthorizationIdentifier"
+        },
+        "lastAuthorizationTransactionDate": {
+          "type": "string",
+          "description": "Time when the transaction referenced by LastTxnId has been processed. Format: YYYY-MM-ddThh:mm:ssZ."
+        },
+        "merchantCategoryCode": {
+          "type": "string",
+          "description": "maxLength: 4\nCategory code assigned to the acceptor (MCC)."
+        },
+        "reserveAmount": {
+          "description": "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nReserved amount in transaction (acceptor) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalAmount.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/MonetaryAmountAlphaCurrency"
+            }
+          ]
+        },
+        "reserveBillingAmount": {
+          "description": "minimum: -1000000000000000000\nmaximum: 1000000000000000000\nReserved amount in billing (cardholder) currency of initial authorization. A positive value is a debit for the cardholder and a credit for the acceptor whereas a negative value is a credit for the cardholder and a debit for the acceptor. Similar semantic as STNI field Generic.TotalBillingAmount.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/MonetaryAmountAlphaCurrency"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the business case"
+        }
+      },
+      "title": "BusinessCase"
+    },
+    "BusinessCaseIdentifier": {
+      "type": "object",
+      "properties": {
+        "businessCaseId": {
+          "type": "string"
+        }
+      },
+      "title": "BusinessCaseIdentifier"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "MonetaryAmountAlphaCurrency": {
+      "type": "object",
+      "properties": {
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of amount currency. Number of decimal digits. Example: 2 for Euro."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro."
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents)."
+        }
+      },
+      "title": "MonetaryAmountAlphaCurrency"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

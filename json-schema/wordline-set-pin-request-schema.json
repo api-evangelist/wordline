@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-set-pin-request-schema.json",
+  "title": "SetPinRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-pin-api-openapi.yml#/components/schemas/SetPinRequest",
+  "type": "object",
+  "required": [
+    "pinAttribute"
+  ],
+  "properties": {
+    "event": {
+      "type": "string",
+      "description": "EXTERNAL (default), INTERNAL, ATM or IVR"
+    },
+    "panExpiryDate": {
+      "type": "string",
+      "description": "Format MMYY"
+    },
+    "pinAttribute": {
+      "$ref": "#/$defs/PinAttribute"
+    }
+  },
+  "$defs": {
+    "EncryptedData": {
+      "type": "object",
+      "required": [
+        "algoId",
+        "encryptedData",
+        "keyId"
+      ],
+      "properties": {
+        "algoId": {
+          "type": "string",
+          "description": "Algorithm used to encrypt Session Key\nAllowed Value:\n06 for RSA"
+        },
+        "encryptedData": {
+          "type": "string",
+          "description": "Cryptogram in hexadecimal string representation"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Key set used for request\nAllowed Value:\n01 - Keyset1\n02 - Keyset2"
+        }
+      },
+      "title": "EncryptedData"
+    },
+    "PinAttribute": {
+      "type": "object",
+      "required": [
+        "pinAlgorithmId",
+        "pinBlock",
+        "pinBlockFormat"
+      ],
+      "properties": {
+        "encryptedSessionKey": {
+          "$ref": "#/$defs/EncryptedData"
+        },
+        "key": {
+          "type": "string",
+          "description": "Not used"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Key set used for response\nAllowed Value:\n01 - Keyset1\n02 - Keyset2"
+        },
+        "pinAlgorithmId": {
+          "type": "string",
+          "description": "Algorithm used to encrypt the PIN\nAllowed Value:\n04 = ISO-4 (=> encryptedSessionKey required)\n05 = ISO-1-BAPOF (internal transport + BE banks)\n06 = RSA-APAC (deprecated)\n07 = BEST-PIN (internal migration)"
+        },
+        "pinBlock": {
+          "type": "string",
+          "description": "PIN block in hexadecimal string representation"
+        },
+        "pinBlockFormat": {
+          "type": "string",
+          "description": "ISO-4, ISO-1-BAPOF, RSA-APAC, BEST-PIN, etc. (free text, no strict constraint)"
+        }
+      },
+      "title": "PinAttribute"
+    }
+  }
+}

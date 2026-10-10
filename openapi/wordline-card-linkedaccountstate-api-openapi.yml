@@ -193,20 +193,131 @@ paths:
       - basic: []
 components:
   schemas:
-    ApiResponseEntityGetAccountStates:
+    GetLinkedAccountStatesRequest:
+      type: object
+      properties:
+        pan:
+          type: string
+          description: The Pan Number
+      title: GetLinkedAccountStatesRequest
+    NotFoundErrorApiResponse:
       type: object
       required:
       - responseMetadata
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountState'
         responseMetadata:
-          description: Response metadata
-          $ref: '#/components/schemas/ResponseMetadata'
-      title: ApiResponseEntityGetAccountStates
-      description: Issuer response entity
+          allOf:
+          - $ref: '#/components/schemas/NotFoundResponseMetadata'
+      title: NotFoundErrorApiResponse
+    InternalServerErrorResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 500
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Internal server error
+          description: Executed REST API status message
+      title: InternalServerErrorResponseMetadata
+    BadGatewayResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 502
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Bad Gateway
+          description: Executed REST API status message
+      title: BadGatewayResponseMetadata
+    NotFoundResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        statusCode:
+          type: integer
+          format: int32
+          example: 404
+          description: HTTP status code
+        statusMessage:
+          type: string
+          example: Not found
+          description: Executed REST API status message
+      title: NotFoundResponseMetadata
+    ResponseMetadata:
+      type: object
+      required:
+      - correlationId
+      - responseDateTime
+      - statusCode
+      - statusMessage
+      properties:
+        correlationId:
+          type: string
+          description: Correlation Identifier
+        links:
+          description: Metadata Links
+          allOf:
+          - $ref: '#/components/schemas/Links'
+        statusMessage:
+          type: string
+          example: Executed successfully
+          description: Executed REST API status message
+        statusCode:
+          type: integer
+          format: int32
+          example: 200
+          description: HTTP status code
+        responseDateTime:
+          type: string
+          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
+          description: Timestamp when response date was generated
+        timeTakenMs:
+          type: integer
+          format: int64
+          example: 12
+          description: Wall clock time required from service to generate the response
+      title: ResponseMetadata
     ForbiddenResponseMetadata:
       type: object
       required:
@@ -241,38 +352,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/BadRequestResponseMetadata'
       title: BadRequestErrorApiResponse
-    GetLinkedAccountStatesRequest:
-      type: object
-      properties:
-        pan:
-          type: string
-          description: The Pan Number
-      title: GetLinkedAccountStatesRequest
-    InternalServerErrorResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 500
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Internal server error
-          description: Executed REST API status message
-      title: InternalServerErrorResponseMetadata
     UnauthorizedResponseMetadata:
       type: object
       required:
@@ -298,6 +377,38 @@ components:
           example: Unauthorized
           description: Executed REST API status message
       title: UnauthorizedResponseMetadata
+    ForbiddenErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
+      title: ForbiddenErrorApiResponse
+    ApiResponseEntityGetAccountStates:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountState'
+        responseMetadata:
+          description: Response metadata
+          $ref: '#/components/schemas/ResponseMetadata'
+      title: ApiResponseEntityGetAccountStates
+      description: Issuer response entity
+    InternalServerErrorErrorApiResponse:
+      type: object
+      required:
+      - responseMetadata
+      properties:
+        responseMetadata:
+          allOf:
+          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
+      title: InternalServerErrorErrorApiResponse
     AccountState:
       type: object
       properties:
@@ -334,40 +445,6 @@ components:
           format: date-time
           description: Start of period in which the result of the fraud dectection system (FDS) call will not impact the authorization decision for transactions in context of the account.
       title: AccountState
-    NotFoundResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 404
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Not found
-          description: Executed REST API status message
-      title: NotFoundResponseMetadata
-    NotFoundErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/NotFoundResponseMetadata'
-      title: NotFoundErrorApiResponse
     BadGatewayErrorApiResponse:
       type: object
       required:
@@ -391,49 +468,6 @@ components:
           example: /x/{x}?page[offset]=2
           description: URL pagination query parameter next page
       title: Links
-    ResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        links:
-          description: Metadata Links
-          allOf:
-          - $ref: '#/components/schemas/Links'
-        statusMessage:
-          type: string
-          example: Executed successfully
-          description: Executed REST API status message
-        statusCode:
-          type: integer
-          format: int32
-          example: 200
-          description: HTTP status code
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        timeTakenMs:
-          type: integer
-          format: int64
-          example: 12
-          description: Wall clock time required from service to generate the response
-      title: ResponseMetadata
-    ForbiddenErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/ForbiddenResponseMetadata'
-      title: ForbiddenErrorApiResponse
     BadRequestResponseMetadata:
       type: object
       required:
@@ -459,40 +493,6 @@ components:
           example: Bad request
           description: Executed REST API status message
       title: BadRequestResponseMetadata
-    InternalServerErrorErrorApiResponse:
-      type: object
-      required:
-      - responseMetadata
-      properties:
-        responseMetadata:
-          allOf:
-          - $ref: '#/components/schemas/InternalServerErrorResponseMetadata'
-      title: InternalServerErrorErrorApiResponse
-    BadGatewayResponseMetadata:
-      type: object
-      required:
-      - correlationId
-      - responseDateTime
-      - statusCode
-      - statusMessage
-      properties:
-        correlationId:
-          type: string
-          description: Correlation Identifier
-        responseDateTime:
-          type: string
-          example: format:yyyy-MM-dd'T'HH:mm:ss.SSSZ
-          description: Timestamp when response date was generated
-        statusCode:
-          type: integer
-          format: int32
-          example: 502
-          description: HTTP status code
-        statusMessage:
-          type: string
-          example: Bad Gateway
-          description: Executed REST API status message
-      title: BadGatewayResponseMetadata
   securitySchemes:
     basic:
       type: oauth2

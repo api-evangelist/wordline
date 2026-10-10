@@ -1,0 +1,392 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-list-account-future-update-schema.json",
+  "title": "ApiResponseEntityListAccountFutureUpdate",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-future-update-api-openapi.yml#/components/schemas/ApiResponseEntityListAccountFutureUpdate",
+  "x-wl-api-response": true,
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    },
+    "data": {
+      "type": "array",
+      "description": "Response data",
+      "items": {
+        "$ref": "#/$defs/AccountFutureUpdate"
+      }
+    }
+  },
+  "$defs": {
+    "AccountFutureUpdate": {
+      "type": "object",
+      "required": [
+        "futureChangeDate",
+        "creationDate",
+        "processed"
+      ],
+      "properties": {
+        "issuerId": {
+          "description": "Issuer identifier (unique per platform)",
+          "type": "string"
+        },
+        "accountIdentifier": {
+          "description": "Refer to Account.accountIdentifier",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountIdentifier"
+            }
+          ]
+        },
+        "futureChangeDate": {
+          "description": "Indicates the schedule date of the updates",
+          "type": "string",
+          "format": "date-time"
+        },
+        "creationDate": {
+          "description": "Indicates the creation date of the future update",
+          "type": "string",
+          "format": "date-time"
+        },
+        "processed": {
+          "description": "DEPRECATED\nReplaced by updateStatus",
+          "type": "boolean"
+        },
+        "updateStatus": {
+          "description": "Indicates the future update processing status:\nCREATED - future update is created by the issuer and is not yet processed\nPROCESSING - future update is being processed (applies for change paying account only)\nPROCESSED - future update is processed successfully\nREJECTED - future update processing is failed\nCANCELLED - future update is cancelled by the issuer",
+          "type": "string"
+        },
+        "accountFutureUpdateIdentifier": {
+          "description": "Refert to AccountFutureUpdateIdentifier data type",
+          "allOf": [
+            {
+              "$ref": "#/$defs/AccountFutureUpdateIdentifier"
+            }
+          ]
+        },
+        "updateReason": {
+          "description": "Indicates the reason of the future update",
+          "type": "string"
+        },
+        "lastUpdateDate": {
+          "description": "Indicates the last update date of the future update",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sepaCreditorId": {
+          "description": "Refer to Account.sepaCreditorId",
+          "type": "string"
+        },
+        "sepaMandateStatus": {
+          "description": "Refer to Account.sepaMandateStatus",
+          "type": "string"
+        },
+        "sepaMandateUir": {
+          "description": "Refer to Account.sepaMandateUir",
+          "type": "string"
+        },
+        "sepaMandateUmr": {
+          "description": "Refer to Account.sepaMandateUmr",
+          "type": "string"
+        },
+        "debtorPhoneNumber": {
+          "description": "SEPA debtor phone number",
+          "type": "string"
+        },
+        "debtorEmail": {
+          "description": "SEPA debtor e-mail",
+          "type": "string"
+        },
+        "debtorPostalAddress": {
+          "description": "Address lines 1 and 2, street name, building number, post code, town name, country and country subdivision can be provided in certain cases - refer to SEPA rules when debtor's address is required.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/SepaMandateMailAddress"
+            }
+          ]
+        },
+        "mandateContractId": {
+          "description": "Mandate underlying contract identifier (external reference) used by the issuer. E.g., if the mandate is set up along with the contract creation, it may contain the application number, etc.",
+          "type": "string"
+        },
+        "mandateNatureType": {
+          "description": "SEPA mandate nature type. PAPER_MANDATE is taken as a default.\nList of mandate possible nature types (for future usage only, not to be used):\nCOMPUTING_MIGRATION_NO_SIGNATURE, COMPUTING_MIGRATION_WITH_SIGNATURE, FR_MIGRATION_DOMESTIC_FILES,\nMANDATE_FROMDIGITALIZATION, e_MANDATE, SIGNATURE_MANDATE, MYBANK_e_MANDATE, IDEAL_e_MANDATE",
+          "type": "string"
+        },
+        "mandateSignDate": {
+          "description": "SEPA mandate date of signature",
+          "type": "string",
+          "format": "date-time"
+        },
+        "mandateSignCity": {
+          "description": "SEPA mandate city of signature",
+          "type": "string"
+        },
+        "iban": {
+          "description": "Refer to Account.iban",
+          "type": "string"
+        },
+        "ibanOwnerName": {
+          "description": "Refer to Account.ibanOwnerName",
+          "type": "string"
+        },
+        "bic": {
+          "description": "Refer to Account.bic",
+          "type": "string"
+        },
+        "amountDueFixedAmount": {
+          "description": "Refer to Account.amountDueFixedAmount",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "amountDueMinAmount": {
+          "description": "Refer to Account.amountDueMinAmount",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "greaterOrLesserAmountDue": {
+          "description": "Refer to Account.greaterOrLesserAmountDue",
+          "type": "string"
+        },
+        "amountDuePercentage": {
+          "description": "Refer to Account.amountDuePercentage",
+          "type": "string"
+        },
+        "directDebitFixedAmount": {
+          "description": "Refer to Account.directDebitFixedAmount",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Amount"
+            }
+          ]
+        },
+        "directDebitPercentage": {
+          "description": "Refer to Account.directDebitPercentage",
+          "type": "string"
+        },
+        "selectedModels": {
+          "type": "array",
+          "description": "Refer to Account.selectedModels",
+          "items": {
+            "$ref": "#/$defs/AccountModel"
+          }
+        },
+        "sepaIndicator": {
+          "type": "boolean",
+          "description": "AccountFutureUpdate.sepaIndicator"
+        },
+        "secondIban": {
+          "type": "string",
+          "description": "Refer to Account.secondIban"
+        },
+        "paymentMode": {
+          "type": "string",
+          "description": "Refer to Account.paymentMode"
+        }
+      },
+      "title": "AccountFutureUpdate"
+    },
+    "AccountFutureUpdateIdentifier": {
+      "type": "object",
+      "properties": {
+        "futureChangeReference": {
+          "type": "string",
+          "description": "A reference of an account future update (unique per account) that may be used to carry out research, find information, etc."
+        }
+      },
+      "title": "AccountFutureUpdateIdentifier"
+    },
+    "AccountIdentifier": {
+      "type": "object",
+      "properties": {
+        "accountReference": {
+          "type": "string",
+          "description": "Account reference is to identify the Account calculated by the system (algorithm is configurable per issuer). Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used."
+        },
+        "issuerAccountExternalReference": {
+          "type": "string",
+          "description": "Issuer account external reference is to identify the Account. Either the account number or the issuerAccountExternalReference is provided, or, if both are provided then only the account number is used. Algorithm configurable by issuer, can be generated by the system if there is an externalReferenceGeneratorAlgorithm."
+        }
+      },
+      "title": "AccountIdentifier"
+    },
+    "AccountModel": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of an account model\nPossible values:\n•\teventFeeModel\n•\ttransactionFeeModel\n•\tmarkupFeeModel\n•\trestrictionModel\n•\tdebitInterestModel\n•\tinterestModel\n•\tdirectDebitAmountModel\n•\taccountAmountDueModel \n•\tstatementModel"
+        },
+        "reference": {
+          "type": "string",
+          "description": "Reference to the particular model that has been selected in selectedModels"
+        },
+        "originalModelReference": {
+          "type": "string",
+          "description": "DEPRECATED"
+        }
+      },
+      "title": "AccountModel"
+    },
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    },
+    "SepaMandateMailAddress": {
+      "type": "object",
+      "properties": {
+        "typeCode": {
+          "type": "string",
+          "description": "DEPRECATED"
+        },
+        "line1": {
+          "type": "string",
+          "description": "Address line 1 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line2": {
+          "type": "string",
+          "description": "Address line 2 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line3": {
+          "type": "string",
+          "description": "Address line 3 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line4": {
+          "type": "string",
+          "description": "Address line 4 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "line5": {
+          "type": "string",
+          "description": "Address line 5 (conditional). Free text. A specific issuer algorithm can be activated to e.g. build the line, apply controls (e.g. length restriction)."
+        },
+        "buildingNumber": {
+          "type": "string",
+          "description": "Building number of the address (optional)"
+        },
+        "boxNumber": {
+          "type": "string",
+          "description": "Box number of the address (optional)"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name of the address (optional)"
+        },
+        "postCode": {
+          "type": "string",
+          "description": "zip code of the address (optional)"
+        },
+        "townName": {
+          "type": "string",
+          "description": "City corresponding to the address"
+        },
+        "countrySubdivision": {
+          "type": "string",
+          "description": "Subdivision of the country (optional)"
+        },
+        "country": {
+          "type": "string",
+          "description": "Code of the country.Free text."
+        }
+      },
+      "title": "SepaMandateMailAddress"
+    }
+  }
+}

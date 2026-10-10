@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-operation-reimbursement-request-schema.json",
+  "title": "CreateOperationReimbursementRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-operation-api-openapi.yml#/components/schemas/CreateOperationReimbursementRequest",
+  "type": "object",
+  "required": [
+    "externalOperationReference",
+    "externalOperationDate",
+    "externalOperationServicePoster"
+  ],
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "Textual description of the  operation\nCan contain a free text that can be used when the operation is presented to the Customer."
+    },
+    "externalOperationReference": {
+      "type": "string",
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nExternal reference of the operation to be created."
+    },
+    "externalOperationDate": {
+      "format": "date-time",
+      "type": "string",
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nThe date the operation is performed (in general, the current date should be provided)."
+    },
+    "externalOperationServicePoster": {
+      "type": "string",
+      "description": "The triplet (externalOperationDate, externalOperationReference, externalOperationServicePoster) uniquely identifies the operation in our system.\nThe identifier of the external system which provides the operation to be posted (free text)."
+    },
+    "externalOperationCode": {
+      "type": "string",
+      "description": "The external operation code of the reimbursment can be provided to identify the operation type in the issuer system."
+    },
+    "destinationIban": {
+      "type": "string",
+      "description": "An IBAN can be used for the reimbursement to transfer the input amount on this IBAN.\nIf not provided, the reimbursment will be done on the IBAN associated to the account."
+    },
+    "reimbursementType": {
+      "type": "string",
+      "description": "The reimbursement type can be::\n- 'FULL': The reimbursement amount, calculated by the system based on the configuration and liable balance and/or Open-To-Buy, will be fully posted on the account.\n- 'PARTIAL': If the input amount is greater than the allowed reimbursement amount calculated by the system, the maximum of the available amount will be posted on the account.\n- 'MAX': If the input amount is greater than the allowed reimbursement amount calculated by the system, the posting will be refused.\nIf the reimbursement type is not provided, the default value \"MAX\" will be used."
+    },
+    "referenceAmount": {
+      "description": "The amount of the operation (amount/exponent/currency values).\n The maximum amount is the balance amount limited to the Open-To-Buy.\n This field must not be provided if the reimbursement type is \"FULL\". Otherwise, the request is rejected.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Amount"
+        }
+      ]
+    },
+    "reimbursementReason": {
+      "type": "string",
+      "description": "The reason why the reimbursement is triggerred\nThe list of possible reimbursement reasons is configurable per issuer."
+    },
+    "specificFields": {
+      "type": "object",
+      "description": "The issuer can provide Specific Fields for the operation.\n It is a list of external data {\"label\":\"value\"} separated by a \",\" related to the operation (pass-thru data) that can be provided by e.g. the issuer for information or for usage by other systems. Example : {\"label1\":\"value1\",\"label2\":\"value2\"} Those provided data have no impact on our system business processes.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    }
+  }
+}

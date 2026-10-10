@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-get-reserves-schema.json",
+  "title": "ApiResponseEntityGetReserves",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-authorization-api-openapi.yml#/components/schemas/ApiResponseEntityGetReserves",
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Reserve"
+      }
+    },
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "AuthorizationIdentifier": {
+      "type": "object",
+      "properties": {
+        "transactionId": {
+          "type": "string",
+          "description": "minLength: 18\nmaxLength: 18\nUnique identifier of notified transaction in WLP FO. "
+        },
+        "issuerExternalAuthorizationReference": {
+          "type": "string",
+          "description": "Issuer external authorization reference"
+        }
+      },
+      "title": "AuthorizationIdentifier"
+    },
+    "BusinessCaseIdentifier": {
+      "type": "object",
+      "properties": {
+        "businessCaseId": {
+          "type": "string"
+        }
+      },
+      "title": "BusinessCaseIdentifier"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "MonetaryAmountAlphaCurrency": {
+      "type": "object",
+      "properties": {
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of amount currency. Number of decimal digits. Example: 2 for Euro."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro."
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents)."
+        }
+      },
+      "title": "MonetaryAmountAlphaCurrency"
+    },
+    "Reserve": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/MonetaryAmountAlphaCurrency"
+        },
+        "approvalCode": {
+          "type": "string"
+        },
+        "billingAmount": {
+          "$ref": "#/$defs/MonetaryAmountAlphaCurrency"
+        },
+        "businessCaseIdentifier": {
+          "$ref": "#/$defs/BusinessCaseIdentifier"
+        },
+        "cardAcceptorCity": {
+          "type": "string"
+        },
+        "cardAcceptorCountry": {
+          "type": "string"
+        },
+        "cardAcceptorName": {
+          "type": "string"
+        },
+        "expiryTime": {
+          "type": "string"
+        },
+        "financialType": {
+          "type": "string"
+        },
+        "firstAuthorizationIdentifier": {
+          "$ref": "#/$defs/AuthorizationIdentifier"
+        },
+        "maskedCardNumber": {
+          "type": "string"
+        },
+        "merchantCategoryCode": {
+          "type": "string"
+        },
+        "operationTime": {
+          "type": "string"
+        }
+      },
+      "title": "Reserve"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

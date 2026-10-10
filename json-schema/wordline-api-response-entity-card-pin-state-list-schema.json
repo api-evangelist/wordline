@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-card-pin-state-list-schema.json",
+  "title": "ApiResponseEntityCardPinStateList",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-cardpinstate-api-openapi.yml#/components/schemas/ApiResponseEntityCardPinStateList",
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "description": "Response data",
+      "items": {
+        "$ref": "#/$defs/CardStateResponse"
+      }
+    },
+    "responseMetadata": {
+      "$ref": "#/$defs/ResponseMetadata"
+    }
+  },
+  "$defs": {
+    "CardStateResponse": {
+      "type": "object",
+      "properties": {
+        "accountReference": {
+          "type": "string",
+          "description": "DynamicReference\nminLength: 1\nmaxLength: 100"
+        },
+        "alternativePan": {
+          "type": "string",
+          "description": "AlternativeCardNumber\nminLength: 1\nmaxLength: 100"
+        },
+        "pan": {
+          "type": "string",
+          "description": "CardNumber\nminLength: 1\nmaxLength: 28"
+        },
+        "cardReference": {
+          "type": "string",
+          "description": "DynamicReference\nminLength: 1\nmaxLength: 100"
+        },
+        "maximumPinTryCounter": {
+          "type": "string",
+          "description": "minimum: 0\nmaximum: 9999\nThe maximum amount of failed PIN tries which the cardholder can do. \nAfter that every PIN based transaction is declined until the PIN try counter is reset. \nNo matter whether the PIN is correct or not."
+        },
+        "nfcStatus": {
+          "type": "string",
+          "description": "Indicates the status of the NFC antenna. \nPossible values are:\n- None (NFC antenna is not present)\n- Enabled (NFC antenna is enabled)\n- EnablingInProgress (Enabling of NFC antenna has been initiated but is not yet finished)\n- Disabled (NFC antenna is disabled)\n- DisablingInProgress (Disabling of NFC antenna has been initiated but is not yet finished)\n- Locked (NFC antenna is disabled for transport but will be automatically enabled by the card once the card is used)"
+        },
+        "nfcStatusChangeCounter": {
+          "type": "string",
+          "description": "minimum: 0\nmaximum: 9999\nNumber of changes performed on NfcStatus. Present in case NfcStatus is present."
+        },
+        "nfcStatusChangeTime": {
+          "type": "string",
+          "description": "Example: 20200518235959\nTime of the last NfcStatus modification. Present in case NfcStatus is present."
+        },
+        "offlinePinChangeStatus": {
+          "type": "string",
+          "description": "Examples: List [ \"Pending\", \"InProgress\", \"Successful\", \"Failed\" ]\nIndicates the current status of adapting the offline PIN. \nPossible values are:\nPending (offline PIN needs to be changed but no script has been sent so far)\nInProgress (at least one PIN change script has been sent; receipt of a positive or negative confirmation is outstanding)\nSuccessful (offline PIN change finished successfully)\nFailed (offline PIN change did not finish successfully)"
+        },
+        "offlinePinChangeStatusChangeTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the pinCheckParameterStatus was changed.\nExample: 2012-12-31T22:00:00.000"
+        },
+        "offlinePinChangeTryCounter": {
+          "type": "string",
+          "description": "minimum: 0\nmaximum: 9999\nNumber of attempts to adapt the offline PIN, i.e. number of times a PIN change script has been sent in a response message. \nPresent in case OfflinePinChangeStatus is present."
+        },
+        "pinCheckParameter1": {
+          "type": "string",
+          "description": "minLength: 1\nmaxLength: 64\nDepending on the used PIN verification method this field has different format and meaning:\n- IBM 3642 algorithm: PIN offset, decimal digits\n- German DK (Deutsche Kreditwirtschaft),: PRW (PIN-Referenzwert), 64 hexadecimal digits\n- German Proprietary: PRW (PIN-Referenzwert), 32 hexadecimal digits\nVISA: PVV, 4 decimal digits"
+        },
+        "pinCheckParameter2": {
+          "type": "string",
+          "description": "minLength: 1\nmaxLength: 64\nDepending on the used PIN verification method this field has different format and meaning:\n- German DK (Deutsche Kreditwirtschaft): Random value, 8 hexadecimal digits\n- German Proprietary: PCC (PIN Change Counter), 4 decimal digits"
+        },
+        "pinCheckParameterStatus": {
+          "type": "string",
+          "description": "Examples: List [ \"Active\", \"Blocked\" ]\nStatus of PIN check parameters. \nPossible values are:\nActive\nBlocked"
+        },
+        "pinCheckParameterStatusChangeTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the OfflinePinChangeStatus was changed.\nExample: 2012-12-31T22:00:00.000"
+        },
+        "pinTryCounter": {
+          "type": "string",
+          "description": "minimum: 0\nmaximum: 9999\nNumber of failed PIN entries."
+        },
+        "pinTryCounterChangeTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp pattern: ^[0-9]{4}([0][1-9]|[1][012])(0[0-9]|[12][0-9]|3[01])(2[0-3]|[01][0-9])([0-5][0-9])([0-5][0-9])$|^$\nExample: 20200518235959"
+        },
+        "pinTryCounterResetTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp pattern: ^[0-9]{4}([0][1-9]|[1][012])(0[0-9]|[12][0-9]|3[01])(2[0-3]|[01][0-9])([0-5][0-9])([0-5][0-9])$|^$\nExample: 20200518235959"
+        },
+        "pinTryCounterResetType": {
+          "type": "string",
+          "description": "Examples: List [ \"Daily\", \"Fixed\", \"Never\", \"Other\" ]\nIndicates the algorithm to reset the PIN try counter after exceeding the maximum number of allowed wrong entries.\n- Daily (Every day at a certain time)\n- Fixed (After expiry of a time interval)\n- Never (No automatic reset)"
+        },
+        "expiryDate": {
+          "type": "string",
+          "description": "The expiry date of the card\nFormat is MMYY"
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the card"
+        },
+        "blockingReason": {
+          "type": "string",
+          "description": "The reason why the card was blocked (if the card status is blocked)"
+        }
+      },
+      "title": "CardStates"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

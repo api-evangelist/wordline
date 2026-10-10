@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-modify-contract-fee-request-schema.json",
+  "title": "ModifyContractFeeRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-contract-api-openapi.yml#/components/schemas/ModifyContractFeeRequest",
+  "type": "object",
+  "x-wl-patch-request": true,
+  "properties": {
+    "selectedModels": {
+      "type": "array",
+      "description": "Fee Model used for the contract (Account setup fee and/or Membership fee models).",
+      "items": {
+        "$ref": "#/$defs/ContractModel"
+      }
+    },
+    "postingAccountForMembershipFee": {
+      "description": "For a consumer contract, indicates if the membership fees have to be posted to card accounts or to the root account as default value for the contract.\nPossible values are :\nROOT_ACCOUNT, CARD_ACCOUNT.For a corporate contract, indicates if the membership fees have to be posted to employee card accounts, interemdiate entity account or to the root (usually paid by the company) as default value for the contract.\nPossible values are :\nROOT_ACCOUNT, CARD_ACCOUNT, ENTITY_ACCOUNT.",
+      "type": "string"
+    },
+    "postingAccountForAccountSetupFee": {
+      "description": "For a consumer contract, indicates if the account setup fees have to be posted to card accounts or to the root account as default value for the contract.\nPossible values are :\nROOT_ACCOUNT, CARD_ACCOUNT.For a corporate contract, indicates if the account setup fees have to be posted to employee card accounts, interemdiate entity account or to the root (usually paid by the company) as default value for the contract.\nPossible values are :\nROOT_ACCOUNT, CARD_ACCOUNT, ENTITY_ACCOUNT.",
+      "type": "string"
+    },
+    "membershipFeePromotionalAmountApplicationMethod": {
+      "description": "Indicates the method used to apply the promotional amount fee of the new membership fee model (if any) in case of model change.\nIt overrides the behaviour defined at issuer level.\nPossible values are:\n• NOT_APPLIED: the promotional amount of the new model is not applied at model change, the regular amount will apply directly.\n• APPLIEDFROM_FIRSTFEEPOSTING: the promotional amount is applied from the first membership fee posting date for the period defined in the new model.\n• APPLIEDFROM_MODELCHANGE: the promotional amount is applied from the model change for the period defined in the new model.",
+      "type": "string",
+      "enum": [
+        "NOT_APPLIED",
+        "APPLIEDFROM_FIRSTFEEPOSTING",
+        "APPLIEDFROM_MODELCHANGE"
+      ]
+    },
+    "membershipFeePromotionalPeriod": {
+      "description": "Membership fee promotional period\nIndicates the period (number of years/months (depending on the frequency defined in the membership fee model)) during which the promotional membership fee amount (if any) is applied from the card creation.\nIf the issuer configuration allows it, it is possible to extend the default promotional period defined in the membership fee model. The value must be greater than the default value and greater than the already passed promotional period.",
+      "type": "integer"
+    }
+  },
+  "$defs": {
+    "ContractModel": {
+      "type": "object",
+      "properties": {
+        "reference": {
+          "type": "string",
+          "description": "Model Reference"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of model\nPossible values:\n- ACCOUNT_SETUP_FEE\n- MEMBERSHIP_FEE"
+        }
+      },
+      "description": "Model containing predefined configuration for fee generation applicable on a contract",
+      "title": "ContractModel"
+    }
+  }
+}

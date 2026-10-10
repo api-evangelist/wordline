@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-assertion-response-schema.json",
+  "title": "AssertionResponse",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-authentication-resource-api-openapi.yml#/components/schemas/AssertionResponse",
+  "required": [
+    "sessionId"
+  ],
+  "type": "object",
+  "properties": {
+    "sessionId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "assertionBlob": {
+      "$ref": "#/$defs/PublicKeyCredentialAssertion"
+    }
+  },
+  "$defs": {
+    "AuthenticatorAssertionResponse": {
+      "required": [
+        "clientDataJSON",
+        "authenticatorData",
+        "signature"
+      ],
+      "type": "object",
+      "properties": {
+        "clientDataJSON": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "authenticatorData": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "signature": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "userHandle": {
+          "type": "string"
+        }
+      }
+    },
+    "PublicKeyCredentialAssertion": {
+      "required": [
+        "response",
+        "type"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "rawId": {
+          "type": "string"
+        },
+        "response": {
+          "$ref": "#/$defs/AuthenticatorAssertionResponse"
+        },
+        "getClientExtensionResults": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "minLength": 1,
+          "pattern": "public-key",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-modify-card-blocking-information-request-schema.json",
+  "title": "ModifyCardBlockingInformationRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-api-openapi.yml#/components/schemas/ModifyCardBlockingInformationRequest",
+  "type": "object",
+  "properties": {
+    "scheduledCardBlockingDelay": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Delay in calendar days used to block the card in the future.\nIt can be updated if needed as long as the scheduled card blocking date is not yet reached and if the new scheduled card blocking date is in the future.\nIf scheduledCardBlockingDelay is provided, scheduledCardBlockingDate is not relevant."
+    },
+    "scheduledCardBlockingDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date when the permanent card blocking is scheduled\nIf scheduledCardBlockingDate is provided, scheduledCardBlockingDelay is not relevant."
+    },
+    "scheduledCardBlockingReason": {
+      "type": "string",
+      "description": "Scheduled permanent blocking reason.\nIt is relevant if the card is already temporarily blocked.\nIt can be updated if needed as long as the scheduled card blocking date is not yet reached\nPermanent blocking reasons used context of loss/theft are not allowed."
+    },
+    "cppFlag": {
+      "type": "boolean",
+      "description": "DEPRECATED"
+    },
+    "blockingReason": {
+      "type": "string",
+      "description": "Reason of the card blocking.\nIt is selected among the card blocking reasons configured for the issuer.\nA permanently blocked card can't be updated with a temporary card blocking reason."
+    },
+    "blockingReasonDetail": {
+      "type": "string",
+      "description": "Complementary information describing the defined blocking reason \nFree text"
+    },
+    "lostStolenDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date when the card has been lost or stolen\nCan be updated if the card was blocked previously in a context of loss/theft\nRequired if the card is blocked in a context of loss/theft"
+    },
+    "pinCompromised": {
+      "type": "boolean",
+      "description": "Indicates if the PIN is compromised (true) or not (false).\nCan be updated if the blocking reason was previously Lost or Stolen.\nTo be provided if the new blocking reason is Lost or Stolen"
+    },
+    "transferEffectiveDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Transfer effective date. It must be a date prior to the card blocking date time"
+    },
+    "comment": {
+      "type": "string",
+      "description": "Comment associated with the card blocking action.\nFree text."
+    },
+    "fraudProcess": {
+      "type": "string",
+      "description": "Fraud process which leads to card blocking.\n\t\t\t\t\tPossible values : \n\t\t\t\t•CPP : the card is in CCP list\n\t\t\t\t•TFI : Fraud detected for a single card\n\t\t\t\t•MBA : Fraud detected for several cards (Mass action)"
+    }
+  }
+}

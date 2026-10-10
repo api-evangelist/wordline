@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-global-search-corporate-contract-request-schema.json",
+  "title": "GlobalSearchCorporateContractRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-corporate-contract-global-search-api-openapi.yml#/components/schemas/GlobalSearchCorporateContractRequest",
+  "type": "object",
+  "required": [
+    "contractCompany"
+  ],
+  "properties": {
+    "contractCompany": {
+      "type": "object",
+      "description": "The issuer must provide some information related to the company to filter the corporate contracts to be returned.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/GlobalSearchCorporateContractRequestCompany"
+        }
+      ]
+    },
+    "issuerId": {
+      "type": "string",
+      "description": "The search is performed by default on all issuers allowed for the user (depending on its rights)\n- The user can limit the search to one issuer (optional).\n- If provided, the list of issuerIds must not be provided, otherwise the search is not performed (an error is generated)."
+    },
+    "includeSubIssuers": {
+      "type": "boolean",
+      "description": "The user can request to include in the search the sub issuers of an issuer, limited to issuers allowed for the user depending on its rights, only if an issuerId is provided.\nDefault value is false.",
+      "default": false
+    },
+    "issuerIds": {
+      "type": "array",
+      "description": "The search is performed by default on all issuers allowed for the user (depending on its rights)\n- The user can limit the search to a list of issuers (optional)\n- If provided, the issuerId must not be provided, otherwise the search is not performed (an error is generated).\n- If at least one issuer is not allowed for this user among the provided list of issuers, the search is not performed (an error is generated).",
+      "items": {
+        "type": "string"
+      }
+    },
+    "retrieveContractOwner": {
+      "type": "boolean",
+      "description": "Optional parameter to enrich the information retrieved.\n If the parameter is set to true, the contract owner will be retrieved in the list of companies.\n If the embed parameter contractCompanies is not requested and the parameter is set to true, an error will be raised."
+    }
+  },
+  "$defs": {
+    "CustomerIdentifier": {
+      "type": "object",
+      "description": "Identification of the updated customer either by Issuer customer external reference or by customer reference",
+      "properties": {
+        "customerReference": {
+          "type": "string",
+          "description": "Reference computed internally by our system"
+        },
+        "issuerCustomerExternalReference": {
+          "type": "string",
+          "description": "Reference provided by the Issuer"
+        }
+      },
+      "title": "CustomerIdentifier"
+    },
+    "GlobalSearchCorporateContractRequestCompany": {
+      "type": "object",
+      "properties": {
+        "corporateName": {
+          "type": "string",
+          "description": "The corporate name is used to filter the corporate contracts where the company is the corporate contract owner or an account owner.\n The field accept wildcards ('%' allows to achieve a search with only a partial input, 'Plat%', '%hill', 'Al%gang'). A miniimum of 3 significative characters are expected else an error will be raised.Either the corporate name or the reference of the company must be provided. If both are provided, the search will be rejected."
+        },
+        "postalAddress": {
+          "type": "object",
+          "description": "The issuer can provide some information related to the address of the company to filter the corporate contracts to be returned only if the search is done on the corporate name. Otherwise the search will be rejected.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/GlobalSearchCorporateContractRequestPostalAddress"
+            }
+          ]
+        },
+        "customerIdentifier": {
+          "description": "The reference of the company can be used (by providing either the customer reference or the issuer customer external reference) to filter the corporate contracts where the company is the corporate contract owner or an account owner.Either the corporate name or the reference of the company must be provided. If both are provided, the search will be rejected.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CustomerIdentifier"
+            }
+          ]
+        }
+      },
+      "title": "GlobalSearchCorporateContractRequest.Company"
+    },
+    "GlobalSearchCorporateContractRequestPostalAddress": {
+      "type": "object",
+      "properties": {
+        "streetName": {
+          "type": "string",
+          "description": "The street name where is located the company.\nThis criteria is optional and accept wildcards ('%' allows to achieve a search with only a partial input, 'Plat%', '%hill', 'Al%gang')"
+        },
+        "buildingNumber": {
+          "type": "string",
+          "description": "The building number where is located the company.\nThis criteria is optional and accept wildcards ('%' allows to achieve a search with only a partial input, '12t%', '%4bll')"
+        },
+        "postCode": {
+          "type": "string",
+          "description": "The postal code where is located the company.\nThis criteria is optional and accept wildcards ('%' allows to achieve a search with only a partial input, '91%', '%41l')"
+        }
+      },
+      "title": "GlobalSearchCorporateContractRequest.PostalAddress"
+    }
+  }
+}

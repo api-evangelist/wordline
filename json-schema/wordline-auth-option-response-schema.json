@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-auth-option-response-schema.json",
+  "title": "AuthOptionResponse",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-authentication-resource-api-openapi.yml#/components/schemas/AuthOptionResponse",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string"
+    },
+    "errorMessage": {
+      "type": "string"
+    },
+    "challenge": {
+      "type": "string"
+    },
+    "timeout": {
+      "format": "int64",
+      "type": "integer"
+    },
+    "rpId": {
+      "type": "string"
+    },
+    "allowCredentials": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PublicKeyCredentialDescriptor"
+      }
+    },
+    "userVerification": {
+      "$ref": "#/$defs/UserVerificationRequirement"
+    },
+    "extensions": {
+      "$ref": "#/$defs/AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput"
+    },
+    "sessionId": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "AuthenticationExtensionsAuthenticatorInputsAuthenticationExtensionAuthenticatorInput": {
+      "type": "object",
+      "properties": {
+        "uvm": {
+          "type": "boolean",
+          "writeOnly": true
+        },
+        "credProtect": {
+          "type": "string",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CredentialProtectionPolicy"
+            }
+          ],
+          "writeOnly": true
+        },
+        "hMACSecret": {}
+      }
+    },
+    "AuthenticatorTransport": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "CredentialProtectionPolicy": {
+      "enum": [
+        "USER_VERIFICATION_OPTIONAL",
+        "USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST",
+        "USER_VERIFICATION_REQUIRED"
+      ],
+      "type": "string"
+    },
+    "PublicKeyCredentialDescriptor": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/PublicKeyCredentialType"
+        },
+        "id": {
+          "type": "string"
+        },
+        "transports": {
+          "uniqueItems": true,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AuthenticatorTransport"
+          }
+        }
+      }
+    },
+    "PublicKeyCredentialType": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "UserVerificationRequirement": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

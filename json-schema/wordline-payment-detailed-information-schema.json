@@ -1,0 +1,641 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-payment-detailed-information-schema.json",
+  "title": "PaymentDetailedInformation",
+  "description": "Payment Status Response\n",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-bulk-payment-initiation-service-extended-service-api-openapi.yml#/components/schemas/PaymentDetailedInformation",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "PaymentProductUsed": {
+      "$ref": "#/$defs/PaymentProductEnum"
+    },
+    "CommonPaymentData": {
+      "$ref": "#/$defs/CommonPaymentDataResponse"
+    },
+    "Links": {
+      "$ref": "#/$defs/StatusResponseLinks"
+    },
+    "UseWaitingScreen": {
+      "type": "boolean",
+      "description": "if `true` the Initiating Party should show a waiting screen even if the the RedirectUrl is provided. On the waiting screen a redirection button should be placed. Click on the button should redirect the PSU to the link provided in the `RedirectUrl` field.\n"
+    }
+  },
+  "$defs": {
+    "AddressData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "FirstName": {
+          "type": "string",
+          "description": "The first name of the debtor\n",
+          "minLength": 1
+        },
+        "LastName": {
+          "type": "string",
+          "description": "The last name of the debtor\n",
+          "minLength": 1
+        },
+        "CompanyName": {
+          "type": "string",
+          "description": "The company name of the debtor\n",
+          "minLength": 1
+        },
+        "PostCode": {
+          "type": "string",
+          "description": "The postal code of the address without spaces\n",
+          "minLength": 1
+        },
+        "BuildingNumber": {
+          "type": "string",
+          "description": "The house number of the address\n",
+          "minLength": 1
+        },
+        "Floor": {
+          "type": "string",
+          "description": "The addition of the address\n",
+          "minLength": 1
+        },
+        "StreetName": {
+          "type": "string",
+          "description": "The street of the address\n",
+          "minLength": 1
+        },
+        "TownName": {
+          "type": "string",
+          "description": "The city of the address\n",
+          "minLength": 1
+        },
+        "Country": {
+          "type": "string",
+          "description": "The code of the coutry regarding ISO 3166 standard. For the IDEAL payments the country name will be provided\n",
+          "minLength": 1
+        },
+        "CountrySubDivision": {
+          "type": "string",
+          "description": "Country sub division.\n",
+          "maxLength": 35,
+          "minLength": 1
+        }
+      }
+    },
+    "AmountRelatedDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "contains additional information about the fees and estimated amount\n",
+      "properties": {
+        "TransactionFees": {
+          "$ref": "#/$defs/TransactionFees"
+        },
+        "ExchangeRateInformation": {
+          "$ref": "#/$defs/ExchangeRateInformationResponse"
+        },
+        "CurrencyConversionFee": {
+          "$ref": "#/$defs/CurrencyConversionFee"
+        },
+        "EstimatedTotalAmount": {
+          "$ref": "#/$defs/EstimatedTotalAmount"
+        },
+        "EstimatedInterbankSettlementAmount": {
+          "$ref": "#/$defs/EstimatedInterbankSettlementAmount"
+        }
+      }
+    },
+    "AuthorisationRequiredData": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The data required for PSU authentication and transaction authorisation\n",
+      "properties": {
+        "PsuCredentials": {
+          "type": "array",
+          "description": "List of credentials the PSU has on the ASPSP's system. The PSU has to provide the CredentialValue for each of these (Username & Password).\n",
+          "items": {
+            "$ref": "#/$defs/PsuCredentials"
+          }
+        },
+        "ScaMethods": {
+          "type": "array",
+          "description": "Array of available ScaMethods.\n",
+          "items": {
+            "$ref": "#/$defs/ScaMethods"
+          }
+        },
+        "ChosenScaMethod": {
+          "$ref": "#/$defs/ScaMethods"
+        },
+        "ChallengeData": {
+          "$ref": "#/$defs/ScaChallengeData"
+        }
+      }
+    },
+    "CommonPaymentDataResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "PaymentId",
+        "PaymentStatus"
+      ],
+      "properties": {
+        "ExpiryDateTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp from which the transaction operation will expire, expressed in UTC time format(YYYY-MM-DDThh:mm:ss.sssZ)\n"
+        },
+        "GuaranteedAmount": {
+          "description": "The amount guaranteed by the ASPSP/Issuer to the Merchant/CPSP. Will be provided if the min max amount values are defined in the request\n",
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string"
+        },
+        "PaymentStatus": {
+          "$ref": "#/$defs/PaymentStatusEnum"
+        },
+        "LevelOfGuarantee": {
+          "$ref": "#/$defs/LevelOfGuaranteeEnum"
+        },
+        "PaymentId": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "Id generated by the Open Banking Service. This should be used to\nrefer to this payment in subsequent api calls.\n"
+        },
+        "AspspPaymentId": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "Id used by the ASPSP/iDEAL Hub to refer to the payment.\n"
+        },
+        "AspspId": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "Id of the ASPSP selected by the PSU.\n"
+        },
+        "InitiatingPartyReferenceId": {
+          "maxLength": 36,
+          "minLength": 1,
+          "type": "string",
+          "description": "Reference to the payment created by the Initiating Party.\nThis Id will not be visible to the Payment Service User.\n"
+        },
+        "FundsAvailable": {
+          "type": "boolean",
+          "description": "Information whether sufficient funding is available.\n"
+        },
+        "DebtorInformation": {
+          "$ref": "#/$defs/DebtorInformationResponse"
+        },
+        "AmountRelatedDetails": {
+          "$ref": "#/$defs/AmountRelatedDetails"
+        },
+        "AuthorisationRequiredData": {
+          "$ref": "#/$defs/AuthorisationRequiredData"
+        },
+        "PsuMessage": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string",
+          "description": "Text to be displayed to the PSU.\n"
+        }
+      }
+    },
+    "CredentialDetails": {
+      "required": [
+        "CredentialId",
+        "IsSecret",
+        "LabelList"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "IsSecret": {
+          "type": "boolean",
+          "description": "Binary identification of the transparancy of the provided\ncredentials by the PSU. Can have 2 values,\n* true\n* false\n\nCan be provided by ASPSP. If not provided by the\nASPSP then by default,\n* true, if the CredentialId=ewl-password\n* false, if CredentialId=ewl-user-id\n"
+        },
+        "CredentialId": {
+          "type": "string",
+          "description": "Credential detail identification of the PSU credential at the\nbank (provided bi CBI if approach is Embedded). If not provided\nby the ASPSP, then default values should be,\n* ewl-user-id, when IsSecret=false\n* ewl-password, when IsSecret=true\n"
+        },
+        "LabelList": {
+          "type": "array",
+          "description": "The list of the labels to show to the PSU. They are\ninternationalized.\n",
+          "items": {
+            "$ref": "#/$defs/CredentialLabel"
+          }
+        }
+      },
+      "description": "Credentials Details.\n"
+    },
+    "CredentialLabel": {
+      "required": [
+        "Label",
+        "Language"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Label": {
+          "type": "string",
+          "description": "The label associated to the credentials to show to the PSU.\n"
+        },
+        "Language": {
+          "type": "string",
+          "description": "Label internationalization. It specifies the language of the\nlabel. The default value is EN\n"
+        }
+      }
+    },
+    "CurrencyConversionFee": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Currency",
+        "Amount",
+        "Rate"
+      ],
+      "properties": {
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        },
+        "Amount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,2}$",
+          "type": "string",
+          "description": "Amount of the fees.\n"
+        },
+        "Rate": {
+          "type": "number"
+        }
+      },
+      "description": "Currency Conversion Fee\n"
+    },
+    "DebtorAccount": {
+      "required": [
+        "Identification"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SchemeName": {
+          "$ref": "#/$defs/IdentificationTypeEnum"
+        },
+        "Identification": {
+          "type": "string",
+          "description": "Unambiguous identification of the account of the debtor to\nwhich a debit entry will be made as a result of the transaction.\n"
+        },
+        "SecondaryIdentification": {
+          "type": "string",
+          "description": "Secondary identification of the Debtor Account, to which a\ndebit entry will be made as a result of the transaction. (Only Openbank\nUK)\n"
+        },
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        }
+      }
+    },
+    "DebtorContactDetailsResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "FirstName": {
+          "type": "string",
+          "description": "The first name of the debtor\n"
+        },
+        "LastName": {
+          "type": "string",
+          "description": "The last name of the debtor\n"
+        },
+        "PhoneNumber": {
+          "type": "string",
+          "description": "The phone number of the debtor in E.164 format\n",
+          "pattern": "^\\+[1-9][0-9]{1,14}$"
+        },
+        "Email": {
+          "type": "string",
+          "description": "The e-mail address of the debtor\n",
+          "format": "email",
+          "minLength": 1
+        }
+      }
+    },
+    "DebtorInformationResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "All debtor relavant data\n",
+      "properties": {
+        "Name": {
+          "maxLength": 140,
+          "type": "string",
+          "description": "The name of the debtor.\n"
+        },
+        "Agent": {
+          "type": "string",
+          "pattern": "[A-Z0-9]{4,4}[A-Z]{2,2}[A-Z0-9]{2,2}([A-Z0-9]{3,3}){0,1}",
+          "description": "BIC of the financial institution servicing an account for\nthe debtor.\n"
+        },
+        "Account": {
+          "$ref": "#/$defs/DebtorAccount"
+        },
+        "ContactDetails": {
+          "$ref": "#/$defs/DebtorContactDetailsResponse"
+        },
+        "ShippingAddress": {
+          "$ref": "#/$defs/AddressData"
+        },
+        "BillingAddress": {
+          "$ref": "#/$defs/AddressData"
+        }
+      }
+    },
+    "EstimatedInterbankSettlementAmount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Currency",
+        "Amount"
+      ],
+      "properties": {
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        },
+        "Amount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string",
+          "description": "Amount\n"
+        }
+      },
+      "description": "Estimated Interbank Settlement Amount.\n"
+    },
+    "EstimatedTotalAmount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Currency",
+        "Amount"
+      ],
+      "properties": {
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        },
+        "Amount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,2}$",
+          "type": "string",
+          "description": "Amount\n"
+        }
+      },
+      "description": "Estimated Total Amount.\n"
+    },
+    "ExchangeRateInformationResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "UnitCurrency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "Currency in which the rate of exchange is expressed in a currency\nexchange. In the example 1GBP = xxxCUR, the unit currency is GBP.\n"
+        },
+        "ExchangeRate": {
+          "type": "number",
+          "description": "The factor used for conversion of an amount from one currency\nto another. This reflects the price at which one currency was bought with\nanother currency. Rate expressed as a decimal, for example, 0.7 is 7/10\nand 70%.\n"
+        },
+        "RateType": {
+          "type": "string",
+          "description": "Specifies the type used to complete the currency exchange.\n* Spot: Exchange rate applied is the spot rate.\n* Sale: Exchange rate applied is the market rate at the time of the sale.\n* Agreed: Exchange rate applied is the rate agreed between the parties.\n",
+          "enum": [
+            "Spot",
+            "Sale",
+            "Agreed"
+          ]
+        },
+        "ContractIdentification": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string",
+          "description": "Unique and unambiguous reference to the foreign exchange contract\nagreed between the initiating party/creditor and the debtor agent.\n"
+        },
+        "ExpirationDateTime": {
+          "type": "string",
+          "description": "Expiration date time. ISO 8601 DateTime.\n",
+          "format": "date-time"
+        }
+      },
+      "description": "Provides details on the currency exchange rate and contract.\n"
+    },
+    "IdentificationTypeEnum": {
+      "type": "string",
+      "description": "Type of the account number.\n",
+      "enum": [
+        "IBAN",
+        "SortCodeAccountNumber"
+      ]
+    },
+    "LevelOfGuaranteeEnum": {
+      "type": "string",
+      "description": "Level of payment guarantee for Payment Status.\n#### The level of guarantee for banks in countries where SCT Instant is either absent or entails a higher cost, as well as in scenarios where collection services are unavailable, is carefully assessed to ensure adequate risk management and payment assurance.\n##### The level of payment guarantee ranges from 0, representing a minimum payment assurance, to 5, denoting a maximum payment guarantee, contingent upon the payment status returned by the customer's bank.\n#### Remark:\n##### The configuration for this level of payment guarantee is fully customizable, allowing for tailored adjustments based on the specific needs of each tenant and the respective policies of the customer's bank.\n",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "Link": {
+      "required": [
+        "Href"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Href": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        }
+      }
+    },
+    "PaymentProductEnum": {
+      "type": "string",
+      "default": "PSD2-SCT",
+      "description": "Indicates the requested payment method.\n",
+      "enum": [
+        "PSD2-SCT",
+        "PSD2-SCT-Inst",
+        "PSD2-Target2",
+        "PSD2-Domestic",
+        "PSD2-Domestic-Inst",
+        "IDEAL",
+        "WERO"
+      ]
+    },
+    "PaymentStatusEnum": {
+      "type": "string",
+      "description": "Payment status.\n* 'TimeoutAtTpp': This status can only occur in combination with the Bank Selection Interface (UseAuthorisationLandingPages = true). It's set if the Bank Selection Interface concludes that the payment cannot be completed because of a timeout. It's a final state.\n",
+      "enum": [
+        "Open",
+        "Authorised",
+        "PartiallyAuthorised",
+        "Pending",
+        "SettlementInProcess",
+        "SettlementCompleted",
+        "ReceivedByCreditorBank",
+        "ReceivedOnCreditorAccount",
+        "Cancelled",
+        "CancelledAtTPP",
+        "TimeoutAtTpp",
+        "Error",
+        "Expired"
+      ]
+    },
+    "PsuCredentials": {
+      "required": [
+        "CredentialsDetails"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "AspspProductCode": {
+          "type": "string",
+          "description": "Product Identification. Used to contextualize the credentials\nprovided by the PSU for those ASPSP that need of it.\n"
+        },
+        "CredentialsDetails": {
+          "type": "array",
+          "description": "Credentials Details",
+          "items": {
+            "$ref": "#/$defs/CredentialDetails"
+          }
+        }
+      },
+      "description": "PSU Credentials on the Bank system.\n"
+    },
+    "ScaChallengeData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "AdditionalInformation": {
+          "type": "string",
+          "description": "Additional Information for the PSU describing the method.\n"
+        },
+        "Data": {
+          "type": "array",
+          "description": "A collection of strings as challenge data.\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Image": {
+          "type": "string",
+          "description": "Image in base64 encoding\n"
+        },
+        "ImageLink": {
+          "type": "string",
+          "description": "URL of image\n"
+        },
+        "OtpFormat": {
+          "type": "string",
+          "description": "The OTP format.\n"
+        },
+        "OtpMaxLength": {
+          "type": "integer",
+          "description": "The maximum length for the OTP.\n",
+          "format": "int32"
+        }
+      },
+      "description": "JSON DTO used to represent challenge data.\n"
+    },
+    "ScaMethods": {
+      "required": [
+        "AuthenticationMethodId",
+        "AuthenticationType"
+      ],
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "AuthenticationType": {
+          "type": "string",
+          "description": "Type of the SCA authentication method. The following methods are commonly seen coming from the ASPSP:\n-  SMS_OTP: The PSU will receive a One Time Password via SMS\n-  CHIP_OTP: The PSU will be presented with a picture or text to create a One Time Password using their bank card\n-  PHOTO_OTP: The PSU will be presented with a picture to create a One Time Password\n-  PUSH_OTP: The PSU will receive a One Time Password via push notification on their mobile device\n-  SMTP_OTP: The PSU will receive a One Time Password via email\n"
+        },
+        "AuthenticationMethodId": {
+          "minLength": 1,
+          "type": "string",
+          "description": "Id of the authentication method. Used in subsequent API calls to refer to the authentication method.\n"
+        },
+        "Version": {
+          "minLength": 1,
+          "type": "string",
+          "description": "Version of the method.\n"
+        },
+        "Name": {
+          "minLength": 1,
+          "type": "string",
+          "description": "Name of the method in readable form. This name shall be used by the TPP when presenting a list of authentication methods to the PSU, if available.\n"
+        },
+        "Explanation": {
+          "minLength": 1,
+          "type": "string",
+          "description": "Detailed information about the SCA method, meant for the PSU.\n"
+        }
+      }
+    },
+    "StatusResponseLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A list of hyperlinks to be recognized by the Initiating Party. The actual\nhyperlinks used in the response depend on the dynamical decisions on\nauthorization approach for example. Remark - All links are full links.\n\n* 'RedirectUrl': In case of an Redirect approach, the Initiating Party has to use this link to redirect the PSU’s browser session.\n* 'PostAuthorisationForExplicit': In case the ASPSP requires explicit start of authorization.\n* 'PostIdentificationForDecoupled': In case of a Decoupled approach, identification of the PSU required to start the decoupled authorization.\n* 'PutAuthorisationForEmbedded': In case of an embedded approach, endpoint to be called to add information to the Authorization.\n* 'SelectAuthenticationMethod': In case of an embedded approach, the Initiating Party has to use this link to pass the SCA method.\n* 'AuthorizeTransaction': In case of an embedded approach, the Initiating Party has to authorize the payment by providing the SCA OneTimePassword.\n* 'ConfirmationRequired': Endpoint to be called for payment confirmation for ASPSPs that require explicit confirmation of payments.\n",
+      "properties": {
+        "RedirectUrl": {
+          "$ref": "#/$defs/Link"
+        },
+        "PostAuthorisationForExplicit": {
+          "$ref": "#/$defs/Link"
+        },
+        "PostIdentificationForDecoupled": {
+          "$ref": "#/$defs/Link"
+        },
+        "PostAuthorisationForEmbedded": {
+          "$ref": "#/$defs/Link"
+        },
+        "PutAuthorisationForEmbedded": {
+          "$ref": "#/$defs/Link"
+        },
+        "SelectAuthenticationMethod": {
+          "$ref": "#/$defs/Link"
+        },
+        "AuthorizeTransaction": {
+          "$ref": "#/$defs/Link"
+        },
+        "ConfirmationRequired": {
+          "$ref": "#/$defs/Link"
+        }
+      }
+    },
+    "TransactionFees": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        },
+        "Amount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string",
+          "description": "Amount of the fees.\n"
+        },
+        "FeesApply": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates if transaction fees are applicable on the payment.\n"
+        }
+      },
+      "description": "Information used for transporting transaction fees by the ASPSP.\n"
+    }
+  }
+}

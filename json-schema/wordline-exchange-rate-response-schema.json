@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-exchange-rate-response-schema.json",
+  "title": "ExchangeRateResponse",
+  "description": "ExchangeRateResponse\n",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-currency-conversion-extended-services-api-openapi.yml#/components/schemas/ExchangeRateResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "ExchangeRateReferences": {
+      "$ref": "#/$defs/ExchangeRateReferences"
+    },
+    "ExchangeRateInformation": {
+      "$ref": "#/$defs/ExchangeRateInformation"
+    },
+    "CurrencyConversionFee": {
+      "$ref": "#/$defs/CurrencyConversionFee"
+    },
+    "EstimatedTotalAmount": {
+      "$ref": "#/$defs/EstimatedTotalAmount"
+    },
+    "ValidUntil": {
+      "type": "string",
+      "description": "This exchange rate is valid until the next run of the scheduled batch to get new exchange rate details. ISO 8601 DateTime.\n",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "ExchangeRateInformation",
+    "CurrencyConversionFee",
+    "EstimatedTotalAmount",
+    "ValidUntil"
+  ],
+  "$defs": {
+    "CurrencyConversionFee": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Currency",
+        "Amount",
+        "Rate"
+      ],
+      "properties": {
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        },
+        "Amount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,2}$",
+          "type": "string",
+          "description": "Amount of the fees.\n"
+        },
+        "Rate": {
+          "type": "number"
+        }
+      },
+      "description": "Currency Conversion Fee\n"
+    },
+    "EstimatedTotalAmount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Currency",
+        "Amount"
+      ],
+      "properties": {
+        "Currency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "A code allocated to a currency by a Maintenance Agency under\nan international identification scheme, as described in the latest edition\nof the international standard ISO 4217 \"Codes for the representation of\ncurrencies and funds\".\n"
+        },
+        "Amount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,2}$",
+          "type": "string",
+          "description": "Amount\n"
+        }
+      },
+      "description": "Estimated Total Amount.\n"
+    },
+    "ExchangeRateInformation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "UnitCurrency",
+        "ExchangeRate",
+        "RateType"
+      ],
+      "properties": {
+        "UnitCurrency": {
+          "pattern": "[A-Z]{3,3}",
+          "type": "string",
+          "description": "Currency in which the rate of exchange is expressed in a currency exchange.\n"
+        },
+        "ExchangeRate": {
+          "type": "number",
+          "description": "The factor used for conversion of an amount from one currency\nto another. This reflects the price at which one currency was bought with\nanother currency. Rate expressed as a decimal, for example, 0.7 is 7/10\nand 70%.\n"
+        },
+        "RateType": {
+          "type": "string",
+          "description": "Specifies the type used to complete the currency exchange.\n* Spot: Exchange rate applied is the spot rate.\n",
+          "enum": [
+            "Spot"
+          ]
+        }
+      }
+    },
+    "ExchangeRateReferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SourceCurrencyReferenceId": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "This should be used to refer to this exchange rate details for currency conversion from the new exchange rate table.\n"
+        },
+        "TargetCurrencyReferenceId": {
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string",
+          "description": "This should be used to reference the second entry ID in the exchange rate table row when cross-currency conversion is required, and two entries are selected for calculation.\n"
+        }
+      }
+    }
+  }
+}

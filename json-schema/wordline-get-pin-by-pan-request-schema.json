@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-get-pin-by-pan-request-schema.json",
+  "title": "GetPinByPanRequest",
+  "description": "encryptedSessionKey is the encrypted session key to be used for encrypting the PIN in the reply",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-pin-api-openapi.yml#/components/schemas/GetPinByPanRequest",
+  "type": "object",
+  "properties": {
+    "event": {
+      "type": "string",
+      "description": "EXTERNAL (default -> just don't mention the field), INTERNAL, ATM or IVR"
+    },
+    "encryptedSessionKey": {
+      "$ref": "#/$defs/EncryptedData"
+    },
+    "encryptedPan": {
+      "$ref": "#/$defs/EncryptedPanData"
+    },
+    "pan": {
+      "type": "string",
+      "description": "Either encryptedPan or pan should be mentioned"
+    },
+    "panSequenceNumber": {
+      "type": "string",
+      "description": "Either panSequenceNumber or panExpiryDate should be mentioned, or both"
+    },
+    "panExpiryDate": {
+      "type": "string",
+      "description": "Format MMYY - Either panSequenceNumber or panExpiryDate should be mentioned, or both"
+    },
+    "encryptedPinBlockPan": {
+      "$ref": "#/$defs/EncryptedPanData"
+    },
+    "pinBlockPan": {
+      "type": "string",
+      "description": "Only for cases where PAN input to PIN block computation should be overriden; either encryptedPinBlockPan or pinBlockPan should be mentioned"
+    }
+  },
+  "$defs": {
+    "EncryptedData": {
+      "type": "object",
+      "required": [
+        "algoId",
+        "encryptedData",
+        "keyId"
+      ],
+      "properties": {
+        "algoId": {
+          "type": "string",
+          "description": "Algorithm used to encrypt Session Key\nAllowed Value:\n06 for RSA"
+        },
+        "encryptedData": {
+          "type": "string",
+          "description": "Cryptogram in hexadecimal string representation"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Key set used for request\nAllowed Value:\n01 - Keyset1\n02 - Keyset2"
+        }
+      },
+      "title": "EncryptedData"
+    },
+    "EncryptedPanData": {
+      "type": "object",
+      "required": [
+        "algoId",
+        "encryptedData",
+        "keyId"
+      ],
+      "properties": {
+        "algoId": {
+          "type": "string",
+          "description": "00 = PCI-AES, 01 = BEST, 02 = PCI-PAN, 03 = AES-GCM, 11 = PCI-TDES"
+        },
+        "encryptedData": {
+          "type": "string",
+          "description": "Cryptogram in hexadecimal string representation"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Either PCI hexadecimal key index or 01 for BEST/AES-GCM keyset 1 or 02 for BEST/AES-GCM keyset 2"
+        },
+        "sessionKey": {
+          "type": "string",
+          "description": "BEST session key in hexadecimal string representation"
+        },
+        "initializationVector": {
+          "type": "string",
+          "description": "BEST or AES-GCM initialization vector in hexadecimal string representation"
+        },
+        "authenticationTag": {
+          "type": "string",
+          "description": "AES-GCM authentication tag in hexadecimal string representation"
+        }
+      },
+      "title": "EncryptedPanData"
+    }
+  }
+}

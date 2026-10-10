@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-close-card-contract-response-schema.json",
+  "title": "ApiResponseEntityCloseCardContractResponse",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-contract-api-openapi.yml#/components/schemas/ApiResponseEntityCloseCardContractResponse",
+  "x-wl-api-response": true,
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "responseMetadata": {
+      "description": "Response metadata",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ResponseMetadata"
+        }
+      ]
+    },
+    "data": {
+      "description": "Response data",
+      "allOf": [
+        {
+          "$ref": "#/$defs/CloseCardContractResponse"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "CardContractIdentifier": {
+      "type": "object",
+      "description": "Identification of the card contract either by Issuer card contract external reference or by card contract reference",
+      "properties": {
+        "cardContractReference": {
+          "type": "string",
+          "description": "The reference of the card contract in our system, unique per platform\nThis reference is calculated from an algorithm (currently a unique algorithm 'DefaultCardContractReferenceAlgorithm' referenced in the card profile version).\nThe reference is composed of the issuerId + a sequence number of 16 digits (e;g; 100042000000000095003, where 10004 is the issuerId)"
+        },
+        "issuerCardContractExternalReference": {
+          "type": "string",
+          "description": "The external reference of the card contract provided by the issuer\nThis reference is unique per issuer and may be used to carry out research and find information."
+        }
+      },
+      "title": "CardContractIdentifier"
+    },
+    "CloseCardContractResponse": {
+      "type": "object",
+      "properties": {
+        "cardContractIdentifier": {
+          "$ref": "#/$defs/CardContractIdentifier"
+        },
+        "status": {
+          "type": "string",
+          "description": "Card contract status after the closure request depending on the delay type\nIf the delay type is IMMEDIATE, the card contract status is CLOSED.\nIf the delay type is SCHEDULED or SCHEDULED_EXP_DATE, the card contract status is not changed and will be CLOSED when the closing date is reached."
+        },
+        "closingDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "If the delay type is IMMEDIATE, the closing date is the current date.\nIf the delay type is SCHEDULED, the closing date is the one provided in the request.\nIf the delay type is SCHEDULED_EXP_DATE, the closing date is the expiration date of the card.\nFormat: \"yyyy-MM-ddTHH:mm:ss.SSSZ\".\nNote: For closing type SCHEDULED_EXP_DATE:\n - If there are several cards within the card contract, the expiry date of the card with the highest PAN sequence number is taken (among the ones in ACTIVE, CREATED, or BLOCKED temporarily status). If all the cards have the same PSN, the expiry date of the latest issued card is taken.\n - Example 1: PSN incremented by PAN (product setup)\n   - Card1 is the initial issued card: PSN = 1\n   - Card1 has malfunction and is replaced by Card2 with same PAN and PSN = 2.\n     Then if the card contract closing is requested, the closing date is set with the expiry date of card2.\n - Example 2: PSN incremented by PAN (product setup)\n   - Card1 is the initial issued card: PSN = 1\n   - Card1 has malfunction and is replaced by Card2 with same PAN and PSN = 2.\n   - Card2 is lost: Card2 is permanently blocked and replaced by Card3 with new PAN and PSN = 1.\n     Then if the card contract closing is requested, the closing date is set with the expiry date of card3."
+        }
+      },
+      "title": "CloseCardContractResponse"
+    },
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    }
+  }
+}

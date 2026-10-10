@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-create-offline-reservation-request-schema.json",
+  "title": "CreateOfflineReservationRequest",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-offline-reservation-api-openapi.yml#/components/schemas/CreateOfflineReservationRequest",
+  "type": "object",
+  "required": [
+    "reservedAmount"
+  ],
+  "properties": {
+    "issuerReservationExternalReference": {
+      "description": "Reference of the offline reservation provided by the issuer\nMust be unique per issuer",
+      "type": "string"
+    },
+    "reason": {
+      "description": "Reason for which the offline reservation is created\nFree text",
+      "type": "string"
+    },
+    "reservedAmount": {
+      "description": "Offline reservation amount\nMust be in the account currency and > 0\nMust be lower than the own funds (credit balance)",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Amount"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "Amount": {
+      "type": "object",
+      "required": [
+        "value",
+        "exponent",
+        "isoCode"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Integer amount value. Ex. if it is two hundred euros and 17 cents, then amount value is 20017 (exponent = 2 digits for currency=EUR)"
+        },
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of Amount. Number of decimal digits."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount\nThe currency in ISO4217 alphabetic format.\nExample: EUR for Euro"
+        }
+      },
+      "title": "Amount"
+    }
+  }
+}

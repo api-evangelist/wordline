@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-api-response-entity-get-velocity-limit-override-history-response-schema.json",
+  "title": "ApiResponseEntityGetVelocityLimitOverrideHistoryResponse",
+  "description": "Issuer response entity",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-account-velocity-limit-api-openapi.yml#/components/schemas/ApiResponseEntityGetVelocityLimitOverrideHistoryResponse",
+  "type": "object",
+  "required": [
+    "responseMetadata"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/VelocityLimitHistory"
+      }
+    },
+    "responseMetadata": {
+      "description": "Response metadata",
+      "$ref": "#/$defs/ResponseMetadata"
+    }
+  },
+  "$defs": {
+    "Links": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Service method URL"
+        },
+        "next": {
+          "type": "string",
+          "description": "URL pagination query parameter next page"
+        }
+      },
+      "title": "Links"
+    },
+    "MonetaryAmountAlphaCurrency": {
+      "type": "object",
+      "properties": {
+        "exponent": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exponent of amount currency. Number of decimal digits. Example: 2 for Euro."
+        },
+        "isoCode": {
+          "type": "string",
+          "description": "Currency code of amount. ISO4217 alphabetic format. Example: EUR for Euro."
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Value of amount. Example: 54321 for 543,21 EUR (exponent = 2: 2 digits for cents)."
+        }
+      },
+      "title": "MonetaryAmountAlphaCurrency"
+    },
+    "ResponseMetadata": {
+      "type": "object",
+      "required": [
+        "correlationId",
+        "responseDateTime",
+        "statusCode",
+        "statusMessage"
+      ],
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "description": "Correlation Identifier"
+        },
+        "links": {
+          "description": "Metadata Links",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Links"
+            }
+          ]
+        },
+        "statusMessage": {
+          "type": "string",
+          "description": "Executed REST API status message"
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "HTTP status code"
+        },
+        "responseDateTime": {
+          "type": "string",
+          "description": "Timestamp when response date was generated"
+        },
+        "timeTakenMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Wall clock time required from service to generate the response"
+        }
+      },
+      "title": "ResponseMetadata"
+    },
+    "VelocityLimitHistory": {
+      "type": "object",
+      "required": [
+        "changeTime",
+        "changeType",
+        "maximumAmount"
+      ],
+      "properties": {
+        "activationEndTime": {
+          "type": "string",
+          "description": "First point in time at which the override will be considered. If not provided the override will be taken into account immediately.\nDate Time format:  DD/MM/YYYY"
+        },
+        "activationStartTime": {
+          "type": "string",
+          "description": "First point in time at which the override will be considered. If not provided the override will be taken into account immediately.\nDate Time format:  DD/MM/YYYY \n"
+        },
+        "changeTime": {
+          "type": "string",
+          "description": "Time when the modification has been performed. UTC time zone.\nDate Time format: yyyy-MM-dd’T’HH:mm:ssZ \n"
+        },
+        "changeType": {
+          "type": "string",
+          "description": "Indicates which kind of modification has been performed on the velocity check override. Possible values are:\n-\tDelete (no attributes are provided at all)\n-\tReplace (all attributes are provided and not only the changed ones)\n"
+        },
+        "maximumAmount": {
+          "description": "Overrides what is configured on higher levels for the corresponding velocity check attribute",
+          "$ref": "#/$defs/MonetaryAmountAlphaCurrency"
+        },
+        "maximumAmountCheck": {
+          "type": "boolean"
+        },
+        "maximumCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Overrides what is configured on higher levels for the corresponding velocity check attribute"
+        },
+        "maximumCountCheck": {
+          "type": "boolean"
+        },
+        "minimumAmount": {
+          "$ref": "#/$defs/MonetaryAmountAlphaCurrency"
+        },
+        "minimumAmountCheck": {
+          "type": "boolean"
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "requestorReference": {
+          "type": "string",
+          "description": "Identifies the caller which has generated or triggered the modification."
+        },
+        "userReference": {
+          "type": "string"
+        }
+      },
+      "title": "VelocityLimitHistory"
+    }
+  }
+}

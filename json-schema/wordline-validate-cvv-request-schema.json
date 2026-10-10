@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-validate-cvv-request-schema.json",
+  "title": "ValidateCvvRequest",
+  "description": "Either cardSecurityCode or encryptedCardSecurityCode + encryptedSessionKey should be mentioned - in the latter case, encryptedSessionKey is the encrypted session key used for encrypting the CVV in the request",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-card-cvv-api-openapi.yml#/components/schemas/ValidateCvvRequest",
+  "type": "object",
+  "properties": {
+    "cardSecurityCode": {
+      "type": "string"
+    },
+    "encryptedCardSecurityCode": {
+      "$ref": "#/$defs/EncryptedCardSecurityCode"
+    },
+    "encryptedSessionKey": {
+      "$ref": "#/$defs/EncryptedData"
+    }
+  },
+  "$defs": {
+    "EncryptedCardSecurityCode": {
+      "type": "object",
+      "required": [
+        "algoId",
+        "encryptedData",
+        "keyId",
+        "initializationVector",
+        "authenticationTag"
+      ],
+      "properties": {
+        "algoId": {
+          "type": "string",
+          "description": "03 for AES-GCM"
+        },
+        "encryptedData": {
+          "type": "string",
+          "description": "Cryptogram in hexadecimal string representation"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "00 for a session key"
+        },
+        "initializationVector": {
+          "type": "string",
+          "description": "AES-GCM initialization vector in hexadecimal string representation"
+        },
+        "authenticationTag": {
+          "type": "string",
+          "description": "AES-GCM authentication tag in hexadecimal string representation"
+        }
+      },
+      "title": "EncryptedCardSecurityCode"
+    },
+    "EncryptedData": {
+      "type": "object",
+      "required": [
+        "algoId",
+        "encryptedData",
+        "keyId"
+      ],
+      "properties": {
+        "algoId": {
+          "type": "string",
+          "description": "Algorithm used to encrypt Session Key\nAllowed Value:\n06 for RSA"
+        },
+        "encryptedData": {
+          "type": "string",
+          "description": "Cryptogram in hexadecimal string representation"
+        },
+        "keyId": {
+          "type": "string",
+          "description": "Key set used for request\nAllowed Value:\n01 - Keyset1\n02 - Keyset2"
+        }
+      },
+      "title": "EncryptedData"
+    }
+  }
+}

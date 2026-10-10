@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/wordline/main/json-schema/wordline-holding-address-data-schema.json",
+  "title": "HoldingAddressData",
+  "x-generated": "2026-10-10",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/wordline-holding-api-openapi.yml#/components/schemas/HoldingAddressData",
+  "type": "object",
+  "properties": {
+    "contractIdentification": {
+      "$ref": "#/$defs/HoldingContractIdentification"
+    },
+    "addresses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AddressDetails"
+      }
+    }
+  },
+  "$defs": {
+    "AddressDetails": {
+      "required": [
+        "addressType",
+        "city",
+        "countryCode"
+      ],
+      "type": "object",
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "description": "Type of the address. Values [Business, Chargeback, Creditor, Debtor, Invoice, Location, Postal, Private]"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name and house number of the address. In case of a Dutch address only Street name"
+        },
+        "houseNumber": {
+          "type": "integer",
+          "description": "House number. Only used for Dutch addresses",
+          "format": "int32"
+        },
+        "houseAddition": {
+          "type": "string",
+          "description": "House number addition. Only used for Dutch addresses"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "Postal code of the address"
+        },
+        "city": {
+          "type": "string",
+          "description": "City of the address"
+        },
+        "region": {
+          "type": "string",
+          "description": "Region of the address. Only applicable for specific countries"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "Country of the address according to ISO 3166-1 (numeric-3)"
+        },
+        "departmentName": {
+          "type": "string",
+          "description": "Department of the contact person registered with the address"
+        },
+        "contactPersonName": {
+          "type": "string",
+          "description": "Name of the contact person registered with the address"
+        },
+        "postalRoom": {
+          "type": "string",
+          "description": "Postal room of the contact person registered with the address"
+        },
+        "telephoneNumber": {
+          "type": "string",
+          "description": "Telephone number of contact person registered with the address"
+        },
+        "faxNumber": {
+          "type": "string",
+          "description": "Fax number of the contact person registered with the address"
+        },
+        "email": {
+          "type": "string",
+          "description": "E-mail address of the contact person registered with the address"
+        },
+        "communicationLanguage": {
+          "type": "string",
+          "description": "Preferred communication language of the contact person registered with the address accrding to ISO 639-2 (alphanumeric-3)"
+        },
+        "communicationPreference": {
+          "type": "integer",
+          "description": "Preferred communication type of the contact person registered with the address. Values [1 = Post, 2 = Fax, 3 = E-mail]",
+          "format": "int32"
+        }
+      }
+    },
+    "HoldingContractIdentification": {
+      "type": "object",
+      "properties": {
+        "acquirerId": {
+          "type": "string",
+          "description": "Unique identification of the acquirer, determined by equensWorldline"
+        },
+        "holdingId": {
+          "type": "string",
+          "description": "Unique identification of the holding, determined by equensWorldline"
+        }
+      }
+    }
+  }
+}
